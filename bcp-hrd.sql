@@ -203,6 +203,23 @@ INSERT INTO `users` (`id`, `username`, `password`, `usertype`, `email`, `created
 (5, 'admin', 'admin123', 'admin', 'admin@gmail.com', '0000-00-00 00:00:00', '0000-00-00');
 
 --
+-- Table structure for table `tasks`
+--
+
+CREATE TABLE `tasks` (
+  `TaskID` int(11) NOT NULL AUTO_INCREMENT,
+  `Title` varchar(255) NOT NULL,
+  `Description` text DEFAULT NULL,
+  `UserID` int(11) NOT NULL,
+  `Status` enum('Pending','In Progress','Completed') NOT NULL DEFAULT 'Pending',
+  `CreatedDate` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`TaskID`),
+  KEY `FK_Tasks_UserID` (`UserID`),
+  CONSTRAINT `FK_Tasks_UserID` FOREIGN KEY (`UserID`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+--
 -- Indexes for dumped tables
 --
 

@@ -1,22 +1,21 @@
-<?php 
+<!-- tech index -->
+<?php
 session_start();
 
-if(isset($_SESSION['user_id'])){
-    
-}else{
+if (isset($_SESSION['user_id'])) {
+} else {
     header("Location: ../auth/index.php");
-   
 }
 
 
 ?>
 <!doctype html>
 <html lang="en">
- 
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <!-- icon -->
     <link rel="shortcut icon" href="../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
 
@@ -27,7 +26,7 @@ if(isset($_SESSION['user_id'])){
     <script defer src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <!-- global JavaScript -->
-    <script defer type="module" src="../../assets/libs/js/global-script.js"></script> 
+    <script defer type="module" src="../../assets/libs/js/global-script.js"></script>
 
     <!-- main js -->
     <script defer type="module" src="../../assets/libs/js/main-js.js"></script>
@@ -41,7 +40,7 @@ if(isset($_SESSION['user_id'])){
     <!-- slimscroll js -->
     <script defer type="module" src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 
-    <title>Analytics dashboard</title>
+    <title>Tech and Analytics</title>
 </head>
 
 <body>
@@ -171,7 +170,7 @@ if(isset($_SESSION['user_id'])){
         <div class="nav-left-sidebar sidebar-dark ">
             <div class="menu-list">
                 <nav class="navbar navbar-expand-lg navbar-light">
-                    <a class="d-xl-none d-lg-none" href="#">AnalyticsDashboard</a>
+                    <a class="d-xl-none d-lg-none" href="#">Analytics Dashboard</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -181,7 +180,7 @@ if(isset($_SESSION['user_id'])){
                                 Human Resource Dept.
                             </li>
                             <li class="nav-item ">
-                                <a class="nav-link active" href="index.php" >
+                                <a class="nav-link" href="../index.php">
                                     <i class="fas fa-fw fa-home"></i> Dashboard
                                 </a>
                             </li>
@@ -265,27 +264,46 @@ if(isset($_SESSION['user_id'])){
                             </li>
                             <!-- Tech & Analytics -->
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3" aria-controls="submenu-3"><i class="fas fa-fw fa-chart-pie"></i> Tech & Analytics</a>
-                                <div id="submenu-3" class="collapse submenu" style="">
+                                <a class="nav-link active" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3" aria-controls="submenu-3"><i class="fas fa-fw fa-chart-pie"></i> Tech & Analytics</a>
+                                <div id="submenu-3" class="collapse submenu show" style="">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/chart-c3.html">C3 Charts</a>
+                                            <a class="nav-link active" href="index.php">Home Dashboard</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/chart-chartist.html">Chartist Charts</a>
+                                            <a class="nav-link" href="./tasks.php">Task management</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/chart-charts.html">Chart</a>
+                                            <a class="nav-link" href="./records.php">Records</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/chart-morris.html">Morris</a>
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3-1" aria-controls="submenu-3-1">Analytics</a>
+                                            <div id="submenu-3-1" class="collapse submenu">
+                                                <ul class="nav flex-column">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="./analytics/engagement.php">Engagement insight</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="./analytics/performace.php">Performance metric</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="./analytics/effieciency.php">Efficiency analysis</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="./analytics/workforce.php">Workforce optimazition</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="./analytics/talent.php">Talent insight</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </li>
-                                        <li class="nav-item">
+                                        <!-- <li class="nav-item">
                                             <a class="nav-link" href="pages/chart-sparkline.html">Sparkline</a>
-                                        </li>
-                                        <li class="nav-item">
+                                        </li> -->
+                                        <!-- <li class="nav-item">
                                             <a class="nav-link" href="pages/chart-gauge.html">Guage</a>
-                                        </li>
+                                        </li> -->
                                     </ul>
                                 </div>
                             </li>
@@ -502,146 +520,153 @@ if(isset($_SESSION['user_id'])){
         <!-- ============================================================== -->
         <div class="dashboard-wrapper">
             <!-- <div class="dashboard-ecommerce"> -->
-                <div class="container-fluid dashboard-content ">
-                    <!-- ============================================================== -->
-                    <!-- pageheader  -->
-                    <!-- ============================================================== -->
-                    <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="page-header">
-                                <h2 class="pageheader-title">Dashboard</h2>
-                    
+            <div class="container-fluid dashboard-content ">
+                <!-- ============================================================== -->
+                <!-- pageheader  -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="page-header">
+                            <h2 class="pageheader-title">Tech and Analytics</h2>
 
-                                <p class="pageheader-text">Nulla euismod urna eros, sit amet scelerisque torton lectus vel mauris facilisis faucibus at enim quis massa lobortis rutrum.</p>
-                             
+
+                            <p class="pageheader-text">Nulla euismod urna eros, sit amet scelerisque torton lectus vel mauris facilisis faucibus at enim quis massa lobortis rutrum.</p>
+                            <div class="page-breadcrumb">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item">
+                                        </li>
+                                    </ol>
+                                </nav>
                             </div>
                         </div>
                     </div>
-                    <!-- ============================================================== -->
-                    <!-- end pageheader  -->
-                    <!-- ============================================================== -->
-                    <!-- <div class="ecommerce-widget"> -->
+                </div>
+                <!-- ============================================================== -->
+                <!-- end pageheader  -->
+                <!-- ============================================================== -->
+                <!-- <div class="ecommerce-widget"> -->
 
-                        <div class="row">
-                            <!-- Modal -->
-                            <div class="modal fade" id="myModal" role="dialog">
-                                <div class="modal-dialog">
-                                
-                                <!-- Modal content-->
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">New Task</h4>
+                <div class="row">
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">New Task</h4>
                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form>
-                                            <div class="mb-3">
-                                                <label for="exampleInputEmail1" class="form-label">Creator:</label>
-                                                <input type="text" class="form-control" id="exampleInputEmail1" value="<?= $_SESSION['username']?>"  disabled>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="exampleInputEmail1" class="form-label">Task</label>
-                                                <input type="text" class="form-control" id="exampleInputEmail1">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="exampleInputEmail1" class="form-label">Description</label>
-                                                <textarea class="form-control" id="exampleInputEmail1"></textarea>
-                                            </div>
-                                            <div class="mb-3">
-                                                <select class="form-control form-select" aria-label="Default select example">
-                                                    <option selected disabled>Basic</option>
-                                                    <option value="1">Important</option>
-                                                    <option value="2">Report</option>
-                                                    <option value="3">Problem</option>
-                                                </select>
-                                            </div>
-                                            
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="mb-3">
+                                            <label for="exampleInputEmail1" class="form-label">Creator:</label>
+                                            <input type="text" class="form-control" id="exampleInputEmail1" value="<?= $_SESSION['username'] ?>" disabled>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="exampleInputEmail1" class="form-label">Task</label>
+                                            <input type="text" class="form-control" id="exampleInputEmail1">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="exampleInputEmail1" class="form-label">Description</label>
+                                            <textarea class="form-control" id="exampleInputEmail1"></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <select class="form-control form-select" aria-label="Default select example">
+                                                <option selected disabled>Basic</option>
+                                                <option value="1">Important</option>
+                                                <option value="2">Report</option>
+                                                <option value="3">Problem</option>
+                                            </select>
+                                        </div>
+
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
-                                </div>
-                                
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="text-muted">Total Revenue</h5>
-                                        <div class="metric-value d-inline-block">
-                                            <h1 class="mb-1">$12099</h1>
-                                        </div>
-                                        <div class="metric-label d-inline-block float-right text-success font-weight-bold">
-                                            <span><i class="fa fa-fw fa-arrow-up"></i></span><span>5.86%</span>
-                                        </div>
-                                    </div>
-                                    <div id="sparkline-revenue"></div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="text-muted">Affiliate Revenue</h5>
-                                        <div class="metric-value d-inline-block">
-                                            <h1 class="mb-1">$12099</h1>
-                                        </div>
-                                        <div class="metric-label d-inline-block float-right text-success font-weight-bold">
-                                            <span><i class="fa fa-fw fa-arrow-up"></i></span><span>5.86%</span>
-                                        </div>
-                                    </div>
-                                    <div id="sparkline-revenue2"></div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="text-muted">Refunds</h5>
-                                        <div class="metric-value d-inline-block">
-                                            <h1 class="mb-1">0.00</h1>
-                                        </div>
-                                        <div class="metric-label d-inline-block float-right text-primary font-weight-bold">
-                                            <span>N/A</span>
-                                        </div>
-                                    </div>
-                                    <div id="sparkline-revenue3"></div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="text-muted">Avg. Revenue Per User</h5>
-                                        <div class="metric-value d-inline-block">
-                                            <h1 class="mb-1">$28000</h1>
-                                        </div>
-                                        <div class="metric-label d-inline-block float-right text-secondary font-weight-bold">
-                                            <span>-2.00%</span>
-                                        </div>
-                                    </div>
-                                    <div id="sparkline-revenue4"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <!-- ============================================================== -->
-                      
-                            <!-- ============================================================== -->
 
-                                          <!-- recent orders  -->
-                            <!-- ============================================================== -->
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            
-                            </div>
-                            <!-- ============================================================== -->
-                            <!-- end recent orders  -->
-
-    
                         </div>
-                       
-                  
-                    <!-- </div> -->
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="text-muted">Total Revenue</h5>
+                                <div class="metric-value d-inline-block">
+                                    <h1 class="mb-1">$12099</h1>
+                                </div>
+                                <div class="metric-label d-inline-block float-right text-success font-weight-bold">
+                                    <span><i class="fa fa-fw fa-arrow-up"></i></span><span>5.86%</span>
+                                </div>
+                            </div>
+                            <div id="sparkline-revenue"></div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="text-muted">Affiliate Revenue</h5>
+                                <div class="metric-value d-inline-block">
+                                    <h1 class="mb-1">$12099</h1>
+                                </div>
+                                <div class="metric-label d-inline-block float-right text-success font-weight-bold">
+                                    <span><i class="fa fa-fw fa-arrow-up"></i></span><span>5.86%</span>
+                                </div>
+                            </div>
+                            <div id="sparkline-revenue2"></div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="text-muted">Refunds</h5>
+                                <div class="metric-value d-inline-block">
+                                    <h1 class="mb-1">0.00</h1>
+                                </div>
+                                <div class="metric-label d-inline-block float-right text-primary font-weight-bold">
+                                    <span>N/A</span>
+                                </div>
+                            </div>
+                            <div id="sparkline-revenue3"></div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="text-muted">Avg. Revenue Per User</h5>
+                                <div class="metric-value d-inline-block">
+                                    <h1 class="mb-1">$28000</h1>
+                                </div>
+                                <div class="metric-label d-inline-block float-right text-secondary font-weight-bold">
+                                    <span>-2.00%</span>
+                                </div>
+                            </div>
+                            <div id="sparkline-revenue4"></div>
+                        </div>
+                    </div>
                 </div>
+                <div class="row">
+                    <!-- ============================================================== -->
+
+                    <!-- ============================================================== -->
+
+                    <!-- recent orders  -->
+                    <!-- ============================================================== -->
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- end recent orders  -->
+
+
+                </div>
+
+
+                <!-- </div> -->
+            </div>
             <!-- </div> -->
             <!-- ============================================================== -->
             <!-- footer -->
@@ -671,5 +696,5 @@ if(isset($_SESSION['user_id'])){
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
 </body>
- 
+
 </html>
