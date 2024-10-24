@@ -1,11 +1,34 @@
 <?php
+
 session_start();
+require_once('../../config/Database.php');
+require_once('./includes/class/Task.php');
+require_once('./includes/class/Employee.php');
 
-if (isset($_SESSION['user_id'])) {
-} else {
-    header("Location: ../auth/index.php");
+// if (isset($_SESSION['user_id'])) {
+// } else {
+//     header("Location: ../auth/index.php");
+// }
+
+$employee = new Employee($conn);
+$emp = $employee->select_all();
+
+$task = new Task($conn);
+$alltasks = $task->select_all_task();
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $title = $_POST['title'];
+    $description = $_POST['description'];
+    $userID = $_POST['userID'];
+    // $status = $_POST['Status'];
+
+    // Call the create() method to insert data
+    if ($task->create_task($title, $description, $userID)) {
+        echo "<script>alert('Task created successfully!');</script>";
+    } else {
+        echo "<script>alert('Failed to create task.');</script>";
+    }
 }
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -16,36 +39,9 @@ if (isset($_SESSION['user_id'])) {
     <!-- icon -->
     <link rel="shortcut icon" href="../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
 
-    <!-- bs -->
-    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <!-- assets -->
+    <?php include('./includes/_assets.php') ?>
 
-    <!-- jquery -->
-    <script defer src="../../node_modules/jquery/dist/jquery.min.js"></script>
-
-    <!-- jquery -->
-    <!-- <script defer src="../../node_modules/jquery/dist/jquery.js"></script> -->
-
-    <!-- datatable: js and cs -->
-    <script defer src="../../node_modules/datatables.net/js/dataTables.js"></script> <!-- main js-->
-    <link rel="stylesheet" href="../../node_modules/datatables.net-dt/css/dataTables.dataTables.css"> <!-- style-->
-
-    <!-- global JavaScript -->
-    <script defer type="module" src="../../assets/libs/js/global-script.js"></script>
-
-    <!-- main js -->
-    <script defer type="module" src="../../assets/libs/js/main-js.js"></script>
-    <link rel="stylesheet" href="../../assets/libs/css/style.css">
-
-    <!-- assts csss -->
-    <link rel="stylesheet" href="../../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
-    <link rel="stylesheet" href="../../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
-    <link rel="stylesheet" href="../../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
-
-    <!-- bs js -->
-    <script defer src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-
-    <!-- slimscroll js -->
-    <script defer type="module" src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
     <title>Admin Dashboard</title>
 </head>
 
@@ -57,121 +53,7 @@ if (isset($_SESSION['user_id'])) {
         <!-- ============================================================== -->
         <!-- navbar -->
         <!-- ============================================================== -->
-        <div class="dashboard-header ">
-            <nav class="navbar navbar-expand-lg bg-white fixed-top ">
-                <a class="navbar-brand" href="index.php">
-                    <img src="../assets/images/bcp-hrd-logo.jpg" alt="" class="" style="height: 3rem;width: auto;">
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse " id="navbarSupportedContent">
-                    <ul class="navbar-nav ml-auto navbar-right-top">
-                        <li class="nav-item">
-                            <div id="custom-search" class="top-search-bar">
-                                <input class="form-control" type="text" placeholder="Search..">
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown notification">
-                            <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span class="indicator"></span></a>
-                            <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
-                                <li>
-                                    <div class="notification-title"> Notification</div>
-                                    <div class="notification-list">
-                                        <div class="list-group">
-                                            <a href="#" class="list-group-item list-group-item-action active">
-                                                <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Jeremy Rakestraw</span>accepted your invitation to join the team.
-                                                        <div class="notification-date">2 min ago</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <a href="#" class="list-group-item list-group-item-action">
-                                                <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">John Abraham </span>is now following you
-                                                        <div class="notification-date">2 days ago</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <a href="#" class="list-group-item list-group-item-action">
-                                                <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Monaan Pechi</span> is watching your main repository
-                                                        <div class="notification-date">2 min ago</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <a href="#" class="list-group-item list-group-item-action">
-                                                <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Jessica Caruso</span>accepted your invitation to join the team.
-                                                        <div class="notification-date">2 min ago</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="list-footer"> <a href="#">View all notifications</a></div>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- <li class="nav-item dropdown connection">
-                            <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-fw fa-th"></i> </a>
-                            <ul class="dropdown-menu dropdown-menu-right connection-dropdown">
-                                <li class="connection-list">
-                                    <div class="row">
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/github.png" alt="" > <span>Github</span></a>
-                                        </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/dribbble.png" alt="" > <span>Dribbble</span></a>
-                                        </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/dropbox.png" alt="" > <span>Dropbox</span></a>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/bitbucket.png" alt=""> <span>Bitbucket</span></a>
-                                        </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/mail_chimp.png" alt="" ><span>Mail chimp</span></a>
-                                        </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/slack.png" alt="" > <span>Slack</span></a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="conntection-footer"><a href="#">More</a></div>
-                                </li>
-                            </ul>
-                        </li> -->
-                        <li class="nav-item dropdown nav-user">
-                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="#" alt="" class="user-avatar-md rounded-circle"></a>
-                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
-                                <div class="nav-user-info">
-                                    <h5 class="mb-0 text-white nav-user-name"> <?= $_SESSION['username'] ?> </h5>
-                                    <span class="status"></span><span class="ml-2">Available</span>
-                                </div>
-                                <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Account</a>
-                                <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
-                                <a class="dropdown-item" href="">
-                                    <button class="btn btn-danger">
-                                        <i class="fas fa-power-off mr-2"></i>
-                                        Logout
-                                    </button>
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
+        <?php include('./includes/_header.php') ?>
         <!-- ============================================================== -->
         <!-- end navbar -->
         <!-- ============================================================== -->
@@ -403,127 +285,41 @@ if (isset($_SESSION['user_id'])) {
         <!-- wrapper  -->
         <!-- ============================================================== -->
         <div class="dashboard-wrapper">
-            <!-- <div class="dashboard-ecommerce"> -->
             <div class="container-fluid dashboard-content ">
-                <!-- ============================================================== -->
-                <!-- pageheader  -->
-                <!-- ============================================================== -->
                 <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="page-header">
-                            <h2 class="pageheader-title">Dashboard</h2>
-
-
-                            <p class="pageheader-text">Nulla euismod urna eros, sit amet scelerisque torton lectus vel mauris facilisis faucibus at enim quis massa lobortis rutrum.</p>
-                            <div class="page-breadcrumb">
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item">
-                                            <!-- < ?p hp breadcrumb()?> -->
-                                        </li>
-                                        <!-- <li class="breadcrumb-item active" aria-current="page">Dashboard</li> -->
-                                    </ol>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- ============================================================== -->
-                <!-- end pageheader  -->
-                <!-- ============================================================== -->
-                <!-- <div class="ecommerce-widget"> -->
-
-                <div class="row">
-                    <!-- Modal -->
-                    <div class="modal fade" id="myModal" role="dialog">
-                        <div class="modal-dialog">
-
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">New Task</h4>
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                </div>
-                                <div class="modal-body">
-                                    <form>
-                                        <div class="mb-3">
-                                            <label for="exampleInputEmail1" class="form-label">Creator:</label>
-                                            <input type="text" class="form-control" id="exampleInputEmail1" value="<?= $_SESSION['username'] ?>" disabled>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="exampleInputEmail1" class="form-label">Task</label>
-                                            <input type="text" class="form-control" id="exampleInputEmail1">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="exampleInputEmail1" class="form-label">Description</label>
-                                            <textarea class="form-control" id="exampleInputEmail1"></textarea>
-                                        </div>
-                                        <div class="mb-3">
-                                            <select class="form-control form-select" aria-label="Default select example">
-                                                <option selected disabled>Basic</option>
-                                                <option value="1">Important</option>
-                                                <option value="2">Report</option>
-                                                <option value="3">Problem</option>
-                                            </select>
-                                        </div>
-
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-                <div class="row">
-                    <!-- ============================================================== -->
-
-                    <!-- ============================================================== -->
-
-                    <!-- recent orders  -->
-                    <!-- ============================================================== -->
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between">
-                                <h2 class="card-title  ">Task Management</h2>
+                                <h2 class="card-title">Task Management</h2>
                                 <button type="button" class="btn btn-primary float-right"
                                     data-toggle="modal" data-target="#myModal">Add Task</button>
                             </div>
 
                             <div class="card-body p-2">
                                 <div class="table-responsive">
-                                    <table class="table table-striped" id="TaskTable">
+                                    <table id="TaskTable">
                                         <thead class="bg-light">
                                             <tr class="border-0">
-                                                <th class="border-0">#</th>
                                                 <th class="border-0">Status</th>
-                                                <th class="border-0">Added by</th>
                                                 <th class="border-0">Task</th>
-                                                <th class="border-0">Description</th>
-                                                <th class="border-0">Start time</th>
-                                                <th class="border-0">End time</th>
+                                                <th class="border-0">Assign to</th>
+                                                <th class="border-0">Create in</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>
-                                                    <div class="m-r-10"><img src="#" alt="user" class="rounded" width="45"></div>
-                                                </td>
-                                                <td>Product #1 </td>
-                                                <td>id000001 </td>
-                                                <td>27-08-2018 01:22:12</td>
-                                                <td>Patricia J. King </td>
-                                                <td><span class="badge-dot badge-brand mr-1"></span>InTransit </td>
-                                                <!-- </tr>
+                                            <?php if (is_array($alltasks) && count($alltasks) > 0): ?>
                                                     
-                                                   
-                                                        <td colspan="9"><a href="#" class="btn btn-outline-light float-right">View Details</a></td>
-                                                    </tr> -->
+                                                <?php foreach ($alltasks as $alltask): ?>
+                                                    <tr>
+                                                        <td><span class="badge-dot mr-1 <?php echo $alltask['Status'] != 'Pending' && $alltask['Status'] != 'In Progress' ? 'badge-success' : 'badge-danger' ?> "></span></td>
+                                                        <td title="<?= htmlspecialchars($alltask['Description']) ?>"><?= $alltask['Title'] ?></td>
+                                                        <td><?= $alltask['FirstName'] . ' ' . $alltask['LastName'] ?></td>
+                                                        <td><?= $alltask['CreatedDate'] ?></td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                                <?php else: ?>
+                                                   <div class="badge badge-success m-3">No Task Today.</div>  
+                                            <?php endif; ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -532,7 +328,54 @@ if (isset($_SESSION['user_id'])) {
                     </div>
                     <!-- ============================================================== -->
                     <!-- end recent orders  -->
+                    <div class="row">
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal" role="dialog">
+                            <div class="modal-dialog">
 
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">New Task</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="post" action="tasks.php">
+                                            <div class="mb-3">
+                                                <label for="exampleInputEmail1" class="form-label">Creator:</label>
+                                                <input type="text" name="creator" class="form-control" id="exampleInputEmail1" value="<?= $_SESSION['username'] ?>" disabled>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="exampleInputEmail1" class="form-label">Task</label>
+                                                <input type="text" name="title" class="form-control" id="exampleInputEmail1">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="exampleInputEmail1" class="form-label">Description</label>
+                                                <textarea name="description" class="form-control" id="exampleInputEmail1"></textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="">Assign to:</label>
+                                                <select name="userID" class="form-control form-select" aria-label="Default select example">
+                                                    <?php if (is_array($emp) && count($emp) > 0): ?>
+                                                        <option selected disabled>Select a user</option>
+                                                        <?php foreach ($emp as $user): ?>
+                                                            <option value="<?= $user['EmployeeID']; ?>"><?= $user['FirstName']; ?></option>
+                                                        <?php endforeach; ?>
+                                                    <?php endif; ?>
+                                                </select>
+                                            </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
 
                 </div>
 

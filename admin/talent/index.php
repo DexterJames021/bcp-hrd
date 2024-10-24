@@ -1,8 +1,9 @@
 <!-- training main dashboard -->
 <?php
 session_start();
-
-
+require "../../config/db_talent.php";
+$sql = "SELECT * FROM job_postings";
+$result = $conn->query($sql);
 ?>
 <!doctype html>
 <html lang="en">
@@ -12,15 +13,17 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- icon -->
     <link rel="shortcut icon" href="../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="styledash1.css">
 
-    <script defer src="../../node_modules/jquery/dist/jquery.min.js"></script>
+    <!-- <script defer src="../../node_modules/jquery/dist/jquery.min.js"></script> -->
 
     <!-- bs -->
-    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <script defer src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css"> -->
+    <!-- <script defer src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script> -->
 
     <!-- jquery -->
-    <script defer src="../../node_modules/jquery/dist/jquery.js"></script>
+    <!-- <script defer src="../../node_modules/jquery/dist/jquery.js"></script> -->
 
     <!-- global JavaScript -->
     <script defer type="module" src="../../assets/libs/js/global-script.js"></script>
@@ -221,34 +224,35 @@ session_start();
                                 <div id="submenu-2" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/cards.html">Cards <span class="badge badge-secondary">New</span></a>
+                                            <a class="nav-link" href="index.php">Dashboard<span class="badge badge-secondary">New</span></a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/general.html">General</a>
+                                            <a class="nav-link" href="recruitment.php">Recruitment</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/carousel.html">Carousel</a>
+                                            <a class="nav-link" href="talent/onboarding.php">Onboarding</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/listgroup.html">Group</a>
+                                            <a class="nav-link" href="talent/talentretention.php">Talent Retention</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/typography.html">Typography</a>
+                                            <a class="nav-link" href="talent/succession.php">Succession Planning</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/accordions.html">Accordions</a>
+                                            <a class="nav-link" href="talent/career.php">Career Development</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/tabs.html">Tabs</a>
+                                            <a class="nav-link" href="talent/performance.html">Performance Review</a>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
+                            <!-- Document and Legal -->
                             <!-- Tech & Analytics -->
                             <li class="nav-item">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3" aria-controls="submenu-3"><i class="fas fa-fw fa-chart-pie"></i> Tech & Analytics</a>
                                 <div id="submenu-3" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
+                                    <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link" href="#">module <span class="badge badge-secondary">New</span></a>
                                         </li>
@@ -277,7 +281,7 @@ session_start();
                             <li class="nav-item ">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4"><i class="fab fa-fw fa-wpforms"></i>Document and Legal</a>
                                 <div id="submenu-4" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
+                                    <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link" href="#">module <span class="badge badge-secondary">New</span></a>
                                         </li>
@@ -306,7 +310,7 @@ session_start();
                             <li class="nav-item">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5"><i class="fas fa-fw fa-table"></i>Performance</a>
                                 <div id="submenu-5" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
+                                    <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link" href="#">module <span class="badge badge-secondary">New</span></a>
                                         </li>
@@ -335,7 +339,7 @@ session_start();
                             <li class="nav-item">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-6" aria-controls="submenu-6"><i class="fas fa-fw fa-columns"></i>Talent management</a>
                                 <div id="submenu-6" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
+                                    <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link" href="#">module <span class="badge badge-secondary">New</span></a>
                                         </li>
@@ -364,7 +368,7 @@ session_start();
                             <li class="nav-item">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-7" aria-controls="submenu-7"><i class="fas fa-f fa-folder"></i>Compensation & benefits</a>
                                 <div id="submenu-7" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
+                                    <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link" href="#">module <span class="badge badge-secondary">New</span></a>
                                         </li>
@@ -489,25 +493,196 @@ session_start();
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="text-muted">Contents</h5>
-                                <div class="metric-value d-inline-block">
-                                    <h1 class="mb-1">text</h1>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h1>Job Postings</h1>
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#addJobModal">Add Job Posting</button>
+                                </div>
+                                <table class="table mt-3">
+                                    <thead>
+                                        <tr>
+                                            <th>Job Title</th>
+                                            <th>Job Description</th>
+                                            <th>Requirements</th>
+                                            <th>Location</th>
+                                            <th>Salary Range</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        if ($result->num_rows > 0) {
+                                            while ($row = $result->fetch_assoc()) {
+                                                echo "<tr>";
+                                                echo "<td>" . $row['job_title'] . "</td>";
+                                                echo "<td>" . $row['job_description'] . "</td>";
+                                                echo "<td>" . $row['requirements'] . "</td>";
+                                                echo "<td>" . $row['location'] . "</td>";
+                                                echo "<td>" . $row['salary_range'] . "</td>";
+                                                echo "<td>" . $row['status'] . "</td>";
+                                                echo "<td>
+                                                    <button class='btn btn-warning btn-sm btn-action' 
+                                                            data-toggle='modal' 
+                                                            data-target='#editJobModal' 
+                                                            data-id='" . $row['id'] . "' 
+                                                            data-title='" . $row['job_title'] . "' 
+                                                            data-description='" . $row['job_description'] . "' 
+                                                            data-requirements='" . $row['requirements'] . "' 
+                                                            data-location='" . $row['location'] . "' 
+                                                            data-salary='" . $row['salary_range'] . "' 
+                                                            data-status='" . $row['status'] . "'>Edit</button>
+                                                    <a href='recruitment/delete_job.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm btn-action' onclick='return confirm(\"Are you sure you want to delete this job posting?\");'>Delete</a>
+                                                </td>";
+                                                echo "</tr>";
+                                            }
+                                        } else {
+                                            echo "<tr><td colspan='7'>No job postings found.</td></tr>";
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Add Job Modal -->
+                            <div class="modal fade" id="addJobModal" tabindex="-1" role="dialog" aria-labelledby="addJobModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="addJobModalLabel">Add Job Posting</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form action="recruitment/add_job.php" method="POST">
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="job_title">Job Title:</label>
+                                                    <input type="text" class="form-control" id="job_title" name="job_title" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="job_description">Job Description:</label>
+                                                    <textarea class="form-control" id="job_description" name="job_description" required></textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="requirements">Job Requirements:</label>
+                                                    <textarea class="form-control" id="requirements" name="requirements" required></textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="location">Location:</label>
+                                                    <input type="text" class="form-control" id="location" name="location" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="salary_range">Salary Range:</label>
+                                                    <input type="text" class="form-control" id="salary_range" name="salary_range" placeholder="e.g. ₱30,000 - ₱50,000" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="status">Status:</label>
+                                                    <select class="form-control" id="status" name="status" required>
+                                                        <option value="Open">Open</option>
+                                                        <option value="Closed">Closed</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Add Job Posting</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                            <div id="sparkline-revenue"></div>
+
+                            <!-- Edit Job Modal -->
+                            <div class="modal fade" id="editJobModal" tabindex="-1" role="dialog" aria-labelledby="editJobModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editJobModalLabel">Edit Job Posting</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <form action="recruitment/edit_job.php" method="POST" id="editJobForm">
+                                            <div class="modal-body">
+                                                <input type="hidden" id="edit_job_id" name="job_id">
+                                                <div class="form-group">
+                                                    <label for="edit_job_title">Job Title:</label>
+                                                    <input type="text" class="form-control" id="edit_job_title" name="job_title" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="edit_job_description">Job Description:</label>
+                                                    <textarea class="form-control" id="edit_job_description" name="job_description" required></textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="edit_requirements">Job Requirements:</label>
+                                                    <textarea class="form-control" id="edit_requirements" name="requirements" required></textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="edit_location">Location:</label>
+                                                    <input type="text" class="form-control" id="edit_location" name="location" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="edit_salary_range">Salary Range:</label>
+                                                    <input type="text" class="form-control" id="edit_salary_range" name="salary_range" placeholder="e.g. ₱30,000 - ₱50,000" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="edit_status">Status:</label>
+                                                    <select class="form-control" id="edit_status" name="status" required>
+                                                        <option value="Open">Open</option>
+                                                        <option value="Closed">Closed</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Update Job Posting</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+                            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                            <script>
+                                // Populate edit modal with job details
+                                $('#editJobModal').on('show.bs.modal', function(event) {
+                                    var button = $(event.relatedTarget); // Button that triggered the modal
+                                    var jobId = button.data('id');
+                                    var jobTitle = button.data('title');
+                                    var jobDescription = button.data('description');
+                                    var jobRequirements = button.data('requirements');
+                                    var jobLocation = button.data('location');
+                                    var jobSalary = button.data('salary');
+                                    var jobStatus = button.data('status');
+
+                                    // Update the modal's content.
+                                    var modal = $(this);
+                                    modal.find('#edit_job_id').val(jobId);
+                                    modal.find('#edit_job_title').val(jobTitle);
+                                    modal.find('#edit_job_description').val(jobDescription);
+                                    modal.find('#edit_requirements').val(jobRequirements);
+                                    modal.find('#edit_location').val(jobLocation);
+                                    modal.find('#edit_salary_range').val(jobSalary);
+                                    modal.find('#edit_status').val(jobStatus);
+                                });
+                            </script>
                         </div>
+                        <div id="sparkline-revenue"></div>
                     </div>
                 </div>
-
-
-
-                <!-- </div> -->
             </div>
+
+
+
             <!-- </div> -->
-            <!-- ============================================================== -->
-            <!-- footer -->
-            <!-- ============================================================== -->
-            <!-- <div class="footer mx-2">
+        </div>
+        <!-- </div> -->
+        <!-- ============================================================== -->
+        <!-- footer -->
+        <!-- ============================================================== -->
+        <!-- <div class="footer mx-2">
                 <div class="container-fluid mx-2">
                     <div class="row">
                         <div class="col-xl-7 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -520,17 +695,18 @@ session_start();
                     </div>
                 </div>
             </div> -->
-            <!-- ============================================================== -->
-            <!-- end footer -->
-            <!-- ============================================================== -->
-        </div>
         <!-- ============================================================== -->
-        <!-- end wrapper  -->
+        <!-- end footer -->
         <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- end wrapper  -->
+    <!-- ============================================================== -->
     </div>
     <!-- ============================================================== -->
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
+
 </body>
 
 </html>

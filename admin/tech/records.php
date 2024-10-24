@@ -2,14 +2,13 @@
 <?php
 session_start();
 include('../../config/Database.php');
-
-if (isset($_SESSION['user_id'])) {
-} else {
-    header("Location: ../auth/index.php");
-}
-
-
-$datas = $conn->query("SELECT * FROM employees");
+require_once('./includes/class/Employee.php');
+// if (isset($_SESSION['user_id'])) {
+// } else {
+//     header("Location: ../auth/index.php");
+// }
+$employee = new Employee($conn);
+$emp = $employee->select_all();
 
 ?>
 <!doctype html>
@@ -21,34 +20,7 @@ $datas = $conn->query("SELECT * FROM employees");
     <!-- icon -->
     <link rel="shortcut icon" href="../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
 
-    <!-- bs -->
-    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
-
-    <!-- jquery -->
-    <script defer src="../../node_modules/jquery/dist/jquery.min.js"></script>
-
-    <!-- datatable: js and cs -->
-    <script defer src="../../node_modules/datatables.net/js/dataTables.js"></script> <!-- main js-->
-    <link rel="stylesheet" href="../../node_modules/datatables.net-dt/css/dataTables.dataTables.css"> <!-- style-->
-
-    <!-- global JavaScript -->
-    <script defer type="module" src="../../assets/libs/js/global-script.js"></script>
-
-    <!-- main js -->
-    <script defer type="module" src="../../assets/libs/js/main-js.js"></script>
-    <link rel="stylesheet" href="../../assets/libs/css/style.css">
-
-    <!-- assts csss -->
-    <link rel="stylesheet" href="../../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
-    <link rel="stylesheet" href="../../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
-    <link rel="stylesheet" href="../../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
-
-    <!-- bs js -->
-    <script defer src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-
-    <!-- slimscroll js -->
-    <script defer type="module" src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
-
+    <?php include('./includes/_assets.php') ?>
 
     <title>Admin Dashboard</title>
 </head>
@@ -61,121 +33,7 @@ $datas = $conn->query("SELECT * FROM employees");
         <!-- ============================================================== -->
         <!-- navbar -->
         <!-- ============================================================== -->
-        <div class="dashboard-header ">
-            <nav class="navbar navbar-expand-lg bg-white fixed-top ">
-                <a class="navbar-brand" href="index.php">
-                    <img src="../../assets/images/bcp-hrd-logo.jpg" alt="" class="" style="height: 3rem;width: auto;">
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse " id="navbarSupportedContent">
-                    <ul class="navbar-nav ml-auto navbar-right-top">
-                        <li class="nav-item">
-                            <div id="custom-search" class="top-search-bar">
-                                <input class="form-control" type="text" placeholder="Search..">
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown notification">
-                            <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span class="indicator"></span></a>
-                            <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
-                                <li>
-                                    <div class="notification-title"> Notification</div>
-                                    <div class="notification-list">
-                                        <div class="list-group">
-                                            <a href="#" class="list-group-item list-group-item-action active">
-                                                <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Jeremy Rakestraw</span>accepted your invitation to join the team.
-                                                        <div class="notification-date">2 min ago</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <a href="#" class="list-group-item list-group-item-action">
-                                                <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">John Abraham </span>is now following you
-                                                        <div class="notification-date">2 days ago</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <a href="#" class="list-group-item list-group-item-action">
-                                                <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Monaan Pechi</span> is watching your main repository
-                                                        <div class="notification-date">2 min ago</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <a href="#" class="list-group-item list-group-item-action">
-                                                <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Jessica Caruso</span>accepted your invitation to join the team.
-                                                        <div class="notification-date">2 min ago</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="list-footer"> <a href="#">View all notifications</a></div>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- <li class="nav-item dropdown connection">
-                            <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-fw fa-th"></i> </a>
-                            <ul class="dropdown-menu dropdown-menu-right connection-dropdown">
-                                <li class="connection-list">
-                                    <div class="row">
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/github.png" alt="" > <span>Github</span></a>
-                                        </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/dribbble.png" alt="" > <span>Dribbble</span></a>
-                                        </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/dropbox.png" alt="" > <span>Dropbox</span></a>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/bitbucket.png" alt=""> <span>Bitbucket</span></a>
-                                        </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/mail_chimp.png" alt="" ><span>Mail chimp</span></a>
-                                        </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/slack.png" alt="" > <span>Slack</span></a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="conntection-footer"><a href="#">More</a></div>
-                                </li>
-                            </ul>
-                        </li> -->
-                        <li class="nav-item dropdown nav-user">
-                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="#" alt="" class="user-avatar-md rounded-circle"></a>
-                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
-                                <div class="nav-user-info">
-                                    <h5 class="mb-0 text-white nav-user-name"> <?= $_SESSION['username'] ?> </h5>
-                                    <span class="status"></span><span class="ml-2">Available</span>
-                                </div>
-                                <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Account</a>
-                                <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
-                                <a class="dropdown-item" href="">
-                                    <button class="btn btn-danger">
-                                        <i class="fas fa-power-off mr-2"></i>
-                                        Logout
-                                    </button>
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
+        <?php include('./includes/_header.php') ?>
         <!-- ============================================================== -->
         <!-- end navbar -->
         <!-- ============================================================== -->
@@ -483,13 +341,11 @@ $datas = $conn->query("SELECT * FROM employees");
                         <div class="card">
                             <div class="card-header d-flex justify-content-between">
                                 <h2 class="card-title  ">Records management</h2>
-                                <!-- <button type="button" class="btn btn-primary float-right"
-                                    data-toggle="modal" data-target="#myModal">Add Employee</button> -->
                             </div>
 
                             <div class="card-body p-2">
                                 <div class="table-responsive">
-                                    <table class="table table-striped" id="TaskTable">
+                                    <table id="RecordsTable">
                                         <thead class="bg-light">
                                             <tr class="border-0">
                                                 <th class="border-0">#</th>
@@ -502,7 +358,7 @@ $datas = $conn->query("SELECT * FROM employees");
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($datas as $data): ?>
+                                            <?php foreach ($emp as $data): ?>
                                                 <tr>
                                                     <td><?= $data['EmployeeID'] ?></td>
                                                     <!-- <td>

@@ -1,13 +1,18 @@
 $(document).ready(function () {
-    $('#TaskTable').DataTable({
-        "columnDefs": [{
-             "defaultContent": "-",
+    
+
+    var task_table = $('#TaskTable').DataTable({});
+
+    var record_table = $('#RecordsTable').DataTable({
+        columnDefs: [{
+            "defaultContent": "-",
             "targets": "_all"
-          }],
-        "buttons": [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ]
+        }],
+       // dom: 'Bfrtip',  // Include buttons
+        buttons: ['csv', 'excel', 'pdf', 'print'],
     });
-})
 
+    // Place buttons inside DataTable container
+    record_table.buttons().container().appendTo('#RecordsTable_wrapper .col-md-6:eq(0)');
 
+});

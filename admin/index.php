@@ -2,8 +2,10 @@
 session_start();
 //check usertype
 if (isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'employee') {
+    
 } else {
     header("Location: ../auth/index.php");
+    // exit();
 }
 
 
@@ -246,22 +248,22 @@ if (isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'employee') {
                                 <div id="submenu-2" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/cards.html">Cards <span class="badge badge-secondary">New</span></a>
+                                            <a class="nav-link" href="talent/index.php">Dashboard<span class="badge badge-secondary">New</span></a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/general.html">General</a>
+                                            <a class="nav-link" href="talent/recruitment.php">Recruitment</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/carousel.html">Carousel</a>
+                                            <a class="nav-link" href="talent/onboarding.php">Onboarding</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/listgroup.html">Group</a>
+                                            <a class="nav-link" href="talent/talentretention.php">Talent Retention</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/typography.html">Typography</a>
+                                            <a class="nav-link" href="talent/succession.php">Succession Planning</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/accordions.html">Accordions</a>
+                                            <a class="nav-link" href="talent/career.php">Career Development</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="pages/tabs.html">Tabs</a>
@@ -549,53 +551,10 @@ if (isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'employee') {
                 <!-- <div class="ecommerce-widget"> -->
 
                 <div class="row">
-                    <!-- Modal -->
-                    <div class="modal fade" id="myModal" role="dialog">
-                        <div class="modal-dialog">
-
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">New Task</h4>
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                </div>
-                                <div class="modal-body">
-                                    <form>
-                                        <div class="mb-3">
-                                            <label for="exampleInputEmail1" class="form-label">Creator:</label>
-                                            <input type="text" class="form-control" id="exampleInputEmail1" value="<?= $_SESSION['username'] ?>" disabled>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="exampleInputEmail1" class="form-label">Task</label>
-                                            <input type="text" class="form-control" id="exampleInputEmail1">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="exampleInputEmail1" class="form-label">Description</label>
-                                            <textarea class="form-control" id="exampleInputEmail1"></textarea>
-                                        </div>
-                                        <div class="mb-3">
-                                            <select class="form-control form-select" aria-label="Default select example">
-                                                <option selected disabled>Basic</option>
-                                                <option value="1">Important</option>
-                                                <option value="2">Report</option>
-                                                <option value="3">Problem</option>
-                                            </select>
-                                        </div>
-
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
                     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="text-muted">Total Revenue</h5>
+                                <h5 class="text-muted">employees</h5>
                                 <div class="metric-value d-inline-block">
                                     <h1 class="mb-1">$12099</h1>
                                 </div>
@@ -609,7 +568,7 @@ if (isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'employee') {
                     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="text-muted">Affiliate Revenue</h5>
+                                <h5 class="text-muted">task</h5>
                                 <div class="metric-value d-inline-block">
                                     <h1 class="mb-1">$12099</h1>
                                 </div>
@@ -623,7 +582,7 @@ if (isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'employee') {
                     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="text-muted">Refunds</h5>
+                                <h5 class="text-muted">onboard</h5>
                                 <div class="metric-value d-inline-block">
                                     <h1 class="mb-1">0.00</h1>
                                 </div>
@@ -637,7 +596,7 @@ if (isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'employee') {
                     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="text-muted">Avg. Revenue Per User</h5>
+                                <h5 class="text-muted">Job opening</h5>
                                 <div class="metric-value d-inline-block">
                                     <h1 class="mb-1">$28000</h1>
                                 </div>
