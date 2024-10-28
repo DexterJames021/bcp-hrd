@@ -19,6 +19,8 @@ function count_col($conn, $table)
     return $result;
 }
 
+$as_of_now = date('Y');
+
 $result_emp = count_col($conn, 'employees');
 $result_posting = count_col($conn, 'job_postings');
 $result_rec = count_col($conn, 'recruitment');
@@ -570,11 +572,16 @@ $result_rec = count_col($conn, 'recruitment');
                             <div class="card-body">
                                 <h5 class="text-muted">Employees</h5>
                                 <div class="metric-value d-inline-block">
-                                    <h1 class="mb-1"><?= $result_emp ?></h1>
+                                    <h1 class="mb-1">
+                                        <?= $result_emp ?>
+                                    </h1>
                                 </div>
                                 <!-- <div class="metric-label d-inline-block float-right text-success font-weight-bold">
                                     <span><i class="fa fa-fw fa-arrow-up"></i></span><span>5.86%</span>
                                 </div> -->
+                            </div>
+                            <div class="card-footer">
+                                As of year: <?= $as_of_now ?>
                             </div>
                             <div id="sparkline-revenue"></div>
                         </div>
@@ -604,6 +611,9 @@ $result_rec = count_col($conn, 'recruitment');
                                     <span>N/A</span>
                                 </div> -->
                             </div>
+                            <div class="card-footer">
+                                As of year: <?= $as_of_now ?>
+                            </div>
                             <div id="sparkline-revenue3"></div>
                         </div>
                     </div>
@@ -611,12 +621,14 @@ $result_rec = count_col($conn, 'recruitment');
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="text-muted">Job opening</h5>
-                                <div class="metric-value d-inline-block">
-                                    <h1 class="mb-1"><?= $result_posting ?></h1>
-                                </div>
+
+                                <h1 class="mb-1"><?= $result_posting ?></h1>
                                 <!-- <div class="metric-label d-inline-block float-right text-secondary font-weight-bold">
                                     <span>-2.00%</span>
                                 </div> -->
+                            </div>
+                            <div class="card-footer">
+                                As of year: <?= $as_of_now ?>
                             </div>
                             <div id="sparkline-revenue4"></div>
                         </div>
@@ -669,11 +681,11 @@ $result_rec = count_col($conn, 'recruitment');
     <!-- ============================================================== -->
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
-     <script>
-        $(document).ready(function(){
-            
+    <script>
+        $(document).ready(function() {
+
         });
-     </script>
+    </script>
 </body>
 
 </html>

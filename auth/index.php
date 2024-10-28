@@ -1,56 +1,44 @@
-<?php 
+<?php
 session_start();
 require "../config/Database.php";
 
 $err = "";
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
-    
-        if($err == ""){
 
-            $query = "SELECT * FROM users WHERE username = :username && password = :password LIMIT 1";
-            $stmt = $conn->prepare($query);
-            $check = $stmt->execute(['username'=> $username,'password'=>$password]);
+    $query = "SELECT * FROM users WHERE username = :username && password = :password LIMIT 1";
+    $stmt = $conn->prepare($query);
+    $check = $stmt->execute(['username' => $username, 'password' => $password]);
+    $user = $stmt->fetch();
 
-            if ($check) {
-                $user = $stmt->fetch(PDO::FETCH_OBJ);
-                if($user){
-                    
-                    if($user->usertype == 'admin'){
-                        $_SESSION['user_id'] = $user->id;
-                        $_SESSION['username'] = $user->username;
-                        $_SESSION['usertype'] = $user->usertype;
+    if ($user) {
 
-                        header("Location:../admin/index.php");
+        if ($user['usertype'] == 'admin') {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['usertype'] = $user['usertype'];
 
-                    }elseif($user->usertype == 'employee'){
-                        $_SESSION['user_id'] = $user->id;
-                        $_SESSION['username'] = $user->username;
-                        $_SESSION['usertype'] = $user->usertype;
+            header("Location:../admin/index.php");
+            exit();
+        } elseif ($user['usertype'] == 'employee') {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['usertype'] = $user['usertype'];
 
-                        header("Location:../portal/index.php");
-
-                    }
-                    echo "<script>confirm('405 no permisiion ')</script>";
-
-                }else{
-                    echo "<script>confirm('Something Wrong in email or password')</script>";
-                    // header("Location: index.php");
-
-                }
-                
-            }
+            header("Location:../portal/index.php");
+            exit();
         }
-
+    } else {
+        $err = 'Invalid username or password';
     }
+}
 
-    // $err = "<script>alert('Something Wrong in email or password')</script>";
 ?>
 <!doctype html>
 <html lang="en">
- 
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -83,11 +71,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <!-- login page  -->
     <!-- ============================================================== -->
     <div class="splash-container">
-        <?php 
-            if(isset($err) && $err != ""){
-                echo $err;
-            }
-        ?>
+
         <div class="card ">
             <div class="card-header text-center">
                 <a href="../index.php">
@@ -96,14 +80,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <!-- <span class="splash-description">For authenticated staffs only.</span> -->
             </div>
             <div class="card-body">
+                <?php if (!empty($err)): ?>
+                    <div class="alert alert-danger"><?= $err ?></div>
+                <?php endif; ?>
                 <form action="index.php" method="POST">
                     <div class="form-group">
-                        <input class="form-control form-control-lg" name="username" id="username" type="text" placeholder="Username" autocomplete="off">
+                        <input class="form-control form-control-lg" name="username" id="username" type="text" placeholder="Username" autocomplete="off" required>
                     </div>
                     <div class="form-group">
-                        <input class="form-control form-control-lg" name="password" id="password" type="password" placeholder="Password">
+                        <input class="form-control form-control-lg" name="password" id="password" type="password" placeholder="Password" required>
                     </div>
-                    <input type="submit" name="submit" class="btn btn-primary btn-lg btn-block" value="Sign in">
+                    <input type="submit" name="submit" id="submit" class="btn btn-primary btn-lg btn-block" value="Sign in">
                 </form>
             </div>
             <div class="card-footer bg-white p-0  ">
@@ -113,7 +100,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             </div>
         </div>
     </div>
-
 </body>
- 
+
 </html>
