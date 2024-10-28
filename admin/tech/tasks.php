@@ -286,7 +286,6 @@ function filter($conn, $status){
                     <div class="card">
                         <div class="card-header d-flex justify-content-between">
                             <h2 class="card-title">Task Management</h2>
-                            <?php var_dump(filter($conn,'Pending'))?>
                             <button type="button" class="btn btn-primary float-right"
                                 data-toggle="modal" data-target="#myModal">Add Task</button>
                         </div>
