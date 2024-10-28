@@ -3,10 +3,10 @@
 session_start();
 
 
-if (isset($_SESSION['user_id'])) {
-} else {
-    header("Location: ../auth/index.php");
-}
+// if (isset($_SESSION['user_id'])) {
+// } else {
+//     header("Location: ../auth/index.php");
+// }
 
 
 ?>
@@ -386,10 +386,10 @@ if (isset($_SESSION['user_id'])) {
                         </div>
                         <div class="row">
                             <div class="card col-5 ">
-                                <canvas id="effieciency-1"></canvas>
+                                <canvas id="performance-1"></canvas>
                             </div>
                             <div class="card col-5">
-                                <canvas id="effieciency-2"></canvas>
+                                <canvas id="performance-2"></canvas>
                             </div>
                         </div>
                     </div>
@@ -403,6 +403,12 @@ if (isset($_SESSION['user_id'])) {
     <!-- ============================================================== -->
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
+     <script>
+        $(document).ready(function(){
+            var chart = document.getElementById('performance-1');
+
+        });
+     </script>
 </body>
 
 </html>

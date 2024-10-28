@@ -19,37 +19,7 @@ if (isset($_SESSION['user_id'])) {
     <!-- icon -->
     <link rel="shortcut icon" href="../../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
 
-    <!-- bs -->
-    <link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.min.css">
-
-    <!-- jquery -->
-    <script defer src="../../../node_modules/jquery/dist/jquery.min.js"></script>
-
-    <!-- datatable: js and cs -->
-    <script defer src="../../../node_modules/datatables.net/js/dataTables.js"></script> <!-- main js-->
-    <link rel="stylesheet" href="../../../node_modules/datatables.net-dt/css/dataTables.dataTables.css"> <!-- style-->
-
-    <!-- chart -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- global JavaScript -->
-    <script defer type="module" src="../../../assets/libs/js/global-script.js"></script>
-    <script defer type="module" src="../../../assets/libs/js/analytics.js"></script>
-
-    <!-- main js -->
-    <script defer type="module" src="../../../assets/libs/js/main-js.js"></script>
-    <link rel="stylesheet" href="../../../assets/libs/css/style.css">
-
-    <!-- assts csss -->
-    <link rel="stylesheet" href="../../../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
-    <link rel="stylesheet" href="../../../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
-    <link rel="stylesheet" href="../../../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
-
-    <!-- bs js -->
-    <script defer src="../../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-
-    <!-- slimscroll js -->
-    <script defer type="module" src="../../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <?php include('./_asset.php') ?>
 
     <title>Analytics Efficiency</title>
 </head>
@@ -386,10 +356,13 @@ if (isset($_SESSION['user_id'])) {
                         </div>
                         <div class="row">
                             <div class="card col-5 ">
-                                <canvas id="effieciency-1"></canvas>
+                                <h2 class="lead text-center mt-2">Employee Logins Over Time</h2>
+                                <canvas id="loginChart" width="400" height="200"></canvas>
+
                             </div>
                             <div class="card col-5">
-                                <canvas id="effieciency-2"></canvas>
+                                <h2 class="lead text-center mt-2">Performance Evaluations</h2>
+                                <canvas id="evaluationChart" width="400" height="200"></canvas>
                             </div>
                         </div>
                     </div>
@@ -403,6 +376,80 @@ if (isset($_SESSION['user_id'])) {
     <!-- ============================================================== -->
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: '../includes/class/get_engagement.php',
+                method: 'GET',
+                success: function(response) {
+                    const data = JSON.parse(response);
+
+                    // Logins Line Chart
+                    const loginCtx = document.getElementById('loginChart').getContext('2d');
+                    const loginChart = new Chart(loginCtx, {
+                        type: 'line',
+                        data: {
+                            labels: data.logins.map(item => item.login_day),
+                            datasets: [{
+                                label: 'Total Logins',
+                                data: data.logins.map(item => item.total_logins),
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+
+                    // Performance Evaluations Pie Chart
+                    const evaluationCtx = document.getElementById('evaluationChart').getContext('2d');
+                    const evaluationChart = new Chart(evaluationCtx, {
+                        type: 'pie',
+                        data: {
+                            labels: data.evaluations.map(item => item.evaluation_type),
+                            datasets: [{
+                                label: 'Performance Evaluations',
+                                data: data.evaluations.map(item => item.total_evaluations),
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(255, 206, 86, 0.2)',
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                }
+                            }
+                        }
+                    });
+
+                 
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

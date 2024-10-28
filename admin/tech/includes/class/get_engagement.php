@@ -1,32 +1,35 @@
 <?php
+include_once("../../../../config/Database.php");
 
-// Fetch login data for the line chart
-$login_data = [];
-$sql = "SELECT DATE(login_date) as login_day, COUNT(*) as total_logins
-        FROM attendanceleave WHERE status = 'Present'
-        GROUP BY login_day ORDER BY login_day ASC";
+try {
 
-$result = $conn->query($sql);
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $login_data[] = $row;
-    }
+    // Attendance: line chart
+    $login_data = [];
+    $sql = "SELECT DATE_FORMAT(login_date, '%Y-%m-%d') as login_day, COUNT(*) as total_logins
+        FROM attendanceleave 
+        WHERE status = 'Present'
+        GROUP BY login_day 
+        ORDER BY login_day ASC";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $login_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Performance evaluations: pie chart
+    $evaluation_data = [];
+    $sql = "SELECT EvaluationType as evaluation_type, COUNT(*) as total_evaluations
+            FROM performanceevaluations
+            GROUP BY EvaluationType";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $evaluation_data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode(['logins' => $login_data, 'evaluations' => $evaluation_data]);
+
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+} finally {
+    // Close the PDO connection
+    $conn = null;
 }
-
-// Fetch performance evaluations data for the pie chart
-$evaluation_data = [];
-$sql = "SELECT evaluation_type, COUNT(*) as total_evaluations
-        FROM performanceevaluations
-        GROUP BY evaluation_type";
-
-$result = $conn->query($sql);
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $evaluation_data[] = $row;
-    }
-}
-
-// Return data as JSON
-echo json_encode(['logins' => $login_data, 'evaluations' => $evaluation_data]);
-
-$conn->close();

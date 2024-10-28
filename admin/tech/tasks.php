@@ -1,9 +1,10 @@
 <?php
 
 session_start();
-require_once('../../config/Database.php');
-require_once('./includes/class/Task.php');
-require_once('./includes/class/Employee.php');
+
+require_once '../../config/Database.php';
+require_once './includes/class/Task.php';
+require_once './includes/class/Employee.php';
 
 // if (isset($_SESSION['user_id'])) {
 // } else {
@@ -16,19 +17,15 @@ $emp = $employee->select_all();
 $task = new Task($conn);
 $alltasks = $task->select_all_task();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $title = $_POST['title'];
-    $description = $_POST['description'];
-    $userID = $_POST['userID'];
-    // $status = $_POST['Status'];
-
-    // Call the create() method to insert data
-    if ($task->create_task($title, $description, $userID)) {
-        echo "<script>alert('Task created successfully!');</script>";
-    } else {
-        echo "<script>alert('Failed to create task.');</script>";
-    }
+function filter($conn, $status){
+    $q = "SELECT Status FROM tasks WHERE ". $status;
+    $stmt = $conn->prepare($q);
+    $stmt->execute();
+    $result = $stmt->fetchAll();
+    return $result;
 }
+
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -40,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="shortcut icon" href="../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
 
     <!-- assets -->
-    <?php include('./includes/_assets.php') ?>
+    <?php include_once('./includes/_assets.php') ?>
 
     <title>Admin Dashboard</title>
 </head>
@@ -278,119 +275,183 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </nav>
             </div>
         </div>
-        <!-- ============================================================== -->
-        <!-- end left sidebar -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- wrapper  -->
-        <!-- ============================================================== -->
-        <div class="dashboard-wrapper">
-            <div class="container-fluid dashboard-content ">
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between">
-                                <h2 class="card-title">Task Management</h2>
-                                <button type="button" class="btn btn-primary float-right"
-                                    data-toggle="modal" data-target="#myModal">Add Task</button>
-                            </div>
-
-                            <div class="card-body p-2">
-                                <div class="table-responsive">
-                                    <table id="TaskTable">
-                                        <thead class="bg-light">
-                                            <tr class="border-0">
-                                                <th class="border-0">Status</th>
-                                                <th class="border-0">Task</th>
-                                                <th class="border-0">Assign to</th>
-                                                <th class="border-0">Create in</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php if (is_array($alltasks) && count($alltasks) > 0): ?>
-                                                    
-                                                <?php foreach ($alltasks as $alltask): ?>
-                                                    <tr>
-                                                        <td><span class="badge-dot mr-1 <?php echo $alltask['Status'] != 'Pending' && $alltask['Status'] != 'In Progress' ? 'badge-success' : 'badge-danger' ?> "></span></td>
-                                                        <td title="<?= htmlspecialchars($alltask['Description']) ?>"><?= $alltask['Title'] ?></td>
-                                                        <td><?= $alltask['FirstName'] . ' ' . $alltask['LastName'] ?></td>
-                                                        <td><?= $alltask['CreatedDate'] ?></td>
-                                                    </tr>
-                                                <?php endforeach; ?>
-                                                <?php else: ?>
-                                                   <div class="badge badge-success m-3">No Task Today.</div>  
-                                            <?php endif; ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- ============================================================== -->
-                    <!-- end recent orders  -->
-                    <div class="row">
-                        <!-- Modal -->
-                        <div class="modal fade" id="myModal" role="dialog">
-                            <div class="modal-dialog">
-
-                                <!-- Modal content-->
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">New Task</h4>
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form method="post" action="tasks.php">
-                                            <div class="mb-3">
-                                                <label for="exampleInputEmail1" class="form-label">Creator:</label>
-                                                <input type="text" name="creator" class="form-control" id="exampleInputEmail1" value="<?= $_SESSION['username'] ?>" disabled>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="exampleInputEmail1" class="form-label">Task</label>
-                                                <input type="text" name="title" class="form-control" id="exampleInputEmail1">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="exampleInputEmail1" class="form-label">Description</label>
-                                                <textarea name="description" class="form-control" id="exampleInputEmail1"></textarea>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="">Assign to:</label>
-                                                <select name="userID" class="form-control form-select" aria-label="Default select example">
-                                                    <?php if (is_array($emp) && count($emp) > 0): ?>
-                                                        <option selected disabled>Select a user</option>
-                                                        <?php foreach ($emp as $user): ?>
-                                                            <option value="<?= $user['EmployeeID']; ?>"><?= $user['FirstName']; ?></option>
-                                                        <?php endforeach; ?>
-                                                    <?php endif; ?>
-                                                </select>
-                                            </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
-                                    </form>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- </div> -->
-            </div>
-            <!-- </div> -->
-        </div>
-        <!-- ============================================================== -->
-        <!-- end wrapper  -->
-        <!-- ============================================================== -->
     </div>
+
+
+    <!-- main content -->
+    <div class="dashboard-wrapper">
+        <div class="container-fluid dashboard-content ">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between">
+                            <h2 class="card-title">Task Management</h2>
+                            <?php var_dump(filter($conn,'Pending'))?>
+                            <button type="button" class="btn btn-primary float-right"
+                                data-toggle="modal" data-target="#myModal">Add Task</button>
+                        </div>
+                        <div class="card-body">
+                            <!-- filter btn -->
+                            <select name="filterTask" id="" class="form-select ">
+                                <option value="all">all</option>
+                                <option value="complete">complete</option>
+                                <option value="active">active</option>
+                            </select>
+
+                            <ul class="list-group mb-0">
+                                <?php if (is_array($alltasks) && count($alltasks) > 0): ?>
+                                    <?php foreach ($alltasks as $alltask): ?>
+                                        <li id="task-list"
+                                            class=" text-center list-group-item d-flex justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom rounded-0 mb-2">
+                                            <div class="d-flex align-items-center">
+                                                <input type="checkbox" id="task-check" class="form-check-input me-2" value="<?= $alltask['Status'] ?>" aria-label="..." />
+                                                <div class="">
+                                                    <span class="d-block "><?= $alltask['Title'] ?>
+                                                        <span class="text-muted">
+                                                            <?= $alltask['Description'] === '' ? '' : '<i class="bi bi-dot"></i>' ?>
+                                                            <?= htmlspecialchars($alltask['Description']) ?>
+                                                        </span>
+                                                    </span>
+
+                                                </div>
+                                            </div>
+                                            <div class="dropdown">
+                                                <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bi bi-three-dots-vertical"></i>
+                                                </a>
+
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <li><a class="dropdown-item" href="./path/id=". <?= $alltask['TaskID'] ?>>Edit</a></li>
+                                                    <li><a class="dropdown-item" href="#">Delete</a></li>
+                                                    <li><a class="dropdown-item" href="#">Mark as Complete</a></li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <div class=" m-3">No Task Today.</div>
+                                <?php endif; ?>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal -->
+    <div class="row">
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">New Task</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                    </div>
+                    <div class="modal-body">
+                        <form id="task_form">
+                            <div class="mb-3">
+                                <label for="creator" class="form-label">Creator:</label>
+                                <input type="text" name="Creator" class="form-control" id="creator" value="<?= $_SESSION['username'] ?>" disabled>
+
+                            </div>
+                            <div class="mb-3">
+                                <label for="task" class="form-label">Task:</label>
+                                <input type="text" name="Title" class="form-control" id="task" required='required'>
+                                <label for="task" class="task-valid d-none text-danger">This field is required!</label>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description:</label>
+                                <textarea name="Description" class="form-control" id="description"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="assign">Assign to:</label>
+                                <select name="UserID" class="form-control form-select" id="assign" aria-label="Default select example" required='required'>
+                                    <?php if (is_array($emp) && count($emp) > 0): ?>
+                                        <option value="" selected disabled>Select a user</option>
+                                        <?php foreach ($emp as $user): ?>
+                                            <option value="<?= $user['UserID']; ?>"><?= $user['FirstName']; ?></option>
+                                        <?php endforeach; ?>
+                                        <option>Everyone</option> //TODO: select *
+                                    <?php endif; ?>
+                                </select>
+                                <label for="assign" class="assign-valid d-none text-danger">This field is required!</label>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" id="submit-btn" class="btn btn-primary">Submit</button>
+                                <button type="button" id="close-btn" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- end wrapper  -->
+    <!-- ============================================================== -->
+
     <!-- ============================================================== -->
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
+    <script>
+        $(document).ready(function() {
+            $('.row .modal .modal-content .modal-body #task_form').on('submit', (e) => {
+                e.preventDefault();
+
+                $formdata = {
+                    Creator: $('#creator').val(),
+                    Title: $('#task').val(),
+                    Description: $('#description').val(),
+                    UserID: $('#assign').val()
+                };
+
+
+                $.ajax({
+                    url: './includes/class/Task.php',
+                    method: 'POST',
+                    data: $formdata,
+                    dataType: 'json',
+                    success: (response) => {
+
+                        // console.log(response)
+                        if (response && response.message === "Task created successfully!") {
+                            $('#task_form')[0].reset();
+                            $('#myModal').closest('.modal').modal('hide');
+
+                            Toastify({
+                                text: "Task Added successfully",
+                                className: "info",
+                                style: {
+                                    background: " #2ec551",
+                                    border: "solid #f9f9f 1px"
+                                }
+                            }).showToast();
+                        }
+
+                    },
+                    error: function(xhr, status, error) {
+                        // Swal.fire('Error', 'An unexpected error occurred.', 'error');
+                        console.log('Error', 'An unexpected error occurred.', 'error');
+                    }
+                })
+
+            });
+
+            $(document).on('click', '#task-check', () => {
+                // console.log('e')
+                $.ajax({
+                    url: '',
+                    method: 'PUT'
+                })
+            })
+        });
+    </script>
 </body>
 
 </html>

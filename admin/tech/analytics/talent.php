@@ -3,10 +3,10 @@
 session_start();
 
 
-if (isset($_SESSION['user_id'])) {
-} else {
-    header("Location: ../auth/index.php");
-}
+// if (isset($_SESSION['user_id'])) {
+// } else {
+//     header("Location: ../auth/index.php");
+// }
 
 
 ?>

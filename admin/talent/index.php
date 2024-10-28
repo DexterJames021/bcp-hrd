@@ -19,11 +19,11 @@ $result = $conn->query($sql);
     <!-- <script defer src="../../node_modules/jquery/dist/jquery.min.js"></script> -->
 
     <!-- bs -->
-    <!-- <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css"> -->
-    <!-- <script defer src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script> -->
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script defer src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <!-- jquery -->
-    <!-- <script defer src="../../node_modules/jquery/dist/jquery.js"></script> -->
+    <script defer src="../../node_modules/jquery/dist/jquery.js"></script>
 
     <!-- global JavaScript -->
     <script defer type="module" src="../../assets/libs/js/global-script.js"></script>

@@ -1,4 +1,7 @@
 <?php 
+// display debug err
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 define("host","localhost");
 define("db","bcp-hrd");

@@ -5,8 +5,8 @@
     <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
 
     <!-- datatable: js and cs -->
-    <!-- <link rel="stylesheet" href="../../node_modules/datatables.net-dt/css/dataTables.dataTables.min.css"> <!-- style-->
-    <!-- <script defer src="../../node_modules/datatables.net/js/dataTables.js"></script> main js --> -->
+    <!-- <link rel="stylesheet" href="../../node_modules/datatables.net-dt/css/dataTables.dataTables.min.css"> 
+    < <script defer src="../../node_modules/datatables.net/js/dataTables.js"></script> main js --> 
 
     <!-- main js -->
     <script defer type="module" src="../../assets/libs/js/main-js.js"></script>

@@ -1,8 +1,8 @@
 <!-- tech record  -->
 <?php
 session_start();
-include('../../config/Database.php');
-require_once('./includes/class/Employee.php');
+require_once '../../config/Database.php';
+require_once './includes/class/Employee.php';
 // if (isset($_SESSION['user_id'])) {
 // } else {
 //     header("Location: ../auth/index.php");
@@ -340,7 +340,7 @@ $emp = $employee->select_all();
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between">
-                                <h2 class="card-title  ">Records management</h2>
+                                <h2 class="card-title">Records management</h2>
                             </div>
 
                             <div class="card-body p-2">
@@ -373,7 +373,11 @@ $emp = $employee->select_all();
                                                     <td><?= $data['Phone'] ?></td>
                                                     <td><?= $data['Address'] ?></td>
                                                     <td><?= $data['DOB'] ?></td>
-                                                    <td><span class="badge-dot mr-1 <?php echo $data['Status'] == 'Active' ? 'badge-success' : 'badge-danger' ?> "></span></td>
+                                                    <td>
+                                                        <span class="badge-dot mr-1 <?= $data['Status'] == 'Active' ? 'badge-success' : 'badge-danger' ?>">
+                                                            <?php $data['Status'] == 'Active' ? 'Active' : 'Not Active' ?>
+                                                        </span>
+                                                    </td>
                                                     <!-- </tr>
                                                     
                                                     	 	 	

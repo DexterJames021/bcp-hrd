@@ -1,13 +1,27 @@
 <?php
 session_start();
+require '../config/Database.php';
+
 //check usertype
 if (isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'employee') {
-    
+    echo "<script>welcome()</script>";
 } else {
     header("Location: ../auth/index.php");
     // exit();
 }
 
+function count_col($conn, $table)
+{
+    $q = "SELECT count(*) FROM " . $table;
+    $stmt = $conn->prepare($q);
+    $stmt->execute();
+    $result = $stmt->fetchColumn();
+    return $result;
+}
+
+$result_emp = count_col($conn, 'employees');
+$result_posting = count_col($conn, 'job_postings');
+$result_rec = count_col($conn, 'recruitment');
 
 ?>
 <!doctype html>
@@ -275,7 +289,7 @@ if (isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'employee') {
                             <li class="nav-item">
                                 <a class="nav-link" href="./analytics/index.php" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3" aria-controls="submenu-3"><i class="fas fa-fw fa-chart-pie"></i> Tech & Analytics</a>
                                 <div id="submenu-3" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
+                                    <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link active" href="./tech/index.php">Home Dashboard</a>
                                         </li>
@@ -366,7 +380,7 @@ if (isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'employee') {
                                         </li>
                                     </ul>
                                 </div>
-                            </li>    
+                            </li>
                             <!--- Compensation & benefits -->
                             <li class="nav-item">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-7" aria-controls="submenu-7"><i class="fas fa-f fa-folder"></i>Compensation & benefits</a>
@@ -554,18 +568,18 @@ if (isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'employee') {
                     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="text-muted">employees</h5>
+                                <h5 class="text-muted">Employees</h5>
                                 <div class="metric-value d-inline-block">
-                                    <h1 class="mb-1">$12099</h1>
+                                    <h1 class="mb-1"><?= $result_emp ?></h1>
                                 </div>
-                                <div class="metric-label d-inline-block float-right text-success font-weight-bold">
+                                <!-- <div class="metric-label d-inline-block float-right text-success font-weight-bold">
                                     <span><i class="fa fa-fw fa-arrow-up"></i></span><span>5.86%</span>
-                                </div>
+                                </div> -->
                             </div>
                             <div id="sparkline-revenue"></div>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                    <!-- <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="text-muted">task</h5>
@@ -578,17 +592,17 @@ if (isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'employee') {
                             </div>
                             <div id="sparkline-revenue2"></div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="text-muted">onboard</h5>
+                                <h5 class="text-muted">Onboard</h5>
                                 <div class="metric-value d-inline-block">
-                                    <h1 class="mb-1">0.00</h1>
+                                    <h1 class="mb-1"><?= $result_rec ?></h1>
                                 </div>
-                                <div class="metric-label d-inline-block float-right text-primary font-weight-bold">
+                                <!-- <div class="metric-label d-inline-block float-right text-primary font-weight-bold">
                                     <span>N/A</span>
-                                </div>
+                                </div> -->
                             </div>
                             <div id="sparkline-revenue3"></div>
                         </div>
@@ -598,11 +612,11 @@ if (isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'employee') {
                             <div class="card-body">
                                 <h5 class="text-muted">Job opening</h5>
                                 <div class="metric-value d-inline-block">
-                                    <h1 class="mb-1">$28000</h1>
+                                    <h1 class="mb-1"><?= $result_posting ?></h1>
                                 </div>
-                                <div class="metric-label d-inline-block float-right text-secondary font-weight-bold">
+                                <!-- <div class="metric-label d-inline-block float-right text-secondary font-weight-bold">
                                     <span>-2.00%</span>
-                                </div>
+                                </div> -->
                             </div>
                             <div id="sparkline-revenue4"></div>
                         </div>
@@ -655,6 +669,11 @@ if (isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'employee') {
     <!-- ============================================================== -->
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
+     <script>
+        $(document).ready(function(){
+            
+        });
+     </script>
 </body>
 
 </html>
