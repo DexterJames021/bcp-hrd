@@ -5,7 +5,6 @@
 
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.min.css">
-<script defer src="../../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
 <!-- main cs -->
 <link rel="stylesheet" href="../../../assets/libs/css/style.css">
@@ -13,6 +12,9 @@
 <!-- datatable:  cs -->
 <link rel="stylesheet" href="../../../node_modules/datatables.net-dt/css/dataTables.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+
+<!-- Bootstrap JS -->
+<script defer src="../../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
 <!-- jQuery -->
 <script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>

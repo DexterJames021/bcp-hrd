@@ -4,9 +4,10 @@ require "../config/Database.php";
 
 $err = "";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
+    // $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
     $query = "SELECT * FROM users WHERE username = :username && password = :password LIMIT 1";
     $stmt = $conn->prepare($query);
@@ -29,6 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             header("Location:../portal/index.php");
             exit();
+        }else{
+            $err = 'Invalid username or password';
         }
     } else {
         $err = 'Invalid username or password';
@@ -77,7 +80,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <a href="../index.php">
                     <img class="logo-img" src="../assets/images/bcp-hrd-logo.jpg" alt="logo" style="height:10rem;width:auto;">
                 </a>
-                <!-- <span class="splash-description">For authenticated staffs only.</span> -->
             </div>
             <div class="card-body">
                 <?php if (!empty($err)): ?>

@@ -158,7 +158,7 @@ function filter($conn, $status){
                                 <div id="submenu-3" class="collapse submenu show" style="">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="./index.php">Home Dashboard</a>
+                                            <a class="nav-link" href="./index.php">Facilities and Resources</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link active" href="./tasks.php">Task management</a>

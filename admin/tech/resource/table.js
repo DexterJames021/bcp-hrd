@@ -16,4 +16,7 @@ $(document).ready(function () {
                 .container()
                 .appendTo('#RecordsTable_wrapper .col-md-6:eq(0)');
 
+    var facility_table = $('#falicityTable').DataTable();
+
+
 });
