@@ -222,7 +222,7 @@ if (isset($_SESSION['user_id'])) {
                                 <div id="submenu-3" class="collapse submenu show" style="">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="../index.php">Home Dashboard</a>
+                                            <a class="nav-link" href="../index.php">Facilites and Resources</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="../tasks.php">Task management</a>
@@ -376,80 +376,6 @@ if (isset($_SESSION['user_id'])) {
     <!-- ============================================================== -->
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
-    <script>
-        $(document).ready(function() {
-            $.ajax({
-                url: '../includes/class/get_engagement.php',
-                method: 'GET',
-                success: function(response) {
-                    const data = JSON.parse(response);
-
-                    // Logins Line Chart
-                    const loginCtx = document.getElementById('loginChart').getContext('2d');
-                    const loginChart = new Chart(loginCtx, {
-                        type: 'line',
-                        data: {
-                            labels: data.logins.map(item => item.login_day),
-                            datasets: [{
-                                label: 'Total Logins',
-                                data: data.logins.map(item => item.total_logins),
-                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                borderColor: 'rgba(75, 192, 192, 1)',
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
-                        }
-                    });
-
-                    // Performance Evaluations Pie Chart
-                    const evaluationCtx = document.getElementById('evaluationChart').getContext('2d');
-                    const evaluationChart = new Chart(evaluationCtx, {
-                        type: 'pie',
-                        data: {
-                            labels: data.evaluations.map(item => item.evaluation_type),
-                            datasets: [{
-                                label: 'Performance Evaluations',
-                                data: data.evaluations.map(item => item.total_evaluations),
-                                backgroundColor: [
-                                    'rgba(255, 99, 132, 0.2)',
-                                    'rgba(54, 162, 235, 0.2)',
-                                    'rgba(255, 206, 86, 0.2)',
-                                    'rgba(75, 192, 192, 0.2)',
-                                    'rgba(153, 102, 255, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)'
-                                ],
-                                borderColor: [
-                                    'rgba(255, 99, 132, 1)',
-                                    'rgba(54, 162, 235, 1)',
-                                    'rgba(255, 206, 86, 1)',
-                                    'rgba(75, 192, 192, 1)',
-                                    'rgba(153, 102, 255, 1)',
-                                    'rgba(255, 159, 64, 1)'
-                                ],
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    position: 'top',
-                                }
-                            }
-                        }
-                    });
-
-                 
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>

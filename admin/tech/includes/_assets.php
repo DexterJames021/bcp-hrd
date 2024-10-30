@@ -40,6 +40,7 @@
 <!-- main js -->
 <link rel="stylesheet" href="../../assets/libs/css/style.css">
 <script type="module" src="../../assets/libs/js/main-js.js"></script>
+<script src="../resource/index.js"></script>
 
 <!-- assts csss -->
 <link rel="stylesheet" href="../../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">

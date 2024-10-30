@@ -15,37 +15,7 @@ session_start();
     <!-- icon -->
     <link rel="shortcut icon" href="../../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
 
-    <!-- bs -->
-    <link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.min.css">
-
-    <!-- jquery -->
-    <script defer src="../../../node_modules/jquery/dist/jquery.min.js"></script>
-
-    <!-- datatable: js and cs -->
-    <script defer src="../../../node_modules/datatables.net/js/dataTables.js"></script> <!-- main js-->
-    <link rel="stylesheet" href="../../../node_modules/datatables.net-dt/css/dataTables.dataTables.css"> <!-- style-->
-
-    <!-- chart -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- global JavaScript -->
-    <script defer type="module" src="../../../assets/libs/js/global-script.js"></script>
-    <script defer type="module" src="../../../assets/libs/js/analytics.js"></script>
-
-    <!-- main js -->
-    <script defer type="module" src="../../../assets/libs/js/main-js.js"></script>
-    <link rel="stylesheet" href="../../../assets/libs/css/style.css">
-
-    <!-- assts csss -->
-    <link rel="stylesheet" href="../../../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
-    <link rel="stylesheet" href="../../../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
-    <link rel="stylesheet" href="../../../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
-
-    <!-- bs js -->
-    <script defer src="../../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-
-    <!-- slimscroll js -->
-    <script defer type="module" src="../../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <?php require_once './_asset.php' ?>
 
     <title>Analytics Efficiency</title>
 </head>
