@@ -2,9 +2,19 @@
 <?php
 session_start();
 require "../../config/db_talent.php";
-$sql = "SELECT * FROM job_postings";
+
+// Updated SQL query to include department names
+$sql = "SELECT jp.*, d.DepartmentName AS department_name 
+FROM job_postings jp 
+JOIN departments d ON jp.DepartmentID = d.DepartmentID";
 $result = $conn->query($sql);
+
+// Fetch departments for the dropdown
+$department_sql = "SELECT DepartmentID, DepartmentName FROM departments";
+$department_result = $conn->query($department_sql);
+
 ?>
+
 <!doctype html>
 <html lang="en">
 
@@ -14,7 +24,7 @@ $result = $conn->query($sql);
     <!-- icon -->
     <link rel="shortcut icon" href="../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="styledash1.css">
+    <link rel="stylesheet" type="text/css" href="styledash2.css">
 
     <script defer src="../../node_modules/jquery/dist/jquery.min.js"></script>
 
@@ -39,7 +49,7 @@ $result = $conn->query($sql);
 
     <!-- Slimscroll JS -->
     <script defer type="module" src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
-    <title>Admin Dashboard</title>
+    <title>Admin Recruitment</title>
     <script>
         // Function to automatically hide the alert after a few seconds
         function autoHideAlert() {
@@ -243,7 +253,7 @@ $result = $conn->query($sql);
                                             <a class="nav-link" href="recruitment.php">Recruitment</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="talent/onboarding.php">Onboarding</a>
+                                            <a class="nav-link" href="onboarding.php">Onboarding</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="talent/talentretention.php">Talent Retention</a>
@@ -506,12 +516,15 @@ $result = $conn->query($sql);
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                            <h1>Job Postings</h1>
-                            <div class="d-flex justify-content-between align-items-center">
-                                
-                                <button class="btn btn-primary" data-toggle="modal" data-target="#addJobModal">Add Job Posting</button>
-                                <button class="btn btn-primary" onclick="window.location.href='recruitment/job_listings.php'">View Job Postings</button>
-                            </div><hr>
+                                <h1>Job Postings</h1>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#addJobModal">Add Job Posting</button>
+                                        <button class="btn btn-primary" data-toggle="modal" data-target="#addDepartmentModal">Add Department</button> <!-- New button for adding department -->
+                                    </div>
+                                    <button class="btn btn-primary" onclick="window.location.href='recruitment/job_listings.php'">View Job Postings</button>
+                                </div>
+                                <hr>
                                 <?php if (isset($_SESSION['message'])): ?>
                                     <div class="alert alert-<?php echo $_SESSION['message_type']; ?> alert-dismissible fade show" role="alert">
                                         <?php 
@@ -523,53 +536,96 @@ $result = $conn->query($sql);
                                         </button>
                                     </div>
                                 <?php endif; ?>
-                            <table class="table mt-3">
-                                <thead>
-                                    <tr>
-                                        <th>Job Title</th>
-                                        <th>Job Description</th>
-                                        <th>Requirements</th>
-                                        <th>Location</th>
-                                        <th>Salary Range</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    
-                                    <?php
-                                    if ($result->num_rows > 0) {
-                                        while($row = $result->fetch_assoc()) {
-                                            echo "<tr>";
-                                            echo "<td>" . $row['job_title'] . "</td>";
-                                            echo "<td>" . $row['job_description'] . "</td>";
-                                            echo "<td>" . $row['requirements'] . "</td>";
-                                            echo "<td>" . $row['location'] . "</td>";
-                                            echo "<td>" . $row['salary_range'] . "</td>";
-                                            echo "<td>" . $row['status'] . "</td>";
-                                            echo "<td>
-                                                    <button class='btn btn-warning btn-sm btn-action' 
-                                                            data-toggle='modal' 
-                                                            data-target='#editJobModal' 
-                                                            data-id='" . $row['id'] . "' 
-                                                            data-title='" . $row['job_title'] . "' 
-                                                            data-description='" . $row['job_description'] . "' 
-                                                            data-requirements='" . $row['requirements'] . "' 
-                                                            data-location='" . $row['location'] . "' 
-                                                            data-salary='" . $row['salary_range'] . "' 
-                                                            data-status='" . $row['status'] . "'>Edit</button>
-                                                    <a href='recruitment/delete_job.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm btn-action' onclick='return confirm(\"Are you sure you want to delete this job posting?\");'>Delete</a>
-                                                </td>";
-                                            echo "</tr>";
-                                        }
-                                    } else {
-                                        echo "<tr><td colspan='7'>No job postings found.</td></tr>";
-                                    }
-                                    ?>
-                            
-                                </tbody>
-                            </table>
+                                <div class="custom-table-container">
+                                    <table class="table mt-3">
+                                        <thead>
+                                            <tr>
+                                                <th>Job Title</th>
+                                                <th>Job Description</th>
+                                                <th>Requirements</th>
+                                                <th>Location</th>
+                                                <th>Salary Range</th>
+                                                <th>Status</th>
+                                                <th>Department</th> <!-- Added department column -->
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            if ($result->num_rows > 0) {
+                                                while($row = $result->fetch_assoc()) {
+                                                    echo "<tr>";
+                                                    echo "<td>" . $row['job_title'] . "</td>";
+                                                    echo "<td class='custom-long-text'>" . $row['job_description'] . "</td>";
+                                                    echo "<td class='custom-long-text'>" . $row['requirements'] . "</td>";
+                                                    echo "<td>" . $row['location'] . "</td>";
+                                                    echo "<td>" . $row['salary_range'] . "</td>";
+                                                    echo "<td>" . $row['status'] . "</td>";
+                                                    echo "<td>" . $row['department_name'] . "</td>"; // Display department name
+                                                    echo "<td>
+                                                            <button class='btn btn-warning btn-sm btn-action' 
+                                                                    data-toggle='modal' 
+                                                                    data-target='#editJobModal' 
+                                                                    data-id='" . $row['id'] . "' 
+                                                                    data-title='" . $row['job_title'] . "' 
+                                                                    data-description='" . $row['job_description'] . "' 
+                                                                    data-requirements='" . $row['requirements'] . "' 
+                                                                    data-location='" . $row['location'] . "' 
+                                                                    data-salary='" . $row['salary_range'] . "' 
+                                                                   data-status='" . $row['status'] . "'>Edit</button>
+                                                                    <div style='margin-top: 5px;'>
+                                                                        <a href='recruitment/delete_job.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm btn-action' onclick='return confirm(\"Are you sure you want to delete this job posting?\");'>Delete</a>
+                                                                    </div>
+                                                                    <div style='margin-top: 5px;'>
+                                                                        <a href='recruitment/manage_application.php?job_id=" . $row['id'] . "' class='btn btn-primary btn-sm btn-action'>Applicants</a>
+                                                                    </div>
+
+                                                            </td>";
+                                                    echo "</tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan='8'>No job postings found.</td></tr>"; // Adjusted colspan
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                </div>
+
+
+<!-- Add Department Modal (You need to implement this modal in your HTML) -->
+<!-- Add Department Modal -->
+<div class="modal fade" id="addDepartmentModal" tabindex="-1" role="dialog" aria-labelledby="addDepartmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addDepartmentModalLabel">Add Department</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="recruitment/add_department.php" method="POST">
+                    <div class="form-group">
+                        <label for="department_name">Department Name:</label>
+                        <input type="text" class="form-control" id="department_name" name="department_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="manager_id">Manager ID: (OPTIONAL)</label>
+                        <input type="text" class="form-control" id="manager_id" name="manager_id"> <!-- Removed required attribute -->
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Department</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
                         <!-- Modal for displaying messages -->
     <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -607,7 +663,7 @@ $result = $conn->query($sql);
         }
     </script>
 
-<!-- Add Job Modal -->
+<!-- Add Job Posting Modal -->
 <div class="modal fade" id="addJobModal" tabindex="-1" role="dialog" aria-labelledby="addJobModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -617,8 +673,8 @@ $result = $conn->query($sql);
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="recruitment/add_job.php" method="POST">
-                <div class="modal-body">
+            <div class="modal-body">
+                <form action="recruitment/add_job.php" method="POST">
                     <div class="form-group">
                         <label for="job_title">Job Title:</label>
                         <input type="text" class="form-control" id="job_title" name="job_title" required>
@@ -646,15 +702,30 @@ $result = $conn->query($sql);
                             <option value="Closed">Closed</option>
                         </select>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add Job Posting</button>
-                </div>
-            </form>
+                    <div class="form-group">
+                        <label for="department_id">Department:</label>
+                        <select class="form-control" id="department_id" name="DepartmentID" required> <!-- Changed name to DepartmentID -->
+                            <option value="">Select Department</option>
+                            <?php
+                            // Assuming $department_result is fetched from your database for departments
+                            if ($department_result->num_rows > 0) {
+                                while ($row = $department_result->fetch_assoc()) {
+                                    echo "<option value='" . $row['DepartmentID'] . "'>" . $row['DepartmentName'] . "</option>";
+                                }
+                            } else {
+                                echo "<option value=''>No departments available</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Job Posting</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
+
+
 
 <!-- Edit Job Modal -->
 <div class="modal fade" id="editJobModal" tabindex="-1" role="dialog" aria-labelledby="editJobModalLabel" aria-hidden="true">
