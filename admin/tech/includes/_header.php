@@ -1,7 +1,7 @@
 <div class="dashboard-header ">
     <nav class="navbar navbar-expand-lg bg-white fixed-top ">
         <a class="navbar-brand" href="index.php">
-            <img src="../../assets/images/bcp-hrd-logo.jpg" alt="" class="" style="height: 3rem;width: auto;">
+            <img src="../../../assets/images/bcp-hrd-logo.jpg" alt="" class="" style="height: 3rem;width: auto;">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -99,7 +99,7 @@
                             <h5 class="mb-0 text-white nav-user-name"> <?= $_SESSION['username'] ?> </h5>
                             <span class="status"></span><span class="ml-2">Available</span>
                         </div>
-                        <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Account</a>
+                        <a class="dropdown-item" href="./settings/profile.php"><i class="fas fa-user mr-2"></i>Account</a>
                         <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
                         <a class="dropdown-item" href="../../auth/logout.php"><i class="fas fa-power-off mr-2"></i>Logout</a>
                     </div>

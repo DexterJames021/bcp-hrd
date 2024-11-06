@@ -293,7 +293,7 @@ $result_rec = count_col($conn, 'recruitment');
                                 <div id="submenu-3" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link active" href="./tech/index.php">Home Dashboard</a>
+                                            <a class="nav-link active" href="./tech/index.php">Facility and Resources</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="./tech/tasks.php">Task management</a>

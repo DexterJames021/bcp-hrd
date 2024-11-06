@@ -7,8 +7,19 @@
 <link rel="stylesheet" href="../../node_modules/datatables.net-dt/css/dataTables.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 
+<!-- main js -->
+<link rel="stylesheet" href="../../assets/libs/css/style.css">
+
 <!-- toastify cs -->
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+<!-- assts csss -->
+<link rel="stylesheet" href="../../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+<link rel="stylesheet" href="../../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
+<link rel="stylesheet" href="../../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
+
+<!-- icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
 
 <!-- jQuery -->
 <script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
@@ -37,20 +48,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
+
 <!-- main js -->
-<link rel="stylesheet" href="../../assets/libs/css/style.css">
-<script type="module" src="../../assets/libs/js/main-js.js"></script>
-<script src="../resource/index.js"></script>
+<script src="../../assets/libs/js/main-js.js"></script>
 
-<!-- assts csss -->
-<link rel="stylesheet" href="../../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
-<link rel="stylesheet" href="../../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
-<link rel="stylesheet" href="../../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
+<!-- custom js -->
+<script src="./includes/resource/index.js"></script>
+<script src="./includes/resource/table.js"></script>
 
-<!-- icon -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
+
 <!-- slimscroll js -->
-<script  type="module" src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
-
-<!-- global JavaScript -->
-<script  type="module" src="../../assets/libs/js/global-script.js"></script>
+<script  src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>

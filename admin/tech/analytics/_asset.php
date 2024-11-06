@@ -47,8 +47,8 @@
 
 
 <!-- custom js -->
-<script  type="module" src="../resource/table.js"></script>
-<script  type="module" src="../resource/index.js"></script>
+<script  type="module" src="../includes/resource/table.js"></script>
+<script  type="module" src="../includes/resource/index.js"></script>
 
 
 <!-- charts -->
