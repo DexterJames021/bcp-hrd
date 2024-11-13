@@ -71,27 +71,8 @@ if (isset($_SESSION['message'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apply for <?php echo htmlspecialchars($job['job_title']); ?></title>
-    <link rel="stylesheet" href="style_apply1.css"> <!-- Link to the CSS file -->
-    <style>
-        /* Style for success message */
-        .success-message {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: #28a745;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-size: 14px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            z-index: 1000;
-        }
-        .close {
-            cursor: pointer;
-            margin-left: 10px;
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" href="style_apply5.css"> <!-- Link to the CSS file -->
+    
     <script>
         // Function to hide the message after a few seconds
         function autoHideMessage() {
@@ -116,29 +97,21 @@ if (isset($_SESSION['message'])) {
     </script>
 </head>
 <body>
+<a href="job_listings.php" class="btn-back">Back</a>
     <h1>Apply for <?php echo htmlspecialchars($job['job_title']); ?></h1>
-
-    <div class="job-details">
-        <h2>Job Details</h2>
-        <p><strong>Job Title:</strong> <?php echo htmlspecialchars($job['job_title']); ?></p>
-        <p><strong>Description:</strong> <?php echo htmlspecialchars($job['job_description']); ?></p>
-        <p><strong>Requirements:</strong> <?php echo htmlspecialchars($job['requirements']); ?></p>
-        <p><strong>Location:</strong> <?php echo htmlspecialchars($job['location']); ?></p>
-        <p><strong>Salary:</strong> <?php echo htmlspecialchars($job['salary_range']); ?></p>
-
-        <!-- Move the Back to Job Listings Button inside the job details -->
-        <a href="job_listings.php" class="btn-back">← Back to Job Listings</a>
-    </div>
+    
+    <!-- Move the Back to Job Listings Button inside the job details -->
+    
 
     <form action="" method="POST" enctype="multipart/form-data">
         <label for="applicant_name">Your Name:</label>
-        <input type="text" id="applicant_name" name="applicant_name" required><br>
+        <input type="text" id="applicant_name" name="applicant_name" required>
 
         <label for="email">Your Email:</label>
-        <input type="email" id="email" name="email" required><br>
+        <input type="email" id="email" name="email" required>
 
         <label for="resume">Upload Resume:</label>
-        <input type="file" id="resume" name="resume" required><br>
+        <input type="file" id="resume" name="resume" required>
 
         <!-- Hidden field for DepartmentID -->
         <input type="hidden" name="department_id" value="<?php echo htmlspecialchars($job['DepartmentID']); ?>">

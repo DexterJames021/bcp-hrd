@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         header("Location: ../portal/index.php");
                         exit;
                     case 'New Hire':
-                        header("Location: ../admin/talent/onboarding/new_hire/index.php");
+                        header("Location: ../admin/talent/onboarding/new_hire/step1.php");
                         exit;
                     default:
                         echo "<script>alert('405 No permission to access this portal.');</script>";

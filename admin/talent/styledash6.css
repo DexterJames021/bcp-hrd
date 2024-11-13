@@ -135,3 +135,73 @@ h1 {
     white-space: normal;
     overflow: visible;
 }
+.box {
+    background-color: #f4f7fa;
+    border: 1px solid #d1d1d1;
+    text-align: center;
+    padding: 20px;
+    transition: all 0.3s ease;
+    position: relative; /* Needed for positioning the icon inside the box */
+}
+
+/* Icon inside the box - Positioned to the right */
+.icon-box {
+    position: flex;
+    top: 10px; /* Adjust position from the top */
+    right: 10px; /* Adjust position from the right side */
+    font-size: 24px;
+    color: #4c8bf5; /* Blue color for the icon */
+}
+
+/* Styling for the buttons inside the boxes */
+.btn-primary {
+    background-color: #4c8bf5; /* Set the same blue color for all buttons */
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Add icon inside the button */
+.btn-primary i {
+    margin-right: 8px;
+}
+
+/* Count text styling */
+.count {
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Hover effect for the boxes */
+.box:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+}
+
+/* Adjust gap between buttons in the container */
+.d-flex {
+    display: flex;
+    gap: 15px;  /* Increased gap between boxes */
+}
+
+/* Adjust width of the boxes */
+.box {
+    width: 200px; /* Increased width for better content fit */
+}
+ /* Sticky header styling */
+ .sticky-header {
+    position: sticky;
+    top: 0; /* Keeps the header at the top of the table when scrolling */
+    background-color: #f4f7fa; /* Light background to make it stand out */
+    z-index: 1; /* Makes sure the header stays on top */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: adds a shadow for a nicer effect */
+}
+
+/* Table responsive container */
+.table-responsive {
+    max-height: 350px; /* Fixed height for the table container */
+    overflow-y: auto; /* Scrollable table body */
+}

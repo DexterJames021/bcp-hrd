@@ -9,6 +9,20 @@ if (isset($_GET['job_id'])) {
     die("Error: job_id parameter missing in the URL.");
 }
 
+// Prepare the SQL query to get the job title for the job_id
+$jobTitleSql = "SELECT job_title FROM job_postings WHERE id = ?";
+$stmt = $conn->prepare($jobTitleSql);
+$stmt->bind_param("i", $job_id);
+$stmt->execute();
+$stmt->bind_result($job_title);
+$stmt->fetch();
+$stmt->close();
+
+// If no job title is found, terminate
+if (!$job_title) {
+    die("Error: Job not found.");
+}
+
 // Prepare the SQL query to get applicants for the job_id, along with department information
 $sql = "
     SELECT a.*, d.DepartmentName 
@@ -35,75 +49,90 @@ $stmt->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Applications</title>
-    <link rel="stylesheet" href="style_ma2.css"> <!-- Link to the CSS file -->
+    <title>Applicants for <?= htmlspecialchars($job_title) ?></title>
+    <link rel="stylesheet" href="style_ma6.css"> <!-- Link to the CSS file -->
 </head>
 <body>
 
-<!-- Display the applicants -->
-<h2>Applicants for Job ID <?= $job_id ?></h2>
-<table>
-    <tr>
-        <th>Applicant Name</th>
-        <th>Email</th>
-        <th>Status</th>
-        <th>Applied At</th>
-        <th>Resume</th>
-        <th>Department</th>
-        <th>Actions</th>
-    </tr>
-    <?php foreach ($applicants as $applicant): ?>
-        <tr>
-            <td data-label="Applicant Name"><?= htmlspecialchars($applicant['applicant_name']) ?></td>
-            <td data-label="Email"><?= htmlspecialchars($applicant['email']) ?></td>
-            <td data-label="Status"><?= htmlspecialchars($applicant['status']) ?></td>
-            <td data-label="Applied At"><?= date('F j, Y, g:i A', strtotime($applicant['applied_at'])) ?></td>
-            <td data-label="Resume">
-                <?php if (!empty($applicant['resume_path'])): ?>
-                    <a href="<?= htmlspecialchars($applicant['resume_path']) ?>" download>Download Resume</a>
-                <?php else: ?>
-                    No Resume Uploaded
-                <?php endif; ?>
-            </td>
-            <td data-label="Department"><?= htmlspecialchars($applicant['DepartmentName'] ?? 'N/A') ?></td> <!-- Display department name or 'N/A' if null -->
+<!-- Back Button -->
+<div class="back-button">
+    <a href="../recruitment.php" class="btn btn-primary">
+        Back
+    </a>
+</div>
 
-            <td data-label="Actions">
-                <?php if ($applicant['status'] === 'Pending'): ?>
-                    <form action="update_status.php?job_id=<?= $job_id ?>" method="POST" style="display:inline;">
-                        <input type="hidden" name="applicant_id" value="<?= $applicant['id'] ?>">
-                        <button type="submit" name="status" value="Selected for Interview" onclick="return confirm('Are you sure you want to hire this applicant?')">Selected</button>
-                        <button type="submit" name="status" value="Rejected" onclick="return confirm('Are you sure you want to reject this applicant?')">Reject</button>
-                    </form>
-                <?php elseif ($applicant['status'] === 'Selected for Interview'): ?>
-                    <form action="schedule_interview.php" method="POST" style="display:inline;">
-                        <input type="hidden" name="applicant_id" value="<?= $applicant['id'] ?>">
-                        <input type="hidden" name="job_id" value="<?= $job_id ?>">
-                        <label for="interview_date">Interview Date:</label>
-                        <input type="date" name="interview_date" required><br>
-                        <label for="interview_time">Interview Time:</label>
-                        <input type="time" name="interview_time" required><br>
-                        <button type="submit">Schedule Interview</button>
-                    </form>
-                <?php elseif ($applicant['status'] === 'Interviewed'): ?>
-                    <span>Interview Scheduled for <?= date('F j, Y', strtotime($applicant['interview_date'])) ?> at <?= date('g:i A', strtotime($applicant['interview_time'])) ?></span><br>
-                    <form action="update_status.php?job_id=<?= $job_id ?>" method="POST" style="display:inline;">
-                        <input type="hidden" name="applicant_id" value="<?= $applicant['id'] ?>">
-                        <button type="submit" name="status" value="Shortlisted">Interview Passed</button>
-                        <button type="submit" name="status" value="Rejected">Interview Failed</button>
-                    </form>
-                <?php elseif ($applicant['status'] === 'Shortlisted'): ?>
-                    <form action="update_status.php?job_id=<?= $job_id ?>" method="POST" style="display:inline;">
-                        <input type="hidden" name="applicant_id" value="<?= $applicant['id'] ?>">
-                        <button type="submit" name="status" value="Hired">Job Offer</button>
-                        <button type="submit" name="status" value="Rejected">Reject</button>
-                    </form>
-                <?php else: ?>
-                    <span><?= htmlspecialchars($applicant['status']) ?></span>
-                <?php endif; ?>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-</table>
+<!-- Display the applicants -->
+<div class="container">
+    <h1>Applicants for <?= htmlspecialchars($job_title) ?></h1>
+    <div class="table-responsive">
+        <table class="table table1">
+            <thead class="sticky-header">
+                <tr>
+                    <th>Applicant Name</th>
+                    <th>Email</th>
+                    <th>Status</th>
+                    <th>Applied At</th>
+                    <th>Resume</th>
+                    <th>Department</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($applicants as $applicant): ?>
+                    <tr>
+                        <td data-label="Applicant Name"><?= htmlspecialchars($applicant['applicant_name']) ?></td>
+                        <td data-label="Email"><?= htmlspecialchars($applicant['email']) ?></td>
+                        <td data-label="Status"><?= htmlspecialchars($applicant['status']) ?></td>
+                        <td data-label="Applied At"><?= date('F j, Y, g:i A', strtotime($applicant['applied_at'])) ?></td>
+                        <td data-label="Resume">
+                            <?php if (!empty($applicant['resume_path'])): ?>
+                                <a href="<?= htmlspecialchars($applicant['resume_path']) ?>" download class="btn btn-primary">Download Resume</a>
+                            <?php else: ?>
+                                <span>No Resume Uploaded</span>
+                            <?php endif; ?>
+                        </td>
+                        <td data-label="Department"><?= htmlspecialchars($applicant['DepartmentName'] ?? 'N/A') ?></td>
+
+                        <td data-label="Actions">
+                            <?php if ($applicant['status'] === 'Pending'): ?>
+                                <form action="update_status.php?job_id=<?= htmlspecialchars($job_id) ?>" method="POST" class="action-buttons">
+                                    <input type="hidden" name="applicant_id" value="<?= htmlspecialchars($applicant['id']) ?>">
+                                    <button type="submit" name="status" value="Selected for Interview" class="btn btn-primary" onclick="return confirm('Are you sure you want to select this applicant for an interview?')">Select for Interview</button>
+                                    <button type="submit" name="status" value="Rejected" class="btn btn-danger" onclick="return confirm('Are you sure you want to reject this applicant?')">Reject</button>
+                                </form>
+                            <?php elseif ($applicant['status'] === 'Selected for Interview'): ?>
+                                <form action="schedule_interview.php" method="POST" class="action-buttons">
+                                    <input type="hidden" name="applicant_id" value="<?= htmlspecialchars($applicant['id']) ?>">
+                                    <input type="hidden" name="job_id" value="<?= htmlspecialchars($job_id) ?>">
+                                    <label for="interview_date">Interview Date:</label>
+                                    <input type="date" name="interview_date" required><br>
+                                    <label for="interview_time">Interview Time:</label>
+                                    <input type="time" name="interview_time" required><br>
+                                    <button type="submit" class="btn btn-primary">Schedule Interview</button>
+                                </form>
+                            <?php elseif ($applicant['status'] === 'Interviewed'): ?>
+                                <span>Interview Scheduled for <?= date('F j, Y', strtotime($applicant['interview_date'])) ?> at <?= date('g:i A', strtotime($applicant['interview_time'])) ?></span><br>
+                                <form action="update_status.php?job_id=<?= htmlspecialchars($job_id) ?>" method="POST" class="action-buttons">
+                                    <input type="hidden" name="applicant_id" value="<?= htmlspecialchars($applicant['id']) ?>">
+                                    <button type="submit" name="status" value="Shortlisted" class="btn btn-success">Interview Passed</button>
+                                    <button type="submit" name="status" value="Rejected" class="btn btn-danger">Interview Failed</button>
+                                </form>
+                            <?php elseif ($applicant['status'] === 'Shortlisted'): ?>
+                                <form action="update_status.php?job_id=<?= htmlspecialchars($job_id) ?>" method="POST" class="action-buttons">
+                                    <input type="hidden" name="applicant_id" value="<?= htmlspecialchars($applicant['id']) ?>">
+                                    <button type="submit" name="status" value="Hired" class="btn btn-success">Job Offer</button>
+                                    <button type="submit" name="status" value="Rejected" class="btn btn-danger">Reject</button>
+                                </form>
+                            <?php else: ?>
+                                <span><?= htmlspecialchars($applicant['status']) ?></span>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 </body>
 </html>

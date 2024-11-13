@@ -53,7 +53,7 @@ $check_employee_result = $check_employee_stmt->get_result();
 $form_submitted = $check_employee_result->num_rows > 0; // Set to true if employee exists
 
 // Prepare to insert employee data if the form is submitted
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$form_submitted) {
     $first_name = $_POST['first_name'];
     $last_name = $_POST['last_name'];
     $email = $_POST['email'];
@@ -70,8 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $insert_stmt->bind_param("sssssssdsi", $first_name, $last_name, $email, $phone, $address, $dob, $hire_date, $salary, $status, $user_id);
     
     if ($insert_stmt->execute()) {
-        $form_submitted = true; // Set to true if form is submitted successfully
-        echo "Onboarding completed successfully!";
+        // Set a flag indicating the form is submitted
+        $form_submitted = true;
     } else {
         echo "Error: " . $conn->error;
     }
@@ -86,31 +86,35 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Onboarding Form</title>
+    <title>Step 1: Onboarding Form</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        .progress {
-            height: 30px;
-        }
-    </style>
 </head>
 <body>
 <div class="container mt-5">
-    <h2>New Hire Onboarding Form</h2>
 
-    <!-- Progress Bar -->
-    <div class="progress">
-        <div class="progress-bar" role="progressbar" style="width: <?php echo $form_submitted ? '100%' : '50%'; ?>;" aria-valuenow="<?php echo $form_submitted ? '100' : '50'; ?>" aria-valuemin="0" aria-valuemax="100">
-            <?php echo $form_submitted ? 'Completed' : 'Step 1 of 2'; ?>
+    <!-- Progress Navigation -->
+    <nav aria-label="Progress">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">Step 1: Personal Information</li>
+            <li class="breadcrumb-item"><a href="step2.php">Step 2: Upload Documents</a></li>
+            <li class="breadcrumb-item"><a href="step3.php">Step 3: Confirmation</a></li>
+        </ol>
+        <div class="progress mb-4">
+            <div class="progress-bar" role="progressbar" style="width: 33.33%;" aria-valuenow="33.33" aria-valuemin="0" aria-valuemax="100">Step 1 of 3</div>
         </div>
-    </div>
+    </nav>
+
+    <!-- Title -->
+    <h2>New Hire Onboarding Form</h2>
 
     <!-- Display Job Title and Department Name -->
     <p><strong>Job Title:</strong> <?php echo $job_title; ?></p>
     <p><strong>Department:</strong> <?php echo $department_name; ?></p>
 
-    <!-- Only display the form if there is no existing employee data -->
-    <?php if (!$form_submitted): ?>
+    <!-- Display Success Message or Form -->
+    <?php if ($form_submitted): ?>
+        <p class="alert alert-success">Your personal information has been submitted successfully!</p>
+    <?php else: ?>
         <form method="POST" action="">
             <div class="form-group">
                 <label for="first_name">First Name</label>
@@ -136,11 +140,8 @@ $conn->close();
                 <label for="dob">Date of Birth</label>
                 <input type="date" class="form-control" name="dob" required>
             </div>
-            <!-- Removed salary input field as it's set to NULL -->
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-    <?php else: ?>
-        <p>You have already completed your onboarding.</p>
     <?php endif; ?>
 
     <!-- Display the Back and Next buttons -->
@@ -148,7 +149,7 @@ $conn->close();
         <form action="previous_step.php" method="GET" style="display:inline;">
             <button type="submit" class="btn btn-secondary">Back</button>
         </form>
-        <form action="next_step.php" method="GET" style="display:inline;">
+        <form action="step2.php" method="GET" style="display:inline;">
             <button type="submit" class="btn btn-success" <?php echo $form_submitted ? '' : 'disabled'; ?>>Next</button>
         </form>
     </div>

@@ -1,7 +1,49 @@
-<!-- training main dashboard -->
 <?php
 session_start();
 require "../../config/db_talent.php";
+
+// Fetch the total number of applicants
+$applicant_query = "SELECT COUNT(*) AS totalApplicants FROM applicants";
+$applicant_result = mysqli_query($conn, $applicant_query);
+$applicant_count = 0;
+
+if ($applicant_result) {
+    $row = mysqli_fetch_assoc($applicant_result);
+    $applicant_count = $row['totalApplicants'];
+}
+
+// Fetch the total number of job postings
+$job_posting_query = "SELECT COUNT(*) AS job_posting_count FROM job_postings";
+$job_posting_result = mysqli_query($conn, $job_posting_query);
+$job_posting_count = 0;
+
+// If job postings exist, fetch the count
+if ($job_posting_result) {
+    $row = mysqli_fetch_assoc($job_posting_result);
+    $job_posting_count = $row['job_posting_count'];
+}
+
+// Fetch the total number of open job postings
+$open_job_posting_query = "SELECT COUNT(*) AS open_job_posting_count FROM job_postings WHERE status = 'Open'";
+$open_job_posting_result = mysqli_query($conn, $open_job_posting_query);
+$open_job_posting_count = 0;
+
+// If open job postings exist, fetch the count
+if ($open_job_posting_result) {
+    $row = mysqli_fetch_assoc($open_job_posting_result);
+    $open_job_posting_count = $row['open_job_posting_count'];
+}
+
+// Fetch the total number of departments
+$department_query = "SELECT COUNT(*) AS department_count FROM departments";
+$department_result = mysqli_query($conn, $department_query);
+$department_count = 0;
+
+// If departments exist, fetch the count
+if ($department_result) {
+    $row = mysqli_fetch_assoc($department_result);
+    $department_count = $row['department_count'];
+}
 
 // Updated SQL query to include department names
 $sql = "SELECT jp.*, d.DepartmentName AS department_name 
@@ -12,8 +54,8 @@ $result = $conn->query($sql);
 // Fetch departments for the dropdown
 $department_sql = "SELECT DepartmentID, DepartmentName FROM departments";
 $department_result = $conn->query($department_sql);
-
 ?>
+
 
 <!doctype html>
 <html lang="en">
@@ -24,7 +66,7 @@ $department_result = $conn->query($department_sql);
     <!-- icon -->
     <link rel="shortcut icon" href="../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="styledash2.css">
+    <link rel="stylesheet" type="text/css" href="styledash6.css">
 
     <script defer src="../../node_modules/jquery/dist/jquery.min.js"></script>
 
@@ -64,6 +106,7 @@ $department_result = $conn->query($department_sql);
         // Call the function on page load
         window.onload = autoHideAlert;
     </script>
+
 </head>
 <body>
     <!-- ============================================================== -->
@@ -489,24 +532,7 @@ $department_result = $conn->query($department_sql);
                 <!-- ============================================================== -->
                 <!-- pageheader  -->
                 <!-- ============================================================== -->
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="page-header">
-                            <h2 class="pageheader-title">Recruitment</h2>
-
-                            <p class="pageheader-text">Nulla euismod urna eros, sit amet scelerisque torton lectus vel mauris facilisis faucibus at enim quis massa lobortis rutrum.</p>
-                            <div class="page-breadcrumb">
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item">
-                                        </li>
-                                        <!-- <li class="breadcrumb-item active" aria-current="page">Dashboard</li> -->
-                                    </ol>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        
                 <!-- ============================================================== -->
                 <!-- end pageheader  -->
                 <!-- ============================================================== -->
@@ -515,15 +541,73 @@ $department_result = $conn->query($department_sql);
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-body">
-                                <h1>Job Postings</h1>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <button class="btn btn-primary" data-toggle="modal" data-target="#addJobModal">Add Job Posting</button>
-                                        <button class="btn btn-primary" data-toggle="modal" data-target="#addDepartmentModal">Add Department</button> <!-- New button for adding department -->
+                            < class="card-body">
+                                <h1>Recruitment</h1>
+                            
+                                <!-- Overview Section -->
+                                <div class="d-flex justify-content-start gap-3">
+
+                                    <!-- Add Job Posting Box -->
+                                    <div class="box p-3 rounded shadow-sm text-center" style="width: 200px;">
+                                        <!-- Icon inside the box -->
+                                        <div class="icon-box">
+                                            <i class="fas fa-briefcase"></i>
+                                        </div>
+                                        <button class="btn btn-primary d-flex align-items-center justify-content-center w-100 mb-2" data-toggle="modal" data-target="#addJobModal">
+                                            <i class="fas fa-plus mr-2"></i> Add Job
+                                        </button>
+                                        <div class="count">
+                                            <strong><?php echo $job_posting_count; ?></strong> Jobs
+                                        </div>
                                     </div>
-                                    <button class="btn btn-primary" onclick="window.location.href='recruitment/job_listings.php'">View Job Postings</button>
+
+                                    <!-- Add Department Box -->
+                                    <div class="box p-3 rounded shadow-sm text-center" style="width: 200px;">
+                                        <!-- Icon inside the box -->
+                                        <div class="icon-box">
+                                            <i class="fas fa-building"></i>
+                                        </div>
+                                        <button class="btn btn-primary d-flex align-items-center justify-content-center w-100 mb-2" data-toggle="modal" data-target="#addDepartmentModal">
+                                            <i class="fas fa-plus mr-2"></i> Add Department
+                                        </button>
+                                        <div class="count">
+                                            <strong><?php echo $department_count; ?></strong> Departments
+                                        </div>
+                                    </div>
+
+                                    <!-- View Job Postings Box -->
+                                    <div class="box p-3 rounded shadow-sm text-center" style="width: 200px;">
+                                        <!-- Icon inside the box -->
+                                        <div class="icon-box">
+                                            <i class="fas fa-eye"></i>
+                                        </div>
+                                        <button class="btn btn-primary d-flex align-items-center justify-content-center w-100 mb-2" onclick="window.location.href='recruitment/job_listings.php'">
+                                            <i class="fas fa-eye mr-2"></i> View Job Openings
+                                        </button>
+                                        <div class="count">
+                                            <strong><?php echo $open_job_posting_count; ?></strong> Job Openings
+                                        </div>
+                                    </div>
+
+                                    <!-- View Applicants Box (New) -->
+                                    <div class="box p-3 rounded shadow-sm text-center" style="width: 200px;">
+                                        <!-- Icon inside the box -->
+                                        <div class="icon-box">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <button class="btn btn-primary d-flex align-items-center justify-content-center w-100 mb-2" onclick="window.location.href='#applicant'">
+                                            <i class="fas fa-eye mr-2"></i> View Applicants
+                                        </button>
+                                        <div class="count">
+                                            <strong><?php echo $applicant_count; ?></strong> Applicants
+                                        </div>
+                                    </div>
+
                                 </div>
+                            
+
+
+
                                 <hr>
                                 <?php if (isset($_SESSION['message'])): ?>
                                     <div class="alert alert-<?php echo $_SESSION['message_type']; ?> alert-dismissible fade show" role="alert">
@@ -536,64 +620,174 @@ $department_result = $conn->query($department_sql);
                                         </button>
                                     </div>
                                 <?php endif; ?>
-                                <div class="custom-table-container">
-                                    <table class="table mt-3">
-                                        <thead>
-                                            <tr>
-                                                <th>Job Title</th>
-                                                <th>Job Description</th>
-                                                <th>Requirements</th>
-                                                <th>Location</th>
-                                                <th>Salary Range</th>
-                                                <th>Status</th>
-                                                <th>Department</th> <!-- Added department column -->
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            if ($result->num_rows > 0) {
-                                                while($row = $result->fetch_assoc()) {
-                                                    echo "<tr>";
-                                                    echo "<td>" . $row['job_title'] . "</td>";
-                                                    echo "<td class='custom-long-text'>" . $row['job_description'] . "</td>";
-                                                    echo "<td class='custom-long-text'>" . $row['requirements'] . "</td>";
-                                                    echo "<td>" . $row['location'] . "</td>";
-                                                    echo "<td>" . $row['salary_range'] . "</td>";
-                                                    echo "<td>" . $row['status'] . "</td>";
-                                                    echo "<td>" . $row['department_name'] . "</td>"; // Display department name
-                                                    echo "<td>
-                                                            <button class='btn btn-warning btn-sm btn-action' 
-                                                                    data-toggle='modal' 
-                                                                    data-target='#editJobModal' 
-                                                                    data-id='" . $row['id'] . "' 
-                                                                    data-title='" . $row['job_title'] . "' 
-                                                                    data-description='" . $row['job_description'] . "' 
-                                                                    data-requirements='" . $row['requirements'] . "' 
-                                                                    data-location='" . $row['location'] . "' 
-                                                                    data-salary='" . $row['salary_range'] . "' 
-                                                                   data-status='" . $row['status'] . "'>Edit</button>
-                                                                    <div style='margin-top: 5px;'>
-                                                                        <a href='recruitment/delete_job.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm btn-action' onclick='return confirm(\"Are you sure you want to delete this job posting?\");'>Delete</a>
-                                                                    </div>
-                                                                    <div style='margin-top: 5px;'>
-                                                                        <a href='recruitment/manage_application.php?job_id=" . $row['id'] . "' class='btn btn-primary btn-sm btn-action'>Applicants</a>
-                                                                    </div>
+                                <h3>Job Postings</h3>
+                                    <div class="custom-table-container">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="sticky-header">Job Title</th>
+                                                        <th class="sticky-header">Status</th>
+                                                        <th class="sticky-header">Department</th>
+                                                        <th class="sticky-header">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                    if ($result->num_rows > 0) {
+                                                        while ($row = $result->fetch_assoc()) {
+                                                            // Fetch the count of applicants for the specific job ID
+                                                            $jobId = $row['id'];
+                                                            $applicantCountSql = "SELECT COUNT(*) as totalApplicants FROM applicants WHERE job_id = ?";
+                                                            $stmt = $conn->prepare($applicantCountSql);
+                                                            $stmt->bind_param("i", $jobId);
+                                                            $stmt->execute();
+                                                            $resultApplicants = $stmt->get_result();
+                                                            $applicantCount = 0;
 
-                                                            </td>";
-                                                    echo "</tr>";
-                                                }
-                                            } else {
-                                                echo "<tr><td colspan='8'>No job postings found.</td></tr>"; // Adjusted colspan
-                                            }
-                                            ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                                            if ($resultApplicants->num_rows > 0) {
+                                                                $countRow = $resultApplicants->fetch_assoc();
+                                                                $applicantCount = $countRow['totalApplicants'];
+                                                            }
+
+                                                            echo "<tr>";
+                                                            echo "<td>" . htmlspecialchars($row['job_title']) . "</td>";
+                                                            echo "<td>" . htmlspecialchars($row['status']) . "</td>";
+                                                            echo "<td>" . htmlspecialchars($row['department_name']) . "</td>";
+                                                            echo "<td>
+                                                                    <button class='btn btn-warning btn-sm btn-action' 
+                                                                            data-toggle='modal' 
+                                                                            data-target='#editJobModal' 
+                                                                            data-id='" . htmlspecialchars($row['id']) . "' 
+                                                                            data-title='" . htmlspecialchars($row['job_title']) . "' 
+                                                                            data-description='" . htmlspecialchars($row['job_description']) . "' 
+                                                                            data-requirements='" . htmlspecialchars($row['requirements']) . "' 
+                                                                            data-location='" . htmlspecialchars($row['location']) . "' 
+                                                                            data-salary='" . htmlspecialchars($row['salary_range']) . "' 
+                                                                            data-status='" . htmlspecialchars($row['status']) . "'>Edit</button>
+                                                                    
+                                                                    <a href='recruitment/delete_job.php?id=" . htmlspecialchars($row['id']) . "' class='btn btn-danger btn-sm btn-action' onclick='return confirm(\"Are you sure you want to delete this job posting?\");'>Delete</a>
+                                                                    
+                                                                    <a href='recruitment/manage_application.php?job_id=" . htmlspecialchars($row['id']) . "' class='btn btn-primary btn-sm btn-action'>
+                                                                        Applicant (" . $applicantCount . ")
+                                                                    </a>
+                                                                </td>";
+                                                            echo "</tr>";
+                                                        }
+                                                    } else {
+                                                        echo "<tr><td colspan='4'>No job postings found.</td></tr>"; // Adjusted colspan
+                                                    }
+                                                    ?>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <hr><br>
+
+                                    <h3>Departments</h3>
+                                        <div class="custom-table-container">
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="sticky-header">Department Name</th>
+                                                            <th class="sticky-header">Manager</th> <!-- Added manager column -->
+                                                            <th class="sticky-header">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php
+                                                        // Assuming you have a query to fetch departments from the database
+                                                        $sql = "SELECT d.DepartmentID, d.DepartmentName, e.FirstName AS Manager 
+                                                                FROM departments d
+                                                                LEFT JOIN employees e ON d.ManagerID = e.EmployeeID";
+                                                        $result = $conn->query($sql);
+                                                        
+                                                        if ($result->num_rows > 0) {
+                                                            while($row = $result->fetch_assoc()) {
+                                                                echo "<tr>";
+                                                                echo "<td>" . htmlspecialchars($row['DepartmentName']) . "</td>";
+                                                                echo "<td>" . htmlspecialchars($row['Manager'] ?? 'No Manager') . "</td>"; // Show manager name or 'No Manager'
+                                                                echo "<td>
+                                                                        <button class='btn btn-warning btn-sm btn-action' 
+                                                                                data-toggle='modal' 
+                                                                                data-target='#editDepartmentModal' 
+                                                                                data-id='" . $row['DepartmentID'] . "' 
+                                                                                data-name='" . $row['DepartmentName'] . "' 
+                                                                                data-manager='" . $row['Manager'] . "'>Edit</button>
+                                                                        
+                                                                        <a href='recruitment/delete_department.php?DepartmentID=" . $row['DepartmentID'] . "' class='btn btn-danger btn-sm btn-action' onclick='return confirm(\"Are you sure you want to delete this department?\");'>Delete</a>
+                                                                
+                                                                    
+                                                                    </td>";
+                                                                echo "</tr>";
+                                                            }
+                                                        } else {
+                                                            echo "<tr><td colspan='3'>No departments found.</td></tr>"; // Adjusted colspan
+                                                        }
+                                                        ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div><hr><br>
+                                        <section id="applicant">                 
+                                        <h3>Applicants</h3>
+                                        <div class="custom-table-container">
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="sticky-header">Applicant Name</th>
+                                                            <th class="sticky-header">Email</th>
+                                                            <th class="sticky-header">Job Position</th>
+                                                            <th class="sticky-header">Status</th>
+                                                            <th class="sticky-header">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php
+                                                        // Assuming you have a query to fetch applicants from the database
+                                                        $sql = "SELECT a.id, a.applicant_name, a.email, j.job_title, a.status, 
+                                                                    a.applied_at, a.interview_date, a.interview_time, d.DepartmentName
+                                                                FROM applicants a
+                                                                LEFT JOIN job_postings j ON a.job_id = j.id
+                                                                LEFT JOIN departments d ON a.DepartmentID = d.DepartmentID";
+                                                        $result = $conn->query($sql);
+                                                        
+                                                        if ($result->num_rows > 0) {
+                                                            while($row = $result->fetch_assoc()) {
+                                                                echo "<tr>";
+                                                                echo "<td>" . htmlspecialchars($row['applicant_name']) . "</td>";
+                                                                echo "<td>" . htmlspecialchars($row['email']) . "</td>";
+                                                                echo "<td>" . htmlspecialchars($row['job_title']) . "</td>";
+                                                                echo "<td>" . htmlspecialchars($row['status']) . "</td>";
+                                                            
+                                                                echo "<td>
+                                                                        <button class='btn btn-warning btn-sm btn-action' 
+                                                                                data-toggle='modal' 
+                                                                                data-target='#editApplicantModal' 
+                                                                                data-id='" . $row['id'] . "' 
+                                                                                data-name='" . $row['applicant_name'] . "' 
+                                                                                data-email='" . $row['email'] . "' 
+                                                                                data-job='" . $row['job_title'] . "' 
+                                                                                data-status='" . $row['status'] . "' 
+                                                                                data-applied='" . $row['applied_at'] . "' 
+                                                                                data-interview-date='" . $row['interview_date'] . "' 
+                                                                                data-interview-time='" . $row['interview_time'] . "'>Edit</button>
+                                                                        
+                                                                        <a href='recruitment/delete_applicant.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm btn-action' onclick='return confirm(\"Are you sure you want to delete this applicant?\");'>Delete</a>
+                                                                    </td>";
+                                                                echo "</tr>";
+                                                            }
+                                                        } else {
+                                                            echo "<tr><td colspan='8'>No applicants found.</td></tr>"; // Adjusted colspan
+                                                        }
+                                                        ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        </section>                           
 
 
 <!-- Add Department Modal (You need to implement this modal in your HTML) -->
@@ -664,6 +858,7 @@ $department_result = $conn->query($department_sql);
     </script>
 
 <!-- Add Job Posting Modal -->
+<!-- Add Job Posting Modal -->
 <div class="modal fade" id="addJobModal" tabindex="-1" role="dialog" aria-labelledby="addJobModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -685,7 +880,7 @@ $department_result = $conn->query($department_sql);
                     </div>
                     <div class="form-group">
                         <label for="requirements">Job Requirements:</label>
-                        <textarea class="form-control" id="requirements" name="requirements" required></textarea>
+                        <textarea class="form-control" id="requirements" name="requirements" placeholder="Enter each requirement on a new line" required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="location">Location:</label>
@@ -704,10 +899,10 @@ $department_result = $conn->query($department_sql);
                     </div>
                     <div class="form-group">
                         <label for="department_id">Department:</label>
-                        <select class="form-control" id="department_id" name="DepartmentID" required> <!-- Changed name to DepartmentID -->
+                        <select class="form-control" id="department_id" name="DepartmentID" required>
                             <option value="">Select Department</option>
                             <?php
-                            // Assuming $department_result is fetched from your database for departments
+                            // Fetch departments for the dropdown
                             if ($department_result->num_rows > 0) {
                                 while ($row = $department_result->fetch_assoc()) {
                                     echo "<option value='" . $row['DepartmentID'] . "'>" . $row['DepartmentName'] . "</option>";
@@ -724,6 +919,8 @@ $department_result = $conn->query($department_sql);
         </div>
     </div>
 </div>
+
+
 
 
 

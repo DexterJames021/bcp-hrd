@@ -23,7 +23,7 @@
                     <a class="nav-link active" aria-current="Home" href="#">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " aria-current="Job opportunity" href="#">Job opportunity</a>
+                    <a class="nav-link " aria-current="Job opportunity" href="admin/talent/recruitment/job_listings.php">Job opportunity</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " aria-current="Application" href="#">Application</a>
