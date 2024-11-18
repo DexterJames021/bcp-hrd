@@ -50,7 +50,7 @@ $stmt->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Applicants for <?= htmlspecialchars($job_title) ?></title>
-    <link rel="stylesheet" href="style_ma6.css"> <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="style_ma7.css"> <!-- Link to the CSS file -->
 </head>
 <body>
 

@@ -56,11 +56,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     echo $email_status;
 
     // Redirect back to the manage applications page
-    header("Location: manage_application.php?job_id=" . $_GET['job_id']);
+    header("Location: ../recruitment.php?job_id=" . $_GET['job_id'] . "#applicant");
+
     exit();
 } else {
     // If not a POST request, redirect to the manage applications page
-    header("Location: manage_application.php?job_id=" . $_GET['job_id']);
+    header("Location: ../recruitment.php?job_id=" . $_GET['job_id'] . "#applicant");
+
     exit();
 }
 

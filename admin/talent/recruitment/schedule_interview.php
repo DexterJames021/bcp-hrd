@@ -68,12 +68,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Redirect back to the manage applications page with job_id
-    header("Location: manage_application.php?job_id=" . $job_id);
+    header("Location: ../recruitment.php?job_id=" . $_GET['job_id'] . "#applicant");
+
     exit();
 } else {
     // If not a POST request, redirect to the manage applications page
     if (isset($_GET['job_id'])) {
-        header("Location: manage_application.php?job_id=" . $_GET['job_id']);
+        header("Location: ../recruitment.php?job_id=" . $_GET['job_id'] . "#applicant");
+
     } else {
         // Handle the case where job_id is not set in the URL
         die("Error: job_id parameter missing.");
