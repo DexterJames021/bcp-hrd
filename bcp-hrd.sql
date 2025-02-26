@@ -1,8 +1,8 @@
 /*
-SQLyog Community v13.1.9 (64 bit)
+SQLyog Community v12.3.3 (64 bit)
 MySQL - 10.4.32-MariaDB : Database - bcp-hrd
 *********************************************************************
-*/
+*/
 
 /*!40101 SET NAMES utf8 */;
 
@@ -31,28 +31,6 @@ CREATE TABLE `analyticsreports` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `analyticsreports` */
-
-/*Table structure for table `applicants` */
-
-DROP TABLE IF EXISTS `applicants`;
-
-CREATE TABLE `applicants` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `job_id` int(11) DEFAULT NULL,
-  `applicant_name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `resume_path` varchar(255) DEFAULT NULL,
-  `status` enum('Pending','Shortlisted','Interviewed','Hired','Rejected') DEFAULT 'Pending',
-  `applied_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  KEY `job_id` (`job_id`),
-  CONSTRAINT `applicants_ibfk_1` FOREIGN KEY (`job_id`) REFERENCES `job_postings` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-/*Data for the table `applicants` */
-
-insert  into `applicants`(`id`,`job_id`,`applicant_name`,`email`,`resume_path`,`status`,`applied_at`) values 
-(8,31,'Apundar','sawda@gmail.com','uploads/resume/human resource.pptx','Pending','2024-10-20 23:54:16');
 
 /*Table structure for table `attendanceleave` */
 
@@ -138,29 +116,6 @@ CREATE TABLE `employees` (
 
 /*Data for the table `employees` */
 
-/*Table structure for table `job_postings` */
-
-DROP TABLE IF EXISTS `job_postings`;
-
-CREATE TABLE `job_postings` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `job_title` varchar(255) NOT NULL,
-  `job_description` text NOT NULL,
-  `requirements` text NOT NULL,
-  `location` varchar(255) NOT NULL,
-  `salary_range` varchar(255) DEFAULT NULL,
-  `status` enum('Open','Closed') DEFAULT 'Open',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-/*Data for the table `job_postings` */
-
-insert  into `job_postings`(`id`,`job_title`,`job_description`,`requirements`,`location`,`salary_range`,`status`,`created_at`) values 
-(31,'HR Coordinator','jeremy','awdw','asdsadsa','122312asdsad','Open','2024-10-19 21:35:50'),
-(38,'sadwada','da','adw','awdwada','wdwda','Open','2024-10-21 00:51:53'),
-(39,'awd12312','123','12321312','3213','213123123','Open','2024-10-21 00:52:42');
-
 /*Table structure for table `jobroles` */
 
 DROP TABLE IF EXISTS `jobroles`;
@@ -234,24 +189,56 @@ CREATE TABLE `roles` (
 
 /*Data for the table `roles` */
 
-/*Table structure for table `trainingprograms` */
+/*Table structure for table `t-feedback` */
 
-DROP TABLE IF EXISTS `trainingprograms`;
+DROP TABLE IF EXISTS `t-feedback`;
 
-CREATE TABLE `trainingprograms` (
-  `TrainingID` int(11) NOT NULL AUTO_INCREMENT,
-  `TrainingName` varchar(100) NOT NULL,
-  `Description` text DEFAULT NULL,
-  `StartDate` date DEFAULT NULL,
-  `EndDate` date DEFAULT NULL,
-  `Instructor` varchar(100) DEFAULT NULL,
-  `EmployeeID` int(11) DEFAULT NULL,
-  PRIMARY KEY (`TrainingID`),
-  KEY `FK_TrainingPrograms_EmployeeID` (`EmployeeID`),
-  CONSTRAINT `FK_TrainingPrograms_EmployeeID` FOREIGN KEY (`EmployeeID`) REFERENCES `employees` (`EmployeeID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `t-feedback` (
+  `feedbackID` int(11) NOT NULL AUTO_INCREMENT,
+  `employeeid` int(11) DEFAULT NULL,
+  `employeename` varchar(50) DEFAULT NULL,
+  `pnumber` int(11) DEFAULT NULL,
+  `department` varchar(50) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `tprogram` varchar(50) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `message` text DEFAULT NULL,
+  PRIMARY KEY (`feedbackID`)
+) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-/*Data for the table `trainingprograms` */
+/*Data for the table `t-feedback` */
+
+/*Table structure for table `training_applications` */
+
+DROP TABLE IF EXISTS `training_applications`;
+
+CREATE TABLE `training_applications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `training_id` int(11) NOT NULL,
+  `employee_name` varchar(255) NOT NULL,
+  `status` enum('Pending','Approved','Rejected') DEFAULT 'Pending',
+  `applied_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `training_id` (`training_id`),
+  CONSTRAINT `training_applications_ibfk_1` FOREIGN KEY (`training_id`) REFERENCES `training_programs` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `training_applications` */
+
+/*Table structure for table `training_programs` */
+
+DROP TABLE IF EXISTS `training_programs`;
+
+CREATE TABLE `training_programs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `proctor` varchar(255) NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `training_programs` */
 
 /*Table structure for table `users` */
 
@@ -272,11 +259,11 @@ CREATE TABLE `users` (
 
 /*Data for the table `users` */
 
-insert  into `users`(`id`,`username`,`password`,`usertype`,`email`,`createdAt`,`lastLogin`) values 
-(1,'jdoe','hashed_password1','admin','johndoe@example.com','2024-09-24 23:23:39',NULL),
-(2,'jsmith','hashed_password2','employee','janesmith@example.com','2024-09-24 23:23:39',NULL),
-(3,'mjohnson','hashed_password3','admin','mikejohnson@example.com','2024-09-24 23:23:39',NULL),
-(4,'employee','employee123','employee','saralee@example.com','2024-09-24 23:23:39',NULL),
+insert  into `users`(`id`,`username`,`password`,`usertype`,`email`,`createdAt`,`lastLogin`) values 
+(1,'jdoe','hashed_password1','admin','johndoe@example.com','2024-09-24 23:23:39',NULL),
+(2,'jsmith','hashed_password2','employee','janesmith@example.com','2024-09-24 23:23:39',NULL),
+(3,'mjohnson','hashed_password3','admin','mikejohnson@example.com','2024-09-24 23:23:39',NULL),
+(4,'employee','employee123','employee','saralee@example.com','2024-09-24 23:23:39',NULL),
 (5,'admin','admin123','admin','admin@gmail.com','0000-00-00 00:00:00','0000-00-00');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
