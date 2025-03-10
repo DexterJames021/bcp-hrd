@@ -1,0 +1,18 @@
+.text {
+    background-color: #f8f9fa; /* Light gray background */
+    border: 1px solid #ddd; /* Subtle border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 16px; /* Padding inside the box */
+    max-width: 400px; /* Limit the width of the container */
+    margin: 20px auto; /* Center alignment with margin */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    font-family: 'Arial', sans-serif; /* Clean font */
+}
+
+.text h3 {
+    color: #333; /* Dark gray text color */
+    font-size: 1.5em; /* Adjusted font size */
+    text-align: center; /* Center the text */
+    margin: 0; /* Remove extra margins */
+    font-weight: bold; /* Make it stand out */
+}
