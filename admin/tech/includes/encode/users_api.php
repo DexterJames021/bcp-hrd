@@ -16,9 +16,6 @@ $user = new User($conn);
 
 $action = $_GET['action'] ?? null;
 switch ($action) {
-    case 'get_all_roles_permission':
-        echo json_encode($user->get_all_roles());
-        break;
 
     case 'get_all_employee_details':
         echo json_encode($user->getAllEmployee());
@@ -54,6 +51,7 @@ switch ($action) {
             echo json_encode(['success' => false]);
         }
         break;
+      
 
 
     default:

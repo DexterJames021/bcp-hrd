@@ -14,12 +14,12 @@ class Roles
         $this->conn = $conn;
     }   
 
-    public function assignRole($userId, $roleId)
+    public function newRole($roleId, $description)
     {
         try {
-            $q = "INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)";
+            $q = "INSERT INTO roles (RoleName, Description) VALUES (?, ?)";
             $stmt = $this->conn->prepare($q);
-            return $stmt->execute([$userId, $roleId]);
+            return $stmt->execute([$roleId, $description]);
         } catch (Exception $e) {
             echo "ERROR::::::::::: " . $e->getMessage();
         }

@@ -65,7 +65,8 @@ session_start();
     <!-- slimscroll js -->
     <script src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 
-
+    <script defer  src="./includes/resource/usercontrol.js"></script>
+ 
     <title>Admin Dashboard</title>
 </head>
 
@@ -498,16 +499,17 @@ session_start();
                                     <div class="card-header d-flex justify-content-between align-text-center">
                                         <h2 class="card-title ">Roles</h2>
                                         <div>
-                                            <button type="button" class="btn btn-outline-primary">+ Roles</button>
+                                            <button type="button" class="btn btn-outline-primary"
+                                            data-toggle="modal" data-target="#NewRole">+ Roles</button>
                                         </div>
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table id="usercontrolTable" class="table table-hover" style="width:100%">
+                                            <table id="rolesTable" class="table table-hover" style="width:100%">
                                                 <thead class="thead-light">
                                                     <tr>
                                                         <th>ID</th>
-                                                        <th>Role/th>
+                                                        <th>Role</th>
                                                         <th>Description</th>
                                                         <th>Action</th>
                                                     </tr>
@@ -529,16 +531,17 @@ session_start();
                                     <div class="card-header d-flex justify-content-between align-text-center">
                                         <h2 class="card-title ">Permission</h2>
                                         <div>
-                                            <button type="button" data-toggle="modal" data-target="NewPermission" class="btn btn-outline-primary">+ Permission</button>
+                                            <button type="button" class="btn btn-outline-primary"
+                                            data-toggle="modal" data-target="#NewPermission">+ Permission</button>
                                         </div>
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table id="usercontrolTable" class="table table-hover" style="width:100%">
+                                            <table id="permissionTable" class="table table-hover" style="width:100%">
                                                 <thead class="thead-light">
                                                     <tr>
                                                         <th>ID</th>
-                                                        <th>Permission/th>
+                                                        <th>Permission</th>
                                                         <th>Description</th>
                                                         <th>Action</th>
                                                     </tr>
@@ -552,10 +555,9 @@ session_start();
                         </div>
                     </div>
 
-                    <!-- <div class="tab-pane fade" id="settings" role="tabpanel">...</div> -->
                 </div>
 
-                <!-- add roles -->
+                <!-- modaladd roles -->
                 <div id="add-modal" class="row">
                     <div class="modal fade" id="NewRole" role="dialog">
                         <div class="modal-dialog">
@@ -590,7 +592,7 @@ session_start();
                     </div>
                 </div>
 
-                <!-- add permision -->
+                <!-- modal add permision -->
                 <div id="add-modal" class="row">
                     <div class="modal fade" id="NewPermission" role="dialog">
                         <div class="modal-dialog">
@@ -637,53 +639,7 @@ session_start();
     <!-- ============================================================== -->
 </body>
 <script>
-    $(document).ready(function() {
-        const usersTable = $('#usercontrolTable').DataTable({
-            processing: true,
-            width: '100%',
-            ajax: {
-                url: "./includes/encode/users_api.php?action=get_all_roles_permission",
-                type: "POST",
-                dataType: 'json',
-                dataSrc: ''
-            },
-            columns: [{
-                    title: '#',
-                    render: (a, b, c, d) => {
-                        return d.row + 1;
-                    }
-                }, {
-                    title: 'Roles',
-                    data: "RoleName",
-                    render: data => {
-                        return data.toUpperCase();
-                    }
-                },
-                {
-                    title: 'Permissions',
-                    data: "PermissionName",
-                    render: data => {
-                        const result = data.replace(/_/g, ' ')
-                            .replace(/\b\w/g, char => char.toUpperCase())
-                        return result;
-                    }
 
-                },
-                {
-                    title: '',
-                    orderable: false,
-                    render: function(data) {
-                        return `
-                        <button class="edit-btn btn btn-outline-primary">Edit</button>
-                        `;
-                    }
-                }
-            ],
-        });
-
-
-
-    });
 </script>
 
 </html>
