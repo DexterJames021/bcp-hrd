@@ -14,22 +14,42 @@ use Admin\Tech\Includes\Class\Permission;
 
 $user = new User($conn);
 $roles = new Roles($conn);
+$permission = new Permission($conn);
 
 $action = $_GET['action'] ?? null;
 switch ($action) {
     case 'get_all_roles_permission':
-        echo json_encode($user->get_all_roles());
+        echo json_encode($user->get_all_roles_permission());
         break;
+
+    case 'get_roles':
+        echo json_encode($roles->get_roles());
+        break;
+
+    case 'get_permissions':
+        echo json_encode($permission->getPermission());
+        break;
+
 
     case 'new_role':
         $rolename = $_POST["RoleName"];
         $description = $_POST["Description"];
-        $rs = $roles->newRole($rolename, $description)
-        if($rs){
-            echo json_encode("message"=> "succefully added");
-        }else{
-            echo json_encode("message"=> "failed.");
+        $rs = $roles->createRole($rolename, $description);
+        if ($rs) {
+            echo json_encode(["success" => "succefully added"]);
+        } else {
+            echo json_encode(["success" => "failed."]);
         }
         break;
 
+    case 'new_permission':
+        $rolename = $_POST["name"];
+        $description = $_POST["description"];
+        $rs = $permission->createPermission($rolename, $description);
+        if ($rs) {
+            echo json_encode(["success" => "succefully added"]);
+        } else {
+            echo json_encode(["success" => "failed."]);
+        }
+        break;
 }

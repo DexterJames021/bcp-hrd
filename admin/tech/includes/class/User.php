@@ -68,7 +68,7 @@ class User
     //     }
     // }
 
-    public function get_all_roles()
+    public function get_all_roles_permission()
     {
         try {
             $q = "SELECT r.* ,

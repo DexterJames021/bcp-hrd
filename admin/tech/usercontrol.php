@@ -9,8 +9,6 @@ session_start();
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- icon -->
-    <link rel="shortcut icon" href="../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
-
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- check if bato-->
     <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
@@ -23,9 +21,6 @@ session_start();
     <!-- main js -->
     <link rel="stylesheet" href="../../assets/libs/css/style.css">
 
-    <!-- toastify cs -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-
     <!-- assts csss -->
     <link rel="stylesheet" href="../../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
     <link rel="stylesheet" href="../../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
@@ -36,7 +31,8 @@ session_start();
 
     <!-- jQuery -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
-    <!-- <script  src="../../node_modules/jquery/dist/jquery.min.js"></script> -->
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -58,14 +54,13 @@ session_start();
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
-
     <!-- main js -->
     <script src="../../assets/libs/js/main-js.js"></script>
 
     <!-- slimscroll js -->
     <script src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 
-    <script defer  src="./includes/resource/usercontrol.js"></script>
+    <script src="./includes/resource/usercontrol.js"></script>
  
     <title>Admin Dashboard</title>
 </head>
@@ -500,7 +495,7 @@ session_start();
                                         <h2 class="card-title ">Roles</h2>
                                         <div>
                                             <button type="button" class="btn btn-outline-primary"
-                                            data-toggle="modal" data-target="#NewRole">+ Roles</button>
+                                            data-toggle="modal" data-target="#NewRole">+</button>
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -508,8 +503,7 @@ session_start();
                                             <table id="rolesTable" class="table table-hover" style="width:100%">
                                                 <thead class="thead-light">
                                                     <tr>
-                                                        <th>ID</th>
-                                                        <th>Role</th>
+                                                        <th>Role Name</th>
                                                         <th>Description</th>
                                                         <th>Action</th>
                                                     </tr>
@@ -532,7 +526,7 @@ session_start();
                                         <h2 class="card-title ">Permission</h2>
                                         <div>
                                             <button type="button" class="btn btn-outline-primary"
-                                            data-toggle="modal" data-target="#NewPermission">+ Permission</button>
+                                            data-toggle="modal" data-target="#NewPermission">+</button>
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -540,7 +534,6 @@ session_start();
                                             <table id="permissionTable" class="table table-hover" style="width:100%">
                                                 <thead class="thead-light">
                                                     <tr>
-                                                        <th>ID</th>
                                                         <th>Permission</th>
                                                         <th>Description</th>
                                                         <th>Action</th>
@@ -570,15 +563,15 @@ session_start();
 
                                 </div>
                                 <div class="modal-body">
-                                    <form id="assets_form">
+                                    <form id="new_role_form">
 
                                         <div class="mb-3">
-                                            <label for="name" class="form-label">Name:</label>
-                                            <input type="text" class="form-control" required name="name" id="name" placeholder="Asset Name">
-                                        </div>
+                                            <label for="name" class="form-label">Role Name:</label>
+                                            <input type="text" class="form-control" required name="RoleName" id="RoleName" placeholder="...">
+                                        </div>  	 	
                                         <div class="mb-3">
                                             <label for="category" class="form-label">Description:</label>
-                                            <input type="text" class="form-control" name="category" id="category" placeholder="Category">
+                                            <input type="text" class="form-control" name="Description" id="Description" placeholder="...">
                                             <!-- <label for="task" class="task-valid d-none text-danger">This field is required!</label> -->
                                         </div>
                                         <div class="modal-footer">
@@ -605,7 +598,7 @@ session_start();
 
                                 </div>
                                 <div class="modal-body">
-                                    <form id="assets_form">
+                                    <form id="new_permission_form">
 
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Name:</label>
@@ -613,8 +606,7 @@ session_start();
                                         </div>
                                         <div class="mb-3">
                                             <label for="category" class="form-label">Description:</label>
-                                            <input type="text" class="form-control" name="category" id="category" placeholder="Category">
-                                            <!-- <label for="task" class="task-valid d-none text-danger">This field is required!</label> -->
+                                            <input type="text" class="form-control" name="description" id="description" placeholder="description">
                                         </div>
                                         <div class="modal-footer">
                                             <button type="submit" id="submit-btn" class="btn btn-primary">Submit</button>
@@ -623,6 +615,20 @@ session_start();
                                     </form>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- bs notification -->
+                <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                    <div id="added" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-body bg-success text-light">
+                            Added, Successfully.
+                        </div>
+                    </div>
+                    <div id="edited" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-body bg-success text-light">
+                            Updated, Successfully.
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,9 @@
 <?php
 namespace Admin\Tech\Includes\Class;
 
+use PDO;
+use PDOException;
+
 class Roles
 {
 
@@ -12,9 +15,9 @@ class Roles
     public function __construct($conn)
     {
         $this->conn = $conn;
-    }   
+    }
 
-    public function newRole($roleId, $description)
+    public function createRole($roleId, $description)
     {
         try {
             $q = "INSERT INTO roles (RoleName, Description) VALUES (?, ?)";
@@ -25,8 +28,15 @@ class Roles
         }
     }
 
-    public function createRole()
+    public function get_roles()
     {
-        $q = "";
+        try {
+            $q = "SELECT * FROM roles;";
+            $stmt = $this->conn->prepare($q);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        } catch (PDOException $e) {
+            return $e->getMessage();
+        }
     }
 }
