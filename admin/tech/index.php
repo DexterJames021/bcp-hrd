@@ -656,10 +656,10 @@ session_start();
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between">
                                         <h1>Requests Resources </h1>
-                                        <div class="btn-group" role="group">
+                                        <!-- <div class="btn-group" role="group">
                                             <button type="button" class="btn btn-outline-primary float-right"
                                                 data-toggle="modal" data-target="#requestModal">Request Resources</button>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <div class="card-body">
                                         <table class="table table-hover" style="width:100%" id="requestsTable">

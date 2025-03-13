@@ -112,9 +112,9 @@ $path = "http://localhost/hrd-capstone-main/admin";
                                             <li class="nav-item">
                                                 <a class="nav-link" href="./tech/room_book_list.php">Facility Management</a>
                                             </li>
-                                            <li class="nav-item">
+                                            <!-- <li class="nav-item">
                                                 <a class="nav-link" href="./tech/request.php">Bookings and Request</a>
-                                            </li>
+                                            </li> -->
                                         </ul>
                                     </div>
                                 </li>

@@ -1,6 +1,6 @@
 $(function () {
   // ASSETS
-  console.log("asdasd");
+  console.log("resources admin");
 
   const resourcesTable = $("#ResourcesTable").DataTable({
     processing: true,
@@ -121,8 +121,12 @@ $(function () {
         render: function (data) {
           return `
                         <div class="btn-group">
-                            <button type="button" class="btn-approve btn btn-outline-primary" data-id="${data.id}">Approve</button>
-                            <button type="button" class="btn-reject btn btn-outline-primary" data-id="${data.id}">Reject</button>
+                            <button type="button" class="btn-approve btn my-1" data-id="${data.id}">
+                            <i class="bi bi-check-circle text-success" style="font-size:x-large;"></i>
+                            </button>
+                            <button type="button" class="btn-reject btn my-1" data-id="${data.id}">
+                              <i class="bi bi-x-circle text-danger" style="font-size:x-large;"></i>
+                            </button>
                         </div>
                 `;
         },

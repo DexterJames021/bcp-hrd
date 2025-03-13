@@ -259,9 +259,9 @@ require_once './includes/class/Task.php';
                                                     <li class="nav-item">
                                                         <a class="nav-link" href="./room_book_list.php">Facility Management</a>
                                                     </li>
-                                                    <li class="nav-item">
+                                                    <!-- <li class="nav-item">
                                                         <a class="nav-link" href="./request.php">Bookings and Request</a>
-                                                    </li>
+                                                    </li> -->
                                                 </ul>
                                             </div>
                                         </li>
