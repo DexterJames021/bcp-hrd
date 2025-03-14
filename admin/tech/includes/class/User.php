@@ -59,24 +59,16 @@ class User
         }
     }
 
-    // public function profile_update()
-    // {
-    //     try {
-    //         $q = "UPDATE users SET ";
-    //     } catch (PDOException $e) {
-    //         return $e->getMessage();
-    //     }
-    // }
-
     public function get_all_roles_permission()
     {
         try {
-            $q = "SELECT r.* ,
-             p.id as PermissionID, 
-             p.name as PermissionName 
-             FROM `role_permissions` rp 
-             JOIN permissions p ON rp.permission_id = p.id 
-            JOIN roles r ON rp.role_id = r.RoleID;";
+            $q = "SELECT r.RoleID AS role_id, 
+                r.RoleName AS role_name,
+                GROUP_CONCAT(p.name ORDER BY p.name SEPARATOR ', ') AS permissions 
+                FROM roles r 
+                LEFT JOIN role_permissions rp ON r.RoleID = rp.role_id 
+                LEFT JOIN permissions p ON rp.permission_id = p.id 
+                GROUP BY r.RoleID, r.RoleName; ";
             $stmt = $this->conn->prepare($q);
             $stmt->execute();
             return $stmt->fetchAll();
@@ -107,6 +99,7 @@ class User
         $stmt->execute([':id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    
     public function recordEdit($data) {
         try {
             $sql = "UPDATE employees 
@@ -125,4 +118,5 @@ class User
         }
     }
     
+
 }

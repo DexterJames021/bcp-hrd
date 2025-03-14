@@ -1,5 +1,5 @@
 <?php
-$path = "http://localhost/hrd-capstone-main/admin";
+$path = "http://localhost/bcp-hrd/";
 ?>
 <!--  rounded mt-4 ml-3 h-10 -->
 <div class="nav-left-sidebar sidebar-dark">
@@ -15,7 +15,7 @@ $path = "http://localhost/hrd-capstone-main/admin";
                         Human Resource Dept.
                     </li>
                     <li class="nav-item ">
-                        <a class="nav-link active" href="<?= $path ?>">
+                        <a class="nav-link active" href="<?php echo $path . "admin/index.php" ?>">
                             <i class="fas fa-fw fa-home"></i> Dashboard
                         </a>
                     </li>
@@ -128,7 +128,7 @@ $path = "http://localhost/hrd-capstone-main/admin";
                                     <a class="nav-link" href="./tech/records.php">Employee Personnel Records</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="./tech/access.php">Roles and Permission Mangement</a>
+                                    <a class="nav-link" href="./tech/usercontrol.php">Roles and Permission Mangement</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3-2" aria-controls="submenu-3-2">Analytics</a>

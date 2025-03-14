@@ -39,4 +39,42 @@ class Roles
             return $e->getMessage();
         }
     }
+
+    public function assignPermissions($role_id, $permissions)
+    {
+        try {
+            $this->conn->beginTransaction();
+
+            // Delete existing permissions for the role
+            $stmt = $this->conn->prepare("DELETE * FROM role_permissions WHERE role_id = ?");
+            $stmt->execute([$role_id]);
+
+            // Insert new permissions
+            $stmt = $this->conn->prepare("INSERT INTO role_permissions (role_id, permission_id) VALUES (?, ?)");
+            foreach ($permissions as $permission_id) {
+                $stmt->execute([$role_id, $permission_id]);
+            }
+
+            $this->conn->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->conn->rollBack();
+            error_log("Error assigning permissions: " . $e->getMessage());
+            return false;
+        }
+    }
+
+
+    public function userHasPermission($userId, $permissionName)
+    {
+        $q = "
+            SELECT COUNT(*) FROM user_roles ur
+            JOIN role_permissions rp ON ur.role_id = rp.role_id
+            JOIN permissions p ON rp.permission_id = p.id
+            WHERE ur.user_id = ? AND p.name = ?
+        ";
+        $stmt = $this->conn->prepare($q);
+        $stmt->execute([$userId, $permissionName]);
+        return $stmt->fetchColumn() > 0;
+    }
 }

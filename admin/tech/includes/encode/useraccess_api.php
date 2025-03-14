@@ -52,4 +52,16 @@ switch ($action) {
             echo json_encode(["success" => "failed."]);
         }
         break;
+
+    case 'update_role_permissions':
+        $role_id = $_POST['role_id'];
+        $permissions = $_POST['permissions'];
+        if ($role->assignPermissions($role_id, $permissions)) {
+            echo json_encode(['success' => true, 'message' => 'Permissions updated successfully']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to update permissions']);
+        }
+        break;
+
+
 }
