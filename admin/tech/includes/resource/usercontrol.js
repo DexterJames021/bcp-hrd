@@ -18,13 +18,13 @@ $(function () {
             }
         },
         columns: [
-            { 
-                title: '#', 
-                data: "index" 
+            {
+                title: '#',
+                data: "index"
             },
-            { 
-                title: 'Roles', 
-                data: "RoleName" 
+            {
+                title: 'Roles',
+                data: "RoleName"
             },
             {
                 title: 'Permissions',
@@ -40,19 +40,23 @@ $(function () {
             },
             {
                 title: 'Actions',
+                data: null,
                 orderable: false,
-                render: function () {
+                render: function (data) {
                     return `
                     <div class="d-flex gap-2 align-text-center">
-                        <button type="button" class="edit-btn btn btn-outline-primary float-right" data-toggle="modal" data-target="#editPermissionModal">Edit</button>
-                        <button type="button" class="btn btn-outline-danger float-right"">Delete</button>
+                        <button type="button" data-id="${data.role_id}" 
+                                class="edit-btn btn btn-outline-primary float-right" 
+                                data-toggle="modal" data-target="#editAccess">
+                                    Edit
+                        </button>
                     <div>
                     `;
                 }
             }
         ]
     });
-    
+
     const rolesTable = $('#rolesTable').DataTable({
         processing: true,
         width: '100%',
@@ -63,6 +67,7 @@ $(function () {
             dataSrc: ''
         },
         column: [
+
             {
                 title: "Role Name",
                 data: "RoleName"
@@ -78,10 +83,7 @@ $(function () {
                 render: function (data) {
                     return `
                         <div class="btn-group">
-                            <button type="button" class="btn-approve btn my-1" data-id="${data.id}">
-                            <i class="bi bi-check-circle text-success" style="font-size:x-large;"></i>
-                            </button>
-                            <button type="button" class="btn-reject btn my-1" data-id="${data.id}">
+                            <button type="button" class="delete-btn btn-reject btn my-1" data-id="${data.id}">
                               <i class="bi bi-x-circle text-danger" style="font-size:x-large;"></i>
                             </button>
                         </div>
@@ -90,27 +92,6 @@ $(function () {
             }
         ]
     })
-
-    $(document).on("click", ".update", function () {
-        const id = $(this).data("id");
-        $.post(
-            `./includes/encode/resources_api.php?action=get_allocated_resources_by_ID`,
-            { id: id },
-            function (resource) {
-                if (resource) {
-                    $("#EditResourcesModal").modal("show");
-                    $("#edit_name").val(resource.name);
-                    $("#edit_name").val(resource.name);
-                    $("#submit-btn").data("id", id); // Attach the resource ID to the submit button
-                } else {
-                    alert("Resource not found");
-                }
-            },
-            "json"
-        ).fail(function () {
-            alert("Something went wrong");
-        });
-    });
 
     const permissionTable = $('#permissionTable').DataTable({
         processing: true,
@@ -125,7 +106,7 @@ $(function () {
             {
                 title: "Permission Name",
                 data: "name",
-                
+
             },
             {
                 title: "description",
@@ -154,79 +135,107 @@ $(function () {
             }, "json");
     })
 
-    $("#new_permission_form").on("submit", function (e) {
-        e.preventDefault();
+    // $("#new_permission_form").on("submit", function (e) {
+    //     e.preventDefault();
 
-        const formData = $(this).serialize();
+    //     const formData = $(this).serialize();
 
-        $.post(BaseURI + "new_permission",
-            formData,
-            function (response) {
-                if (response.success) {
-                    $("#new_permission_form")[0].reset();
-                    permissionTable.ajax.reload();
-                    rolesPermissionTable.ajax.reload();
-                    $("#added").toast("show");
-                } else {
-                    alert("Failed to submit request: " + response.message);
-                }
-            }, "json");
-    })
+    //     $.post(BaseURI + "new_permission",
+    //         formData,
+    //         function (response) {
+    //             if (response.success) {
+    //                 $("#new_permission_form")[0].reset();
+    //                 permissionTable.ajax.reload();
+    //                 rolesPermissionTable.ajax.reload();
+    //                 $("#added").toast("show");
+    //             } else {
+    //                 alert("Failed to submit request: " + response.message);
+    //             }
+    //         }, "json");
+    // })
 
-    function loadRolesSelectTag() {
-        $.get(BaseURI + 'get_roles', function (data) {
-            const roles = JSON.parse(data);
 
-            $('#role_select_id').empty().append('<option value="" selected disabled hidden>Select Role</option>');
+    // $('#role_select_id').on('change', function () {
+    //     const selectedRoleId = $(this).val();
 
-            roles.forEach(role => {
-                $('#role_select_id').append(`<option value="${role.id}">${role.RoleName} (${role.Description})</option>`);
-            });
-        });
-    }
+    //     $('.permission-checkbox').prop('checked', false); // Uncheck all first
 
-    function loadPermissionSelectTag() {
-        $.get(BaseURI + 'get_permissions', function (data) {
-            const roles = JSON.parse(data);
+    //     if (selectedRoleId) {
+    //         $.get(BaseURI + `get_role_permissions?role_id=${selectedRoleId}`, function (data) {
+    //             const assignedPermissions = JSON.parse(data);
+    //             assignedPermissions.forEach(permission => {
+    //                 $(`.permission-checkbox[value="${permission.id}"]`).prop('checked', true);
+    //             });
+    //         });
+    //     }
+    // });
 
-            $('#permissions_tags').empty().append('<option value="" selected disabled hidden>Select Role</option>');
 
-            roles.forEach(role => {
-                $('#permissions_tags').append(`
-                    <div class="d-flex justify-content-between align-text-center hover-bg-primary">
-                        <label class="form-label">${role.name}:</label>
-                        <input type="checkbox" value="${role.id}" class="permission-checkbox" title="${role.description}" value="${role.name}" />
-                    </div>
-                    `);
-            });
-        });
-    }
-
-    $('#role_select_id').on('change',function () {
-        const selectedRoleId = $(this).val();
-
-        $('.permission-checkbox').prop('checked', false); // Uncheck all first
-
-        if (selectedRoleId) {
-            $.get(BaseURI + `get_role_permissions?role_id=${selectedRoleId}`, function (data) {
-                const assignedPermissions = JSON.parse(data);
-                assignedPermissions.forEach(permission => {
-                    $(`.permission-checkbox[value="${permission.id}"]`).prop('checked', true);
-                });
-            });
-        }
+    // Open Modal & Load Data
+    $('#AsignAccess').on('show.bs.modal', function () {
+        loadRolesPerm()
     });
 
+    // Load Roles
+    function loadRolesPerm() {
+        $.ajax({
+            url: BaseURI + 'get_roles',
+            type: 'GET',
+            success: function (response) {
+                let roleSelect = $('#roleSelect');
+                roleSelect.empty();
+                response.forEach(role => {
+                    roleSelect.append(`<option value="${role.RoleID}">${role.RoleName}</option>`);
+                });
+            }
+        });
 
+        $.ajax({
+            url: BaseURI + 'get_permissions',
+            type: 'GET',
+            success: function (response) {
+                let permissionSelect = $('#permissionSelect');
+                permissionSelect.empty();
+                response.forEach(permission => {
+                    permissionSelect.append(`<option value="${permission.id}">${permission.name}</option>`);
+                });
+            }
+        });
+    }
+
+    // assign Role Permissions
+    $('#savePermissionsBtn').on('click', function () {
+        let roleId = $('#roleSelect').val();
+        let selectedPermissions = $('#permissionSelect').val()[0];
+
+        $.ajax({
+            url: BaseURI + 'assign_role_permissions',
+            type: 'POST',
+            data: {
+                role_id: roleId,
+                permissions: selectedPermissions
+            },
+            success: function (response) {
+                if (response.success) {
+                    rolesPermissionTable.ajax.reload();
+                    $("added").toast("show")
+                } else {
+                    alert("Failed to update permissions: " + response.message);
+                }
+            }
+        });
+    });
+
+    //edit role access modal checkbox
     $(document).on('click', '.edit-btn', function () {
         let data = rolesPermissionTable.row($(this).parents('tr')).data();
         let roleId = data.index;
         let roleName = data.RoleName;
-        
+
         // Populate modal title and hidden input
         $('#modalRoleName').text(roleName);
         $('#modalRoleId').val(roleId);
-        
+
         // Fetch available permissions from server
         $.ajax({
             url: BaseURI + "get_permissions", // Fetch all possible permissions
@@ -234,7 +243,7 @@ $(function () {
             dataType: "json",
             success: function (permissions) {
                 let permissionListHtml = '';
-                
+
                 permissions.forEach(perm => {
                     let checked = (data.Permissions && data.Permissions.includes(perm.name)) ? 'checked' : '';
 
@@ -246,24 +255,19 @@ $(function () {
                             </label>
                         </div>`;
                 });
-    
+
                 $('#permissionList').html(permissionListHtml);
                 $('#editPermissionModal').modal('show');
             }
         });
     });
-    
-    $('#savePermissionsBtn').on('click', function () {
-        let roleId = $('#modalRoleId').val();
-        let selectedPermissions = [];
-    
-        $('.permission-checkbox:checked').each(function () {
-            selectedPermissions.push($(this).val());
-        });
-    
-        // Send update request
+
+    $("#EditedRolesPerm").on("submit", function(){
+        let roleId = $('#roleSelect').val();
+        let selectedPermissions = $('#permissionSelect').val()[0];
+
         $.ajax({
-            url: 'api.php?action=update_role_permissions',
+            url: BaseURI + 'assign_role_permissions',
             type: 'POST',
             data: {
                 role_id: roleId,
@@ -271,15 +275,12 @@ $(function () {
             },
             success: function (response) {
                 if (response.success) {
-                    $('#editPermissionModal').modal('hide');
-                    alert('Permissions updated successfully');
+                    rolesPermissionTable.ajax.reload();
+                    $("edited").toast("show")
                 } else {
                     alert("Failed to update permissions: " + response.message);
                 }
             }
         });
-    });
-
-    loadRolesSelectTag()
-    loadPermissionSelectTag()
+    })
 });

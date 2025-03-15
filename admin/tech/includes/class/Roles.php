@@ -40,31 +40,6 @@ class Roles
         }
     }
 
-    public function assignPermissions($role_id, $permissions)
-    {
-        try {
-            $this->conn->beginTransaction();
-
-            // Delete existing permissions for the role
-            $stmt = $this->conn->prepare("DELETE * FROM role_permissions WHERE role_id = ?");
-            $stmt->execute([$role_id]);
-
-            // Insert new permissions
-            $stmt = $this->conn->prepare("INSERT INTO role_permissions (role_id, permission_id) VALUES (?, ?)");
-            foreach ($permissions as $permission_id) {
-                $stmt->execute([$role_id, $permission_id]);
-            }
-
-            $this->conn->commit();
-            return true;
-        } catch (Exception $e) {
-            $this->conn->rollBack();
-            error_log("Error assigning permissions: " . $e->getMessage());
-            return false;
-        }
-    }
-
-
     public function userHasPermission($userId, $permissionName)
     {
         $q = "
@@ -77,4 +52,42 @@ class Roles
         $stmt->execute([$userId, $permissionName]);
         return $stmt->fetchColumn() > 0;
     }
+
+    public function deleteRolesPermission($id)
+    {
+        try {
+            $q = "DELETE FROM roles_permissions WHERE id=:id";
+            $stmt = $this->conn->prepare($q);
+            return $stmt->execute([$id]);
+        } catch (PDOException $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function assignPermissions($role_id, $permissions)
+    {
+        try {
+            $this->conn->beginTransaction();
+    
+            // ✅ Delete old permissions first
+            // $stmt = $this->conn->prepare("DELETE FROM role_permissions WHERE role_id = ?");
+            // $stmt->execute([$role_id]);
+    
+            // ✅ Insert new permissions
+            $stmt = $this->conn->prepare("INSERT INTO role_permissions (role_id, permission_id) VALUES (?, ?)");
+            foreach ($permissions as $permission_id) {
+                $stmt->execute([$role_id, (int) $permission_id]);
+            }
+    
+            $this->conn->commit();
+            return true;
+    
+        } catch (Exception $e) {
+            $this->conn->rollBack();
+            return $e->getMessage();
+        }
+    }
+    
+
+
 }

@@ -2,6 +2,9 @@
 header("Access-Control-Allow-Origin: *"); //  domain
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header('Content-Type: application/json; charset=utf-8');
+
+
 
 require_once '../class/User.php';
 require_once '../class/Roles.php';
@@ -53,13 +56,37 @@ switch ($action) {
         }
         break;
 
-    case 'update_role_permissions':
+    case 'assign_role_permissions':
         $role_id = $_POST['role_id'];
         $permissions = $_POST['permissions'];
-        if ($role->assignPermissions($role_id, $permissions)) {
+
+        $rs = $roles->assignPermissions($role_id, $permissions);
+
+        if ($rs === true) {
             echo json_encode(['success' => true, 'message' => 'Permissions updated successfully']);
         } else {
-            echo json_encode(['success' => false, 'message' => 'Failed to update permissions']);
+            echo json_encode(['success' => false, 'message' => 'Failed to update permissions: ' . $rs]);
+        }
+        break;
+
+    case 'update_role_permissions':
+
+
+    case 'delete_role_permission':
+        if (empty($_POST['id'])) {
+            echo json_encode(['error' => 'ID is required']);
+            exit;
+        }
+
+        $id = $_POST['id'];
+
+        // Delete 
+        $deleted = $roles->deleteRolesPermission($id);
+
+        if ($deleted) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['error' => 'Failed to delete the room']);
         }
         break;
 

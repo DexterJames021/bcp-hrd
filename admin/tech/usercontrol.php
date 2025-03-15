@@ -525,9 +525,9 @@ $BaseURL = "";
                                             <!-- <button type="button" class="btn btn-outline-primary float-right"
                                                 data-toggle="modal" data-target="#NewRole">+ Roles</button>
                                             <button type="button" class="btn btn-outline-primary float-right"
-                                                data-toggle="modal" data-target="#NewPermission">+ Permission</button>
-                                            <button type="button" class="btn btn-outline-primary float-right"
-                                                data-toggle="modal" data-target="#AsignAccess">+ Assign</button> -->
+                                                data-toggle="modal" data-target="#NewPermission">+ Permission</button>  -->
+                                            <button type="button" class="btn btn-outline-primary float-right" 
+                                                data-toggle="modal" data-target="#AsignAccess">+ Assign</button>
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -567,6 +567,7 @@ $BaseURL = "";
                                             <table id="rolesTable" class="table table-hover" style="width:100%">
                                                 <thead class="thead-light">
                                                     <tr>
+                                                        <!-- <th>Role ID</th> -->
                                                         <th>Role Name</th>
                                                         <th>Description</th>
                                                         <th>Action</th>
@@ -632,12 +633,12 @@ $BaseURL = "";
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Role Name:</label>
                                             <input type="text" class="form-control" required name="RoleName"
-                                                id="RoleName" placeholder="...">
+                                                id="RoleName" placeholder="Role title">
                                         </div>
                                         <div class="mb-3">
                                             <label for="category" class="form-label">Description:</label>
                                             <input type="text" class="form-control" name="Description" id="Description"
-                                                placeholder="...">
+                                                placeholder="description...">
                                             <!-- <label for="task" class="task-valid d-none text-danger">This field is required!</label> -->
                                         </div>
                                         <div class="modal-footer">
@@ -691,8 +692,47 @@ $BaseURL = "";
                     </div>
                 </div>
 
-                <!-- modal assign role and  permision -->
-                <div class="modal fade" id="editPermissionModal" role="dialog"
+                <!-- Assign Role & Permission Modal -->
+                <div class="modal fade" id="AsignAccess" role="dialog"
+                    aria-labelledby="editPermissionModalLabel">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Assign Permissions for <span id="modalRoleName"></span></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="editPermissionForm">
+                                    <!-- Select Role -->
+                                    <div class="form-group">
+                                        <label for="roleSelect">Select Role:</label>
+                                        <select id="roleSelect" class="form-control">
+                                            <!-- Roles will be populated here dynamically -->
+                                        </select>
+                                    </div>
+
+                                    <!-- Select Permissions -->
+                                    <div class="form-group">
+                                        <label for="permissionSelect">Select Permissions:</label>
+                                        <select id="permissionSelect" class="form-control" multiple>
+                                            <!-- Permissions will be populated here dynamically -->
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" id="savePermissionsBtn">Save
+                                    Changes</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- update roles and permission -->
+                <div class="modal fade" id="editAccess" role="dialog"
                     aria-labelledby="editPermissionModalLabel">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -712,7 +752,7 @@ $BaseURL = "";
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" id="savePermissionsBtn">Save
+                                <button type="button" class="btn btn-primary" id="EditedRolesPerm">Save
                                     Changes</button>
                                 <button type="button" id="close-btn" class="btn btn-default"
                                     data-dismiss="modal">Close</button>
@@ -732,6 +772,11 @@ $BaseURL = "";
                     <div id="edited" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
                         <div class="toast-body bg-success text-light">
                             Updated, Successfully.
+                        </div>
+                    </div>
+                    <div id="deleted" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-body bg-success text-light">
+                            Deleted, Successfully.
                         </div>
                     </div>
                 </div>
