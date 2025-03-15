@@ -761,7 +761,6 @@ $BaseURL = "";
                     </div>
                 </div>
 
-
                 <!-- bs notification -->
                 <div class="toast-container position-fixed bottom-0 end-0 p-3">
                     <div id="added" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">

@@ -68,26 +68,63 @@ class Roles
     {
         try {
             $this->conn->beginTransaction();
-    
-            // ✅ Delete old permissions first
-            // $stmt = $this->conn->prepare("DELETE FROM role_permissions WHERE role_id = ?");
-            // $stmt->execute([$role_id]);
-    
-            // ✅ Insert new permissions
+
+            $stmt = $this->conn->prepare("SELECT permission_id FROM role_permissions WHERE role_id = ?");
+            $stmt->execute([$role_id]);
+            $existingPermissions = $stmt->fetchAll(PDO::FETCH_COLUMN); // Get current permissions as an array
+
+            // ✅ Insert only if the permission is not already assigned
             $stmt = $this->conn->prepare("INSERT INTO role_permissions (role_id, permission_id) VALUES (?, ?)");
             foreach ($permissions as $permission_id) {
-                $stmt->execute([$role_id, (int) $permission_id]);
+                if (!in_array($permission_id, $existingPermissions)) {
+                    $stmt->execute([$role_id, (int) $permission_id]);
+                }
             }
-    
+
             $this->conn->commit();
             return true;
-    
+
         } catch (Exception $e) {
             $this->conn->rollBack();
             return $e->getMessage();
         }
     }
-    
+
+    public function editRolePermission($role_id, $permissions)
+    {
+        try {
+            $this->conn->beginTransaction();
+
+            // Fetch existing permissions for the role
+            $stmt = $this->conn->prepare("SELECT permission_id FROM role_permissions WHERE role_id = ?");
+            $stmt->execute([$role_id]);
+            $existingPermissions = $stmt->fetchAll(PDO::FETCH_COLUMN); // Fetch as array
+
+            // Insert new permissions if not already assigned
+            $stmtInsert = $this->conn->prepare("INSERT INTO role_permissions (role_id, permission_id) VALUES (?, ?)");
+            foreach ($permissions as $permission_id) {
+                if (!in_array($permission_id, $existingPermissions)) {
+                    $stmtInsert->execute([$role_id, (int) $permission_id]); // Insert new permission
+                }
+            }
+
+            // Remove unchecked permissions
+            $stmtDelete = $this->conn->prepare("DELETE FROM role_permissions WHERE role_id = ? AND permission_id = ?");
+            foreach ($existingPermissions as $permission_id) {
+                if (!in_array($permission_id, $permissions)) {
+                    $stmtDelete->execute([$role_id, (int) $permission_id]); // Remove permission
+                }
+            }
+
+            $this->conn->commit();
+            return true;
+
+        } catch (Exception $e) {
+            $this->conn->rollBack();
+            return $e->getMessage();
+        }
+    }
+
 
 
 }

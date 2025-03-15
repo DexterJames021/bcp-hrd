@@ -206,7 +206,7 @@ $(function () {
     // assign Role Permissions
     $('#savePermissionsBtn').on('click', function () {
         let roleId = $('#roleSelect').val();
-        let selectedPermissions = $('#permissionSelect').val()[0];
+        let selectedPermissions = $('#permissionSelect').val();
 
         $.ajax({
             url: BaseURI + 'assign_role_permissions',
@@ -218,7 +218,7 @@ $(function () {
             success: function (response) {
                 if (response.success) {
                     rolesPermissionTable.ajax.reload();
-                    $("added").toast("show")
+                    $("#added").toast("show")
                 } else {
                     alert("Failed to update permissions: " + response.message);
                 }
@@ -262,12 +262,16 @@ $(function () {
         });
     });
 
-    $("#EditedRolesPerm").on("submit", function(){
-        let roleId = $('#roleSelect').val();
-        let selectedPermissions = $('#permissionSelect').val()[0];
-
+    $("#EditedRolesPerm").on("click", function () {
+        let roleId = $('#modalRoleId').val();
+        let selectedPermissions = [];
+    
+        $('.permission-checkbox:checked').each(function () {
+            selectedPermissions.push($(this).val());
+        });
+    
         $.ajax({
-            url: BaseURI + 'assign_role_permissions',
+            url: BaseURI + 'update_role_permissions',
             type: 'POST',
             data: {
                 role_id: roleId,
@@ -276,11 +280,14 @@ $(function () {
             success: function (response) {
                 if (response.success) {
                     rolesPermissionTable.ajax.reload();
-                    $("edited").toast("show")
+                    $("#added").toast("show")
                 } else {
                     alert("Failed to update permissions: " + response.message);
                 }
             }
         });
-    })
+    });
+    
+
+    
 });

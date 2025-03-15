@@ -70,7 +70,18 @@ switch ($action) {
         break;
 
     case 'update_role_permissions':
+        $role_id = $_POST['role_id'];
+        $permissions = isset($_POST['permissions']) ? $_POST['permissions'] : [];
 
+        $result = $roles->editRolePermission($role_id, $permissions);
+
+        if ($result === true) {
+            echo json_encode(["success" => true, "message" => "Permissions updated"]);
+        } else {
+            echo json_encode(["success" => false, "message" => $result]); // Error message from function
+        }
+        break;
+        
 
     case 'delete_role_permission':
         if (empty($_POST['id'])) {
