@@ -10,22 +10,10 @@ $permission = new p($conn);
 $roles = new Roles($conn);
 
 // Example usage
-if ($permission->userHasPermission($_SESSION['user_id'], 'manage_employees')) {
+if ($roles->userHasPermission($_SESSION['user_id'], 'admin')) {
     echo "Access granted";
 } else {
     echo "Access denied";
 }
 
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>asdasd</title>
-</head>
-<body>
-    <h1>dasdasd</h1>
-</body>
-</html>

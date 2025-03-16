@@ -10,7 +10,8 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- check if bato-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- check if bato-->
     <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <script defer src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
@@ -27,7 +28,8 @@ session_start();
     <link rel="stylesheet" href="../../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
 
     <!-- icon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
 
     <!-- jQuery -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
@@ -67,7 +69,9 @@ session_start();
                 <a class="navbar-brand" href="index.php">
                     <img src="../../assets/images/bcp-hrd-logo.jpg" alt="" class="" style="height: 3rem;width: auto;">
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse " id="navbarSupportedContent">
@@ -78,7 +82,9 @@ session_start();
                             </div>
                         </li>
                         <li class="nav-item dropdown notification">
-                            <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span class="indicator"></span></a>
+                            <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span
+                                    class="indicator"></span></a>
                             <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                                 <li>
                                     <div class="notification-title"> Notification</div>
@@ -86,32 +92,44 @@ session_start();
                                         <div class="list-group">
                                             <a href="#" class="list-group-item list-group-item-action active">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Jeremy Rakestraw</span>accepted your invitation to join the team.
+                                                    <div class="notification-list-user-img"><img src="#" alt=""
+                                                            class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span
+                                                            class="notification-list-user-name">Jeremy
+                                                            Rakestraw</span>accepted your invitation to join the team.
                                                         <div class="notification-date">2 min ago</div>
                                                     </div>
                                                 </div>
                                             </a>
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">John Abraham </span>is now following you
+                                                    <div class="notification-list-user-img"><img src="#" alt=""
+                                                            class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span
+                                                            class="notification-list-user-name">John Abraham </span>is
+                                                        now following you
                                                         <div class="notification-date">2 days ago</div>
                                                     </div>
                                                 </div>
                                             </a>
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Monaan Pechi</span> is watching your main repository
+                                                    <div class="notification-list-user-img"><img src="#" alt=""
+                                                            class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span
+                                                            class="notification-list-user-name">Monaan Pechi</span> is
+                                                        watching your main repository
                                                         <div class="notification-date">2 min ago</div>
                                                     </div>
                                                 </div>
                                             </a>
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Jessica Caruso</span>accepted your invitation to join the team.
+                                                    <div class="notification-list-user-img"><img src="#" alt=""
+                                                            class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span
+                                                            class="notification-list-user-name">Jessica
+                                                            Caruso</span>accepted your invitation to join the team.
                                                         <div class="notification-date">2 min ago</div>
                                                     </div>
                                                 </div>
@@ -157,15 +175,19 @@ session_start();
                             </ul>
                         </li> -->
                         <li class="nav-item dropdown nav-user">
-                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="#" alt="" class="user-avatar-md rounded-circle"></a>
-                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
+                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="#" alt=""
+                                    class="user-avatar-md rounded-circle"></a>
+                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown"
+                                aria-labelledby="navbarDropdownMenuLink2">
                                 <div class="nav-user-info">
                                     <h5 class="mb-0 text-white nav-user-name"> <?= $_SESSION['username'] ?> </h5>
                                     <span class="status"></span><span class="ml-2">Available</span>
                                 </div>
                                 <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Account</a>
                                 <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
-                                <a class="dropdown-item" href="../../auth/logout.php"><i class="fas fa-power-off mr-2"></i>Logout</a>
+                                <a class="dropdown-item" href="../../auth/logout.php"><i
+                                        class="fas fa-power-off mr-2"></i>Logout</a>
                             </div>
                         </li>
                     </ul>
@@ -182,7 +204,8 @@ session_start();
             <div class="menu-list">
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <!-- <a class="d-xl-none d-lg-none" href="#">Dashboard</a> -->
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
@@ -197,11 +220,15 @@ session_start();
                             </li>
                             <!-- Selection and Recuitment -->
                             <li class="nav-item ">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fa fa-fw fa-user-circle"></i>Selection and Recuitment <span class="badge badge-success">6</span></a>
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-1" aria-controls="submenu-1"><i
+                                        class="fa fa-fw fa-user-circle"></i>Selection and Recuitment <span
+                                        class="badge badge-success">6</span></a>
                                 <div id="submenu-1" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1-2" aria-controls="submenu-1-2">Lorem, ipsum.</a>
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                                data-target="#submenu-1-2" aria-controls="submenu-1-2">Lorem, ipsum.</a>
                                             <div id="submenu-1-2" class="collapse submenu">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
@@ -220,13 +247,16 @@ session_start();
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="./records-management/Records.php">Lorem, ipsum dolor.</a>
+                                            <a class="nav-link" href="./records-management/Records.php">Lorem, ipsum
+                                                dolor.</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="dashboard-sales.html">Lorem, ipsum dolor.</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1-1" aria-controls="submenu-1-1">Lorem, ipsum dolor.</a>
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                                data-target="#submenu-1-1" aria-controls="submenu-1-1">Lorem, ipsum
+                                                dolor.</a>
                                             <div id="submenu-1-1" class="collapse submenu">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
@@ -246,11 +276,14 @@ session_start();
                             </li>
                             <!-- Talent Management -->
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2"><i class="fa fa-fw fa-rocket"></i>Talent Management</a>
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-2" aria-controls="submenu-2"><i
+                                        class="fa fa-fw fa-rocket"></i>Talent Management</a>
                                 <div id="submenu-2" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/cards.html">Cards <span class="badge badge-secondary">New</span></a>
+                                            <a class="nav-link" href="pages/cards.html">Cards <span
+                                                    class="badge badge-secondary">New</span></a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="pages/general.html">General</a>
@@ -275,18 +308,23 @@ session_start();
                             </li>
                             <!-- Tech & Analytics -->
                             <li class="nav-item">
-                                <a class="nav-link active" href="./analytics/index.php" data-toggle="collapse" aria-expanded="true" data-target="#submenu-3" aria-controls="submenu-3"><i class="fas fa-fw fa-chart-pie"></i> Tech & Analytics</a>
+                                <a class="nav-link active" href="./analytics/index.php" data-toggle="collapse"
+                                    aria-expanded="true" data-target="#submenu-3" aria-controls="submenu-3"><i
+                                        class="fas fa-fw fa-chart-pie"></i> Tech & Analytics</a>
                                 <div id="submenu-3" class="collapse submenu show">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3-1" aria-controls="submenu-3-1">Facilities & Resources</a>
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                                data-target="#submenu-3-1" aria-controls="submenu-3-1">Facilities &
+                                                Resources</a>
                                             <div id="submenu-3-1" class="collapse submenu">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
                                                         <a class="nav-link " href="./index.php">Resources Management</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="./room_book_list.php">Facility Management</a>
+                                                        <a class="nav-link" href="./room_book_list.php">Facility
+                                                            Management</a>
                                                     </li>
                                                     <!-- <li class="nav-item">
                                                         <a class="nav-link" href="./request.php">Bookings and Request</a>
@@ -298,16 +336,26 @@ session_start();
                                             <a class="nav-link" href="./records.php">Employee Personnel Records</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="./reports.php">Administrative Report</a>
+                                            <a class="nav-link active" href="./reports.php">Administrative Report</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="./usercontrol.php">Roles and Permission Mangement</a>
+                                            <a class="nav-link" href="./usercontrol.php">Roles and Permission
+                                                Mangement</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3-2" aria-controls="submenu-3-2">Analytics</a>
-                                            <div id="submenu-3-1" class="collapse submenu">
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                                data-target="#submenu-3-2" aria-controls="submenu-3-2">Analytics</a>
+                                            <div id="submenu-3-2" class="collapse submenu">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
+                                                        <a class="nav-link" href="./analytics/facilities.php">Monitor
+                                                            Facilities</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="./analytics/resources.php">Monitor
+                                                            Resources</a>
+                                                    </li>
+                                                    <!-- <li class="nav-item">
                                                         <a class="nav-link" href="#">Engagement insight</a>
                                                     </li>
                                                     <li class="nav-item">
@@ -321,7 +369,7 @@ session_start();
                                                     </li>
                                                     <li class="nav-item">
                                                         <a class="nav-link" href="#">Talent insight</a>
-                                                    </li>
+                                                    </li> -->
                                                 </ul>
                                             </div>
                                         </li>
@@ -336,14 +384,17 @@ session_start();
                             </li>
                             <!-- Document and Legal -->
                             <li class="nav-item ">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4"><i class="fab fa-fw fa-wpforms"></i>Document and Legal</a>
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-4" aria-controls="submenu-4"><i
+                                        class="fab fa-fw fa-wpforms"></i>Document and Legal</a>
                                 <div id="submenu-4" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link" href="pages/form-elements.html">Form Elements</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/form-validation.html">Parsely Validations</a>
+                                            <a class="nav-link" href="pages/form-validation.html">Parsely
+                                                Validations</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="pages/multiselect.html">Multiselect</a>
@@ -359,7 +410,9 @@ session_start();
                             </li>
                             <!-- Performance -->
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5"><i class="fas fa-fw fa-table"></i>Performance</a>
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-5" aria-controls="submenu-5"><i
+                                        class="fas fa-fw fa-table"></i>Performance</a>
                                 <div id="submenu-5" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
@@ -373,7 +426,9 @@ session_start();
                             </li>
                             <!-- Talent management -->
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-6" aria-controls="submenu-6"><i class="fas fa-fw fa-columns"></i>Talent management</a>
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-6" aria-controls="submenu-6"><i
+                                        class="fas fa-fw fa-columns"></i>Talent management</a>
                                 <div id="submenu-6" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
@@ -387,7 +442,9 @@ session_start();
                             </li>
                             <!-- Compensation & benefits -->
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-7" aria-controls="submenu-7"><i class="fas fa-f fa-folder"></i>Compensation & benefits</a>
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-7" aria-controls="submenu-7"><i
+                                        class="fas fa-f fa-folder"></i>Compensation & benefits</a>
                                 <div id="submenu-7" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
@@ -403,7 +460,8 @@ session_start();
                                 Features
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="./task-management/index.php" aria-expanded="false" data-target="#submenu-8" aria-controls="submenu-8">
+                                <a class="nav-link" href="./task-management/index.php" aria-expanded="false"
+                                    data-target="#submenu-8" aria-controls="submenu-8">
                                     <i class="fas fa-fw fa-file"></i> Task-management </a>
                             </li>
 
@@ -431,8 +489,8 @@ session_start();
                             <div class="card-header d-flex justify-content-between ">
                                 <h1>Resource Usage Report</h1>
                                 <div>
-                                    <button type="button" class="btn btn-primary float-right"
-                                        data-toggle="modal">AI Generate Report</button>
+                                    <button type="button" class="btn btn-primary float-right" data-toggle="modal">AI
+                                        Generate Report</button>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -462,8 +520,8 @@ session_start();
                         <div class="card">
                             <div class="card-header">
                                 <h1>Facility Management Report</h1>
-                                <button type="button" class="btn btn-primary float-right"
-                                    data-toggle="modal">AI Generate Report</button>
+                                <button type="button" class="btn btn-primary float-right" data-toggle="modal">AI
+                                    Generate Report</button>
                             </div>
                             <div class="card-body">
                                 <table id="roomTable">
@@ -520,7 +578,7 @@ session_start();
     <!-- ============================================================== -->
 </body>
 <script>
-    $(function() {
+    $(function () {
         console.log('connect');
 
         const bookingTable = $('#LogbookingTable').DataTable({
@@ -532,29 +590,29 @@ session_start();
                 dataSrc: '',
             },
             columns: [{
-                    title: 'Name',
-                    data: 'name'
-                },
-                {
-                    title: 'Quantity',
-                    data: 'quantity'
-                },
-                {
-                    title: 'Status',
-                    data: 'status',
-                },
-                {
-                    title: 'Category',
-                    data: 'category',
-                },
-                {
-                    title: 'Last Maintence',
-                    data: 'last_maintenance'
-                },
-                {
-                    title: 'Next Maintence',
-                    data: 'next_maintenance'
-                },
+                title: 'Name',
+                data: 'name'
+            },
+            {
+                title: 'Quantity',
+                data: 'quantity'
+            },
+            {
+                title: 'Status',
+                data: 'status',
+            },
+            {
+                title: 'Category',
+                data: 'category',
+            },
+            {
+                title: 'Last Maintence',
+                data: 'last_maintenance'
+            },
+            {
+                title: 'Next Maintence',
+                data: 'next_maintenance'
+            },
             ],
         });
 
@@ -568,27 +626,27 @@ session_start();
                 dataSrc: '',
             },
             columns: [{
-                    data: null,
-                    render: function(a, b, c, d) {
-                        return d.row + 1;
-                    },
-                    title: "No."
+                data: null,
+                render: function (a, b, c, d) {
+                    return d.row + 1;
                 },
-                {
-                    data: 'name'
-                },
-                {
-                    data: 'location',
-                    defaultContent: '<span align="right">-</span>'
-                },
-                {
-                    data: 'capacity',
-                    defaultContent: '-'
-                },
-                {
-                    data: 'status',
-                    defaultContent: '-'
-                },
+                title: "No."
+            },
+            {
+                data: 'name'
+            },
+            {
+                data: 'location',
+                defaultContent: '<span align="right">-</span>'
+            },
+            {
+                data: 'capacity',
+                defaultContent: '-'
+            },
+            {
+                data: 'status',
+                defaultContent: '-'
+            },
             ],
         });
 

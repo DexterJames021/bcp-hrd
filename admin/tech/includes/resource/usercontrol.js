@@ -195,9 +195,10 @@ $(function () {
             type: 'GET',
             success: function (response) {
                 let permissionSelect = $('#permissionSelect');
+                let temp = '<i class="fa-solid fa-circle-plus"></i>';
                 permissionSelect.empty();
                 response.forEach(permission => {
-                    permissionSelect.append(`<option value="${permission.id}">${permission.name}</option>`);
+                    permissionSelect.append(`<option value="${permission.id}">+ ${permission.name}</option>`);
                 });
             }
         });
@@ -282,7 +283,7 @@ $(function () {
                     rolesPermissionTable.ajax.reload();
                     $("#added").toast("show")
                 } else {
-                    alert("Failed to update permissions: " + response.message);
+                    $("#error").toast("show")
                 }
             }
         });

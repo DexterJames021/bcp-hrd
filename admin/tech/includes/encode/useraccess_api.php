@@ -78,7 +78,7 @@ switch ($action) {
         if ($result === true) {
             echo json_encode(["success" => true, "message" => "Permissions updated"]);
         } else {
-            echo json_encode(["success" => false, "message" => $result]); // Error message from function
+            echo json_encode(["failed" => false, "message" => $result]); // Error message from function
         }
         break;
         

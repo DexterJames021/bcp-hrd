@@ -135,6 +135,12 @@ $path = "http://localhost/bcp-hrd/";
                                     <div id="submenu-3-2" class="collapse submenu">
                                         <ul class="nav flex-column">
                                             <li class="nav-item">
+                                                <a class="nav-link" href="./tech/analytics/facilities.php">Monitor Facilities</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="./tech/analytics/facilities.php">Monitor Resources</a>
+                                            </li>
+                                            <!-- <li class="nav-item">
                                                 <a class="nav-link" href="#">Engagement insight</a>
                                             </li>
                                             <li class="nav-item">
@@ -148,16 +154,10 @@ $path = "http://localhost/bcp-hrd/";
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link" href="#">Talent insight</a>
-                                            </li>
+                                            </li> -->
                                         </ul>
                                     </div>
                                 </li>
-                                <!-- <li class="nav-item">
-                                            <a class="nav-link" href="pages/chart-sparkline.html">Sparkline</a>
-                                        </li> -->
-                                <!-- <li class="nav-item">
-                                            <a class="nav-link" href="pages/chart-gauge.html">Guage</a>
-                                        </li> -->
                             </ul>
                         </div>
                     </li>

@@ -335,7 +335,13 @@ session_start();
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3-2" aria-controls="submenu-3-2">Analytics</a>
                                             <div id="submenu-3-2" class="collapse submenu">
                                                 <ul class="nav flex-column">
+                                                <li class="nav-item">
+                                                        <a class="nav-link" href="./analytics/facilities.php">Monitor Facilities</a>
+                                                    </li>
                                                     <li class="nav-item">
+                                                        <a class="nav-link" href="./analytics/resources.php">Monitor Resources</a>
+                                                    </li>
+                                                    <!-- <li class="nav-item">
                                                         <a class="nav-link" href="./analytics/engagement.php">Engagement insight</a>
                                                     </li>
                                                     <li class="nav-item">
@@ -358,7 +364,7 @@ session_start();
                                                     </li>
                                                     <li class="nav-item">
                                                         <a class="nav-link" href="./analytics/resources.php">Resources Analytics</a>
-                                                    </li>
+                                                    </li> -->
                                                 </ul>
                                             </div>
                                         </li>

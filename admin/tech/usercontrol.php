@@ -354,7 +354,7 @@ $BaseURL = "";
                                             <a class="nav-link" href="./reports.php">Administrative Report</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="./usercontrol.php">Roles and Permission
+                                            <a class="nav-link active" href="./usercontrol.php">Roles and Permission
                                                 Mangement</a>
                                         </li>
                                         <li class="nav-item">
@@ -363,8 +363,15 @@ $BaseURL = "";
                                             <div id="submenu-3-2" class="collapse submenu">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="./analytics/engagement.php">Engagement
-                                                            insight</a>
+                                                        <a class="nav-link" href="./analytics/facilities.php">Monitor
+                                                            Facilities</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="./analytics/resources.php">Monitor
+                                                            Resources</a>
+                                                    </li>
+                                                    <!-- <li class="nav-item">
+                                                        <a class="nav-link" href="#">Engagement insight</a>
                                                     </li>
                                                     <li class="nav-item">
                                                         <a class="nav-link"
@@ -385,7 +392,7 @@ $BaseURL = "";
                                                     <li class="nav-item">
                                                         <a class="nav-link"
                                                             href="./analytics/retention.php">Retention</a>
-                                                    </li>
+                                                    </li> -->
                                                 </ul>
                                             </div>
                                         </li>
@@ -526,7 +533,7 @@ $BaseURL = "";
                                                 data-toggle="modal" data-target="#NewRole">+ Roles</button>
                                             <button type="button" class="btn btn-outline-primary float-right"
                                                 data-toggle="modal" data-target="#NewPermission">+ Permission</button>  -->
-                                            <button type="button" class="btn btn-outline-primary float-right" 
+                                            <button type="button" class="btn btn-outline-primary float-right"
                                                 data-toggle="modal" data-target="#AsignAccess">+ Assign</button>
                                         </div>
                                     </div>
@@ -693,12 +700,11 @@ $BaseURL = "";
                 </div>
 
                 <!-- Assign Role & Permission Modal -->
-                <div class="modal fade" id="AsignAccess" role="dialog"
-                    aria-labelledby="editPermissionModalLabel">
+                <div class="modal fade" id="AsignAccess" role="dialog" aria-labelledby="editPermissionModalLabel">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Assign Permissions for <span id="modalRoleName"></span></h5>
+                                <h5 class="modal-title">Assign Permissions</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -732,13 +738,11 @@ $BaseURL = "";
                 </div>
 
                 <!-- update roles and permission -->
-                <div class="modal fade" id="editAccess" role="dialog"
-                    aria-labelledby="editPermissionModalLabel">
+                <div class="modal fade" id="editAccess" role="dialog" aria-labelledby="editPermissionModalLabel">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="editPermissionModalLabel">Edit Permissions for <span
-                                        id="modalRoleName"></span></h5>
+                                <h5 class="modal-title" id="editPermissionModalLabel">Edit Permissions</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -776,6 +780,11 @@ $BaseURL = "";
                     <div id="deleted" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
                         <div class="toast-body bg-success text-light">
                             Deleted, Successfully.
+                        </div>
+                    </div>
+                    <div id="error" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-body bg-success text-light">
+                            Something went wrong.
                         </div>
                     </div>
                 </div>
