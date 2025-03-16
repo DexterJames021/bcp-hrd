@@ -45,7 +45,7 @@ $(function () {
                 render: function (data) {
                     return `
                     <div class="d-flex gap-2 align-text-center">
-                        <button type="button" data-id="${data.role_id}" 
+                        <button type="button" data-id="${data.RoleID}" 
                                 class="edit-btn btn btn-outline-primary float-right" 
                                 data-toggle="modal" data-target="#editAccess">
                                     Edit
@@ -265,30 +265,31 @@ $(function () {
 
     $("#EditedRolesPerm").on("click", function () {
         let roleId = $('#modalRoleId').val();
-        let selectedPermissions = [];
-    
-        $('.permission-checkbox:checked').each(function () {
-            selectedPermissions.push($(this).val());
-        });
-    
+        let selectedPermissions = $('.permission-checkbox:checked').map(function () {
+            return $(this).val();
+        }).get(); // Always ensure it's an array
+
+        console.log("Submitting Role ID:", roleId, "Permissions:", selectedPermissions); // Debugging
+
         $.ajax({
             url: BaseURI + 'update_role_permissions',
             type: 'POST',
             data: {
                 role_id: roleId,
-                permissions: selectedPermissions
+                permissions: selectedPermissions.length > 0 ? selectedPermissions : [] // Ensure it's always an array
             },
             success: function (response) {
                 if (response.success) {
                     rolesPermissionTable.ajax.reload();
-                    $("#added").toast("show")
+                    alert("Permissions updated successfully");
                 } else {
-                    $("#error").toast("show")
+                    alert("Failed to update permissions: " + response.message);
                 }
             }
         });
     });
-    
 
-    
+
+
+
 });
