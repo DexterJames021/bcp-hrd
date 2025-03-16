@@ -45,7 +45,7 @@ $(function () {
                 render: function (data) {
                     return `
                     <div class="d-flex gap-2 align-text-center">
-                        <button type="button" data-id="${data.RoleID}" 
+                        <button type="button" data-id="${data.role_id}" 
                                 class="edit-btn btn btn-outline-primary float-right" 
                                 data-toggle="modal" data-target="#editAccess">
                                     Edit
@@ -281,7 +281,7 @@ $(function () {
             success: function (response) {
                 if (response.success) {
                     rolesPermissionTable.ajax.reload();
-                    alert("Permissions updated successfully");
+                    $("#edited").toast("show")
                 } else {
                     alert("Failed to update permissions: " + response.message);
                 }

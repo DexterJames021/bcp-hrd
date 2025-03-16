@@ -502,7 +502,7 @@ $BaseURL = "";
         <div class="dashboard-wrapper">
             <div class="container-fluid dashboard-content ">
                 <!-- tab navigation -->
-                <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
+                <!-- <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="role-permission-tab" data-toggle="tab" href="#role-permission"
                             role="tab" aria-controls="role-permission" aria-selected="true">Roles & Permission</a>
@@ -515,13 +515,13 @@ $BaseURL = "";
                         <a class="nav-link" id="permissions-tab" data-toggle="tab" href="#permissions" role="tab"
                             aria-controls="permissions" aria-selected="false">Permissions</a>
                     </li>
-                </ul>
+                </ul> -->
 
                 <!-- Tab Content -->
-                <div class="tab-content" id="dashboardTabContent">
+                <!-- <div class="tab-content" id="dashboardTabContent"> -->
                     <!-- role spermission Tab -->
-                    <div class="tab-pane fade show active" id="role-permission" role="tabpanel"
-                        aria-labelledby="role-permission-tab">
+                    <!-- <div class="tab-pane fade show active" id="role-permission" role="tabpanel"
+                        aria-labelledby="role-permission-tab"> -->
                         <!-- table user role -->
                         <div class="row">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -529,9 +529,9 @@ $BaseURL = "";
                                     <div class="card-header d-flex justify-content-between align-text-center">
                                         <h2 class="card-title ">Roles and Permissions</h2>
                                         <div class="btn-group">
-                                            <!-- <button type="button" class="btn btn-outline-primary float-right"
-                                                data-toggle="modal" data-target="#NewRole">+ Roles</button>
                                             <button type="button" class="btn btn-outline-primary float-right"
+                                                data-toggle="modal" data-target="#NewRole">+ Roles</button>
+                                             <!-- <button type="button" class="btn btn-outline-primary float-right"
                                                 data-toggle="modal" data-target="#NewPermission">+ Permission</button>  -->
                                             <button type="button" class="btn btn-outline-primary float-right"
                                                 data-toggle="modal" data-target="#AsignAccess">+ Assign</button>
@@ -558,7 +558,7 @@ $BaseURL = "";
                     </div>
 
                     <!-- roles Tab -->
-                    <div class="tab-pane fade" id="roles" role="tabpanel" aria-labelledby="roles-tab">
+                    <!-- <div class="tab-pane fade" id="roles" role="tabpanel" aria-labelledby="roles-tab">
                         <div class="row">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="card">
@@ -574,7 +574,7 @@ $BaseURL = "";
                                             <table id="rolesTable" class="table table-hover" style="width:100%">
                                                 <thead class="thead-light">
                                                     <tr>
-                                                        <!-- <th>Role ID</th> -->
+                                                         <th>Role ID</th> 
                                                         <th>Role Name</th>
                                                         <th>Description</th>
                                                         <th>Action</th>
@@ -587,18 +587,18 @@ $BaseURL = "";
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- permision Tab -->
-                    <div class="tab-pane fade" id="permissions" role="tabpanel" aria-labelledby="permissions-tab">
+                    <!-- <div class="tab-pane fade" id="permissions" role="tabpanel" aria-labelledby="permissions-tab">
                         <div class="row">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-text-center">
                                         <h2 class="card-title ">Permission</h2>
                                         <div>
-                                            <!-- <button type="button" class="btn btn-outline-primary"
-                                            data-toggle="modal" data-target="#NewPermission">+</button> -->
+                                             <button type="button" class="btn btn-outline-primary"
+                                            data-toggle="modal" data-target="#NewPermission">+</button>
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -608,7 +608,6 @@ $BaseURL = "";
                                                     <tr>
                                                         <th>Permission</th>
                                                         <th>Description</th>
-                                                        <!-- <th>Action</th> -->
                                                     </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -618,9 +617,9 @@ $BaseURL = "";
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
-                </div>
+                <!-- </div> -->
 
                 <!-- modaladd roles -->
                 <div id="add-modal" class="row">

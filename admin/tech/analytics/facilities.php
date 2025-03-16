@@ -370,9 +370,9 @@
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link active" href="#" data-toggle="collapse"
-                                                aria-expanded="false" data-target="#submenu-3-1"
-                                                aria-controls="submenu-3-1">Analytics</a>
-                                            <div id="submenu-3-1" class="collapse submenu show">
+                                                aria-expanded="false" data-target="#submenu-3-2"
+                                                aria-controls="submenu-3-2">Analytics</a>
+                                            <div id="submenu-3-2" class="collapse submenu show">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
                                                         <a class="nav-link active" href="./facilities.php">Monitor

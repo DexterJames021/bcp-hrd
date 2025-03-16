@@ -62,7 +62,7 @@ class User
     public function get_all_roles_permission()
     {
         try {
-            $q = "SELECT r.RoleID, 
+            $q = "SELECT r.RoleID AS role_id, 
                 r.RoleName AS role_name,
                 GROUP_CONCAT(p.name ORDER BY p.name SEPARATOR ', ') AS permissions 
                 FROM roles r 
