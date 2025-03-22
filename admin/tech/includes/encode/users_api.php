@@ -34,13 +34,13 @@ switch ($action) {
     case 'employee_records_edit':
 
         $data = [
-            ':fn' =>  $_POST['edit_FirstName'],
-            ':ln' =>  $_POST['edit_LastName'],
-            ':email' =>  $_POST['edit_email'],
-            ':phone' =>  $_POST['edit_phone'],
-            ':address' =>  $_POST['edit_address'],
-            ':dob' =>  $_POST['edit_birthday'],
-            ':id' =>  $_POST['edit_id'],
+            ':fn' => $_POST['edit_FirstName'],
+            ':ln' => $_POST['edit_LastName'],
+            ':email' => $_POST['edit_email'],
+            ':phone' => $_POST['edit_phone'],
+            ':address' => $_POST['edit_address'],
+            ':dob' => $_POST['edit_birthday'],
+            ':id' => $_POST['edit_id'],
         ];
 
         $result = $user->EmployeerecordEdit($data);
@@ -51,9 +51,31 @@ switch ($action) {
             echo json_encode(['success' => false]);
         }
         break;
-      
+
+    case 'get_by_id_overview_info':
+        $id = $_POST['id'] ?? null;
+
+        $result = $user->getEmployeeOverviewInfo($id);
+        if ($result) {
+            echo json_encode($result);
+        } else {
+            echo json_encode(['error' => 'Employee not found']);
+        }
+        break;
+
+    case 'get_by_id_training_list':
+        $id = $_POST['id'] ?? null;
+
+        $result = $user->getEmployeeTrainingList($id);
+        if ($result) {
+            echo json_encode($result);
+        } else {
+            echo json_encode(['error' => 'Employee not found']);
+        }
+        break;
+
 
 
     default:
-    return null;
+        return null;
 }

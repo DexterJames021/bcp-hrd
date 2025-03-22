@@ -75,6 +75,8 @@ access_log($userData);
     <!-- slimscroll js -->
     <script src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 
+    <!-- charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <title>Admin Dashboard</title>
 </head>
@@ -515,13 +517,13 @@ access_log($userData);
         <!-- ============================================================== -->
         <div class="dashboard-wrapper" id="dashboardWrapper">
             <?php if ($userData && in_array("VIEW", $userData['permissions'])): ?>
-                <!-- Employee Records Section -->
+                <!-- Employee list Records Section -->
                 <div class="container-fluid dashboard-content" id="employeeListView">
                     <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between">
-                                    <h2 class="card-title ">Employees Records management</h2>
+                                    <h2 class="card-title ">Employees Personnel Records</h2>
                                 </div>
                                 <div class="card-body p-2">
                                     <div class="table-responsive">
@@ -551,197 +553,158 @@ access_log($userData);
                 <!-- Employee Details Tab-->
                 <div class="container-fluid dashboard-content" id="employeeDetailView" style="display: none;">
                     <div class="row p-2">
-                        <div class="col-12">
 
-                            <!-- overview -->
-                            <div class="card">
-                                <div class="card-title p-3 d-flex justify-content-between">
-                                    <h2>Overview</h2>
-                                    <div>
-                                        <button id="backButton" class="btn btn-outline-light d-inline">Back to List</button>
-                                        <button type="button" onclick="window.print()"
-                                            class="btn btn-outline-primary">Download
-                                            as PDF</button>
+                        <!-- overview -->
+                        <div class="card">
+                            <div class="card-title p-3 m-0 d-flex justify-content-between">
+                                <h2>Overview</h2>
+                                <div>
+                                    <button id="backButton" class="btn btn-outline-light d-inline">Back to
+                                        List</button>
+                                    <button type="button" onclick="window.print()" class="btn btn-outline-primary">Download
+                                        as PDF</button>
+                                </div>
+                            </div>
+                            <div class="row p-0">
+                                <div class="row align-items-center">
+                                    <!-- Employee Details -->
+                                    <div class="col-md-8">
+                                        <div class="card">
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item">
+                                                    <span class="fw-bold">Full Name:</span>
+                                                    <span id="employeeFullname" class="float-end text-dark">---</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="fw-bold">Job Role:</span>
+                                                    <span id="employeeJobRole" class="float-end text-dark">---</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="fw-bold">Department:</span>
+                                                    <span id="employeeDepartment" class="float-end text-dark">---</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="fw-bold">Base Salary:</span>
+                                                    <span id="employeeBaseSalary" class="float-end text-dark">---</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="fw-bold">Hired Date:</span>
+                                                    <span id="employeeHiredDate" class="float-end text-dark">---</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="fw-bold">Address:</span>
+                                                    <span id="employeeAddress" class="float-end text-dark">---</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="fw-bold">Employment Status:</span>
+                                                    <span id="employeeStatus" class="float-end text-dark">---</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <!-- Performance Score Chart -->
+                                    <div class="col-md-4 text-center">
+                                        <div class="card px-2">
+                                            <canvas id="performanceChart" width="100" height="100"></canvas>
+                                            <h3 id="performanceScore" class="">89%</h3>
+                                            <i class="fas fa-chart-line"></i> Performance Score
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="card-body">
-                                    department <br>
-                                    Performance <br>
-                                    trainings <br>
-                                    user acccounts <br>
-                                    employee/applicant <br>
-                                    Compensation <br>
-                                </div>
                             </div>
+                        </div>
 
-                            <!-- employee info -->
-                            <div class="card">
-                                <div class="card-header p-3 m-0">
-                                    <h3 class="m-0">Employee Details</h3>
-                                </div>
-                                <div class="card-body">
-                                    <form id="editEmployeeForm" method="POST">
-                                        <input type="hidden" name="edit_id" id="edit_id">
-
-                                        <div class="mb-2">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label for="edit_name">First Name:</label>
-                                                    <input type="text" name="edit_FirstName" id="edit_name"
-                                                        class="form-control" required>
-                                                </div>
-                                                <div class="col">
-                                                    <label for="edit_LastName">Last Name:</label>
-                                                    <input type="text" name="edit_LastName" id="edit_LastName"
-                                                        class="form-control" required>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-2">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label for="edit_email">Email:</label>
-                                                    <input type="email" name="edit_email" id="edit_email"
-                                                        class="form-control" required>
-                                                </div>
-                                                <div class="col">
-                                                    <label for="edit_phone">Phone:</label>
-                                                    <input type="text" name="edit_phone" id="edit_phone"
-                                                        class="form-control" required>
-                                                </div>
-                                                <div class="col">
-                                                    <label for="edit_birthday">Birthday:</label>
-                                                    <input type="date" name="edit_birthday" id="edit_birthday"
-                                                        class="form-control" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label for="edit_address">Address:</label>
-                                            <input type="text" name="edit_address" id="edit_address" class="form-control"
-                                                required>
-                                        </div>
-                                        <div class="mb-2">
-                                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-
-                            <!-- application details -->
-                            <div class="card ">
-                                <div class="card-title p-3 d-flex justify-content-between">
-                                    <h3>Application Details</h3>
-                                    <!-- <div>
+                        <!-- Training Attended list -->
+                        <div class="card ">
+                            <div class="card-title p-3 d-flex justify-content-between">
+                                <h3><span id="trainingAttendee"></span> Training Attended</h3>
+                                <!-- <div>
                                     <button id="backButton" class="btn btn-outline-light d-inline">Back to List</button>
                                 </div> -->
-                                </div>
-                                <div class="card-body">
-                                    <form id="editEmployeeForm" action="update_employee.php" method="POST">
-                                        <input type="hidden" name="edit_id" id="edit_id">
-
-                                        <div class="mb-2">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label for="edit_name">First Name:</label>
-                                                    <input type="text" name="edit_FirstName" id="edit_name"
-                                                        class="form-control" required>
-                                                </div>
-                                                <div class="col">
-                                                    <label for="edit_LastName">Last Name:</label>
-                                                    <input type="text" name="edit_LastName" id="edit_LastName"
-                                                        class="form-control" required>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-2">
-                                            <label for="edit_email">Email:</label>
-                                            <input type="email" name="edit_email" id="edit_email" class="form-control"
-                                                required>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label for="edit_phone">Phone:</label>
-                                            <input type="text" name="edit_phone" id="edit_phone" class="form-control"
-                                                required>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label for="edit_address">Address:</label>
-                                            <input type="text" name="edit_address" id="edit_address" class="form-control"
-                                                required>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label for="edit_birthday">Birthday:</label>
-                                            <input type="date" name="edit_birthday" id="edit_birthday" class="form-control"
-                                                required>
-                                        </div>
-                                        <div class="mb-2">
-                                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                                        </div>
-                                    </form>
-
-                                </div>
-
                             </div>
-
-                            <!-- user account details -->
-                            <div class="card ">
-                                <div class="card-title p-3 d-flex justify-content-between">
-                                    <h3>User Account Details</h3>
-                                    <!-- <div>
-                                    <button id="backButton" class="btn btn-outline-light d-inline">Back to List</button>
-                                </div> -->
-                                </div>
-                                <div class="card-body">
-                                    <form id="editEmployeeForm" action="update_employee.php" method="POST">
-                                        <input type="hidden" name="edit_id" id="edit_id">
-
-                                        <div class="mb-2">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label for="edit_name">First Name:</label>
-                                                    <input type="text" name="edit_FirstName" id="edit_name"
-                                                        class="form-control" required>
-                                                </div>
-                                                <div class="col">
-                                                    <label for="edit_LastName">Last Name:</label>
-                                                    <input type="text" name="edit_LastName" id="edit_LastName"
-                                                        class="form-control" required>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-2">
-                                            <label for="edit_email">Email:</label>
-                                            <input type="email" name="edit_email" id="edit_email" class="form-control"
-                                                required>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label for="edit_phone">Phone:</label>
-                                            <input type="text" name="edit_phone" id="edit_phone" class="form-control"
-                                                required>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label for="edit_address">Address:</label>
-                                            <input type="text" name="edit_address" id="edit_address" class="form-control"
-                                                required>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label for="edit_birthday">Birthday:</label>
-                                            <input type="date" name="edit_birthday" id="edit_birthday" class="form-control"
-                                                required>
-                                        </div>
-                                        <div class="mb-2">
-                                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                                        </div>
-                                    </form>
-
-                                </div>
-
+                            <div class="card-body">
+                                <table id="trainingList">
+                                    <thead>
+                                        <tr>
+                                            <th>Training Name</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
                             </div>
 
                         </div>
+
+                        <!-- employee info -->
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <h2 class="card-title ">Employees Records</h2>
+                            </div>
+                            <div class="card-body">
+                                <form id="editEmployeeForm" method="POST">
+                                    <input type="hidden" name="edit_id" id="edit_id">
+
+                                    <div class="mb-2">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="edit_name">First Name:</label>
+                                                <input type="text" name="edit_FirstName" id="edit_name" class="form-control"
+                                                    required>
+                                            </div>
+                                            <div class="col">
+                                                <label for="edit_LastName">Last Name:</label>
+                                                <input type="text" name="edit_LastName" id="edit_LastName"
+                                                    class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="edit_email">Email:</label>
+                                                <input type="email" name="edit_email" id="edit_email" class="form-control"
+                                                    required>
+                                            </div>
+                                            <div class="col">
+                                                <label for="edit_phone">Phone:</label>
+                                                <input type="text" name="edit_phone" id="edit_phone" class="form-control"
+                                                    required>
+                                            </div>
+                                            <div class="col">
+                                                <label for="edit_birthday">Birthday:</label>
+                                                <input type="date" name="edit_birthday" id="edit_birthday"
+                                                    class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="edit_address">Address:</label>
+                                        <input type="text" name="edit_address" id="edit_address" class="form-control"
+                                            required>
+                                    </div>
+                                    <div class="mb-2">
+                                        <button type="submit" class="btn btn-outline-primary">Save Changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+
+
+                        <!-- <div>JOB description:
+                                            overview: employee records, department ;<br>
+                                            Performance: trainings attended, Chart evaluation rate<br>
+                                            Compensation: salary payrolls <br>
+                                            user acccounts (optional) <br>
+                                            ATTACHMENTS:</div> -->
                     </div>
                 </div>
 

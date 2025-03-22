@@ -79,10 +79,11 @@ class User
 
     public function getAllEmployee()
     {
-        $q = "SELECT e.* , u.* 
-        FROM employees e 
-        JOIN users u ON e.UserID = u.id 
-        ORDER BY e.EmployeeID";
+        $q = "SELECT e.*, CONCAT(e.FirstName, ' ', e.LastName) AS FullName, 
+                jp.job_title AS JobTitle 
+                FROM employees e 
+                LEFT JOIN applicants a ON e.EmployeeID = a.id 
+                LEFT JOIN job_postings jp ON a.job_id = jp.id; ";
         $stmt = $this->conn->prepare($q);
         $stmt->execute();
         return $stmt->fetchAll();
@@ -99,8 +100,9 @@ class User
         $stmt->execute([':id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    
-    public function EmployeerecordEdit($data) {
+
+    public function EmployeerecordEdit($data)
+    {
         try {
             $sql = "UPDATE employees 
                     SET FirstName = :fn, 
@@ -110,13 +112,69 @@ class User
                         Address = :address, 
                         DOB = :dob 
                     WHERE EmployeeID = :id";
-    
+
             $stmt = $this->conn->prepare($sql);
             return $stmt->execute($data);
         } catch (PDOException $e) {
             return false;
         }
     }
-    
+
+    public function getEmployeeOverviewInfo($id)
+    {
+        $q = "SELECT 
+                e.*,
+                CONCAT(e.FirstName, ' ', e.LastName) AS FullName,
+                d.DepartmentName,
+                cb.BaseSalary,
+                cb.Bonus,
+                (cb.BaseSalary + cb.Bonus) AS TotalCompensation,
+                pe.Score AS PerformanceScore,
+                pe.EvaluationDate,
+                jp.job_title AS JobTitle,
+                a.DepartmentID AS ApplicantDepartmentID
+            FROM 
+                employees e
+            LEFT JOIN 
+                applicants a ON e.EmployeeID = a.id
+            LEFT JOIN 
+                departments d ON a.DepartmentID = d.DepartmentID
+            LEFT JOIN 
+                compensationbenefits cb ON e.EmployeeID = cb.EmployeeID
+            LEFT JOIN 
+                performanceevaluations pe ON e.EmployeeID = pe.EmployeeID
+            LEFT JOIN 
+                job_postings jp ON a.job_id = jp.id
+            WHERE e.EmployeeID = :id; ";
+
+        $stmt = $this->conn->prepare($q);
+        $stmt->execute([':id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getEmployeeTrainingList($id)
+    {
+        $q = "SELECT 
+                    tp.TrainingID,
+                    tp.TrainingName,
+                    tp.Description,
+                    tp.StartDate,
+                    tp.EndDate,
+                    tp.Instructor,
+                    ta.status AS TrainingStatus,
+                    ta.completion_date AS CompletionDate
+                FROM 
+                    training_assignments ta
+                JOIN 
+                    trainingprograms tp ON ta.training_id = tp.TrainingID
+                JOIN 
+                    employees e ON ta.employee_id = e.EmployeeID
+                WHERE e.EmployeeID = :id; ";
+
+        $stmt = $this->conn->prepare($q);
+        $stmt->execute([':id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
 
 }
