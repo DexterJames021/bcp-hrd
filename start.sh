@@ -1,5 +1,3 @@
 systemctl stop apache2.service
-ALL ALL: NO Password
-
+systemctl start grafana-server.service
 sudo /opt/lampp/lampp start
-ALL ALL: NO Password

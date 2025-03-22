@@ -1,5 +1,6 @@
 $(function () {
     console.log('connect');
+    console.log("JS ROLE PASS:  ", userPermissions);
 
     // facility table
     const AllRoomTable = $('#roomTable').DataTable({
@@ -43,14 +44,24 @@ $(function () {
             title: 'Action',
             data: null,
             render: function (data) {
-                return `<div class="btn-group" role="group" aria-label="Action">
-                        <button class="edit-btn btn my-1" data-id="${data.id}">
+                let buttons = '';
+                // console.log("Checking Permissions for:", row.id);
+                console.log("User Has UPDATE:", userPermissions.includes("EDIT"));
+                console.log("User Has DELETE:", userPermissions.includes("DELETE"));
+
+                if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
+                    buttons += `<button class="edit-btn btn my-1" data-id="${data.id}" title="UPDATE">
                             <i class="bi bi-pencil-square text-primary" style="font-size:large;"></i>
-                        </button>
-                        <button class="delete-btn btn my-1" data-id="${data.id}">
+                        </button>`;
+                }
+
+                if (Array.isArray(userPermissions) && userPermissions.includes("DELETE")) {
+                    buttons += `<button class="delete-btn btn my-1" data-id="${data.id}" title="DELETE">
                             <i class="bi bi-trash text-danger" style="font-size:large;"></i>
-                        </button>
-                    </div>`;
+                        </button>`;
+                }
+
+                return buttons || '<i class="bi bi-ban text-danger" title="No permission" style="font-size:x-large;"></i>';
             },
             orderable: false,
         }
@@ -60,26 +71,26 @@ $(function () {
 
     function loadAnalytics() {
         $.ajax({
-          url: "./includes/encode/facility_api.php?action=get_all_room",
-          method: "POST",
-          dataType: "JSON",
-          success: function (data) {
-            let total = 0;
-            let book = 0;
-            let available = 0;
-    
-            data.forEach((facility) => {
-              total += AllRoomTable .column().count();
-              book += facility.status === "Booked";
-              available += facility.status === "Available";
-            });
-    
-            $("#total-card").text(total);
-            $("#on-book").text(book);
-            $("#available").text(available);
-          },
+            url: "./includes/encode/facility_api.php?action=get_all_room",
+            method: "POST",
+            dataType: "JSON",
+            success: function (data) {
+                let total = 0;
+                let book = 0;
+                let available = 0;
+
+                data.forEach((facility) => {
+                    total += AllRoomTable.column().count();
+                    book += facility.status === "Booked";
+                    available += facility.status === "Available";
+                });
+
+                $("#total-card").text(total);
+                $("#on-book").text(book);
+                $("#available").text(available);
+            },
         });
-      }
+    }
 
     $(document).on('click', '.edit-btn', function () {
         const id = $(this).data('id');
@@ -187,17 +198,27 @@ $(function () {
             title: 'Approve or Reject',
             data: null,
             render: function (data) {
-                return `<div class="btn-group" role="group" aria-label="Approve AND reject">
-                <button 
+                let buttons = '';
+                // console.log("Checking Permissions for:", row.id);
+                console.log("User Has UPDATE:", userPermissions.includes("EDIT"));
+                console.log("User Has DELETE:", userPermissions.includes("DELETE"));
+
+                if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
+                    buttons += `<button 
                         class="approve-btn btn my-1" 
                         data-id="${data.id}">
                         <i class="bi bi-check-circle text-success" style="font-size:x-large;"></i>
-                </button>
-                <button class="reject-btn btn my-1"
+                </button>`;
+                }
+
+                if (Array.isArray(userPermissions) && userPermissions.includes("DELETE")) {
+                    buttons += `<button class="reject-btn btn my-1"
                         data-id="${data.id}">
                         <i class="bi bi-x-circle text-danger" style="font-size:x-large;"></i>
-                 </button>
-                 </div>`;
+                 </button>`;
+                }
+
+                return buttons || '<i class="bi bi-ban text-danger" title="No permission" style="font-size:x-large;"></i>';
             },
             orderable: false,
         }
@@ -296,23 +317,25 @@ $(function () {
                     let remainingHours = null;
 
                     let actionContent;
-                    if (currentTime >= endTime) {
-                        actionContent = `
+
+                    if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
+                        if (currentTime >= endTime) {
+                            actionContent = `
                             <button class="done-btn btn text-success" data-id="${room.id}" data-room_id="${room.room_id}" style='font-size: x-large;'>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-clipboard-check" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
-                                    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z"/>
-                                    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
-                                </svg>
+                                <i class="bi bi-file-earmark-plus" style="font-size:x-large;"></i>
                             </button>`;
-                    } else {
-                        const timeDiff = endTime - currentTime;
-                        remainingMinutes += Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-                        remainingHours += Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                        actionContent = `
+                        } else {
+                            const timeDiff = endTime - currentTime;
+                            remainingMinutes += Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                            remainingHours += Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            actionContent = `
                             <span class="text-gray ">
                                 Time remaining: ${remainingHours}h ${remainingMinutes}m
                             </span>`;
+                        }
+
+                    } else {
+                        actionContent = '<i class="bi bi-ban text-danger" title="No permission" style="font-size:x-large;"></i>';
                     }
 
                     return `

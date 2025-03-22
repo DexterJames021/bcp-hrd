@@ -31,7 +31,7 @@ switch ($action) {
         }
         break;
 
-    case 'recordsEdit':
+    case 'employee_records_edit':
 
         $data = [
             ':fn' =>  $_POST['edit_FirstName'],
@@ -43,7 +43,7 @@ switch ($action) {
             ':id' =>  $_POST['edit_id'],
         ];
 
-        $result = $user->recordEdit($data);
+        $result = $user->EmployeerecordEdit($data);
 
         if ($result) {
             echo json_encode(['success' => true]);

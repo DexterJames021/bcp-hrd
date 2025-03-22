@@ -1,6 +1,6 @@
 $(function () {
   // ASSETS
-  console.log("resources admin");
+  console.log("JS ROLE PASS:  ", userPermissions);
 
   const resourcesTable = $("#ResourcesTable").DataTable({
     processing: true,
@@ -51,10 +51,24 @@ $(function () {
         data: null,
         orderable: false,
         render: function (data) {
-          return `<div class="d-flex gap-2">
-                    <button class="update btn btn-secondary" data-id="${data.id}">Update</button>
-                    <button class="delete btn btn-secondary" data-id="${data.id}">Delete</button>
-                </div>`;
+          let buttons = '';
+          // console.log("Checking Permissions for:", row.id);
+          // console.log("User Has UPDATE:", userPermissions.includes("EDIT"));
+          // console.log("User Has DELETE:", userPermissions.includes("DELETE"));
+
+          if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
+            buttons += `<button class="update btn btn" data-id="${data.id}" title="UPDATE">
+                          <i class="bi bi-pencil-square text-primary"  style="font-size:x-large;"></i>
+                      </button>`;
+          }
+
+          if (Array.isArray(userPermissions) && userPermissions.includes("DELETE")) {
+            buttons += `<button class="delete btn btn" data-id="${data.id}" title="UPDATE">
+                        <i class="bi bi-trash-fill text-danger"  style="font-size:x-large;"></i>
+                    </button>`;
+          }
+
+          return buttons || '<i class="bi bi-ban text-danger" title="No permission" style="font-size:x-large;"></i>';
         },
       },
     ],
@@ -119,16 +133,24 @@ $(function () {
         data: null,
         ordering: true,
         render: function (data) {
-          return `
-                        <div class="btn-group">
-                            <button type="button" class="btn-approve btn my-1" data-id="${data.id}">
+          let buttons = '';
+          // console.log("Checking Permissions for:", row.id);
+          // console.log("User Has UPDATE:", userPermissions.includes("EDIT"));
+          // console.log("User Has DELETE:", userPermissions.includes("DELETE"));
+
+          if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
+            buttons += `<button type="button" class="btn-approve btn my-1" data-id="${data.id}" title="APPROVE">
                             <i class="bi bi-check-circle text-success" style="font-size:x-large;"></i>
-                            </button>
-                            <button type="button" class="btn-reject btn my-1" data-id="${data.id}">
+                        </button>`;
+          }
+
+          if (Array.isArray(userPermissions) && userPermissions.includes("DELETE")) {
+            buttons += `<button type="button" class="btn-reject btn my-1" data-id="${data.id}" title="REJECT">
                               <i class="bi bi-x-circle text-danger" style="font-size:x-large;"></i>
-                            </button>
-                        </div>
-                `;
+                        </button>`;
+          }
+
+          return buttons || '<i class="bi bi-ban text-danger" title="No permission" style="font-size:x-large;"></i>';
         },
       },
     ],
@@ -245,7 +267,7 @@ $(function () {
       $(".submit-request").removeAttr("disabled", "disabled");
     }
   });
-  
+
   $(document).on("input", "#quantity-allocate", function () {
     const selectedOption = $("#resource_id").find(":selected");
     const availableQuantity = selectedOption.data("quantity");
@@ -446,7 +468,7 @@ $(function () {
       formData,
       function (response) {
         if (response.success) {
-            $('#allocateForm').modal('dispose')
+          $('#allocateForm').modal('dispose')
           $("#added").toast("show");
           allocationTable.ajax.reload();
           $("#resourceAllocationForm")[0].reset();

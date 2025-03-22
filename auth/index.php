@@ -7,7 +7,7 @@ $err = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
-    
+
     if ($err == "") {
         // Prepare the query to select the user by username only
         $query = "SELECT * FROM users WHERE username = :username LIMIT 1";
@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 // Redirect based on user type
                 switch ($user->usertype) {
-                    case 'admin':
+                    case 'admin' && 'superadmin':
                         header("Location: ../admin/index.php");
                         exit;
                     case 'employee':
@@ -89,7 +89,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="card ">
             <div class="card-header text-center">
                 <a href="../index.php">
-                    <img class="logo-img" src="../assets/images/bcp-hrd-logo.jpg" alt="logo" style="height:10rem;width:auto;">
+                    <img class="logo-img" src="../assets/images/bcp-hrd-logo.jpg" alt="logo"
+                        style="height:10rem;width:auto;">
                 </a>
             </div>
             <div class="card-body">
@@ -98,12 +99,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php endif; ?>
                 <form action="index.php" method="POST">
                     <div class="form-group">
-                        <input class="form-control form-control-lg" name="username" id="username" type="text" placeholder="Username" autocomplete="off" required>
+                        <input class="form-control form-control-lg" name="username" id="username" type="text"
+                            placeholder="Username" autocomplete="off" required>
                     </div>
                     <div class="form-group">
-                        <input class="form-control form-control-lg" name="password" id="password" type="password" placeholder="Password" required>
+                        <input class="form-control form-control-lg" name="password" id="password" type="password"
+                            placeholder="Password" required>
                     </div>
-                    <input type="submit" name="submit" id="submit" class="btn btn-primary btn-lg btn-block" value="Sign in">
+                    <input type="submit" name="submit" id="submit" class="btn btn-primary btn-lg btn-block"
+                        value="Sign in">
                 </form>
             </div>
             <div class="card-footer bg-white p-0  ">

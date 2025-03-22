@@ -506,7 +506,6 @@
                                     data-target="#submenu-8" aria-controls="submenu-8">
                                     <i class="fas fa-fw fa-file"></i> Task-management </a>
                             </li>
-
                         </ul>
                     </div>
                 </nav>
@@ -573,7 +572,7 @@
                             </div>
                             <div class="card-header">
 
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col">
                                         <label for="end_date" class="form-label">Year:</label>
                                         <input type="date" id="end_date" class="form-control">
@@ -581,7 +580,7 @@
                                     <div class="col">
                                         <button id="filterBtn" class="btn btn-primary">Filter</button>
                                     </div>
-                                </div>
+                                </div> -->
                                 <canvas id="requestTrends"></canvas>
                             </div>
                         </div>

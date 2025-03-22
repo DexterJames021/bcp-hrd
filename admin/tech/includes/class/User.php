@@ -100,7 +100,7 @@ class User
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
     
-    public function recordEdit($data) {
+    public function EmployeerecordEdit($data) {
         try {
             $sql = "UPDATE employees 
                     SET FirstName = :fn, 

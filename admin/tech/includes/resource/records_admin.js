@@ -55,6 +55,7 @@ $(function () {
         buttons: ['csv', 'excel', 'pdf', 'print'],
     });
 
+    //SHOW
     $(document).on('click', '.view', function () {
         const employeeId = $(this).data('id');
 
@@ -84,6 +85,35 @@ $(function () {
                 alert('An error occurred while fetching employee data');
             }
         });
+
+        $.ajax({
+            url: baseURL + 'get_by_id_employee_info',
+            method: 'POST',
+            data: { id: employeeId },
+            dataType: 'json',
+            success: function (response) {
+                if (response) {
+
+                    $('#employeeListView').hide();
+                    $('#employeeDetailView').show();
+
+                    $('#edit_id').val(response.EmployeeID);
+                    $('#edit_name').val(response.FirstName);
+                    $('#edit_LastName').val(response.LastName);
+                    $('#edit_email').val(response.Email);
+                    $('#edit_phone').val(response.Phone);
+                    $('#edit_address').val(response.Address);
+                    $('#edit_birthday').val(response.DOB);
+                } else {
+                    alert('Employee not found');
+                }
+            },
+            error: function () {
+                alert('An error occurred while fetching employee data');
+            }
+        });
+
+
     });
 
     $('#backButton').on('click', function () {
@@ -95,7 +125,7 @@ $(function () {
         e.preventDefault();
 
         $.ajax({
-            url: baseURL + 'recordsEdit',
+            url: baseURL + 'employee_records_edit',
             method: 'POST',
             data: $(this).serialize(),
             dataType: 'json',
