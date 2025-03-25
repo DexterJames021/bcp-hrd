@@ -2,7 +2,7 @@
 require "../../config/db_talent.php";
 
 // Fetch the total number of applicants excluding 'Hired' applicants
-$applicant_query = "SELECT COUNT(*) AS totalApplicants FROM applicants WHERE status != 'Hired'";
+$applicant_query = "SELECT COUNT(*) AS totalApplicants FROM applicants";
 $applicant_result = mysqli_query($conn, $applicant_query);
 $applicant_count = 0;
 
@@ -419,22 +419,21 @@ $department_result = $conn->query($department_sql);
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    // Fetch applicants (same logic as before)
-                    $job_id = isset($_GET['job_id']) ? intval($_GET['job_id']) : 0;
+    <?php
+    // Fetch applicants (same logic as before)
+    $job_id = isset($_GET['job_id']) ? intval($_GET['job_id']) : 0;
 
-                    $sql = $job_id > 0 ? 
-                        "SELECT a.id, a.applicant_name, a.email, j.job_title, a.status, a.applied_at, a.interview_date, a.interview_time, d.DepartmentName
-                        FROM applicants a
-                        LEFT JOIN job_postings j ON a.job_id = j.id
-                        LEFT JOIN departments d ON a.DepartmentID = d.DepartmentID
-                        WHERE a.job_id = $job_id AND a.status != 'Hired'" : // Exclude 'Hired' applicants
-                        "SELECT a.id, a.applicant_name, a.email, j.job_title, a.status, a.applied_at, a.interview_date, a.interview_time, d.DepartmentName
-                        FROM applicants a
-                        LEFT JOIN job_postings j ON a.job_id = j.id
-                        LEFT JOIN departments d ON a.DepartmentID = d.DepartmentID
-                        WHERE a.status != 'Hired'"; // Exclude 'Hired' applicants
+    $sql = $job_id > 0 ? 
+        "SELECT a.id, a.applicant_name, a.email, j.job_title, a.status, a.applied_at, a.interview_date, a.interview_time, d.DepartmentName
+        FROM applicants a
+        LEFT JOIN job_postings j ON a.job_id = j.id
+        LEFT JOIN departments d ON a.DepartmentID = d.DepartmentID
+        WHERE a.job_id = $job_id" : // Show all applicants for a specific job_id
 
+        "SELECT a.id, a.applicant_name, a.email, j.job_title, a.status, a.applied_at, a.interview_date, a.interview_time, d.DepartmentName
+        FROM applicants a
+        LEFT JOIN job_postings j ON a.job_id = j.id
+        LEFT JOIN departments d ON a.DepartmentID = d.DepartmentID"; // Show all applicants, including 'Hired'
 
                     $result = $conn->query($sql);
 

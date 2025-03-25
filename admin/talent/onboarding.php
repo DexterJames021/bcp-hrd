@@ -769,7 +769,7 @@ $(document).ready(function () {
                             <option value="">Select User Type</option>
                             <option value="admin">Admin</option>
                             <option value="employee">Employee</option>
-                            <option value="New Hire">New Hire</option>
+                            <option value="staff">Staff</option>
                         </select>
                     </div>
                 </div>

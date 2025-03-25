@@ -32,7 +32,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     case 'employee':
                         header("Location: ../portal/index.php");
                         exit;
-                    case 'New Hire':
+                    case 'super_admin':
+                        header("Location: ../super_admin/index.php");
+                        exit;
+                    case 'staff':
                         header("Location: ../admin/talent/onboarding/new_hire/step1.php");
                         exit;
                     default:
@@ -68,7 +71,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             align-items: center;
             padding-top: 40px;
             padding-bottom: 40px;
+            min-height: 100vh;
+            overflow: hidden;
+            background: url('../assets/images/bcp1.jpg') no-repeat center center/cover;
         }
+        
     </style>
 </head>
 

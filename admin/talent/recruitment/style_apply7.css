@@ -1,0 +1,184 @@
+/* Import Poppins Font */
+@font-face {
+    font-family: 'Poppins';
+    src: url('../../../assets/vendor/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('../../../assets/vendor/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    text-align: center;
+}
+
+/* Page Title */
+form h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 10px 20px;
+    background: #f0f8ff;
+    color: black;
+    border-radius: 8px;
+  
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2::after {
+    content: "";
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, #007bff, #00c6ff);
+    display: block;
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+header {
+    min-height: 100vh;
+    overflow: hidden;
+    background: url('../../../assets/images/bcp1.jpg') no-repeat center center/cover;
+}
+
+
+/* Form Styling */
+form {
+    font-family: 'Poppins', sans-serif;
+    background: white;
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    text-align: left;
+}
+
+/* Input Fields */
+label {
+    font-weight: bold;
+    color: BLACK;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="file"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    transition: border-color 0.3s ease-in-out;
+}
+
+input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Submit Button */
+button {
+    background: linear-gradient(90deg, #007bff, #00c6ff);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    width: 100%;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: 'Poppins', sans-serif;
+}
+
+button:hover {
+    background: linear-gradient(90deg, #0056b3, #0096ff);
+}
+
+/* Success Message */
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #c3e6cb;
+    width: 50%;
+    margin: 10px auto;
+    text-align: center;
+    position: relative;
+    font-weight: bold;
+}
+
+.success-message .close {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+}
+
+/* Back Button */
+.btn-back {
+    display: inline-block;
+    background: #ff4d4d;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+.btn-back:hover {
+    background: #cc0000;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    form {
+        width: 90%;
+    }
+}
+/* Navigation Bar */
+.navbar {
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.navbar {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.navbar-nav .nav-link {
+    font-size: 1rem;
+    margin-right: 15px;
+    transition: color 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffcc00 !important;
+}

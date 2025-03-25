@@ -27,10 +27,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form data
     $applicant_name = mysqli_real_escape_string($conn, $_POST['applicant_name']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $department_id = intval($_POST['department_id']); // Get DepartmentID
+    $department_id = intval($_POST['department_id']);
     $resume_path = "uploads/resume/";
 
-    // Handle file upload
+    // ✅ Step 1: Check if applicant already applied for this job
+    $check_query = "SELECT * FROM applicants WHERE job_id = ? AND email = ?";
+    $stmt = $conn->prepare($check_query);
+    $stmt->bind_param("is", $job_id, $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        // Applicant already applied
+        $_SESSION['message'] = "You have already applied for this position!";
+        header("Location: apply.php?job_id=$job_id"); // Redirect to the same page
+        exit;
+    }
+
+    // ✅ Step 2: Handle file upload
     if (isset($_FILES['resume']) && $_FILES['resume']['error'] == 0) {
         $upload_dir = 'uploads/resume/';
         $resume_path = $upload_dir . basename($_FILES['resume']['name']);
@@ -42,28 +56,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         move_uploaded_file($_FILES['resume']['tmp_name'], $resume_path);
     }
 
-    // Insert application into the database
-    $query = "INSERT INTO applicants (job_id, applicant_name, email, resume_path, status, applied_at, DepartmentID) 
-              VALUES ($job_id, '$applicant_name', '$email', '$resume_path', 'Pending', NOW(), $department_id)";
+    // ✅ Step 3: Insert application into the database
+    $insert_query = "INSERT INTO applicants (job_id, applicant_name, email, resume_path, status, applied_at, DepartmentID) 
+                     VALUES (?, ?, ?, ?, 'Pending', NOW(), ?)";
+    $stmt = $conn->prepare($insert_query);
+    $stmt->bind_param("isssi", $job_id, $applicant_name, $email, $resume_path, $department_id);
 
-    if (mysqli_query($conn, $query)) {
-        $_SESSION['message'] = "Application submitted successfully!";
+    if ($stmt->execute()) {
+        header("Location: thank_you.php");
+        exit;
     } else {
-        $_SESSION['message'] = "Error: " . mysqli_error($conn);
+        $_SESSION['message'] = "Error: " . $stmt->error;
     }
+
+    $stmt->close();
+    $conn->close();
 }
 ?>
 
 <?php
-// Display success message if set
+// Display success or error message
 if (isset($_SESSION['message'])) {
-    echo "<div class='success-message'>
-            <span class='close'>&times;</span>
-            " . $_SESSION['message'] . "
+    echo "<div id='popupMessage' class='alert alert-danger text-center' role='alert' 
+            style='position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            z-index: 1050; width: 40%; padding: 20px; border-radius: 10px; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); background:linear-gradient(90deg, #007bff, #00c6ff); color: white;'>
+            <strong>Oops!</strong> " . $_SESSION['message'] . "
           </div>";
-    unset($_SESSION['message']); // Clear message after displaying
+    unset($_SESSION['message']);
 }
 ?>
+
+<script>
+    function closePopup() {
+        document.getElementById('popupMessage').style.display = 'none';
+    }
+
+    // Auto-hide after 5 seconds
+    setTimeout(closePopup, 3000);
+</script>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -71,8 +102,8 @@ if (isset($_SESSION['message'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apply for <?php echo htmlspecialchars($job['job_title']); ?></title>
-    <link rel="stylesheet" href="style_apply5.css"> <!-- Link to the CSS file -->
-    
+    <link rel="stylesheet" href="style_apply7.css"> <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="../../../assets/vendor/bootstrap/css/bootstrap.min.css">
     <script>
         // Function to hide the message after a few seconds
         function autoHideMessage() {
@@ -97,13 +128,29 @@ if (isset($_SESSION['message'])) {
     </script>
 </head>
 <body>
-<a href="job_listings.php" class="btn-back">Back</a>
-    <h1>Apply for <?php echo htmlspecialchars($job['job_title']); ?></h1>
-    
+    <!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+
+<div class="container">
+    <a class="navbar-brand fw-bold" href="#">Employee Management System</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="../../../index.php">Apply Now</a></li>
+            <li class="nav-item"><a class="btn btn-light text-primary" href="../../../auth/index.php">Login</a></li>
+        </ul>
+    </div>
+</div>
+</nav>
+<header class="text-white text-center d-flex align-items-center justify-content-center position-relative" style="min-height: 100vh; overflow: hidden;">
+
     <!-- Move the Back to Job Listings Button inside the job details -->
     
 
     <form action="" method="POST" enctype="multipart/form-data">
+        <h2>Apply for <?php echo htmlspecialchars($job['job_title']); ?></h2>
         <label for="applicant_name">Your Name:</label>
         <input type="text" id="applicant_name" name="applicant_name" required>
 
@@ -118,5 +165,7 @@ if (isset($_SESSION['message'])) {
 
         <button type="submit">Submit Application</button>
     </form>
+
+</header>
 </body>
 </html>

@@ -78,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $mail->send();
                 $_SESSION['success_message'] = "Account created successfully and an email has been sent to the applicant!";
             } catch (Exception $e) {
-                $_SESSION['error_message'] = "Error sending email: " . $mail->ErrorInfo;
+
             }
 
             // Redirect back to the onboarding page

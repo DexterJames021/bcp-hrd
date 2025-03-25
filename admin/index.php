@@ -1,3 +1,59 @@
+<?php
+require "../config/db_talent.php"; // Ensure this file has a working DB connection
+
+// Fetch total employees
+$queryEmployees = "SELECT COUNT(*) AS total FROM employees";
+$resultEmployees = mysqli_query($conn, $queryEmployees);
+$totalEmployees = mysqli_fetch_assoc($resultEmployees)['total'];
+
+// Fetch total applicants
+$queryApplicants = "SELECT COUNT(*) AS total FROM applicants";
+$resultApplicants = mysqli_query($conn, $queryApplicants);
+$totalApplicants = mysqli_fetch_assoc($resultApplicants)['total'];
+
+// Fetch total job postings
+$queryJobPostings = "SELECT COUNT(*) AS total FROM job_postings";
+$resultJobPostings = mysqli_query($conn, $queryJobPostings);
+$totalJobPostings = mysqli_fetch_assoc($resultJobPostings)['total'];
+
+// Fetch total hired employees
+$queryHired = "SELECT COUNT(*) AS total FROM applicants WHERE status = 'Hired'";
+$resultHired = mysqli_query($conn, $queryHired);
+$totalHired = mysqli_fetch_assoc($resultHired)['total'];
+
+// Fetch applicants per department
+$queryApplicantsPerDept = "
+    SELECT d.DepartmentName, COUNT(a.id) AS totalApplicants
+    FROM applicants a
+    LEFT JOIN departments d ON a.DepartmentID = d.DepartmentID
+    GROUP BY d.DepartmentName";
+$resultApplicantsPerDept = mysqli_query($conn, $queryApplicantsPerDept);
+$applicantsData = [];
+while ($row = mysqli_fetch_assoc($resultApplicantsPerDept)) {
+    $applicantsData[$row['DepartmentName']] = $row['totalApplicants'];
+}
+
+// Fetch employees per department
+$queryEmployeesPerDept = "
+    SELECT d.DepartmentName, COUNT(e.EmployeeID) AS totalEmployees
+FROM employees e
+LEFT JOIN users u ON e.UserID = u.id  -- Get the applicant ID through users table
+LEFT JOIN applicants a ON u.applicant_id = a.id  -- Get the department through the applicant
+LEFT JOIN departments d ON a.DepartmentID = d.DepartmentID  -- Fetch department name
+GROUP BY d.DepartmentName";
+
+$resultEmployeesPerDept = mysqli_query($conn, $queryEmployeesPerDept);
+$employeesData = [];
+while ($row = mysqli_fetch_assoc($resultEmployeesPerDept)) {
+    $employeesData[$row['DepartmentName']] = $row['totalEmployees'];
+}
+
+// Convert PHP arrays to JSON
+$applicantsJSON = json_encode($applicantsData);
+$employeesJSON = json_encode($employeesData);
+
+
+?>
 
 <!doctype html>
 <html lang="en">
@@ -54,174 +110,129 @@
         <!-- ============================================================== -->
         <div class="dashboard-wrapper">
             <!-- <div class="dashboard-ecommerce"> -->
-                <div class="container-fluid dashboard-content ">
-                    <!-- ============================================================== -->
-                    <!-- pageheader  -->
-                    <!-- ============================================================== -->
-                    <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="page-header">
-                                <h2 class="pageheader-title">Dashboard</h2>
-                    
+            <div class="container-fluid dashboard-content ">
+                <!-- ============================================================== -->
+                <!-- pageheader  -->
+                <!-- ============================================================== -->
+        
+                <!-- ============================================================== -->
+                <!-- end pageheader  -->
+                <!-- ============================================================== -->
+                <!-- <div class="ecommerce-widget"> -->
 
-                                <p class="pageheader-text">Nulla euismod urna eros, sit amet scelerisque torton lectus vel mauris facilisis faucibus at enim quis massa lobortis rutrum.</p>
-                             
-                            </div>
-                        </div>
-                    </div>
-                    <!-- ============================================================== -->
-                    <!-- end pageheader  -->
-                    <!-- ============================================================== -->
-                    <!-- <div class="ecommerce-widget"> -->
+                <div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h1>DASHBOARD</h1>
 
-                        <div class="row">
-                            <!-- Modal -->
-                            <div class="modal fade" id="myModal" role="dialog">
-                                <div class="modal-dialog">
-                                
-                                <!-- Modal content-->
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">New Task</h4>
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form>
-                                            <div class="mb-3">
-                                                <label for="exampleInputEmail1" class="form-label">Creator:</label>
-                                                <input type="text" class="form-control" id="exampleInputEmail1" value="<?= $_SESSION['username']?>"  disabled>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="exampleInputEmail1" class="form-label">Task</label>
-                                                <input type="text" class="form-control" id="exampleInputEmail1">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="exampleInputEmail1" class="form-label">Description</label>
-                                                <textarea class="form-control" id="exampleInputEmail1"></textarea>
-                                            </div>
-                                            <div class="mb-3">
-                                                <select class="form-control form-select" aria-label="Default select example">
-                                                    <option selected disabled>Basic</option>
-                                                    <option value="1">Important</option>
-                                                    <option value="2">Report</option>
-                                                    <option value="3">Problem</option>
-                                                </select>
-                                            </div>
-                                            
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    </div>
-                                </div>
-                                
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="text-muted">Total Revenue</h5>
-                                        <div class="metric-value d-inline-block">
-                                            <h1 class="mb-1">$12099</h1>
-                                        </div>
-                                        <div class="metric-label d-inline-block float-right text-success font-weight-bold">
-                                            <span><i class="fa fa-fw fa-arrow-up"></i></span><span>5.86%</span>
-                                        </div>
-                                    </div>
-                                    <div id="sparkline-revenue"></div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="text-muted">Affiliate Revenue</h5>
-                                        <div class="metric-value d-inline-block">
-                                            <h1 class="mb-1">$12099</h1>
-                                        </div>
-                                        <div class="metric-label d-inline-block float-right text-success font-weight-bold">
-                                            <span><i class="fa fa-fw fa-arrow-up"></i></span><span>5.86%</span>
-                                        </div>
-                                    </div>
-                                    <div id="sparkline-revenue2"></div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="text-muted">Refunds</h5>
-                                        <div class="metric-value d-inline-block">
-                                            <h1 class="mb-1">0.00</h1>
-                                        </div>
-                                        <div class="metric-label d-inline-block float-right text-primary font-weight-bold">
-                                            <span>N/A</span>
-                                        </div>
-                                    </div>
-                                    <div id="sparkline-revenue3"></div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="text-muted">Avg. Revenue Per User</h5>
-                                        <div class="metric-value d-inline-block">
-                                            <h1 class="mb-1">$28000</h1>
-                                        </div>
-                                        <div class="metric-label d-inline-block float-right text-secondary font-weight-bold">
-                                            <span>-2.00%</span>
-                                        </div>
-                                    </div>
-                                    <div id="sparkline-revenue4"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <!-- ============================================================== -->
-                      
-                            <!-- ============================================================== -->
-
-                                          <!-- recent orders  -->
-                            <!-- ============================================================== -->
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            
-                            </div>
-                            <!-- ============================================================== -->
-                            <!-- end recent orders  -->
-
-    
-                        </div>
-                       
-                  
-                    <!-- </div> -->
-                </div>
-            <!-- </div> -->
-            <!-- ============================================================== -->
-            <!-- footer -->
-            <!-- ============================================================== -->
-            <!-- <div class="footer mx-2">
-                <div class="container-fluid mx-2">
-                    <div class="row">
-                        <div class="col-xl-7 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="text-md-right footer-links d-none d-sm-block">
-                                <a href="javascript: void(0);">About</a>
-                                <a href="javascript: void(0);">Support</a>
-                                <a href="javascript: void(0);">Contact Us</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-            <!-- ============================================================== -->
-            <!-- end footer -->
-            <!-- ============================================================== -->
+                <!-- Summary Cards -->
+<div class="row">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h5>Total Employees</h5>
+                <h3><?php echo $totalEmployees; ?></h3>
+            </div>
         </div>
-        <!-- ============================================================== -->
-        <!-- end wrapper  -->
-        <!-- ============================================================== -->
     </div>
-    <!-- ============================================================== -->
-    <!-- end main wrapper  -->
-    <!-- ============================================================== -->
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5>Total Applicants</h5>
+                <h3><?php echo $totalApplicants; ?></h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark">
+            <div class="card-body">
+                <h5>Total Job Postings</h5>
+                <h3><?php echo $totalJobPostings; ?></h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-danger text-white">
+            <div class="card-body">
+                <h5>Total Hired</h5>
+                <h3><?php echo $totalHired; ?></h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+                <!-- Charts -->
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>Applicants Per Job</h5>
+                                <canvas id="applicantsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>Employees Per Department</h5>
+                                <canvas id="departmentChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- End of Card Body -->
+        </div> <!-- End of Card -->
+    </div> <!-- End of Col-12 -->
+</div> <!-- End of Row -->
+
+<!-- Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Convert PHP JSON to JavaScript Object
+    var applicantsData = <?php echo $applicantsJSON; ?>;
+    var employeesData = <?php echo $employeesJSON; ?>;
+
+    // Generate labels and data for charts
+    var applicantLabels = Object.keys(applicantsData);
+    var applicantCounts = Object.values(applicantsData);
+
+    var employeeLabels = Object.keys(employeesData);
+    var employeeCounts = Object.values(employeesData);
+
+    // Applicants per Department Chart
+    var ctx1 = document.getElementById('applicantsChart').getContext('2d');
+    var applicantsChart = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: applicantLabels,
+            datasets: [{
+                label: 'Applicants',
+                data: applicantCounts,
+                backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8']
+            }]
+        }
+    });
+
+    // Employees per Department Chart
+    var ctx2 = document.getElementById('departmentChart').getContext('2d');
+    var departmentChart = new Chart(ctx2, {
+        type: 'pie',
+        data: {
+            labels: employeeLabels,
+            datasets: [{
+                data: employeeCounts,
+                backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8']
+            }]
+        }
+    });
+</script>
+
+</div>
+</div>
+        
 </body>
  
 </html>

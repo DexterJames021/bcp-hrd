@@ -1,17 +1,3 @@
-<?php 
-session_start();
-//check usertype
-if(isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'employee'){
-    
-}else{
-
-    header("Location: ../auth/index.php");
-   
-}
-$base_url = 'http://localhost/finals/bcp-hrd'; // Your project's base URL
-
-
-?>
 <!doctype html>
 <html lang="en">
  
@@ -24,7 +10,7 @@ $base_url = 'http://localhost/finals/bcp-hrd'; // Your project's base URL
 
     <script defer src="../node_modules/jquery/dist/jquery.min.js"></script>
 
-    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <script defer src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <!-- global JavaScript -->
@@ -32,12 +18,12 @@ $base_url = 'http://localhost/finals/bcp-hrd'; // Your project's base URL
 
     <!-- main js -->
     <script defer type="module" src="../assets/libs/js/main-js.js"></script>
-    <link rel="stylesheet" href="../assets/libs/css/style.css">
+    <link rel="stylesheet" href="../../assets/libs/css/style.css">
 
     <!-- assts csss -->
-    <link rel="stylesheet" href="../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
-    <link rel="stylesheet" href="../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
-    <link rel="stylesheet" href="../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <link rel="stylesheet" href="../../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
+    <link rel="stylesheet" href="../../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
 
     <!-- slimscroll js -->
     <script defer type="module" src="../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
@@ -45,15 +31,17 @@ $base_url = 'http://localhost/finals/bcp-hrd'; // Your project's base URL
     <title>Admin Dashboard</title>
 </head>
 <body>
+<div class="dashboard-main-wrapper">
 <div class="dashboard-header ">
             <nav class="navbar navbar-expand-lg bg-white fixed-top  ">
             <?php
-            $base_url_logo = 'http://localhost/finals/bcp-hrd'; // Change to your actual base URL
+            $base_url_logo = 'http://localhost/bcp-hrd'; // Change to your actual base URL
             ?>
 
             <a class="navbar-brand" href="index.php">
-                <img src="<?php echo $base_url_logo; ?>/assets/images/bcp-hrd-logo.jpg" alt="" style="height: 3rem;width: auto;"> 
+                <img src="<?php echo $base_url_logo; ?>/assets/images/bcp-hrd-logo.jpg" alt="" style="height: 3rem;width: auto;">
             </a>
+
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -506,5 +494,30 @@ $base_url = 'http://localhost/finals/bcp-hrd'; // Your project's base URL
                 </nav>
             </div>
 </div>
+<div class="dashboard-wrapper">
+            <!-- <div class="dashboard-ecommerce"> -->
+            <div class="container-fluid dashboard-content ">
+                <!-- ============================================================== -->
+                <!-- pageheader  -->
+                <!-- ============================================================== -->
+        
+                <!-- ============================================================== -->
+                <!-- end pageheader  -->
+                <!-- ============================================================== -->
+                <!-- <div class="ecommerce-widget"> -->
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+<h1>TRY</h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
 </body>
 </html>
