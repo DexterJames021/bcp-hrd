@@ -623,10 +623,8 @@
                             <div class="card-header d-flex justify-content-between ">
                                 <h1>Generate Booking Log</h1>
                                 <div>
-                                    <button type="button" class="btn btn-primary float-right" data-toggle="modal">AI
+                                    <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal">
                                         Generate Report</button>
-                                    <button type="button" class="btn btn-primary float-right mx-2"
-                                        data-toggle="modal">Custome Generate Report</button>
                                 </div>
 
                             </div>

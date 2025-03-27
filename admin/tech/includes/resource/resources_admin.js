@@ -200,14 +200,14 @@ $(function () {
       },
       success: function (response) {
         if (response.success) {
-          alert("Status updated successfully!");
+          $("#added").toast("show");
           allocationTable.ajax.reload();
         } else {
-          alert("Failed to update status: " + response.message);
+          $("#error").toast("show");
         }
       },
       error: function () {
-        alert("Error updating status.");
+        $("#error").toast("show");
       },
     });
   });
@@ -321,7 +321,7 @@ $(function () {
 
           // return false;
         } else {
-          alert("Failed to add asset!");
+          $("#error").toast("show");
         }
       },
       "json"
@@ -363,12 +363,12 @@ $(function () {
           $("#edit_next_maintenance").val(resource.next_maintenance);
           $("#submit-btn").data("id", id); // Attach the resource ID to the submit button
         } else {
-          alert("Resource not found");
+          $("#error").toast("show");
         }
       },
       "json"
     ).fail(function () {
-      alert("Something went wrong");
+      $("#error").toast("show");
     });
   });
 
@@ -391,17 +391,17 @@ $(function () {
       formData,
       function (response) {
         if (response.success) {
-          alert(response.message);
+          $("#updated").toast("show")
           $("#EditResourcesModal").modal("hide");
           resourcesTable.ajax.reload();
           loadRoomsSelectTag();
         } else {
-          alert(response.message || "Failed to update resource");
+          $("#error").toast("show")
         }
       },
       "json"
     ).fail(function () {
-      alert("Something went wrong");
+      $("#error").toast("show")
     });
   });
 
@@ -416,16 +416,16 @@ $(function () {
       formData,
       function (response) {
         if (response.success) {
-          alert("Request submitted successfully!");
+          $("#added").toast("show")
           $("#resourceRequestForm")[0].reset();
           requestsTable.ajax.reload();
         } else {
-          alert("Failed to submit request: " + response.message);
+          $("#error").toast("show")
         }
       },
       "json"
     ).fail(function () {
-      alert("Error processing your request.");
+      $("#error").toast("show")
     });
   });
 
@@ -433,7 +433,7 @@ $(function () {
     const requestId = $(this).data("id");
     const action = $(this).hasClass("btn-approve") ? "Approved" : "Rejected";
 
-    if (!confirm(`Are you sure you want to ${action} this request?`)) return;
+    // if (!confirm(`Are you sure you want to ${action} this request?`)) return;
 
     // console.log(requestId + action)
     $.post(
@@ -444,16 +444,16 @@ $(function () {
       },
       function (response) {
         if (response.success) {
-          alert(response.message);
+          $("#added").toast("show")
           //loadRequests(); // Reload the requests table
           requestsTable.ajax.reload();
         } else {
-          alert("Error: " + response.message);
+          $("#error").toast("show")
         }
       },
       "json"
     ).fail(function () {
-      alert("Error processing your request.");
+      $("#error").toast("show")
     });
   });
 
@@ -473,12 +473,12 @@ $(function () {
           allocationTable.ajax.reload();
           $("#resourceAllocationForm")[0].reset();
         } else {
-          alert("Allocation failed: " + response.message);
+          $("#error").toast("show");
         }
       },
       "json"
     ).fail(function () {
-      alert("Error processing your allocation request.");
+      $("#error").toast("show");
     });
   });
 

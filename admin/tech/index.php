@@ -92,9 +92,9 @@ access_log($userData);
 </head>
 
 <body>
-<script>
-    var userPermissions = <?= json_encode($userData['permissions']); ?>;
-</script>
+    <script>
+        var userPermissions = <?= json_encode($userData['permissions']); ?>;
+    </script>
 
     <!-- ============================================================== -->
     <!-- main wrapper -->
@@ -821,7 +821,7 @@ access_log($userData);
                                                         data-toggle="modal" data-target="#addAsset">+</button>
                                                 <?php else: ?>
                                                     <button type="button" class="btn btn-outline-primary float-right"
-                                                    data-toggle="modal" data-target="#addAsset" disabled>+</button>
+                                                        data-toggle="modal" data-target="#addAsset" disabled>+</button>
                                                 <?php endif; ?>
                                             </div>
                                         </div>
@@ -840,7 +840,7 @@ access_log($userData);
                                                             <th class="border-0">Next maintenance</th>
                                                             <th class="border-0">Created at</th>
                                                             <?php if ($userData && in_array("CREATE", $userData['permissions'])): ?>
-                                                            <th class="border-0">Action</th>
+                                                                <th class="border-0">Action</th>
                                                             <?php else: ?>
                                                                 <th class=" border-0">Action</th>
                                                             <?php endif; ?>
@@ -1117,13 +1117,33 @@ access_log($userData);
             <!-- bs toast  -->
             <div class="toast-container position-fixed bottom-0 end-0 p-3">
                 <div id="deleted" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-body bg-success text-light">
+                    <div class="toast-body bg-danger text-light">
                         Deleted, Successfully.
+                    </div>
+                </div>
+                <div id="error" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body bg-warning text-light">
+                        Something went wrong.
                     </div>
                 </div>
                 <div id="added" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-body bg-success text-light">
                         Added, Successfully.
+                    </div>
+                </div>
+                <div id="updated" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body bg-success text-light">
+                        Updated, Successfully.
+                    </div>
+                </div>
+                <div id="approved" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body bg-success text-light">
+                        Updated, Successfully.
+                    </div>
+                </div>
+                <div id="rejected" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body bg-danger text-light">
+                        Updated, Successfully.
                     </div>
                 </div>
             </div>

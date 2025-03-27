@@ -23,7 +23,7 @@ class Roles
             $q = "INSERT INTO roles (RoleName, Description) VALUES (?, ?)";
             $stmt = $this->conn->prepare($q);
             return $stmt->execute([$roleId, $description]);
-        } catch (Exception $e) {
+        } catch (PDOException $e) {
             echo "ERROR::::::::::: " . $e->getMessage();
         }
     }

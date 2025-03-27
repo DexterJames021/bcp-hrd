@@ -751,9 +751,8 @@ access_log($userData);
                                     </div>
                                     <div class="mb-2">
                                         <label for="edit_status">Status:</label>
-                                        <select name="edit_status" id="edit_status" class="form-control" required>
-                                            <option value="Available">Available</option>
-                                            <option value="Unavailable">Unavailable</option>
+                                        <select name="edit_status" id="edit_status" class="form-control" >
+                                        <option selected value="Available">Available</option>
                                         </select>
                                     </div>
                                     <div class="mb-2">
@@ -803,7 +802,7 @@ access_log($userData);
                                             <option value="Damaged">Damaged</option>
                                         </select>
                                     </div>
-                                    <div class="mb-3">
+                                    <div class="mb-3">  
                                         <button type="submit" class="btn btn-primary">Add Facility</button>
                                     </div>
                                 </form>

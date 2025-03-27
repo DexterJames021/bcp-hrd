@@ -48,7 +48,7 @@ session_start();
     <script src="../../assets/libs/js/main-js.js"></script>
 
     <!-- custom -->
-    <script type="module" src="./includes/resource/room_booking_admin.js"></script>
+    <script type="module" src="./includes/resource/report_admin.js"></script>
 
     <!-- slimscroll js -->
     <script src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>

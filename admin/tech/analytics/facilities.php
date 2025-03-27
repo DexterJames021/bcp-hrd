@@ -71,6 +71,7 @@
 
     <!-- custom js -->
     <script type="module" src="../includes/resource/facility_charts.js"></script>
+    <script type="module" src="../includes/resource/report_admin.js"></script>
 
 
     <!-- charts -->
@@ -339,14 +340,15 @@
                                         class="fas fa-fw fa-chart-pie"></i> Tech & Analytics</a>
                                 <div id="submenu-3" class="collapse submenu show">
                                     <ul class="nav flex-column">
-                                    <li class="nav-item">
+                                        <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
                                                 data-target="#submenu-3-1" aria-controls="submenu-3-1">Facilities &
                                                 Resources</a>
                                             <div id="submenu-3-1" class="collapse submenu">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
-                                                        <a class="nav-link " href="../index.php">Resources Management</a>
+                                                        <a class="nav-link " href="../index.php">Resources
+                                                            Management</a>
                                                     </li>
                                                     <li class="nav-item">
                                                         <a class="nav-link" href="../room_book_list.php">Facility
@@ -620,14 +622,16 @@
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between ">
-                                <h1>Generate Booking Log</h1>
+                                <h1></h1>
                                 <div>
-                                    <button type="button" class="btn btn-primary float-right" data-toggle="modal">AI
-                                        Generate Report</button>
-                                    <button type="button" class="btn btn-primary float-right mx-2"
-                                        data-toggle="modal">Custome Generate Report</button>
+                                    <button type="button" id="generateBtn" class="btn btn-outline-primary float-right"
+                                        data-toggle="modal">Generate Report</button>
+                                        <!--
+                                            logs number
+                                            suggestion not need 
+                                            what is trend
+                                        -->
                                 </div>
-
                             </div>
                             <div class="card-body">
                                 <table id="LogbookingTable" class="table table-hover" width="100%">
