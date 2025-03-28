@@ -2,6 +2,10 @@ $(function () {
     console.log('connect');
     console.log("JS ROLE PASS:  ", userPermissions);
 
+    $("#openModalBtn").on("click", function () {
+        $("#reportModal").modal("show");
+    });
+
     // facility table
     const AllRoomTable = $('#roomTable').DataTable({
         autoWidth: true,

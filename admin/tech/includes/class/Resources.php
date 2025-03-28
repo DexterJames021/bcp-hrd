@@ -24,6 +24,17 @@ class Resources
         return $stmt->fetchAll(PDO::FETCH_BOTH);
     }
 
+
+    public function getAllRequest()
+    {
+        $q = "SELECT r.name, r.quantity, rq.status, rq.requested_at  
+                FROM fm_resource_requests rq
+                JOIN fm_resources r ON rq.resource_id = r.id;";
+        $stmt = $this->conn->prepare($q);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_BOTH);
+    }
+
     public function create_resource($data)
     {
         $q = "INSERT INTO {$this->table}(name, category, quantity, status, next_maintenance, last_maintenance, location) 

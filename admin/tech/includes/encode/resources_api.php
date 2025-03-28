@@ -18,9 +18,12 @@ switch ($action) {
     case 'fetch_all':
         echo json_encode($resource->getAll());
         break;
-    
+    case 'fetch_all_request':
+        echo json_encode($resource->getAllRequest());
+        break;
     case 'add_new_resource':
-        if (!isset($_POST['name'])) return false;
+        if (!isset($_POST['name']))
+            return false;
         $data = [
             ':name' => $_POST['name'],
             ':category' => $_POST['category'],
@@ -35,7 +38,8 @@ switch ($action) {
         break;
 
     case 'delete_resource':
-        if (!isset($_POST['id'])) return false;
+        if (!isset($_POST['id']))
+            return false;
         echo json_encode(['success' => $resource->delete_asset($_POST['id'])]);
         break;
 
@@ -76,10 +80,10 @@ switch ($action) {
         }
 
         $data = [
-            'resource_id' =>  $_POST['resource_id'],
-            'employee_id' =>  $_POST['employee_id'],
-            'quantity' =>  $_POST['quantity'],
-            'purpose' =>  $_POST['purpose'],
+            'resource_id' => $_POST['resource_id'],
+            'employee_id' => $_POST['employee_id'],
+            'quantity' => $_POST['quantity'],
+            'purpose' => $_POST['purpose'],
         ];
 
         $result = $resource->requestResource($data);
@@ -164,10 +168,10 @@ switch ($action) {
     case 'requests_trend':
         echo json_encode($resource->RequestTrend());
         break;
-        
+
     case 'unused_resources':
         echo json_encode($resource->getUnusedResources());
-            break;
+        break;
 
     case 'overutilized_resources':
         echo json_encode($resource->OverutilizedResources());

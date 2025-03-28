@@ -71,7 +71,7 @@
 
     <!-- custom js -->
     <script type="module" src="../includes/resource/resources_charts.js"></script>
-
+    <script type="module" src="../includes/resource/report_admin.js"></script>
 
     <!-- charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -623,8 +623,8 @@
                             <div class="card-header d-flex justify-content-between ">
                                 <h1>Generate Booking Log</h1>
                                 <div>
-                                    <button type="button" class="btn btn-outline-primary float-right" data-toggle="modal">
-                                        Generate Report</button>
+                                    <button type="button" id="openModalBtn" class="btn btn-outline-primary float-right"
+                                        data-toggle="modal" data-target="#reportModal">Generate Report</button>
                                 </div>
 
                             </div>
@@ -633,11 +633,9 @@
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>category</th>
-                                            <th>quantity</th>
-                                            <th>location</th>
-                                            <!-- <th>Purpose</th> -->
-                                            <!-- <th>Status</th> -->
+                                            <th>Quantity</th>
+                                            <th>Status</th>
+                                            <th>Requested at</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -650,6 +648,41 @@
             </div>
         </div>
 
+        <!-- Modal -->
+        <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reportModalLabel">Generate Facility Log Report</h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="filter" class="my-auto">Filter:</label>
+                        <select id="filter" class="form-control">
+                            <option value="all">All Logs</option>
+                            <option value="today">Today</option>
+                            <option value="weekly">This Week</option>
+                            <option value="monthly">This Month</option>
+                        </select>
+
+                        <div id="loading" class="mt-3 text-center" style="display: none;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Generating...</span>
+                            </div>
+                            <p>Generating report...</p>
+                        </div>
+
+                        <!-- <h5 class="mt-3">AI Report:</h5> -->
+                        <p id="aiResponse"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="ResourcesGenerateBtn" class="btn btn-outline-primary">Start Generating</button>
+                        <button id="downloadBtn" class="btn btn-outline-info" style="display: none;">Download
+                            Report</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- ============================================================== -->
         <!-- end wrapper  -->

@@ -9,7 +9,7 @@ $(function () {
     processing: true,
     dom: "Bfrtip",
     ajax: {
-      url: "../includes/encode/resources_api.php?action=fetch_all",
+      url: "../includes/encode/resources_api.php?action=fetch_all_request",
       dataType: "json",
       dataSrc: "",
     },
@@ -18,13 +18,13 @@ $(function () {
         data: "name",
       },
       {
-        data: "category",
-      },
-      {
         data: "quantity",
       },
       {
-        data: "location",
+        data: "status",
+      },
+      {
+        data: "requested_at",
       },
     ],
   });
