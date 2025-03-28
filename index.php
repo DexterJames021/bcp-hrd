@@ -47,6 +47,7 @@ $result = mysqli_query($conn, $query);
     <link rel="stylesheet" href="styledashboard.css">
     <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
 </head>
+
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
@@ -140,4 +141,5 @@ document.getElementById('searchInput').addEventListener('keyup', function() {
 
 <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

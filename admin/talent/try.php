@@ -8,7 +8,7 @@
     <!-- icon -->
     <link rel="shortcut icon" href="../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
 
-    <script defer src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <!-- <script defer src="../../node_modules/jquery/dist/jquery.min.js"></script> -->
 
     <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <script defer src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -174,23 +174,36 @@
                                 <div id="submenu-1" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1-2" aria-controls="submenu-1-2">Lorem, ipsum.</a>
-                                            <div id="submenu-1-2" class="collapse submenu">
-                                                <ul class="nav flex-column">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="index.html">Lorem.</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">lorem1</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">Lorem.</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">Lorem.</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                            <a class="nav-link" href="#">module <span class="badge badge-secondary">New</span></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">module</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">module</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">module</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">module</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">module</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">module</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                             <!-- Talent Management -->
+                             <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2"><i class="fa fa-fw fa-rocket"></i>Talent Management</a>
+                                <div id="submenu-2" class="collapse submenu">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="index.php">Dashboard<span class="badge badge-secondary">New</span></a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="./records-management/Records.php">Lorem, ipsum dolor.</a>
@@ -217,52 +230,36 @@
                                     </ul>
                                 </div>
                             </li>
-                           <!-- Talent Management -->
-<li class="nav-item">
-<a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'recruitment.php' || basename($_SERVER['PHP_SELF']) == 'onboarding.php' || basename($_SERVER['PHP_SELF']) == 'indextalent.php') ? 'active' : ''; ?>" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2">
-    <i class="fa fa-fw fa-rocket"></i> Talent Management
-</a>
-
-
-    <div id="submenu-2" class="collapse submenu">
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'indextalent.php') ? 'active' : ''; ?>" href="<?php echo $base_url; ?>/admin/talent/indextalent.php">
-                    Dashboard 
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'recruitment.php') ? 'active' : ''; ?>" href="<?php echo $base_url; ?>/admin/talent/recruitment.php">
-                    Recruitment
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'onboarding.php') ? 'active' : ''; ?>" href="<?php echo $base_url; ?>/admin/talent/onboarding.php">
-                    Onboarding
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'talentretention.php') ? 'active' : ''; ?>" href="<?php echo $base_url; ?>/admin/talent/talentretention.php">
-                    Talent Retention
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'succession.php') ? 'active' : ''; ?>" href="<?php echo $base_url; ?>/admin/talent/succession.php">
-                    Succession Planning
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'career.php') ? 'active' : ''; ?>" href="<?php echo $base_url; ?>/admin/talent/career.php">
-                    Career Development
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="pages/tabs.html">Tabs</a>
-            </li>
-        </ul>
-    </div>
-</li>
-
+                            <!-- Document and Legal -->
+                            <!-- Tech & Analytics -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3" aria-controls="submenu-3"><i class="fas fa-fw fa-chart-pie"></i> Tech & Analytics</a>
+                                <div id="submenu-3" class="collapse submenu" style="">
+                                <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">module <span class="badge badge-secondary">New</span></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">module</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">module</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">module</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">module</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">module</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">module</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
                             <!-- Document and Legal -->
                             <li class="nav-item ">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4"><i class="fab fa-fw fa-wpforms"></i>Document and Legal</a>
@@ -510,14 +507,219 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-<h1>TRY</h1>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h1>Job Postings</h1>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#addJobModal">Add Job Posting</button>
+                            </div>
+                            <table class="table mt-3">
+                                <thead>
+                                    <tr>
+                                        <th>Job Title</th>
+                                        <th>Job Description</th>
+                                        <th>Requirements</th>
+                                        <th>Location</th>
+                                        <th>Salary Range</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    if ($result->num_rows > 0) {
+                                        while($row = $result->fetch_assoc()) {
+                                            echo "<tr>";
+                                            echo "<td>" . $row['job_title'] . "</td>";
+                                            echo "<td>" . $row['job_description'] . "</td>";
+                                            echo "<td>" . $row['requirements'] . "</td>";
+                                            echo "<td>" . $row['location'] . "</td>";
+                                            echo "<td>" . $row['salary_range'] . "</td>";
+                                            echo "<td>" . $row['status'] . "</td>";
+                                            echo "<td>
+                                                    <button class='btn btn-warning btn-sm btn-action' 
+                                                            data-toggle='modal' 
+                                                            data-target='#editJobModal' 
+                                                            data-id='" . $row['id'] . "' 
+                                                            data-title='" . $row['job_title'] . "' 
+                                                            data-description='" . $row['job_description'] . "' 
+                                                            data-requirements='" . $row['requirements'] . "' 
+                                                            data-location='" . $row['location'] . "' 
+                                                            data-salary='" . $row['salary_range'] . "' 
+                                                            data-status='" . $row['status'] . "'>Edit</button>
+                                                    <a href='recruitment/delete_job.php?id=" . $row['id'] . "' class='btn btn-danger btn-sm btn-action' onclick='return confirm(\"Are you sure you want to delete this job posting?\");'>Delete</a>
+                                                </td>";
+                                            echo "</tr>";
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='7'>No job postings found.</td></tr>";
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                        </div>
+
+<!-- Add Job Modal -->
+<div class="modal fade" id="addJobModal" tabindex="-1" role="dialog" aria-labelledby="addJobModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addJobModalLabel">Add Job Posting</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="recruitment/add_job.php" method="POST">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="job_title">Job Title:</label>
+                        <input type="text" class="form-control" id="job_title" name="job_title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="job_description">Job Description:</label>
+                        <textarea class="form-control" id="job_description" name="job_description" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="requirements">Job Requirements:</label>
+                        <textarea class="form-control" id="requirements" name="requirements" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location:</label>
+                        <input type="text" class="form-control" id="location" name="location" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="salary_range">Salary Range:</label>
+                        <input type="text" class="form-control" id="salary_range" name="salary_range" placeholder="e.g. ₱30,000 - ₱50,000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Status:</label>
+                        <select class="form-control" id="status" name="status" required>
+                            <option value="Open">Open</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Job Posting</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
+<!-- Edit Job Modal -->
+<div class="modal fade" id="editJobModal" tabindex="-1" role="dialog" aria-labelledby="editJobModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editJobModalLabel">Edit Job Posting</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="recruitment/edit_job.php" method="POST" id="editJobForm">
+                <div class="modal-body">
+                    <input type="hidden" id="edit_job_id" name="job_id">
+                    <div class="form-group">
+                        <label for="edit_job_title">Job Title:</label>
+                        <input type="text" class="form-control" id="edit_job_title" name="job_title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_job_description">Job Description:</label>
+                        <textarea class="form-control" id="edit_job_description" name="job_description" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_requirements">Job Requirements:</label>
+                        <textarea class="form-control" id="edit_requirements" name="requirements" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_location">Location:</label>
+                        <input type="text" class="form-control" id="edit_location" name="location" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_salary_range">Salary Range:</label>
+                        <input type="text" class="form-control" id="edit_salary_range" name="salary_range" placeholder="e.g. ₱30,000 - ₱50,000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_status">Status:</label>
+                        <select class="form-control" id="edit_status" name="status" required>
+                            <option value="Open">Open</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update Job Posting</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    // Populate edit modal with job details
+    $('#editJobModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var jobId = button.data('id');
+        var jobTitle = button.data('title');
+        var jobDescription = button.data('description');
+        var jobRequirements = button.data('requirements');
+        var jobLocation = button.data('location');
+        var jobSalary = button.data('salary');
+        var jobStatus = button.data('status');
+
+        // Update the modal's content.
+        var modal = $(this);
+        modal.find('#edit_job_id').val(jobId);
+        modal.find('#edit_job_title').val(jobTitle);
+        modal.find('#edit_job_description').val(jobDescription);
+        modal.find('#edit_requirements').val(jobRequirements);
+        modal.find('#edit_location').val(jobLocation);
+        modal.find('#edit_salary_range').val(jobSalary);
+        modal.find('#edit_status').val(jobStatus);
+    });
+</script>
+                            </div>
+                            <div id="sparkline-revenue"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- </div> -->
+            </div>
+            <!-- </div> -->
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <!-- <div class="footer mx-2">
+                <div class="container-fluid mx-2">
+                    <div class="row">
+                        <div class="col-xl-7 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="text-md-right footer-links d-none d-sm-block">
+                                <a href="javascript: void(0);">About</a>
+                                <a href="javascript: void(0);">Support</a>
+                                <a href="javascript: void(0);">Contact Us</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <!-- ============================================================== -->
+            <!-- end footer -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- end wrapper  -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- end main wrapper  -->
+    <!-- ============================================================== -->
+     
 </body>
 </html>

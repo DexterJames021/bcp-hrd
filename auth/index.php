@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 require "../config/Database.php";
 
@@ -88,14 +88,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </a>
             </div>
             <div class="card-body">
+                <?php if (!empty($err)): ?>
+                    <div class="alert alert-danger"><?= $err ?></div>
+                <?php endif; ?>
                 <form action="index.php" method="POST">
                     <div class="form-group">
+                        <input class="form-control form-control-lg" name="username" id="username" type="text" placeholder="Username" autocomplete="off" required>
                         <input class="form-control form-control-lg" name="username" id="username" type="text" placeholder="Username" autocomplete="off" required>
                     </div>
                     <div class="form-group">
                         <input class="form-control form-control-lg" name="password" id="password" type="password" placeholder="Password" required>
+                        <input class="form-control form-control-lg" name="password" id="password" type="password" placeholder="Password" required>
                     </div>
-                    <input type="submit" name="submit" class="btn btn-primary btn-lg btn-block" value="Sign in">
+                    <input type="submit" name="submit" id="submit" class="btn btn-primary btn-lg btn-block" value="Sign in">
                 </form>
             </div>
             <div class="card-footer bg-white p-0">

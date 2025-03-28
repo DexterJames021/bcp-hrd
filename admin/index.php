@@ -57,20 +57,22 @@ $employeesJSON = json_encode($employeesData);
 
 <!doctype html>
 <html lang="en">
- 
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <!-- icon -->
     <link rel="shortcut icon" href="../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
 
+    <!-- ajax -->
     <script defer src="../node_modules/jquery/dist/jquery.min.js"></script>
 
+    <!-- bs -->
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
 
     <!-- global JavaScript -->
-    <script defer type="module" src="../assets/libs/js/global-script.js"></script> 
+    <script defer type="module" src="../assets/libs/js/global-script.js"></script>
 
     <!-- main js -->
     <script defer type="module" src="../assets/libs/js/main-js.js"></script>
@@ -234,5 +236,5 @@ $employeesJSON = json_encode($employeesData);
 </div>
         
 </body>
- 
+
 </html>
