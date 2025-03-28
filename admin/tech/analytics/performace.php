@@ -152,7 +152,7 @@ session_start();
                                             <a class="nav-link active" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3-1" aria-controls="submenu-3-1">Analytics</a>
                                             <div id="submenu-3-1" class="collapse submenu show">
                                                 <ul class="nav flex-column">
-                                                <li class="nav-item">
+                                                    <li class="nav-item">
                                                         <a class="nav-link" href="./engagement.php">Engagement insight</a>
                                                     </li>
                                                     <li class="nav-item">
@@ -166,6 +166,9 @@ session_start();
                                                     </li>
                                                     <li class="nav-item">
                                                         <a class="nav-link" href="./talent.php">Talent insight</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="./retention.php">Retention</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -267,17 +270,13 @@ session_start();
             <div class="container-fluid dashboard-content ">
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="card">
+                        <div class="card p-3">
                             <div class="card-header d-flex justify-content-between">
                                 <h2 class="card-title text-align-center">Performance metric</h2>
+                                <p>Total Evaluations per Employee</p>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="card col-5 ">
-                                <canvas id="performance-1"></canvas>
-                            </div>
-                            <div class="card col-5">
-                                <canvas id="performance-2"></canvas>
+                            <div class="card  ">
+                                <canvas id="barChart" width="400" height="200"></canvas>
                             </div>
                         </div>
                     </div>
@@ -291,12 +290,36 @@ session_start();
     <!-- ============================================================== -->
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
-     <script>
-        $(document).ready(function(){
-            var chart = document.getElementById('performance-1');
+    <script>
+        $.ajax({
+            url: "../includes/class/get-perf-metrics.php",
+            method: "GET",
+            success: function(data) {
+                const jsonData = JSON.parse(data);
 
+                // Bar Chart: Total Evaluations per Employee
+                const barLabels = jsonData.bar_chart.map(item => item.employee_id);
+                const barData = jsonData.bar_chart.map(item => item.total_evaluations);
+
+                new Chart(document.getElementById('barChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: barLabels,
+                        datasets: [{
+                            label: 'Total Evaluations',
+                            data: barData,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
         });
-     </script>
+    </script>
 </body>
 
 </html>

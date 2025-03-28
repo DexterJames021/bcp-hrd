@@ -94,10 +94,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <form action="index.php" method="POST">
                     <div class="form-group">
                         <input class="form-control form-control-lg" name="username" id="username" type="text" placeholder="Username" autocomplete="off" required>
-                        <input class="form-control form-control-lg" name="username" id="username" type="text" placeholder="Username" autocomplete="off" required>
                     </div>
                     <div class="form-group">
-                        <input class="form-control form-control-lg" name="password" id="password" type="password" placeholder="Password" required>
                         <input class="form-control form-control-lg" name="password" id="password" type="password" placeholder="Password" required>
                     </div>
                     <input type="submit" name="submit" id="submit" class="btn btn-primary btn-lg btn-block" value="Sign in">

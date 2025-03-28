@@ -8,7 +8,7 @@ if(isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'employee'){
     header("Location: ../auth/index.php");
    
 }
-$base_url = 'http://localhost/finals/bcp-hrd'; // Your project's base URL
+$base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
 
 
 ?>

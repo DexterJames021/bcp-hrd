@@ -60,46 +60,23 @@ class Task
         }
     }
 
-    public function update_task($taskID, $title, $description, $userID, $status){
-        try{
-            $q = "UPDATE " .$this->table . " SET TaskID = :Title, :Description, :userID, :Status 
-            WHERE :TaskID ";
-            $stmt = $this->conn->prepare($q);
-            $stmt->bindParam('TaskID', $taskID);
-            $stmt->bindParam('Title', $title);
-            $stmt->bindParam('Description', $description);
-            $stmt->bindParam('userID', $userID);
-            $stmt->bindParam('Status', $status);
-            $result = $stmt->execute();
+    public function update_task($id, $creator, $title, $description, $userID) {
+        // Prepare the SQL query to update the task
+        $query = "UPDATE tasks SET Creator = :creator, Title = :title, Description = :description, UserID = :userID WHERE TaskID = :id";
+        $stmt = $this->conn->prepare($query);
 
+        // Bind parameters using PDO
+        $stmt->bindParam(':creator', $creator, PDO::PARAM_STR);
+        $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+        $stmt->bindParam(':description', $description, PDO::PARAM_STR);
+        $stmt->bindParam(':userID', $userID, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
-        }catch(PDOException $e){
-            return "Something went wrong. " . $e->getMessage();
+        // Execute the query
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
         }
-
     }
-}
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    session_start();
-    $creator = $_SESSION['username'];
-    $title = $_POST['Title'];
-    $description = $_POST['Description'];
-    $userID = $_POST['UserID'];
-    // $status = $_POST['Status'];
-
-    $task = new Task($conn); // Ensure $conn is the active database connection
-    $taskCreated = $task->create_task($creator, $title, $description, $userID);
-    
-    // Call the create() method to insert data
-    header('Content-Type: application/json'); // Set the content type to JSON
-    
-    if ($taskCreated === true) {
-        echo json_encode(["message" => "Task created successfully!"]);
-    } elseif ($taskCreated === false) {
-        echo json_encode(["message" => "Failed to create task."]);
-    } else {
-        echo json_encode(["error" => $taskCreated]); // Return the error message if exception occurred
-    }
-
-    exit;
 }

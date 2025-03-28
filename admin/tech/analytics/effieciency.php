@@ -148,7 +148,7 @@ session_start();
                                             <a class="nav-link active" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3-1" aria-controls="submenu-3-1">Analytics</a>
                                             <div id="submenu-3-1" class="collapse submenu show">
                                                 <ul class="nav flex-column">
-                                                <li class="nav-item">
+                                                    <li class="nav-item">
                                                         <a class="nav-link" href="./engagement.php">Engagement insight</a>
                                                     </li>
                                                     <li class="nav-item">
@@ -163,6 +163,10 @@ session_start();
                                                     <li class="nav-item">
                                                         <a class="nav-link" href="./talent.php">Talent insight</a>
                                                     </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link " href="./retention.php">Retention</a>
+                                                    </li>
+                                                    
                                                 </ul>
                                             </div>
                                         </li>
@@ -268,13 +272,14 @@ session_start();
                                 <h2 class="card-title text-align-center">Efficiency Analytics</h2>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="card col-5 ">
-                                <canvas id="effieciency-1"></canvas>
+                        <div class="card">
+                                <!-- <div class="block">
+                                    <canvas id="barChart"></canvas>
+                                </div> -->
+                            <div class="block">
+                                <canvas id="histogramChart"></canvas>
                             </div>
-                            <div class="card col-5">
-                                <canvas id="effieciency-2"></canvas>
-                            </div>
+                            <!-- <div id="gantt" style="height: 500px;"></div> -->
                         </div>
                     </div>
                 </div>
@@ -287,7 +292,54 @@ session_start();
     <!-- ============================================================== -->
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
-     
+
 </body>
+<script>
+    $.ajax({
+        url: "../includes/class/get-efficiency.php",
+        method: "GET",
+        success: function(data) {
+            const jsonData = JSON.parse(data);
+
+            const histogramData = jsonData.histogram.map(item => item.time_spent);
+
+            new Chart(document.getElementById('histogramChart'), {
+                type: 'bar',
+                data: {
+                    labels: jsonData.histogram.map(item => item.task_name),
+                    datasets: [{
+                        label: 'Time Distribution Across Tasks',
+                        data: histogramData,
+                        backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                        borderColor: 'rgba(255, 206, 86, 1)',
+                        borderWidth: 1
+                    }]
+                }
+            });
+        }
+    });
+    
+    $.ajax({
+        url: "../includes/class/get-efficiency.php",
+        method: "GET",
+        success: function(data) {
+            const jsonData = JSON.parse(data);
+
+            const ganttData = jsonData.gantt_chart.map(item => ({
+                id: item.task_name,
+                name: item.task_name,
+                start: item.start_date,
+                end: item.end_date,
+                progress: 100,
+                dependencies: ''
+            }));
+
+            new Gantt("#gantt", ganttData, {
+                view_mode: "Week",
+                date_format: "YYYY-MM-DD"
+            });
+        }
+    });
+</script>
 
 </html>

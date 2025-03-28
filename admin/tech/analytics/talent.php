@@ -131,6 +131,7 @@ session_start();
                                         <li class="nav-item">
                                             <a class="nav-link" href="pages/tabs.html">Tabs</a>
                                         </li>
+
                                     </ul>
                                 </div>
                             </li>
@@ -152,7 +153,7 @@ session_start();
                                             <a class="nav-link active" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3-1" aria-controls="submenu-3-1">Analytics</a>
                                             <div id="submenu-3-1" class="collapse submenu show">
                                                 <ul class="nav flex-column">
-                                                <li class="nav-item">
+                                                    <li class="nav-item">
                                                         <a class="nav-link" href="./engagement.php">Engagement insight</a>
                                                     </li>
                                                     <li class="nav-item">
@@ -166,6 +167,9 @@ session_start();
                                                     </li>
                                                     <li class="nav-item">
                                                         <a class="nav-link active" href="./talent.php">Talent insight</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="./retention.php">Retention</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -272,12 +276,15 @@ session_start();
                                 <h2 class="card-title text-align-center">Talent insight</h2>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="card col-5 ">
-                                <canvas id="effieciency-1"></canvas>
+                        <div class="card">
+                            <!-- <div>
+                                <canvas id="pieChart"></canvas>
+                            </div> -->
+                            <div>
+                                <canvas id="lineChart"></canvas>
                             </div>
-                            <div class="card col-5">
-                                <canvas id="effieciency-2"></canvas>
+                            <div>
+                                <canvas id="barChart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -292,5 +299,110 @@ session_start();
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
 </body>
+<script>
+    $.ajax({
+        url: "../includes/class/get_talent.php",
+        method: "GET",
+        success: function(data) {
+            const jsonData = JSON.parse(data);
+
+            const labels = jsonData.pie_chart.map(item => item.role_name);
+            const dataValues = jsonData.pie_chart.map(item => item.total_employees);
+
+            new Chart(document.getElementById('pieChart'), {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: dataValues,
+                        backgroundColor: labels.map(() => getRandomColor())
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Workforce Composition by Job Role'
+                        }
+                    }
+                }
+            });
+        }
+    });
+    $.ajax({
+        url: "../includes/class/get_talent.php",
+        method: "GET",
+        success: function(data) {
+            const jsonData = JSON.parse(data);
+
+            const labels = jsonData.line_chart.map(item => item.task_date);
+            const dataValues = jsonData.line_chart.map(item => item.tasks_completed);
+
+            new Chart(document.getElementById('lineChart'), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Tasks Completed Over Time',
+                        data: dataValues,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Talent Development Over Time'
+                        }
+                    }
+                }
+            });
+        }
+    });
+    $.ajax({
+        url: "../includes/class/get_talent.php",
+        method: "GET",
+        success: function(data) {
+            const jsonData = JSON.parse(data);
+
+            const labels = jsonData.bar_chart.map(item => item.department_name);
+            const attritionRates = jsonData.bar_chart.map(item =>
+                (item.attrition_count / item.total_employees) * 100);
+
+            new Chart(document.getElementById('barChart'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Attrition Rate (%)',
+                        data: attritionRates,
+                        backgroundColor: labels.map(() => getRandomColor())
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Attrition Rates by Department'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: value => value + '%'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
 
 </html>

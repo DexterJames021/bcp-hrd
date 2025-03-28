@@ -8,20 +8,6 @@ require '../../../config/Database.php';
 require '../includes/class/User.php';
 $employeeInfo = new User($conn);
 
-// TODO: pagnagpalit ng id nagchange dapat hindi
-// function id_checker($id, $data){
-if (!isset($_GET['id']) && $_GET['id'] === $employeeInfo->getId('')) {
-    echo "403: Forbidden";
-    Header('Location: ../');
-    exit();
-} else {
-
-     $result = $employeeInfo->profile_select_one($_GET['id']);
-     $validresult = (!$employeeInfo->profile_select_one($_GET['id']))? Header('Location: ../'): $result ;
-}
-
-
-
 
 
 
@@ -213,7 +199,7 @@ if (!isset($_GET['id']) && $_GET['id'] === $employeeInfo->getId('')) {
                                     <h5 class="mb-0 text-white nav-user-name"> <?= $_SESSION['username'] ?> </h5>
                                     <span class="status"></span><span class="ml-2">Available</span>
                                 </div>
-                                <a class="dropdown-item" href="./settings/profile.php?id=<?= $id['EmployeeID'] ?>"><i class="fas fa-user mr-2"></i>Account</a>
+                                <a class="dropdown-item" href="./settings/emp-info.php?id=<?= $id['EmployeeID'] ?>"><i class="fas fa-user mr-2"></i>Account</a>
                                 <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
                                 <a class="dropdown-item" href="../../auth/logout.php"><i class="fas fa-power-off mr-2"></i>Logout</a>
                             </div>
@@ -247,6 +233,38 @@ if (!isset($_GET['id']) && $_GET['id'] === $employeeInfo->getId('')) {
                         </ul>
                     </div>
                 </nav>
+            </div>
+        </div>
+        <div class="dashboard-wrapper">
+            <div class="container-fluid dashboard-content ">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <h2 class="card-title">Account & Profile</h2>
+                            </div>
+                            <div class="card-body">
+                                <form action="profile.php" class="">
+                                    <div class="mb-3">
+                                        <label for="username">Username</label>
+                                        <input type="text" name="username" id="username" value="<?= $result['username']?? "" ?>" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="username">Password</label>
+                                        <input type="text" name="username" id="username" value="<?= $result['username']?? "" ?>" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="username">Confirm password</label>
+                                        <input type="text" name="username" id="username" value="<?= $result['username']?? "" ?>" class="form-control">
+                                    </div>
+                                    <div class="md-3">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="dashboard-wrapper">

@@ -167,6 +167,9 @@ if (isset($_SESSION['user_id'])) {
                                                     <li class="nav-item">
                                                         <a class="nav-link" href="./talent.php">Talent insight</a>
                                                     </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="./retention.php">Retention</a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </li>

@@ -1,36 +1,31 @@
-<?php 
+<?php
 session_start();
 
-if(isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'admin'){
-    echo "<script> alert('welcome') </script>";
-}else{
+if (isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'admin') {
+    // echo "<script> alert('welcome') </script>";
+} else {
     header("Location: ../auth/index.php");
-   
 }
 
 
 ?>
 <!doctype html>
 <html lang="en">
- 
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-    <!-- icon -->
-    <link rel="shortcut icon" href="../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
 
-    <!-- ajax -->
-    <script defer src="../node_modules/jquery/dist/jquery.min.js"></script>
-
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- check if bato-->
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <script defer src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
-    <!-- global JavaScript -->
-    <script defer type="module" src="../assets/libs/js/global-script.js"></script> 
+    <!-- datatable:  cs -->
+    <link rel="stylesheet" href="../node_modules/datatables.net-dt/css/dataTables.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 
     <!-- main js -->
-    <script defer type="module" src="../assets/libs/js/main-js.js"></script>
     <link rel="stylesheet" href="../assets/libs/css/style.css">
 
     <!-- assts csss -->
@@ -38,10 +33,29 @@ if(isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'admin'){
     <link rel="stylesheet" href="../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
     <link rel="stylesheet" href="../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
 
-    <!-- slimscroll js -->
-    <script defer type="module" src="../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <!-- icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
 
-    <title>Employee Dashboard</title>
+    <!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- DataTable JS -->
+    <script src="../node_modules/datatables.net/js/dataTables.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <!-- main js -->
+    <script src="../assets/libs/js/main-js.js"></script>
+
+    <!-- slimscroll js -->
+    <script src="../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+
+    <title>Admin Dashboard</title>
 </head>
 
 <body>
@@ -170,28 +184,29 @@ if(isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'admin'){
         <!-- ============================================================== -->
         <div class="nav-left-sidebar sidebar-white ">
             <div class="menu-list">
-                <nav class="navbar navbar-expand-lg navbar-light">
-                    <a class="d-xl-none d-lg-none" href="#">Dashboard</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <nav class="navbar navbar-expand-lg cc">
+                    <a class="d-xl-none d-lg-none" href="#"><?= strtoupper($_SESSION['usertype']) ?> PANEL</a>
+                    <button class="navbar-toggler btn-light" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav flex-column">
+                        <ul class="navbar-nav  flex-column">
                             <li class="nav-divider">
-                                Human Resource Dept.
+                                <?= strtoupper($_SESSION['usertype']) ?> PANEL
                             </li>
                             <li class="nav-item ">
-                                <a class="nav-link active" href="index.php" >
+                                <a class="nav-link active" href="index.php">
                                     <i class="fas fa-fw fa-home"></i> Dashboard
                                 </a>
                             </li>
+                            <!-- temp -->
                             <li class="nav-item ">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fa fa-fw fa-user-circle"></i>employee <span class="badge badge-success">6</span></a>
-                                <div id="submenu-1" class="collapse submenu">
+                                <div id="submenu-1" class="collapse submenu bg-light">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1-2" aria-controls="submenu-1-2">Lorem, ipsum.</a>
-                                            <div id="submenu-1-2" class="collapse submenu">
+                                            <div id="submenu-1-2" class="collapse submenu bg-light">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
                                                         <a class="nav-link" href="index.html">Lorem.</a>
@@ -233,70 +248,27 @@ if(isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'admin'){
                                     </ul>
                                 </div>
                             </li>
-                            <!-- <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-8" aria-controls="submenu-8"><i class="fas fa-fw fa-columns"></i>Icons</a>
-                                <div id="submenu-8" class="collapse submenu" style="">
+                            <!-- facilities -->
+                            <li class="nav-item ">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2">
+                                    <i class="fa fa-fw fa-user-circle"></i>Facilites and Resources
+                                    <!-- <span class="badge badge-success">6</span> -->
+                                </a>
+                                <div id="submenu-2" class="collapse submenu bg-light">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/icon-fontawesome.html">FontAwesome Icons</a>
+                                            <a class="nav-link" href="./tech/facilities/book_facility.php">Book Facility</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/icon-material.html">Material Icons</a>
+                                            <a class="nav-link" href="./tech/facilities/request_resources.php">Request Resources</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/icon-simple-lineicon.html">Simpleline Icon</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/icon-themify.html">Themify Icon</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/icon-flag.html">Flag Icons</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/icon-weather.html">Weather Icon</a>
+                                            <a class="nav-link" href="./tech/facilities/survey.php">Survey</a>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-9" aria-controls="submenu-9"><i class="fas fa-fw fa-map-marker-alt"></i>Maps</a>
-                                <div id="submenu-9" class="collapse submenu" style="">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/map-google.html">Google Maps</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/map-vector.html">Vector Maps</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-10" aria-controls="submenu-10"><i class="fas fa-f fa-folder"></i>Menu Level</a>
-                                <div id="submenu-10" class="collapse submenu" style="">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#">Level 1</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-11" aria-controls="submenu-11">Level 2</a>
-                                            <div id="submenu-11" class="collapse submenu" style="">
-                                                <ul class="nav flex-column">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">Level 1</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">Level 2</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#">Level 3</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li> -->
+
                         </ul>
                     </div>
                 </nav>
@@ -310,25 +282,27 @@ if(isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'admin'){
         <!-- ============================================================== -->
         <div class="dashboard-wrapper">
             <!-- <div class="dashboard-ecommerce"> -->
-                <div class="container-fluid dashboard-content ">
-                    <!-- ============================================================== -->
-                    <!-- pageheader  -->
-                    <!-- ============================================================== -->
-                    <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="page-header">
-                                <h2 class="pageheader-title">Portal </h2>
-                    
+            <div class="container-fluid dashboard-content ">
+                <!-- ============================================================== -->
+                <!-- pageheader  -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="page-header">
+                            <h2 class="pageheader-title">Portal </h2>
 
-                                <p class="pageheader-text">Nulla euismod urna eros, sit amet scelerisque torton lectus vel mauris facilisis faucibus at enim quis massa lobortis rutrum.</p>
-                             
-                            </div>
+
+                            <p class="pageheader-text">Nulla euismod urna eros, sit amet scelerisque torton lectus vel mauris facilisis faucibus at enim quis massa lobortis rutrum.</p>
+
                         </div>
                     </div>
- 
-                  
-                    <!-- </div> -->
                 </div>
+
+
+
+
+                <!-- </div> -->
+            </div>
             <!-- </div> -->
             <!-- ============================================================== -->
             <!-- footer -->
@@ -337,7 +311,7 @@ if(isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'admin'){
                 <div class="container-fluid mx-2">
                     <div class="row">
                         <div class="col-xl-7 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="text-md-right footer-links d-none d-sm-block">
+                            <div class="text-md-righ    t footer-links d-none d-sm-block">
                                 <a href="javascript: void(0);">About</a>
                                 <a href="javascript: void(0);">Support</a>
                                 <a href="javascript: void(0);">Contact Us</a>
@@ -358,5 +332,5 @@ if(isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'admin'){
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
 </body>
- 
+
 </html>

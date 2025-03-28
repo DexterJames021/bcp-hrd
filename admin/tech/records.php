@@ -1,16 +1,10 @@
 <!-- tech record  -->
 <?php
-use Admin\Tech\Includes\Class\Employee;
-session_start();
-require_once '../../config/Database.php';
-require_once './includes/class/Employee.php';
-// if (isset($_SESSION['user_id'])) {
-// } else {
-//     header("Location: ../auth/index.php");
-// }
-$employee = new Employee($conn);
-$emp = $employee->select_all();
-$id = $employee->profile_select_one($_SESSION['user_id']);
+require '../../config/Database.php';
+require '../../auth/accesscontrol.php';
+
+$userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
+access_log($userData);
 
 
 ?>
@@ -23,12 +17,74 @@ $id = $employee->profile_select_one($_SESSION['user_id']);
     <!-- icon -->
     <link rel="shortcut icon" href="../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
 
-    <?php include('./includes/_assets.php') ?>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- check if bato-->
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script defer src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- datatable:  cs -->
+    <link rel="stylesheet" href="../../node_modules/datatables.net-dt/css/dataTables.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+
+    <!-- main js -->
+    <link rel="stylesheet" href="../../assets/libs/css/style.css">
+
+    <!-- toastify cs -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <!-- assts csss -->
+    <link rel="stylesheet" href="../../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <link rel="stylesheet" href="../../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
+    <link rel="stylesheet" href="../../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
+
+    <!-- icon -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
+
+    <!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+    <!-- <script  src="../../node_modules/jquery/dist/jquery.min.js"></script> -->
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- DataTable JS -->
+    <script src="../../node_modules/datatables.net/js/dataTables.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <!-- DataTables Buttons -->
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+
+    <!-- JSZip and pdfmake -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+    <!-- main js -->
+    <script src="../../assets/libs/js/main-js.js"></script>
+
+    <!-- custom js -->
+    <script src="./includes/resource/records_admin.js"></script>
+
+    <!-- slimscroll js -->
+    <script src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+
+    <!-- charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <title>Admin Dashboard</title>
 </head>
 
 <body>
+    <script>
+        var userPermissions = <?= json_encode($userData['permissions']); ?>;
+    </script>
     <!-- ============================================================== -->
     <!-- main wrapper -->
     <!-- ============================================================== -->
@@ -41,7 +97,9 @@ $id = $employee->profile_select_one($_SESSION['user_id']);
                 <a class="navbar-brand" href="index.php">
                     <img src="../../assets/images/bcp-hrd-logo.jpg" alt="" class="" style="height: 3rem;width: auto;">
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse " id="navbarSupportedContent">
@@ -52,7 +110,9 @@ $id = $employee->profile_select_one($_SESSION['user_id']);
                             </div>
                         </li>
                         <li class="nav-item dropdown notification">
-                            <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span class="indicator"></span></a>
+                            <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span
+                                    class="indicator"></span></a>
                             <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                                 <li>
                                     <div class="notification-title"> Notification</div>
@@ -60,32 +120,44 @@ $id = $employee->profile_select_one($_SESSION['user_id']);
                                         <div class="list-group">
                                             <a href="#" class="list-group-item list-group-item-action active">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Jeremy Rakestraw</span>accepted your invitation to join the team.
+                                                    <div class="notification-list-user-img"><img src="#" alt=""
+                                                            class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span
+                                                            class="notification-list-user-name">Jeremy
+                                                            Rakestraw</span>accepted your invitation to join the team.
                                                         <div class="notification-date">2 min ago</div>
                                                     </div>
                                                 </div>
                                             </a>
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">John Abraham </span>is now following you
+                                                    <div class="notification-list-user-img"><img src="#" alt=""
+                                                            class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span
+                                                            class="notification-list-user-name">John Abraham </span>is
+                                                        now following you
                                                         <div class="notification-date">2 days ago</div>
                                                     </div>
                                                 </div>
                                             </a>
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Monaan Pechi</span> is watching your main repository
+                                                    <div class="notification-list-user-img"><img src="#" alt=""
+                                                            class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span
+                                                            class="notification-list-user-name">Monaan Pechi</span> is
+                                                        watching your main repository
                                                         <div class="notification-date">2 min ago</div>
                                                     </div>
                                                 </div>
                                             </a>
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Jessica Caruso</span>accepted your invitation to join the team.
+                                                    <div class="notification-list-user-img"><img src="#" alt=""
+                                                            class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span
+                                                            class="notification-list-user-name">Jessica
+                                                            Caruso</span>accepted your invitation to join the team.
                                                         <div class="notification-date">2 min ago</div>
                                                     </div>
                                                 </div>
@@ -131,15 +203,20 @@ $id = $employee->profile_select_one($_SESSION['user_id']);
                             </ul>
                         </li> -->
                         <li class="nav-item dropdown nav-user">
-                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="#" alt="" class="user-avatar-md rounded-circle"></a>
-                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
+                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="#" alt=""
+                                    class="user-avatar-md rounded-circle"></a>
+                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown"
+                                aria-labelledby="navbarDropdownMenuLink2">
                                 <div class="nav-user-info">
                                     <h5 class="mb-0 text-white nav-user-name"> <?= $_SESSION['username'] ?> </h5>
                                     <span class="status"></span><span class="ml-2">Available</span>
                                 </div>
-                                <a class="dropdown-item" href="./settings/profile.php?id=<?= $id['EmployeeID'] ?>"><i class="fas fa-user mr-2"></i>Account</a>
+                                <a class="dropdown-item" href="./settings/emp-info.php?id=<?= $id['EmployeeID'] ?>"><i
+                                        class="fas fa-user mr-2"></i>Account</a>
                                 <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
-                                <a class="dropdown-item" href="../../auth/logout.php"><i class="fas fa-power-off mr-2"></i>Logout</a>
+                                <a class="dropdown-item" href="../../auth/logout.php"><i
+                                        class="fas fa-power-off mr-2"></i>Logout</a>
                             </div>
                         </li>
                     </ul>
@@ -152,11 +229,12 @@ $id = $employee->profile_select_one($_SESSION['user_id']);
         <!-- ============================================================== -->
         <!-- left sidebar -->
         <!-- ============================================================== -->
-        <div class="nav-left-sidebar sidebar-dark ">
+        <div class="nav-left-sidebar sidebar-dark">
             <div class="menu-list">
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <!-- <a class="d-xl-none d-lg-none" href="#">Dashboard</a> -->
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
@@ -171,11 +249,15 @@ $id = $employee->profile_select_one($_SESSION['user_id']);
                             </li>
                             <!-- Selection and Recuitment -->
                             <li class="nav-item ">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fa fa-fw fa-user-circle"></i>Selection and Recuitment <span class="badge badge-success">6</span></a>
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-1" aria-controls="submenu-1"><i
+                                        class="fa fa-fw fa-user-circle"></i>Selection and Recuitment <span
+                                        class="badge badge-success">6</span></a>
                                 <div id="submenu-1" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1-2" aria-controls="submenu-1-2">Lorem, ipsum.</a>
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                                data-target="#submenu-1-2" aria-controls="submenu-1-2">Lorem, ipsum.</a>
                                             <div id="submenu-1-2" class="collapse submenu">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
@@ -194,13 +276,16 @@ $id = $employee->profile_select_one($_SESSION['user_id']);
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="./records-management/Records.php">Lorem, ipsum dolor.</a>
+                                            <a class="nav-link" href="./records-management/Records.php">Lorem, ipsum
+                                                dolor.</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="dashboard-sales.html">Lorem, ipsum dolor.</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1-1" aria-controls="submenu-1-1">Lorem, ipsum dolor.</a>
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                                data-target="#submenu-1-1" aria-controls="submenu-1-1">Lorem, ipsum
+                                                dolor.</a>
                                             <div id="submenu-1-1" class="collapse submenu">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
@@ -220,11 +305,14 @@ $id = $employee->profile_select_one($_SESSION['user_id']);
                             </li>
                             <!-- Talent Management -->
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2"><i class="fa fa-fw fa-rocket"></i>Talent Management</a>
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-2" aria-controls="submenu-2"><i
+                                        class="fa fa-fw fa-rocket"></i>Talent Management</a>
                                 <div id="submenu-2" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/cards.html">Cards <span class="badge badge-secondary">New</span></a>
+                                            <a class="nav-link" href="pages/cards.html">Cards <span
+                                                    class="badge badge-secondary">New</span></a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="pages/general.html">General</a>
@@ -249,37 +337,78 @@ $id = $employee->profile_select_one($_SESSION['user_id']);
                             </li>
                             <!-- Tech & Analytics -->
                             <li class="nav-item">
-                                <a class="nav-link active" href="#" data-toggle="collapse" aria-expanded="true" data-target="#submenu-3" aria-controls="submenu-3"><i class="fas fa-fw fa-chart-pie"></i> Tech & Analytics</a>
-                                <div id="submenu-3" class="collapse submenu show" style="">
+                                <a class="nav-link active" href="#" data-toggle="collapse" aria-expanded="true"
+                                    data-target="#submenu-3" aria-controls="submenu-3"><i
+                                        class="fas fa-fw fa-chart-pie"></i> Tech & Analytics</a>
+                                <div id="submenu-3" class="collapse submenu show">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="./index.php">Facilities and Resources</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="./tasks.php">Task management</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link active" href="./records.php">Records</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3-1" aria-controls="submenu-3-1">Analytics</a>
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                                data-target="#submenu-3-1" aria-controls="submenu-3-1">Facilities &
+                                                Resources</a>
                                             <div id="submenu-3-1" class="collapse submenu">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="./analytics/engagement.php">Engagement insight</a>
+                                                        <a class="nav-link " href="./index.php">Resources Management</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="./analytics/performace.php">Performance metric</a>
+                                                        <a class="nav-link" href="./room_book_list.php">Facility
+                                                            Management</a>
+                                                    </li>
+                                                    <!-- <li class="nav-item">
+                                                        <a class="nav-link" href="./request.php">Bookings and Request</a>
+                                                    </li> -->
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="./records.php">Employee Personnel
+                                                Records</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="./reports.php">Administrative Report</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="./usercontrol.php">Roles and Permission
+                                                Mangement</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                                data-target="#submenu-3-2" aria-controls="submenu-3-2">Analytics</a>
+                                            <div id="submenu-3-2" class="collapse submenu">
+                                                <ul class="nav flex-column">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="./analytics/facilities.php">Monitor
+                                                            Facilities</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="./analytics/effieciency.php">Efficiency analysis</a>
+                                                        <a class="nav-link" href="./analytics/resources.php">Monitor
+                                                            Resources</a>
+                                                    </li>
+                                                    <!-- <li class="nav-item">
+                                                        <a class="nav-link" href="#">Engagement insight</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="./analytics/workforce.php">Workforce optimazition</a>
+                                                        <a class="nav-link"
+                                                            href="./analytics/performace.php">Performance metric</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="./analytics/talent.php">Talent insight</a>
+                                                        <a class="nav-link"
+                                                            href="./analytics/effieciency.php">Efficiency
+                                                            analysis</a>
                                                     </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="./analytics/workforce.php">Workforce
+                                                            optimazition</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="./analytics/talent.php">Talent
+                                                            insight</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link"
+                                                            href="./analytics/retention.php">Retention</a>
+                                                    </li> -->
                                                 </ul>
                                             </div>
                                         </li>
@@ -294,14 +423,17 @@ $id = $employee->profile_select_one($_SESSION['user_id']);
                             </li>
                             <!-- Document and Legal -->
                             <li class="nav-item ">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4"><i class="fab fa-fw fa-wpforms"></i>Document and Legal</a>
-                                <div id="submenu-4" class="collapse submenu" style="">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-4" aria-controls="submenu-4"><i
+                                        class="fab fa-fw fa-wpforms"></i>Document and Legal</a>
+                                <div id="submenu-4" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link" href="pages/form-elements.html">Form Elements</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/form-validation.html">Parsely Validations</a>
+                                            <a class="nav-link" href="pages/form-validation.html">Parsely
+                                                Validations</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="pages/multiselect.html">Multiselect</a>
@@ -317,8 +449,10 @@ $id = $employee->profile_select_one($_SESSION['user_id']);
                             </li>
                             <!-- Performance -->
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5"><i class="fas fa-fw fa-table"></i>Performance</a>
-                                <div id="submenu-5" class="collapse submenu" style="">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-5" aria-controls="submenu-5"><i
+                                        class="fas fa-fw fa-table"></i>Performance</a>
+                                <div id="submenu-5" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link" href="pages/general-table.html">General Tables</a>
@@ -331,8 +465,10 @@ $id = $employee->profile_select_one($_SESSION['user_id']);
                             </li>
                             <!-- Talent management -->
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-6" aria-controls="submenu-6"><i class="fas fa-fw fa-columns"></i>Talent management</a>
-                                <div id="submenu-6" class="collapse submenu" style="">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-6" aria-controls="submenu-6"><i
+                                        class="fas fa-fw fa-columns"></i>Talent management</a>
+                                <div id="submenu-6" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link" href="pages/general-table.html">General Tables</a>
@@ -345,8 +481,10 @@ $id = $employee->profile_select_one($_SESSION['user_id']);
                             </li>
                             <!-- Compensation & benefits -->
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-7" aria-controls="submenu-7"><i class="fas fa-f fa-folder"></i>Compensation & benefits</a>
-                                <div id="submenu-7" class="collapse submenu" style="">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-7" aria-controls="submenu-7"><i
+                                        class="fas fa-f fa-folder"></i>Compensation & benefits</a>
+                                <div id="submenu-7" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link" href="pages/general-table.html">General Tables</a>
@@ -361,7 +499,8 @@ $id = $employee->profile_select_one($_SESSION['user_id']);
                                 Features
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="./task-management/index.php" aria-expanded="false" data-target="#submenu-8" aria-controls="submenu-8">
+                                <a class="nav-link" href="./task-management/index.php" aria-expanded="false"
+                                    data-target="#submenu-8" aria-controls="submenu-8">
                                     <i class="fas fa-fw fa-file"></i> Task-management </a>
                             </li>
 
@@ -376,97 +515,223 @@ $id = $employee->profile_select_one($_SESSION['user_id']);
         <!-- ============================================================== -->
         <!-- wrapper  -->
         <!-- ============================================================== -->
-        <div class="dashboard-wrapper">
-            <div class="container-fluid dashboard-content ">
-                <!-- ============================================================== -->
-                <!-- pageheader  -->
-                <!-- ============================================================== -->
-                <!-- <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="page-header">
-                            <h2 class="pageheader-title">Dashboard</h2>
-
-
-                            <p class="pageheader-text">Nulla euismod urna eros, sit amet scelerisque torton lectus vel mauris facilisis faucibus at enim quis massa lobortis rutrum.</p>
-                            <div class="page-breadcrumb">
-                                <nav aria-label="breadcrumb">
-                                    <ol class="breadcrumb">
-                                        <li class="breadcrumb-item">
-                                        </li>
-                                    </ol>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-                <!-- ============================================================== -->
-                <!-- end pageheader  -->
-                <!-- ============================================================== -->
-                <!-- <div class="ecommerce-widget"> -->
-
-           
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between">
-                                <h2 class="card-title">Records management</h2>
-                            </div>
-
-                            <div class="card-body p-2">
-                                <div class="table-responsive">
-                                    <table id="RecordsTable">
-                                        <thead class="bg-light">
-                                            <tr class="border-0">
-                                                <th class="border-0">#</th>
-                                                <th class="border-0">Name</th>
-                                                <th class="border-0">Email</th>
-                                                <th class="border-0">Phone</th>
-                                                <th class="border-0">Address</th>
-                                                <th class="border-0">Birthday</th>
-                                                <th class="border-0">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php foreach ($emp as $data): ?>
-                                                <tr>
-                                                    <td><?= $data['EmployeeID'] ?></td>
-                                                    <!-- <td>
-                                                        <div class="m-r-10"><img src="#" alt="user" class="rounded" width="45"></div>
-                                                    </td> -->
-                                                    <td>
-                                                        <a href="./settings/profile.php?id=<?= $data['EmployeeID']?>">
-                                                            <?= $data['FirstName'] ?>, <?= $data['LastName'] ?>
-                                                        </a>
-                                                    </td>
-                                                    <td><?= $data['Email'] ?></td>
-                                                    <td><?= $data['Phone'] ?></td>
-                                                    <td><?= $data['Address'] ?></td>
-                                                    <td><?= $data['DOB'] ?></td>
-                                                    <td>
-                                                        <span class="badge-dot mr-1 <?= $data['Status'] == 'Active' ? 'badge-success' : 'badge-danger' ?>">
-                                                            <?php $data['Status'] == 'Active' ? 'Active' : 'Not Active' ?>
-                                                        </span>
-                                                    </td>
-                                                    <!-- </tr>
-                                                    
-                                                    	 	 	
-                                                        <td colspan="9"><a href="#" class="btn btn-outline-light float-right">View Details</a></td>
-                                                    </tr> -->
-                                                <?php endforeach; ?>
-
-                                        </tbody>
-                                    </table>
+        <div class="dashboard-wrapper" id="dashboardWrapper">
+            <?php if ($userData && in_array("VIEW", $userData['permissions'])): ?>
+                <!-- Employee list Records Section -->
+                <div class="container-fluid dashboard-content" id="employeeListView">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between">
+                                    <h2 class="card-title ">Employees Personnel Records</h2>
+                                </div>
+                                <div class="card-body p-2">
+                                    <div class="table-responsive">
+                                        <table id="RecordsTable" class="table table-hover">
+                                            <thead class="thead-light">
+                                                <tr class="border-0">
+                                                    <th class="border-0">Employee ID</th>
+                                                    <th class="border-0">Name</th>
+                                                    <th class="border-0">Email</th>
+                                                    <th class="border-0">Phone</th>
+                                                    <th class="border-0">Address</th>
+                                                    <th class="border-0">Birthday</th>
+                                                    <th class="border-0">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- Employee rows will be populated by JS -->
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- ============================================================== -->
-                    <!-- end recent orders  -->
-
                 </div>
-                <!-- </div> -->
-            </div>
+
+                <!-- Employee Details Tab-->
+                <div class="container-fluid dashboard-content" id="employeeDetailView" style="display: none;">
+                    <div class="row p-2">
+
+                        <!-- overview -->
+                        <div class="card">
+                            <div class="card-title p-3 m-0 d-flex justify-content-between">
+                                <h2>Overview</h2>
+                                <div>
+                                    <button id="backButton" class="btn btn-outline-light d-inline">Back to
+                                        List</button>
+                                    <button type="button" onclick="window.print()" class="btn btn-outline-primary">Download
+                                        as PDF</button>
+                                </div>
+                            </div>
+                            <div class="row p-0">
+                                <div class="row align-items-center">
+                                    <!-- Employee Details -->
+                                    <div class="col-md-8">
+                                        <div class="card">
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item">
+                                                    <span class="fw-bold">Full Name:</span>
+                                                    <span id="employeeFullname" class="float-end text-dark">---</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="fw-bold">Job Role:</span>
+                                                    <span id="employeeJobRole" class="float-end text-dark">---</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="fw-bold">Department:</span>
+                                                    <span id="employeeDepartment" class="float-end text-dark">---</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="fw-bold">Base Salary:</span>
+                                                    <span id="employeeBaseSalary" class="float-end text-dark">---</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="fw-bold">Hired Date:</span>
+                                                    <span id="employeeHiredDate" class="float-end text-dark">---</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="fw-bold">Address:</span>
+                                                    <span id="employeeAddress" class="float-end text-dark">---</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <span class="fw-bold">Employment Status:</span>
+                                                    <span id="employeeStatus" class="float-end text-dark">---</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <!-- Performance Score Chart -->
+                                    <div class="col-md-4 text-center">
+                                        <div class="card px-2">
+                                            <canvas id="performanceChart" width="100" height="100"></canvas>
+                                            <h3 id="performanceScore" class="">89%</h3>
+                                            <i class="fas fa-chart-line"></i> Performance Score
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Training Attended list -->
+                        <div class="card ">
+                            <div class="card-title p-3 d-flex justify-content-between">
+                                <h3><span id="trainingAttendee"></span> Training Attended</h3>
+                                <!-- <div>
+                                    <button id="backButton" class="btn btn-outline-light d-inline">Back to List</button>
+                                </div> -->
+                            </div>
+                            <div class="card-body">
+                                <table id="trainingList">
+                                    <thead>
+                                        <tr>
+                                            <th>Training Name</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <!-- employee info -->
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <h2 class="card-title ">Employees Records</h2>
+                            </div>
+                            <div class="card-body">
+                                <form id="editEmployeeForm" method="POST">
+                                    <input type="hidden" name="edit_id" id="edit_id">
+
+                                    <div class="mb-2">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="edit_name">First Name:</label>
+                                                <input type="text" name="edit_FirstName" id="edit_name" class="form-control"
+                                                    required>
+                                            </div>
+                                            <div class="col">
+                                                <label for="edit_LastName">Last Name:</label>
+                                                <input type="text" name="edit_LastName" id="edit_LastName"
+                                                    class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="edit_email">Email:</label>
+                                                <input type="email" name="edit_email" id="edit_email" class="form-control"
+                                                    required>
+                                            </div>
+                                            <div class="col">
+                                                <label for="edit_phone">Phone:</label>
+                                                <input type="text" name="edit_phone" id="edit_phone" class="form-control"
+                                                    required>
+                                            </div>
+                                            <div class="col">
+                                                <label for="edit_birthday">Birthday:</label>
+                                                <input type="date" name="edit_birthday" id="edit_birthday"
+                                                    class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="edit_address">Address:</label>
+                                        <input type="text" name="edit_address" id="edit_address" class="form-control"
+                                            required>
+                                    </div>
+                                    <div class="mb-2">
+                                        <button type="submit" class="btn btn-outline-primary">Save Changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+
+
+                        <!-- <div>JOB description:
+                                            overview: employee records, department ;<br>
+                                            Performance: trainings attended, Chart evaluation rate<br>
+                                            Compensation: salary payrolls <br>
+                                            user acccounts (optional) <br>
+                                            ATTACHMENTS:</div> -->
+                    </div>
+                </div>
+
+                <!-- bs notification -->
+                <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                    <div id="status" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-body bg-success text-light">
+                            Updated Successfully!
+                        </div>
+                    </div>
+                    <div id="error" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-body bg-success text-light">
+                            Something went wrong.
+                        </div>
+                    </div>
+                    <div id="required" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-body bg-success text-light">
+                            All fields are required
+                        </div>
+                    </div>
+                </div>
+
+            <?php else: ?>
+                <?php include_once "../403.php"; ?>
+            <?php endif; ?>
         </div>
+
         <!-- ============================================================== -->
         <!-- end wrapper  -->
         <!-- ============================================================== -->

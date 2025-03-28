@@ -152,7 +152,7 @@ session_start();
                                             <a class="nav-link active" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3-1" aria-controls="submenu-3-1">Analytics</a>
                                             <div id="submenu-3-1" class="collapse submenu show">
                                                 <ul class="nav flex-column">
-                                                <li class="nav-item">
+                                                    <li class="nav-item">
                                                         <a class="nav-link" href="./engagement.php">Engagement insight</a>
                                                     </li>
                                                     <li class="nav-item">
@@ -166,6 +166,9 @@ session_start();
                                                     </li>
                                                     <li class="nav-item">
                                                         <a class="nav-link" href="./talent.php">Talent insight</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="./retention.php">Retention</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -272,14 +275,16 @@ session_start();
                                 <h2 class="card-title text-align-center">Workforce optimazition</h2>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="card col-5 ">
-                                <canvas id="effieciency-1"></canvas>
+                        <div class="card">
+                            <div class="block">
+                                <canvas id="bubbleChart"></canvas>
                             </div>
-                            <div class="card col-5">
-                                <canvas id="effieciency-2"></canvas>
+                            <div>
+                                <canvas id="stackedBarChart"></canvas>
                             </div>
+                            <div id="orgChart" style="height: 500px;"></div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -292,5 +297,119 @@ session_start();
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
 </body>
+<script>
+    $.ajax({
+        url: "../includes/class/get_workforce.php",
+        method: "GET",
+        success: function(data) {
+            const jsonData = JSON.parse(data);
+
+            const employeeNames = [...new Set(jsonData.stacked_bar_chart.map(item => item.employee_name))];
+            const taskNames = [...new Set(jsonData.stacked_bar_chart.map(item => item.task_name))];
+            const datasets = taskNames.map(task => ({
+                label: task,
+                data: employeeNames.map(employee => {
+                    const record = jsonData.stacked_bar_chart.find(item => item.employee_name === employee && item.task_name === task);
+                    return record ? record.total_tasks : 0;
+                }),
+                backgroundColor: getRandomColor()
+            }));
+
+            new Chart(document.getElementById('stackedBarChart'), {
+                type: 'bar',
+                data: {
+                    labels: employeeNames,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Workload Distribution by Employees'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true
+                        },
+                        y: {
+                            stacked: true
+                        }
+                    }
+                }
+            });
+        }
+    });
+
+    $.ajax({
+        url: "../includes/class/get_workforce.php",
+        method: "GET",
+        success: function(data) {
+            const jsonData = JSON.parse(data);
+
+            const chartData = jsonData.bubble_chart.map(item => ({
+                x: item.workload,
+                y: item.productivity,
+                r: Math.random() * 15 + 5 // Bubble size can represent task count
+            }));
+
+            new Chart(document.getElementById('bubbleChart'), {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                        label: 'Workload vs Productivity',
+                        data: chartData,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Workload vs Productivity'
+                        }
+                    }
+                }
+            });
+        }
+    });
+
+    google.charts.load('current', {
+        'packages': ['orgchart']
+    });
+    google.charts.setOnLoadCallback(drawOrgChart);
+
+    function drawOrgChart() {
+        $.ajax({
+            url: "../includes/class/get_workforce.php",
+            method: "GET",
+            success: function(data) {
+                const jsonData = JSON.parse(data);
+
+                const chartData = jsonData.org_chart.map(item => [
+                    item.manager_name || '', item.employee_name, item.task_name || ''
+                ]);
+                chartData.unshift([{
+                    label: 'Manager'
+                }, {
+                    label: 'Employee'
+                }, {
+                    role: 'tooltip',
+                    type: 'string'
+                }]);
+
+                const dataTable = google.visualization.arrayToDataTable(chartData);
+
+                const chart = new google.visualization.OrgChart(document.getElementById('orgChart'));
+                chart.draw(dataTable, {
+                    allowHtml: true
+                });
+            }
+        });
+    }
+</script>
 
 </html>
