@@ -1,0 +1,207 @@
+body {
+    background-color: #f8f9fa;
+}
+
+h1 {
+    color: #343a40;
+}
+
+.table1 {
+    background-color: #ffffff;
+}
+
+.table th {
+    background-color: #343a40;
+    color: #ffffff;
+}
+
+.modal-header {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+.modal-footer button {
+    margin-left: 10px;
+}
+/* Basic reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Body and Container Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa; /* Light background color */
+}
+
+.container {
+    max-width: 1200px; /* Maximum width for larger screens */
+    margin: 0 auto; /* Center container */
+    padding: 20px; /* Padding around container */
+}
+
+/* Heading Styles */
+h1 {
+    margin-bottom: 20px; /* Space below heading */
+    color: #343a40; /* Dark text color */
+}
+
+/* Button Styles */
+.btn {
+    margin-right: 10px; /* Space between buttons */
+}
+
+/* Table Styles */
+.table {
+    background-color: #ffffff; /* White background for table */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.table1 th,
+.table1 td {
+    vertical-align: middle; /* Center content vertically */
+}
+
+.table1 thead {
+    background-color: #007bff; /* Primary color for header */
+    color: white; /* White text color for header */
+}
+
+/* Modal Styles */
+.modal-header {
+    background-color: #007bff; /* Primary color for modal header */
+    color: white; /* White text color */
+}
+
+.modal-footer {
+    background-color: #f1f1f1; /* Light background for footer */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px; /* Reduced padding on smaller screens */
+    }
+
+    h1 {
+        font-size: 1.5rem; /* Smaller heading on mobile */
+    }
+
+    .table {
+        font-size: 14px; /* Smaller font size for table */
+    }
+
+    .btn {
+        width: 100%; /* Full width buttons on mobile */
+        margin-bottom: 10px; /* Space between buttons */
+    }
+}
+
+/* Ensure the modal is full width on smaller screens */
+@media (max-width: 576px) {
+    .modal-dialog {
+        max-width: 90%; /* Make modal full width on mobile */
+        margin: 1.75rem auto; /* Center modal */
+    }
+}
+.btn-action {
+    width: 100px; /* Fixed width for buttons */
+    display: inline-block; /* Ensure buttons are inline-block elements */
+    text-align: center; /* Center text within buttons */
+    margin-right: 10px; /* Space between the buttons */
+}
+
+.btn-action:last-child {
+    margin-right: 0; /* Remove margin from the last button */
+}
+
+/* Custom container for responsive table */
+.custom-table-container {
+    overflow-x: auto;
+}
+
+/* Custom styling for long text fields in job postings table */
+.custom-long-text {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.custom-long-text:hover {
+    white-space: normal;
+    overflow: visible;
+}
+.box {
+    background-color: #f4f7fa;
+    border: 1px solid #d1d1d1;
+    text-align: center;
+    padding: 20px;
+    transition: all 0.3s ease;
+    position: relative; /* Needed for positioning the icon inside the box */
+}
+
+/* Icon inside the box - Positioned to the right */
+.icon-box {
+    position: flex;
+    top: 10px; /* Adjust position from the top */
+    right: 10px; /* Adjust position from the right side */
+    font-size: 24px;
+    color: #4c8bf5; /* Blue color for the icon */
+}
+
+/* Styling for the buttons inside the boxes */
+.btn-primary {
+    background-color: #4c8bf5; /* Set the same blue color for all buttons */
+    border: none;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Add icon inside the button */
+.btn-primary i {
+    margin-right: 8px;
+}
+
+/* Count text styling */
+.count {
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Hover effect for the boxes */
+.box:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+}
+
+/* Adjust gap between buttons in the container */
+.d-flex {
+    display: flex;
+    gap: 15px;  /* Increased gap between boxes */
+}
+
+/* Adjust width of the boxes */
+.box {
+    width: 200px; /* Increased width for better content fit */
+}
+ /* Sticky header styling */
+ .sticky-header {
+    position: sticky;
+    top: 0; /* Keeps the header at the top of the table when scrolling */
+    background-color: #f4f7fa; /* Light background to make it stand out */
+    z-index: 1; /* Makes sure the header stays on top */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: adds a shadow for a nicer effect */
+}
+
+/* Table responsive container */
+.table-responsive {
+    max-height: 350px; /* Fixed height for the table container */
+    overflow-y: auto; /* Scrollable table body */
+}

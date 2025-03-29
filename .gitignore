@@ -1,6 +1,5 @@
 #############
 *.txt
-bpa/*
-
-
-
+*.vuerd
+*.drawio
+bcp-hrd.code-workspace
