@@ -2,7 +2,6 @@
 <?php
 session_start();
 
-$BaseURL = "";
 
 ?>
 <!doctype html>
@@ -215,284 +214,7 @@ $BaseURL = "";
         <!-- ============================================================== -->
         <!-- left sidebar -->
         <!-- ============================================================== -->
-        <div class="nav-left-sidebar sidebar-dark ">
-            <div class="menu-list">
-                <nav class="navbar navbar-expand-lg navbar-light">
-                    <!-- <a class="d-xl-none d-lg-none" href="#">Dashboard</a> -->
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav flex-column">
-                            <li class="nav-divider">
-                                Human Resource Dept.
-                            </li>
-                            <li class="nav-item ">
-                                <a class="nav-link " href="../index.php">
-                                    <i class="fas fa-fw fa-home"></i> Dashboard
-                                </a>
-                            </li>
-                            <!-- Selection and Recuitment -->
-                            <li class="nav-item ">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                                    data-target="#submenu-1" aria-controls="submenu-1"><i
-                                        class="fa fa-fw fa-user-circle"></i>Selection and Recuitment <span
-                                        class="badge badge-success">6</span></a>
-                                <div id="submenu-1" class="collapse submenu">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                                                data-target="#submenu-1-2" aria-controls="submenu-1-2">Lorem, ipsum.</a>
-                                            <div id="submenu-1-2" class="collapse submenu">
-                                                <ul class="nav flex-column">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="index.html">Lorem.</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">lorem1</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">Lorem.</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">Lorem.</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="./records-management/Records.php">Lorem, ipsum
-                                                dolor.</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="dashboard-sales.html">Lorem, ipsum dolor.</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                                                data-target="#submenu-1-1" aria-controls="submenu-1-1">Lorem, ipsum
-                                                dolor.</a>
-                                            <div id="submenu-1-1" class="collapse submenu">
-                                                <ul class="nav flex-column">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">Lorem, ipsum dolor.</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">Lorem, ipsum dolor.</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">Lorem, ipsum dolor.</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <!-- Talent Management -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                                    data-target="#submenu-2" aria-controls="submenu-2"><i
-                                        class="fa fa-fw fa-rocket"></i>Talent Management</a>
-                                <div id="submenu-2" class="collapse submenu">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/cards.html">Cards <span
-                                                    class="badge badge-secondary">New</span></a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/general.html">General</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/carousel.html">Carousel</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/listgroup.html">Group</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/typography.html">Typography</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/accordions.html">Accordions</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/tabs.html">Tabs</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <!-- Tech & Analytics -->
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#" data-toggle="collapse" aria-expanded="true"
-                                    data-target="#submenu-3" aria-controls="submenu-3"><i
-                                        class="fas fa-fw fa-chart-pie"></i> Tech & Analytics</a>
-                                <div id="submenu-3" class="collapse submenu show">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                                                data-target="#submenu-3-1" aria-controls="submenu-3-1">Facilities &
-                                                Resources</a>
-                                            <div id="submenu-3-1" class="collapse submenu">
-                                                <ul class="nav flex-column">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link " href="./index.php">Resources Management</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="./room_book_list.php">Facility
-                                                            Management</a>
-                                                    </li>
-                                                    <!-- <li class="nav-item">
-                                                        <a class="nav-link" href="./request.php">Bookings and Request</a>
-                                                    </li> -->
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="./records.php">Employee Personnel Records</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="./reports.php">Administrative Report</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link active" href="./usercontrol.php">Roles and Permission
-                                                Mangement</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                                                data-target="#submenu-3-2" aria-controls="submenu-3-2">Analytics</a>
-                                            <div id="submenu-3-2" class="collapse submenu">
-                                                <ul class="nav flex-column">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="./analytics/facilities.php">Monitor
-                                                            Facilities</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="./analytics/resources.php">Monitor
-                                                            Resources</a>
-                                                    </li>
-                                                    <!-- <li class="nav-item">
-                                                        <a class="nav-link" href="#">Engagement insight</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link"
-                                                            href="./analytics/performace.php">Performance metric</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link"
-                                                            href="./analytics/effieciency.php">Efficiency analysis</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="./analytics/workforce.php">Workforce
-                                                            optimazition</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="./analytics/talent.php">Talent
-                                                            insight</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link"
-                                                            href="./analytics/retention.php">Retention</a>
-                                                    </li> -->
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <!-- <li class="nav-item">
-                                            <a class="nav-link" href="pages/chart-sparkline.html">Sparkline</a>
-                                        </li> -->
-                                        <!-- <li class="nav-item">
-                                            <a class="nav-link" href="pages/chart-gauge.html">Guage</a>
-                                        </li> -->
-                                    </ul>
-                                </div>
-                            </li>
-                            <!-- Document and Legal -->
-                            <li class="nav-item ">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                                    data-target="#submenu-4" aria-controls="submenu-4"><i
-                                        class="fab fa-fw fa-wpforms"></i>Document and Legal</a>
-                                <div id="submenu-4" class="collapse submenu">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/form-elements.html">Form Elements</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/form-validation.html">Parsely
-                                                Validations</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/multiselect.html">Multiselect</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/datepicker.html">Date Picker</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/bootstrap-select.html">Bootstrap Select</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <!-- Performance -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                                    data-target="#submenu-5" aria-controls="submenu-5"><i
-                                        class="fas fa-fw fa-table"></i>Performance</a>
-                                <div id="submenu-5" class="collapse submenu">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/general-table.html">General Tables</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/data-tables.html">Data Tables</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <!-- Talent management -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                                    data-target="#submenu-6" aria-controls="submenu-6"><i
-                                        class="fas fa-fw fa-columns"></i>Talent management</a>
-                                <div id="submenu-6" class="collapse submenu">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/general-table.html">General Tables</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/data-tables.html">Data Tables</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <!-- Compensation & benefits -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                                    data-target="#submenu-7" aria-controls="submenu-7"><i
-                                        class="fas fa-f fa-folder"></i>Compensation & benefits</a>
-                                <div id="submenu-7" class="collapse submenu">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/general-table.html">General Tables</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/data-tables.html">Data Tables</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="nav-divider">
-                                Features
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="./task-management/index.php" aria-expanded="false"
-                                    data-target="#submenu-8" aria-controls="submenu-8">
-                                    <i class="fas fa-fw fa-file"></i> Task-management </a>
-                            </li>
-
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-        </div>
+        <?php include '../sideandnavbar.php'; ?>
         <!-- ============================================================== -->
         <!-- end left sidebar -->
         <!-- ============================================================== -->
@@ -519,46 +241,46 @@ $BaseURL = "";
 
                 <!-- Tab Content -->
                 <!-- <div class="tab-content" id="dashboardTabContent"> -->
-                    <!-- role spermission Tab -->
-                    <!-- <div class="tab-pane fade show active" id="role-permission" role="tabpanel"
+                <!-- role spermission Tab -->
+                <!-- <div class="tab-pane fade show active" id="role-permission" role="tabpanel"
                         aria-labelledby="role-permission-tab"> -->
-                        <!-- table user role -->
-                        <div class="row">
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                <div class="card">
-                                    <div class="card-header d-flex justify-content-between align-text-center">
-                                        <h2 class="card-title ">Roles and Permissions</h2>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-outline-primary float-right"
-                                                data-toggle="modal" data-target="#NewRole">+ Roles</button>
-                                             <!-- <button type="button" class="btn btn-outline-primary float-right"
+                <!-- table user role -->
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-text-center">
+                                <h2 class="card-title ">Roles and Permissions</h2>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-primary float-right"
+                                        data-toggle="modal" data-target="#NewRole">+ Roles</button>
+                                    <!-- <button type="button" class="btn btn-outline-primary float-right"
                                                 data-toggle="modal" data-target="#NewPermission">+ Permission</button>  -->
-                                            <button type="button" class="btn btn-outline-primary float-right"
-                                                data-toggle="modal" data-target="#AsignAccess">+ Assign</button>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table id="usercontrolTable" class="table table-hover" style="width:100%">
-                                                <thead class="thead-light">
-                                                    <tr>
-                                                        <th>ID</th>
-                                                        <th>Role/th>
-                                                        <th>Permission</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody></tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+                                    <button type="button" class="btn btn-outline-primary float-right"
+                                        data-toggle="modal" data-target="#AsignAccess">+ Assign</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="usercontrolTable" class="table table-hover" style="width:100%">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Role/th>
+                                                <th>Permission</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    <!-- roles Tab -->
-                    <!-- <div class="tab-pane fade" id="roles" role="tabpanel" aria-labelledby="roles-tab">
+            <!-- roles Tab -->
+            <!-- <div class="tab-pane fade" id="roles" role="tabpanel" aria-labelledby="roles-tab">
                         <div class="row">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="card">
@@ -589,8 +311,8 @@ $BaseURL = "";
                         </div>
                     </div> -->
 
-                    <!-- permision Tab -->
-                    <!-- <div class="tab-pane fade" id="permissions" role="tabpanel" aria-labelledby="permissions-tab">
+            <!-- permision Tab -->
+            <!-- <div class="tab-pane fade" id="permissions" role="tabpanel" aria-labelledby="permissions-tab">
                         <div class="row">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="card">
@@ -619,177 +341,175 @@ $BaseURL = "";
                         </div>
                     </div> -->
 
-                <!-- </div> -->
+            <!-- </div> -->
 
-                <!-- modaladd roles -->
-                <div id="add-modal" class="row">
-                    <div class="modal fade" id="NewRole" role="dialog">
-                        <div class="modal-dialog">
-
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">New Role</h4>
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-
-                                </div>
-                                <div class="modal-body">
-                                    <form id="new_role_form">
-
-                                        <div class="mb-3">
-                                            <label for="name" class="form-label">Role Name:</label>
-                                            <input type="text" class="form-control" required name="RoleName"
-                                                id="RoleName" placeholder="Role title">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="category" class="form-label">Description:</label>
-                                            <input type="text" class="form-control" name="Description" id="Description"
-                                                placeholder="description...">
-                                            <!-- <label for="task" class="task-valid d-none text-danger">This field is required!</label> -->
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" id="submit-btn"
-                                                class="btn btn-primary">Submit</button>
-                                            <button type="button" id="close-btn" class="btn btn-default"
-                                                data-dismiss="modal">Close</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- modal add permision -->
-                <div id="add-modal" class="row">
-                    <div class="modal fade" id="NewPermission" role="dialog">
-                        <div class="modal-dialog">
-
-                            <!-- Modal content-->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">New Permission</h4>
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-
-                                </div>
-                                <div class="modal-body">
-                                    <form id="new_permission_form">
-
-                                        <div class="mb-3">
-                                            <label for="name" class="form-label">Name:</label>
-                                            <input type="text" class="form-control" required name="name" id="name"
-                                                placeholder="Asset Name">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="category" class="form-label">Description:</label>
-                                            <input type="text" class="form-control" name="description" id="description"
-                                                placeholder="description">
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" id="submit-btn"
-                                                class="btn btn-primary">Submit</button>
-                                            <button type="button" id="close-btn" class="btn btn-default"
-                                                data-dismiss="modal">Close</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Assign Role & Permission Modal -->
-                <div class="modal fade" id="AsignAccess" role="dialog" aria-labelledby="editPermissionModalLabel">
+            <!-- modaladd roles -->
+            <div id="add-modal" class="row">
+                <div class="modal fade" id="NewRole" role="dialog">
                     <div class="modal-dialog">
+
+                        <!-- Modal content-->
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Assign Permissions</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                                <h4 class="modal-title">New Role</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
                             </div>
                             <div class="modal-body">
-                                <form id="editPermissionForm">
-                                    <!-- Select Role -->
-                                    <div class="form-group">
-                                        <label for="roleSelect">Select Role:</label>
-                                        <select id="roleSelect" class="form-control">
-                                            <!-- Roles will be populated here dynamically -->
-                                        </select>
-                                    </div>
+                                <form id="new_role_form">
 
-                                    <!-- Select Permissions -->
-                                    <div class="form-group">
-                                        <label for="permissionSelect">Select Permissions:</label>
-                                        <select id="permissionSelect" class="form-control" multiple>
-                                            <!-- Permissions will be populated here dynamically -->
-                                        </select>
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Role Name:</label>
+                                        <input type="text" class="form-control" required name="RoleName" id="RoleName"
+                                            placeholder="Role title">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="category" class="form-label">Description:</label>
+                                        <input type="text" class="form-control" name="Description" id="Description"
+                                            placeholder="description...">
+                                        <!-- <label for="task" class="task-valid d-none text-danger">This field is required!</label> -->
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" id="submit-btn" class="btn btn-primary">Submit</button>
+                                        <button type="button" id="close-btn" class="btn btn-default"
+                                            data-dismiss="modal">Close</button>
                                     </div>
                                 </form>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" id="savePermissionsBtn">Save
-                                    Changes</button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- update roles and permission -->
-                <div class="modal fade" id="editAccess" role="dialog" aria-labelledby="editPermissionModalLabel">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="editPermissionModalLabel">Edit Permissions</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="editPermissionForm">
-                                    <input type="hidden" id="modalRoleId">
-                                    <div id="permissionList">
-                                        <!-- Checkboxes will be populated dynamically here -->
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" id="EditedRolesPerm">Save
-                                    Changes</button>
-                                <button type="button" id="close-btn" class="btn btn-default"
-                                    data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- bs notification -->
-                <div class="toast-container position-fixed bottom-0 end-0 p-3">
-                    <div id="added" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-body bg-success text-light">
-                            Added, Successfully.
-                        </div>
-                    </div>
-                    <div id="edited" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-body bg-success text-light">
-                            Updated, Successfully.
-                        </div>
-                    </div>
-                    <div id="deleted" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-body bg-success text-light">
-                            Deleted, Successfully.
-                        </div>
-                    </div>
-                    <div id="error" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-body bg-success text-light">
-                            Something went wrong.
-                        </div>
-                    </div>
-                </div>
-
             </div>
+
+            <!-- modal add permision -->
+            <div id="add-modal" class="row">
+                <div class="modal fade" id="NewPermission" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">New Permission</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                            </div>
+                            <div class="modal-body">
+                                <form id="new_permission_form">
+
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Name:</label>
+                                        <input type="text" class="form-control" required name="name" id="name"
+                                            placeholder="Asset Name">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="category" class="form-label">Description:</label>
+                                        <input type="text" class="form-control" name="description" id="description"
+                                            placeholder="description">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" id="submit-btn" class="btn btn-primary">Submit</button>
+                                        <button type="button" id="close-btn" class="btn btn-default"
+                                            data-dismiss="modal">Close</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assign Role & Permission Modal -->
+            <div class="modal fade" id="AsignAccess" role="dialog" aria-labelledby="editPermissionModalLabel">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Assign Permissions</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editPermissionForm">
+                                <!-- Select Role -->
+                                <div class="form-group">
+                                    <label for="roleSelect">Select Role:</label>
+                                    <select id="roleSelect" class="form-control">
+                                        <!-- Roles will be populated here dynamically -->
+                                    </select>
+                                </div>
+
+                                <!-- Select Permissions -->
+                                <div class="form-group">
+                                    <label for="permissionSelect">Select Permissions:</label>
+                                    <select id="permissionSelect" class="form-control" multiple>
+                                        <!-- Permissions will be populated here dynamically -->
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="savePermissionsBtn">Save
+                                Changes</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- update roles and permission -->
+            <div class="modal fade" id="editAccess" role="dialog" aria-labelledby="editPermissionModalLabel">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editPermissionModalLabel">Edit Permissions</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editPermissionForm">
+                                <input type="hidden" id="modalRoleId">
+                                <div id="permissionList">
+                                    <!-- Checkboxes will be populated dynamically here -->
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="EditedRolesPerm">Save
+                                Changes</button>
+                            <button type="button" id="close-btn" class="btn btn-default"
+                                data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- bs notification -->
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="added" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body bg-success text-light">
+                        Added, Successfully.
+                    </div>
+                </div>
+                <div id="edited" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body bg-success text-light">
+                        Updated, Successfully.
+                    </div>
+                </div>
+                <div id="deleted" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body bg-success text-light">
+                        Deleted, Successfully.
+                    </div>
+                </div>
+                <div id="error" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body bg-success text-light">
+                        Something went wrong.
+                    </div>
+                </div>
+            </div>
+
         </div>
+    </div>
     </div>
     <!-- ============================================================== -->
     <!-- end wrapper  -->
