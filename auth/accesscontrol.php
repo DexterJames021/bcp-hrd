@@ -1,25 +1,24 @@
 <?php
 session_start();
 
-// Redirect if not logged in
-if (!isset($_SESSION['usertype']) || !isset($_SESSION['user_id'])){
+
+if (!isset($_SESSION['usertype']) || !isset($_SESSION['user_id'])) {
     header("Location: ../");
     exit();
 }
+
 function getUserRoleAndPermissions($user_id, $conn)
 {
-    // Fetch latest user role
     $stmt = $conn->prepare("SELECT usertype FROM users WHERE id = ?");
     $stmt->execute([$user_id]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$user) {
-        return null; // Return null if no user found
+        return null;
     }
 
     $role = $user['usertype'];
 
-    // Fetch role permissions
     $stmt = $conn->prepare("
         SELECT p.name 
         FROM permissions p 
@@ -41,12 +40,13 @@ function hasPermission($permission)
 }
 
 
-function access_log($userData){
-echo "<script>console.log('@@@@@@@@@@@@@@@@ ACCESS CONTROL @@@@@@@@@@@@@@@@')</script>";
-echo "<script>console.log('Role: " . $userData['role'] . "')</script>";
-foreach ($userData['permissions'] as $value) {
-    echo "<script>console.log('Permission: " . $value . "')</script>";
-}
-echo "<script>console.log('@@@@@@@@@@@@@@@@ ACCESS CONTROL @@@@@@@@@@@@@@@@')</script>";
+function access_log($userData)
+{
+    echo "<script>console.log('@@@@@@@@@@@@@@@@ ACCESS CONTROL @@@@@@@@@@@@@@@@')</script>";
+    echo "<script>console.log('Role: " . $userData['role'] . "')</script>";
+    foreach ($userData['permissions'] as $value) {
+        echo "<script>console.log('Permission: " . $value . "')</script>";
+    }
+    echo "<script>console.log('@@@@@@@@@@@@@@@@ ACCESS CONTROL @@@@@@@@@@@@@@@@')</script>";
 
 }

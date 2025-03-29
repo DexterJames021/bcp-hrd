@@ -271,9 +271,9 @@ session_start();
                                         <li class="nav-item">
                                             <a class="nav-link" href="./request_resources.php">Request Resources</a>
                                         </li>
-                                        <li class="nav-item">
+                                        <!-- <li class="nav-item">
                                             <a class="nav-link active" href="./survey.php">Survey</a>
-                                        </li>
+                                        </li> -->
                                     </ul>
                                 </div>
                             </li>

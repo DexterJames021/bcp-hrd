@@ -1,5 +1,10 @@
 <?php
-require "../config/db_talent.php"; // Ensure this file has a working DB connection
+require "../config/db_talent.php";
+require '../auth/mysqli_accesscontrol.php';
+
+$userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
+access_log($userData);
+
 
 // Fetch total employees
 $queryEmployees = "SELECT COUNT(*) AS total FROM employees";

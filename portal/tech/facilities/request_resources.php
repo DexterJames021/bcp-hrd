@@ -261,9 +261,9 @@ if (!isset($_SESSION['usertype']) || $_SESSION['usertype'] != 'employee') {
                                         <li class="nav-item">
                                             <a class="nav-link active" href="./request_resources.php">Request Resources</a>
                                         </li>
-                                        <li class="nav-item">
+                                        <!-- <li class="nav-item">
                                             <a class="nav-link" href="./survey.php">Survey</a>
-                                        </li>
+                                        </li> -->
                                     </ul>
                                 </div>
                             </li>

@@ -1,5 +1,9 @@
 <?php
-session_start();
+require '../../config/Database.php';
+require '../../auth/accesscontrol.php';
+
+$userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
+access_log($userData);
 
 ?>
 <!doctype html>
@@ -8,6 +12,9 @@ session_start();
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- icon -->
+    <link rel="shortcut icon" href="../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -57,6 +64,9 @@ session_start();
 </head>
 
 <body>
+    <script>
+        var userPermissions = <?= json_encode($userData['permissions']); ?>;
+    </script>
     <!-- ============================================================== -->
     <!-- main wrapper -->
     <!-- ============================================================== -->
@@ -64,7 +74,7 @@ session_start();
         <!-- ============================================================== -->
         <!-- navbar -->
         <!-- ============================================================== -->
-        <div class="dashboard-header ">
+        <!-- <div class="dashboard-header ">
             <nav class="navbar navbar-expand-lg bg-white fixed-top  ">
                 <a class="navbar-brand" href="index.php">
                     <img src="../../assets/images/bcp-hrd-logo.jpg" alt="" class="" style="height: 3rem;width: auto;">
@@ -142,38 +152,6 @@ session_start();
                                 </li>
                             </ul>
                         </li>
-                        <!-- <li class="nav-item dropdown connection">
-                            <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-fw fa-th"></i> </a>
-                            <ul class="dropdown-menu dropdown-menu-right connection-dropdown">
-                                <li class="connection-list">
-                                    <div class="row">
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/github.png" alt="" > <span>Github</span></a>
-                                        </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/dribbble.png" alt="" > <span>Dribbble</span></a>
-                                        </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/dropbox.png" alt="" > <span>Dropbox</span></a>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/bitbucket.png" alt=""> <span>Bitbucket</span></a>
-                                        </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/mail_chimp.png" alt="" ><span>Mail chimp</span></a>
-                                        </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/slack.png" alt="" > <span>Slack</span></a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="conntection-footer"><a href="#">More</a></div>
-                                </li>
-                            </ul>
-                        </li> -->
                         <li class="nav-item dropdown nav-user">
                             <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="#" alt=""
@@ -193,7 +171,7 @@ session_start();
                     </ul>
                 </div>
             </nav>
-        </div>
+        </div> -->
         <!-- ============================================================== -->
         <!-- end navbar -->
         <!-- ============================================================== -->
@@ -208,96 +186,70 @@ session_start();
         <!-- wrapper  -->
         <!-- ============================================================== -->
         <div class="dashboard-wrapper">
-            <div class="container-fluid dashboard-content ">
-                <!-- ============================================================== -->
-                <!-- pageheader  -->
-                <!-- ============================================================== -->
+            <?php if ($userData && in_array("VIEW", $userData['permissions'])): ?>
+                <div class="container-fluid dashboard-content ">
+                    <!-- ============================================================== -->
+                    <!-- pageheader  -->
+                    <!-- ============================================================== -->
 
-                <!-- table log gererate report ng bookings table -->
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between ">
-                                <h1>Resource Usage Report</h1>
-                                <div>
-                                    <button type="button" class="btn btn-primary float-right" data-toggle="modal">AI
-                                        Generate Report</button>
+                    <!-- table log gererate report ng bookings table -->
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between ">
+                                    <h1>Employee Usage Report</h1>
+                                    <div>
+                                        <button type="button" class="btn btn-primary float-right" data-toggle="modal">AI
+                                            Generate Report</button>
+                                    </div>
                                 </div>
+                                <div class="card-body">
+                                    <table id="LogbookingTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Employee</th>
+                                                <th>Room</th>
+                                                <th>Date</th>
+                                                <th>Time</th>
+                                                <th>Purpose</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                                <div class="card-footer"></div>
                             </div>
-                            <div class="card-body">
-                                <table id="LogbookingTable">
-                                    <thead>
-                                        <tr>
-                                            <th>Employee</th>
-                                            <th>Room</th>
-                                            <th>Date</th>
-                                            <th>Time</th>
-                                            <th>Purpose</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-                            <div class="card-footer"></div>
                         </div>
                     </div>
+
                 </div>
+            <?php else: ?>
+                <?php include_once "../403.php"; ?>
+            <?php endif; ?>
+        </div>
 
-                <!-- //todo: button na calendar or table list -->
-                <!-- rooms table -->
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h1>Facility Management Report</h1>
-                                <button type="button" class="btn btn-primary float-right" data-toggle="modal">AI
-                                    Generate Report</button>
-                            </div>
-                            <div class="card-body">
-                                <table id="roomTable">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Location</th>
-                                            <th>Capacity</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-                            <div class="card-footer"></div>
-                        </div>
-                    </div>
+        <!-- bs notification -->
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="room_added" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body bg-success text-light">
+                    Added, Successfully.
                 </div>
-
-
-                <!-- bs notification -->
-                <div class="toast-container position-fixed bottom-0 end-0 p-3">
-                    <div id="room_added" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-body bg-success text-light">
-                            Added, Successfully.
-                        </div>
-                    </div>
-                    <div id="status" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-body bg-success text-light">
-                            Status updated and email sent!
-                        </div>
-                    </div>
-                    <div id="done" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-body bg-success text-light">
-                            Booking marked as done.
-                        </div>
-                    </div>
-                    <div id="error" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-body bg-danger text-light">
-                            Something went wrong.
-                        </div>
-                    </div>
+            </div>
+            <div id="status" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body bg-success text-light">
+                    Status updated and email sent!
                 </div>
-
+            </div>
+            <div id="done" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body bg-success text-light">
+                    Booking marked as done.
+                </div>
+            </div>
+            <div id="error" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body bg-danger text-light">
+                    Something went wrong.
+                </div>
             </div>
         </div>
         <!-- ============================================================== -->

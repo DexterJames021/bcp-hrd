@@ -12,6 +12,9 @@ access_log($userData);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <!-- icon -->
+    <link rel="shortcut icon" href="../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- check if bato-->
@@ -372,13 +375,13 @@ access_log($userData);
                                         <div class="card-header d-flex justify-content-between">
                                             <h2>Facility Lists</h2>
                                             <?php if ($userData && in_array("CREATE", $userData['permissions'])): ?>
-                                                <button type="button" class="btn float-right"
-                                                    data-toggle="modal" data-target="#AddroomModal">
+                                                <button type="button" class="btn float-right" data-toggle="modal"
+                                                    data-target="#AddroomModal">
                                                     <i class="bi bi-plus-circle-fill text-primary" style="font-size:large;"></i>
                                                 </button>
                                             <?php else: ?>
-                                                <button type="button" class="btn float-right"
-                                                    data-toggle="modal" data-target="#AddroomModal" disabled>
+                                                <button type="button" class="btn float-right" data-toggle="modal"
+                                                    data-target="#AddroomModal" disabled>
                                                     <i class="bi bi-plus-circle-fill text-primary" style="font-size:large;"></i>
                                                 </button>
                                             <?php endif; ?>
@@ -484,8 +487,8 @@ access_log($userData);
                                     </div>
                                     <div class="mb-2">
                                         <label for="edit_status">Status:</label>
-                                        <select name="edit_status" id="edit_status" class="form-control" >
-                                        <option selected value="Available">Available</option>
+                                        <select name="edit_status" id="edit_status" class="form-control">
+                                            <option selected value="Available">Available</option>
                                         </select>
                                     </div>
                                     <div class="mb-2">
@@ -535,7 +538,7 @@ access_log($userData);
                                             <option value="Damaged">Damaged</option>
                                         </select>
                                     </div>
-                                    <div class="mb-3">  
+                                    <div class="mb-3">
                                         <button type="submit" class="btn btn-primary">Add Facility</button>
                                     </div>
                                 </form>

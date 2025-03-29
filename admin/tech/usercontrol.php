@@ -1,7 +1,10 @@
 <!-- tech record  -->
 <?php
-session_start();
+include_once '../../config/Database.php';
+include_once '../../auth/accesscontrol.php';
 
+$userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
+access_log($userData);
 
 ?>
 <!doctype html>
@@ -11,6 +14,8 @@ session_start();
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- icon -->
+    <link rel="shortcut icon" href="../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- check if bato-->

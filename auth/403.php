@@ -34,7 +34,7 @@
             <h1 class="error-code">403</h1>
             <div class="error-message">Forbidden</div>
             <p class="lead">You don't have permission to access this page.</p>
-            <a href="/" class="btn btn-primary">Go to Homepage</a>
+            <a href="http://localhost/bcp-hrd/admin/" class="btn btn-primary">Go to Homepage</a>
         </div>
     </div>
 </body>

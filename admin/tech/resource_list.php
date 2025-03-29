@@ -1,7 +1,7 @@
 <!-- Resources -->
 <?php
-require '../../config/Database.php';
-require '../../auth/accesscontrol.php';
+include_once '../../config/Database.php';
+include_once '../../auth/accesscontrol.php';
 
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);
@@ -43,6 +43,8 @@ access_log($userData);
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
 
+    <link rel="stylesheet" href="./includes/error.css">
+
     <!-- jQuery -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
     <!-- <script  src="../../node_modules/jquery/dist/jquery.min.js"></script> -->
@@ -75,18 +77,6 @@ access_log($userData);
     <!-- slimscroll js -->
     <script src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 
-    <style>
-        .is-invalid {
-            border-color: red;
-            background-color: #ffe6e6;
-            /* Light red background */
-        }
-
-        .invalid-feedback {
-            color: red;
-            display: block;
-        }
-    </style>
 
     <title>Tech and Analytics</title>
 </head>
