@@ -1,14 +1,10 @@
-<?php session_start();
+<?php
 
-//usertype: admin, super-admin
+require '../../../config/Database.php';
+require '../../../auth/accesscontrol.php';
 
-// if (isset($_SESSION['usertype']) !== 'super-admin' && isset($_SESSION['usertype']) !== 'admin') {
-//     http_response_code(403);
-//     Header('Location: ../../../auth/403.php');
-//     // echo json_encode(['error' => 'Access Denied']);/
-//     exit;
-// }
-
+$userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
+access_log($userData);
 
 
 ?>
@@ -234,61 +230,61 @@
         <!-- wrapper  -->
         <!-- ============================================================== -->
         <div class="dashboard-wrapper">
-
-            <!-- analytics -->
-            <div id="analyticPage" class="container-fluid dashboard-content">
-                <!-- ============================================================== -->
-                <!-- pageheader  -->
-                <!-- ============================================================== -->
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="page-header d-flex justify-content-between">
-                            <h2 class="pageheader-title">Resources Analytics </h2>
-                            <div class="btn-group m-1">
-                                <button type="button" onclick="window.print()"
-                                    class="btn btn-outline-primary">Print</button>
-                                <button type="button" id="logsView" class="btn btn-outline-primary">Logs</button>
+            <?php if ($userData && in_array("VIEW", $userData['permissions'])): ?>
+                <!-- analytics -->
+                <div id="analyticPage" class="container-fluid dashboard-content">
+                    <!-- ============================================================== -->
+                    <!-- pageheader  -->
+                    <!-- ============================================================== -->
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="page-header d-flex justify-content-between">
+                                <h2 class="pageheader-title">Resources Analytics </h2>
+                                <div class="btn-group m-1">
+                                    <button type="button" onclick="window.print()"
+                                        class="btn btn-outline-primary">Print</button>
+                                    <button type="button" id="logsView" class="btn btn-outline-primary">Logs</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="row d-flex">
-                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
-                        <!-- donat -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Categorization Resources</h4>
+                    <div class="row d-flex">
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
+                            <!-- donat -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Categorization Resources</h4>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="categoryChart"></canvas>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <canvas id="categoryChart"></canvas>
+
+                            <!-- utilization -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Under Utilized</h4>
+                                </div>
+                                <!-- utilize -->
+                                <div class="card-body" width="100%" height="100%">
+                                    <canvas id="unusedResourcesChart"></canvas>
+                                </div>
                             </div>
+
+
                         </div>
 
-                        <!-- utilization -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Under Utilized</h4>
-                            </div>
-                            <!-- utilize -->
-                            <div class="card-body" width="100%" height="100%">
-                                <canvas id="unusedResourcesChart"></canvas>
-                            </div>
-                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
 
+                            <!-- trends -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Request Trends</h4>
+                                </div>
+                                <div class="card-header">
 
-                    </div>
-
-                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
-
-                        <!-- trends -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Request Trends</h4>
-                            </div>
-                            <div class="card-header">
-
-                                <!-- <div class="row">
+                                    <!-- <div class="row">
                                     <div class="col">
                                         <label for="end_date" class="form-label">Year:</label>
                                         <input type="date" id="end_date" class="form-control">
@@ -297,71 +293,73 @@
                                         <button id="filterBtn" class="btn btn-primary">Filter</button>
                                     </div>
                                 </div> -->
-                                <canvas id="requestTrends"></canvas>
-                            </div>
-                        </div>
-
-                        <!-- usage -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Usage Patterns</h4>
-                            </div>
-                            <div class="card-body">
-                                <canvas id="usagePatterns"></canvas>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-
-            </div>
-
-
-            <!-- logs page -->
-            <div id="logPage" class="container-fluid dashboard-content" style="display:none;">
-                <!-- ============================================================== -->
-                <!-- pageheader  -->
-                <!-- ============================================================== -->
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="page-header d-flex justify-content-between">
-                            <h2 class="pageheader-title">Resources Request Logs </h2>
-                            <div class="btn-group m-1">
-                                <button id="analyticView" type="button" class="btn btn-outline-primary">Back</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between ">
-                                <h1>Generate Booking Log</h1>
-                                <div>
-                                    <button type="button" id="openModalBtn" class="btn btn-outline-primary float-right"
-                                        data-toggle="modal" data-target="#reportModal">Generate Report</button>
+                                    <canvas id="requestTrends"></canvas>
                                 </div>
+                            </div>
 
+                            <!-- usage -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Usage Patterns</h4>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="usagePatterns"></canvas>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <table id="LogRequestTable" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Quantity</th>
-                                            <th>Status</th>
-                                            <th>Requested at</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- logs page -->
+                <div id="logPage" class="container-fluid dashboard-content" style="display:none;">
+                    <!-- ============================================================== -->
+                    <!-- pageheader  -->
+                    <!-- ============================================================== -->
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="page-header d-flex justify-content-between">
+                                <h2 class="pageheader-title">Resources Request Logs </h2>
+                                <div class="btn-group m-1">
+                                    <button id="analyticView" type="button" class="btn btn-outline-primary">Back</button>
+                                </div>
                             </div>
-                            <div class="card-footer"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between ">
+                                    <h1>Generate Booking Log</h1>
+                                    <div>
+                                        <button type="button" id="openModalBtn" class="btn btn-outline-primary float-right"
+                                            data-toggle="modal" data-target="#reportModal">Generate Report</button>
+                                    </div>
+
+                                </div>
+                                <div class="card-body">
+                                    <table id="LogRequestTable" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Quantity</th>
+                                                <th>Status</th>
+                                                <th>Requested at</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                                <div class="card-footer"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            <?php else: ?>
+                <?php include_once "../../403.php"; ?>
+            <?php endif; ?>
         </div>
 
         <!-- Modal -->

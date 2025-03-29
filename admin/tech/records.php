@@ -350,8 +350,8 @@ access_log($userData);
                                         <tr>
                                             <th>Training Name</th>
                                             <th>Description</th>
-                                            <th>StartDate</th>
-                                            <th>EndDate</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
                                             <th>Instructor</th>
                                             <th>Training Status</th>
                                             <th>Completion Date</th>
