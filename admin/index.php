@@ -121,125 +121,124 @@ $employeesJSON = json_encode($employeesData);
                 <!-- ============================================================== -->
                 <!-- pageheader  -->
                 <!-- ============================================================== -->
-        
+
                 <!-- ============================================================== -->
                 <!-- end pageheader  -->
                 <!-- ============================================================== -->
                 <!-- <div class="ecommerce-widget"> -->
 
                 <div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h1>DASHBOARD</h1>
-
-                <!-- Summary Cards -->
-<div class="row">
-    <div class="col-md-3">
-        <div class="card bg-primary text-white">
-            <div class="card-body">
-                <h5>Total Employees</h5>
-                <h3><?php echo $totalEmployees; ?></h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card bg-success text-white">
-            <div class="card-body">
-                <h5>Total Applicants</h5>
-                <h3><?php echo $totalApplicants; ?></h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card bg-warning text-dark">
-            <div class="card-body">
-                <h5>Total Job Postings</h5>
-                <h3><?php echo $totalJobPostings; ?></h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card bg-danger text-white">
-            <div class="card-body">
-                <h5>Total Hired</h5>
-                <h3><?php echo $totalHired; ?></h3>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-                <!-- Charts -->
-                <div class="row mt-4">
-                    <div class="col-md-6">
+                    <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5>Applicants Per Job</h5>
-                                <canvas id="applicantsChart"></canvas>
+                                <h1>DASHBOARD</h1>
+
+                                <!-- Summary Cards -->
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="card bg-light text-white">
+                                            <div class="card-body">
+                                                <h5>Total Employees</h5>
+                                                <h3><?php echo $totalEmployees; ?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-light text-white">
+                                            <div class="card-body">
+                                                <h5>Total Applicants</h5>
+                                                <h3><?php echo $totalApplicants; ?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-light text-dark">
+                                            <div class="card-body">
+                                                <h5>Total Job Postings</h5>
+                                                <h3><?php echo $totalJobPostings; ?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-light text-white">
+                                            <div class="card-body">
+                                                <h5>Total Hired</h5>
+                                                <h3><?php echo $totalHired; ?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div> <!-- End of Card Body -->
+                        </div> <!-- End of Card -->
+
+                        <!-- Charts -->
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5>Applicants Per Job</h5>
+                                        <canvas id="applicantsChart" height="100" width="100"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5>Employees Per Department</h5>
+                                        <canvas id="departmentChart" height="100" width="100"></canvas>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5>Employees Per Department</h5>
-                                <canvas id="departmentChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    </div> <!-- End of Col-12 -->
+                </div> <!-- End of Row -->
 
-            </div> <!-- End of Card Body -->
-        </div> <!-- End of Card -->
-    </div> <!-- End of Col-12 -->
-</div> <!-- End of Row -->
+                <!-- Chart.js Library -->
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script>
+                    // Convert PHP JSON to JavaScript Object
+                    var applicantsData = <?php echo $applicantsJSON; ?>;
+                    var employeesData = <?php echo $employeesJSON; ?>;
 
-<!-- Chart.js Library -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    // Convert PHP JSON to JavaScript Object
-    var applicantsData = <?php echo $applicantsJSON; ?>;
-    var employeesData = <?php echo $employeesJSON; ?>;
+                    // Generate labels and data for charts
+                    var applicantLabels = Object.keys(applicantsData);
+                    var applicantCounts = Object.values(applicantsData);
 
-    // Generate labels and data for charts
-    var applicantLabels = Object.keys(applicantsData);
-    var applicantCounts = Object.values(applicantsData);
+                    var employeeLabels = Object.keys(employeesData);
+                    var employeeCounts = Object.values(employeesData);
 
-    var employeeLabels = Object.keys(employeesData);
-    var employeeCounts = Object.values(employeesData);
+                    // Applicants per Department Chart
+                    var ctx1 = document.getElementById('applicantsChart').getContext('2d');
+                    var applicantsChart = new Chart(ctx1, {
+                        type: 'bar',
+                        data: {
+                            labels: applicantLabels,
+                            datasets: [{
+                                label: 'Applicants',
+                                data: applicantCounts,
+                                backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8']
+                            }]
+                        }
+                    });
 
-    // Applicants per Department Chart
-    var ctx1 = document.getElementById('applicantsChart').getContext('2d');
-    var applicantsChart = new Chart(ctx1, {
-        type: 'bar',
-        data: {
-            labels: applicantLabels,
-            datasets: [{
-                label: 'Applicants',
-                data: applicantCounts,
-                backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8']
-            }]
-        }
-    });
+                    // Employees per Department Chart
+                    var ctx2 = document.getElementById('departmentChart').getContext('2d');
+                    var departmentChart = new Chart(ctx2, {
+                        type: 'pie',
+                        data: {
+                            labels: employeeLabels,
+                            datasets: [{
+                                data: employeeCounts,
+                                backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8']
+                            }]
+                        }
+                    });
+                </script>
 
-    // Employees per Department Chart
-    var ctx2 = document.getElementById('departmentChart').getContext('2d');
-    var departmentChart = new Chart(ctx2, {
-        type: 'pie',
-        data: {
-            labels: employeeLabels,
-            datasets: [{
-                data: employeeCounts,
-                backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8']
-            }]
-        }
-    });
-</script>
+            </div>
+        </div>
 
-</div>
-</div>
-        
 </body>
 
 </html>

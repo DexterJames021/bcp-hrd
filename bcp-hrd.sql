@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 06, 2025 at 11:31 AM
+-- Generation Time: Mar 29, 2025 at 03:08 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -62,7 +62,7 @@ CREATE TABLE `applicants` (
 INSERT INTO `applicants` (`id`, `job_id`, `applicant_name`, `email`, `resume_path`, `status`, `applied_at`, `interview_date`, `interview_time`, `DepartmentID`) VALUES
 (43, 59, 'SAWADA', 'apundarjeremy@gmail.com', 'uploads/resume/jere.txt', 'Hired', '2024-11-13 10:51:07', NULL, NULL, 9),
 (44, 57, 'QWERTY', 'apundarjeremy@gmail.com', 'uploads/resume/jere.txt', 'Hired', '2024-11-13 10:51:31', '2024-11-13', '22:15:00', 8),
-(49, 60, 'Kevin Durant', 'apundarjeremy@gmail.com', 'uploads/resume/jere.txt', 'Pending', '2024-11-13 13:58:16', NULL, NULL, 9),
+(49, 60, 'Kevin Durant', 'apundarjeremy@gmail.com', 'uploads/resume/jere.txt', 'Hired', '2024-11-13 13:58:16', NULL, NULL, 9),
 (50, 58, 'LeBron James', 'apundarjeremy@gmail.com', 'uploads/resume/jere.txt', 'Pending', '2024-11-13 13:58:39', NULL, NULL, 8),
 (51, 57, 'Steph Curry', 'apundarjeremy@gmail.com', 'uploads/resume/jere.txt', 'Pending', '2024-11-13 13:59:12', NULL, NULL, 8),
 (52, 62, 'John Doe', 'johndoe@example.com', 'uploads/resume/johndoe.txt', 'Pending', '2025-01-26 03:14:16', NULL, NULL, 9),
@@ -74,7 +74,10 @@ INSERT INTO `applicants` (`id`, `job_id`, `applicant_name`, `email`, `resume_pat
 (58, 68, 'Ethan Foster', 'ethanfoster@example.com', 'uploads/resume/ethanfoster.txt', 'Pending', '2025-01-26 03:14:16', NULL, NULL, 12),
 (59, 69, 'Fiona Green', 'fionagreen@example.com', 'uploads/resume/fionagreen.txt', 'Pending', '2025-01-26 03:14:16', NULL, NULL, 10),
 (60, 70, 'George Harris', 'georgeharris@example.com', 'uploads/resume/georgeharris.txt', 'Pending', '2025-01-26 03:14:16', NULL, NULL, 9),
-(61, 71, 'Hannah Ivers', 'hannahivers@example.com', 'uploads/resume/hannahivers.txt', 'Pending', '2025-01-26 03:14:16', NULL, NULL, 8);
+(61, 71, 'Hannah Ivers', 'hannahivers@example.com', 'uploads/resume/hannahivers.txt', 'Pending', '2025-01-26 03:14:16', NULL, NULL, 8),
+(62, 58, 'test', 'test@gmail.com', 'uploads/resume/dexter-schoolresume.docx', 'Pending', '2025-03-26 12:28:46', NULL, NULL, 8),
+(63, 58, 'qwe', 'qwe@masd.com', 'uploads/resume/internship-memorandum-of-agreement-between-student-and-company.docx', 'Pending', '2025-03-26 12:47:03', NULL, NULL, 8),
+(64, 59, 'test', 'test@gmail.com', 'uploads/resume/Magadang buhay Maam i.txt', 'Interviewed', '2025-03-29 14:03:26', '2025-03-31', '23:03:00', 9);
 
 -- --------------------------------------------------------
 
@@ -89,6 +92,88 @@ CREATE TABLE `attendanceleave` (
   `Status` enum('Present','Absent','Leave') DEFAULT NULL,
   `LeaveType` enum('Sick','Vacation','Personal','Unpaid') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `attendanceleave`
+--
+
+INSERT INTO `attendanceleave` (`AttendanceID`, `EmployeeID`, `Date`, `Status`, `LeaveType`) VALUES
+(1, 44, '2023-07-01', 'Present', NULL),
+(2, 45, '2023-07-02', 'Leave', 'Vacation'),
+(3, 46, '2023-07-01', 'Present', NULL),
+(4, 47, '2023-07-02', 'Present', NULL),
+(5, 48, '2023-07-01', 'Absent', NULL),
+(6, 49, '2023-07-02', 'Present', NULL),
+(7, 50, '2023-07-01', 'Present', NULL),
+(8, 51, '2023-07-02', 'Leave', 'Sick'),
+(9, 52, '2023-07-01', 'Present', NULL),
+(10, 53, '2023-07-02', 'Present', NULL),
+(11, 44, '2023-07-03', 'Present', NULL),
+(12, 45, '2023-07-03', 'Leave', 'Vacation'),
+(13, 46, '2023-07-03', 'Present', NULL),
+(14, 47, '2023-07-03', 'Present', NULL),
+(15, 48, '2023-07-03', 'Absent', NULL),
+(16, 49, '2023-07-03', 'Present', NULL),
+(17, 50, '2023-07-03', 'Present', NULL),
+(18, 51, '2023-07-03', 'Leave', 'Sick'),
+(19, 52, '2023-07-03', 'Present', NULL),
+(20, 53, '2023-07-03', 'Present', NULL),
+(21, 54, '2023-07-03', 'Present', NULL),
+(22, 44, '2023-07-04', 'Present', NULL),
+(23, 45, '2023-07-04', 'Leave', 'Vacation'),
+(24, 46, '2023-07-04', 'Present', NULL),
+(25, 47, '2023-07-04', 'Present', NULL),
+(26, 48, '2023-07-04', 'Absent', NULL),
+(27, 49, '2023-07-04', 'Present', NULL),
+(28, 50, '2023-07-04', 'Present', NULL),
+(29, 51, '2023-07-04', 'Leave', 'Sick'),
+(30, 52, '2023-07-04', 'Present', NULL),
+(31, 53, '2023-07-04', 'Present', NULL),
+(32, 54, '2023-07-04', 'Present', NULL),
+(33, 44, '2023-07-05', 'Present', NULL),
+(34, 45, '2023-07-05', 'Leave', 'Vacation'),
+(35, 46, '2023-07-05', 'Present', NULL),
+(36, 47, '2023-07-05', 'Present', NULL),
+(37, 48, '2023-07-05', 'Absent', NULL),
+(38, 49, '2023-07-05', 'Present', NULL),
+(39, 50, '2023-07-05', 'Present', NULL),
+(40, 51, '2023-07-05', 'Leave', 'Sick'),
+(41, 52, '2023-07-05', 'Present', NULL),
+(42, 53, '2023-07-05', 'Present', NULL),
+(43, 54, '2023-07-05', 'Present', NULL),
+(44, 44, '2023-07-06', 'Present', NULL),
+(45, 45, '2023-07-06', 'Leave', 'Vacation'),
+(46, 46, '2023-07-06', 'Present', NULL),
+(47, 47, '2023-07-06', 'Present', NULL),
+(48, 48, '2023-07-06', 'Absent', NULL),
+(49, 49, '2023-07-06', 'Present', NULL),
+(50, 50, '2023-07-06', 'Present', NULL),
+(51, 51, '2023-07-06', 'Leave', 'Sick'),
+(52, 52, '2023-07-06', 'Present', NULL),
+(53, 53, '2023-07-06', 'Present', NULL),
+(54, 54, '2023-07-06', 'Present', NULL),
+(55, 44, '2023-07-07', 'Present', NULL),
+(56, 45, '2023-07-07', 'Leave', 'Vacation'),
+(57, 46, '2023-07-07', 'Present', NULL),
+(58, 47, '2023-07-07', 'Present', NULL),
+(59, 48, '2023-07-07', 'Absent', NULL),
+(60, 49, '2023-07-07', 'Present', NULL),
+(61, 50, '2023-07-07', 'Present', NULL),
+(62, 51, '2023-07-07', 'Leave', 'Sick'),
+(63, 52, '2023-07-07', 'Present', NULL),
+(64, 53, '2023-07-07', 'Present', NULL),
+(65, 54, '2023-07-07', 'Present', NULL),
+(66, 44, '2023-07-06', 'Leave', NULL),
+(67, 45, '2023-07-06', 'Present', 'Vacation'),
+(68, 46, '2023-07-06', 'Leave', NULL),
+(69, 47, '2023-07-06', 'Present', NULL),
+(70, 48, '2023-07-06', 'Present', NULL),
+(71, 49, '2023-07-06', 'Present', NULL),
+(72, 50, '2023-07-06', 'Present', NULL),
+(73, 51, '2023-07-06', 'Leave', 'Sick'),
+(74, 52, '2023-07-06', 'Present', NULL),
+(75, 53, '2023-07-06', 'Present', NULL),
+(76, 54, '2023-07-06', 'Leave', NULL);
 
 -- --------------------------------------------------------
 
@@ -105,6 +190,23 @@ CREATE TABLE `compensationbenefits` (
   `BenefitValue` decimal(10,2) DEFAULT NULL,
   `EffectiveDate` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `compensationbenefits`
+--
+
+INSERT INTO `compensationbenefits` (`CompensationID`, `EmployeeID`, `BaseSalary`, `Bonus`, `BenefitType`, `BenefitValue`, `EffectiveDate`) VALUES
+(1, 44, 60000.00, 5000.00, 'Health', 2000.00, '2023-01-01'),
+(2, 45, 60000.00, 5000.00, 'Retirement', 3000.00, '2023-01-01'),
+(3, 46, 75000.00, 7000.00, 'Health', 2500.00, '2023-01-01'),
+(4, 47, 75000.00, 7000.00, 'Stock Options', 5000.00, '2023-01-01'),
+(5, 48, 55000.00, 3000.00, 'Health', 1500.00, '2023-01-01'),
+(6, 49, 55000.00, 3000.00, 'Retirement', 2000.00, '2023-01-01'),
+(7, 50, 80000.00, 10000.00, 'Health', 3000.00, '2023-01-01'),
+(8, 51, 80000.00, 10000.00, 'Stock Options', 7000.00, '2023-01-01'),
+(9, 52, 48000.00, 2000.00, 'Health', 1000.00, '2023-01-01'),
+(10, 53, 48000.00, 2000.00, 'Retirement', 1500.00, '2023-01-01'),
+(11, 54, 47000.00, 2000.00, 'Retirement', 1500.00, '2023-01-01');
 
 -- --------------------------------------------------------
 
@@ -127,7 +229,7 @@ INSERT INTO `departments` (`DepartmentID`, `DepartmentName`, `ManagerID`) VALUES
 (9, 'IT Department', NULL),
 (10, 'Finance and Accounting', NULL),
 (11, 'Facilities Management', NULL),
-(12, 'SAWADA', NULL);
+(12, 'Teacher Department', NULL);
 
 -- --------------------------------------------------------
 
@@ -148,7 +250,17 @@ CREATE TABLE `documents` (
 --
 
 INSERT INTO `documents` (`id`, `user_id`, `document_name`, `file_path`, `uploaded_at`) VALUES
-(19, 39, 'BOSS Q 1.txt', 'uploads/documents/BOSS Q 1.txt', '2024-11-13 16:03:36');
+(19, 39, 'BOSS Q 1.txt', 'uploads/documents/BOSS Q 1.txt', '2024-11-13 16:03:36'),
+(20, 44, 'BOSS Q 1.txt', 'uploads/documents/BOSS Q 1.txt', '2025-03-22 11:33:00'),
+(21, 45, 'BOSS Q 1.txt', 'uploads/documents/BOSS Q 1.txt', '2025-03-22 11:33:24'),
+(22, 46, 'BOSS Q 1.txt', 'uploads/documents/BOSS Q 1.txt', '2025-03-22 11:33:51'),
+(23, 47, 'BOSS Q 1.txt', 'uploads/documents/BOSS Q 1.txt', '2025-03-22 11:33:51'),
+(24, 48, 'BOSS Q 1.txt', 'uploads/documents/BOSS Q 1.txt', '2025-03-22 11:36:05'),
+(25, 49, 'BOSS Q 1.txt', 'uploads/documents/BOSS Q 1.txt', '2025-03-22 11:36:05'),
+(26, 4, 'BOSS Q 1.txt', 'uploads/documents/BOSS Q 1.txt', '2025-03-22 11:36:05'),
+(27, 36, 'BOSS Q 1.txt', 'uploads/documents/BOSS Q 1.txt', '2025-03-22 11:36:05'),
+(28, 36, 'BOSS Q 2.txt', 'uploads/documents/BOSS Q 1.txt', '2025-03-22 11:36:05'),
+(29, 36, 'BOSS Q 3.txt', 'uploads/documents/BOSS Q 1.txt', '2025-03-22 11:36:05');
 
 -- --------------------------------------------------------
 
@@ -176,7 +288,7 @@ CREATE TABLE `employees` (
 --
 
 INSERT INTO `employees` (`EmployeeID`, `FirstName`, `LastName`, `Email`, `Phone`, `Address`, `DOB`, `HireDate`, `Salary`, `Status`, `UserID`, `PolicyAgreed`) VALUES
-(44, 'Jeremy', 'Apundar', 'apundarjeremy@gmail.com', '09485234501', 'CSJDM', '2024-11-14', '2024-11-13', NULL, 'Active', 39, 1),
+(44, 'Luke', 'Francio', 'luefrancio@gmail.com', '09485234501', 'Silicon Valley', '2004-11-14', '2024-11-13', 30000.00, 'Active', 39, 1),
 (45, 'John', 'Doe', 'johndoe@example.com', '09123456789', '123 Main St', '1990-01-01', '2025-01-26', 50000.00, 'Active', 40, 1),
 (46, 'Jane', 'Smith', 'janesmith@example.com', '09123456780', '124 Main St', '1991-02-02', '2025-01-26', 60000.00, 'Active', 41, 1),
 (47, 'Alice', 'Johnson', 'alicejohnson@example.com', '09123456781', '125 Main St', '1992-03-03', '2025-01-26', 55000.00, 'Active', 42, 1),
@@ -244,8 +356,8 @@ INSERT INTO `fm_bookings` (`id`, `employee_id`, `room_id`, `booking_date`, `star
 (29, 36, 11, '2024-12-31', '23:33:00', '03:34:00', 'New YEars Party', 'Cancelled', '2024-12-25 03:30:49', '2025-01-26 16:36:15', 1),
 (30, 4, 1, '2024-12-26', '23:03:00', '04:05:00', 'sdfsdf', 'Rejected', '2024-12-25 14:14:57', '2024-12-27 05:41:53', 1),
 (31, 4, 2, '2024-12-27', '23:03:00', '04:55:00', 'sdfsdf', 'Approved', '2024-12-26 13:33:19', '2024-12-27 06:10:51', 1),
-(32, 4, 4, '0006-01-06', '03:44:00', '04:05:00', 'dfgdfg', 'Pending', '2024-12-26 13:47:48', '2024-12-26 13:47:48', 1),
-(33, 4, 5, '2025-01-30', '23:03:00', '04:05:00', 'dfgdfg', 'Pending', '2024-12-26 13:49:06', '2024-12-26 13:49:06', 1),
+(32, 4, 4, '0006-01-06', '03:44:00', '04:05:00', 'dfgdfg', 'Approved', '2024-12-26 13:47:48', '2025-03-27 12:49:26', 1),
+(33, 4, 5, '2025-01-30', '23:03:00', '04:05:00', 'dfgdfg', 'Approved', '2024-12-26 13:49:06', '2025-03-29 09:42:30', 0),
 (34, 4, 6, '2025-02-18', '23:03:00', '04:05:00', 'sdff', 'Approved', '2024-12-26 13:51:40', '2025-02-20 13:08:55', 0),
 (35, 4, 7, '2025-01-04', '23:03:00', '03:44:00', 'fsdsdf', 'Cancelled', '2024-12-26 13:58:55', '2024-12-26 16:26:06', 1),
 (36, 4, 8, '2025-01-02', '03:33:00', '03:44:00', 'sdfsdf', 'Cancelled', '2024-12-26 13:59:11', '2024-12-26 15:52:59', 1),
@@ -260,9 +372,13 @@ INSERT INTO `fm_bookings` (`id`, `employee_id`, `room_id`, `booking_date`, `star
 (45, 4, 18, '2025-01-06', '04:44:00', '05:55:00', '4455', 'Cancelled', '2024-12-26 16:54:25', '2024-12-26 16:54:33', 0),
 (46, 4, 18, '2025-01-07', '01:05:00', '01:06:00', 'dfdfg', 'Cancelled', '2024-12-26 16:55:15', '2024-12-26 16:55:20', 0),
 (47, 4, 15, '2024-12-30', '22:22:00', '04:44:00', 'adad', 'Cancelled', '2025-01-26 04:31:56', '2025-01-26 04:32:04', 0),
-(48, 36, 18, '2025-02-20', '21:02:00', '23:03:00', 'asdasd', 'Pending', '2025-02-20 12:53:17', '2025-02-20 12:53:17', 1),
+(48, 36, 18, '2025-02-20', '21:02:00', '23:03:00', 'asdasd', 'Approved', '2025-02-20 12:53:17', '2025-03-27 12:49:31', 0),
 (49, 4, 23, '2025-02-21', '12:02:00', '03:44:00', 'testing feb 20', 'Cancelled', '2025-02-20 13:12:25', '2025-02-20 13:12:52', 0),
-(50, 4, 23, '2025-02-21', '12:22:00', '12:02:00', 'testing feb 20', 'Approved', '2025-02-20 13:13:14', '2025-02-20 13:15:32', 1);
+(50, 4, 23, '2025-02-21', '12:22:00', '12:02:00', 'testing feb 20', 'Approved', '2025-02-20 13:13:14', '2025-03-16 14:54:31', 0),
+(51, 4, 6, '2025-03-26', '12:22:00', '12:22:00', 'sSSsdf', 'Cancelled', '2025-03-26 14:26:30', '2025-03-26 14:26:40', 0),
+(52, 4, 20, '2025-03-26', '23:33:00', '04:55:00', 'sfsdfsdf', 'Pending', '2025-03-26 14:27:24', '2025-03-26 14:27:24', 1),
+(53, 4, 23, '2025-03-26', '12:22:00', '03:44:00', 'rwar', 'Approved', '2025-03-26 14:29:14', '2025-03-28 13:21:52', 0),
+(54, 4, 6, '2025-03-06', '12:22:00', '04:44:00', 'sdfsdf', 'Pending', '2025-03-28 13:17:11', '2025-03-28 13:17:11', 1);
 
 -- --------------------------------------------------------
 
@@ -287,16 +403,16 @@ CREATE TABLE `fm_resources` (
 --
 
 INSERT INTO `fm_resources` (`id`, `name`, `category`, `quantity`, `location`, `status`, `last_maintenance`, `next_maintenance`, `created_at`) VALUES
-(81, 'Impact Tool', 'Hardware', 66, 'Storage room', 'Available', '2025-01-01', '2024-12-26', '2024-12-09 08:44:08'),
-(82, 'RJ45', 'Hardware', 95, '2nd Floor', 'Available', '2025-01-01', '2025-01-03', '2024-12-09 08:44:37'),
+(81, 'Impact Tool', 'Hardware', 26, 'Storage room', 'Available', '2025-01-01', '2024-12-26', '2024-12-09 08:44:08'),
+(82, 'RJ45', 'Hardware', 94, '2nd Floor', 'Available', '2025-01-01', '2025-01-03', '2024-12-09 08:44:37'),
 (87, 'System Unit', 'Hardware', 13, '2nd Floor', 'Available', '2024-12-17', '2024-12-25', '2024-12-10 12:16:42'),
 (88, 'Cable', 'Hardware', 1000, 'IT Department', 'Available', '3232-02-12', '0222-12-21', '2024-12-11 01:59:19'),
 (90, 'Computer Monitor', 'Hardware', 90, 'IT Department', 'Available', '2121-02-12', '2222-02-12', '2024-12-15 02:40:44'),
 (97, 'Volleyball', 'Sports', 93, 'PEH Depertment', 'Available', '2025-01-26', '2025-01-26', '2025-01-26 03:46:08'),
-(98, 'Basketball', 'Sports', 100, 'PEH Depertment', 'Available', '2025-01-26', '2025-01-26', '2025-01-26 03:46:54'),
-(99, 'Chalk', 'Utilities', 600, 'Dean', 'Available', '2025-01-26', '2025-01-26', '2025-01-26 10:10:58'),
-(100, 'test', 'test', 12, 'test', 'Available', '2025-02-20', '2025-02-21', '2025-02-20 12:52:34'),
-(101, 'Map', 'Utilities', 2, 'Utilities room', 'Available', '2025-02-20', '2025-02-27', '2025-02-20 13:58:10');
+(98, 'Basketball', 'Sports', 98, 'PEH Depertment', 'Available', '2025-01-26', '2025-01-26', '2025-01-26 03:46:54'),
+(99, 'Chalk', 'Utilities', 590, 'Dean', 'Available', '2025-01-26', '2025-01-26', '2025-01-26 10:10:58'),
+(100, 'Pentel Pen', 'Utilities', 11, 'test', 'Available', '2025-02-20', '2025-02-21', '2025-02-20 12:52:34'),
+(102, 'test', 'Utilities', 122, 'test', 'Available', '2025-03-28', '2025-03-28', '2025-03-27 12:47:51');
 
 -- --------------------------------------------------------
 
@@ -325,7 +441,8 @@ INSERT INTO `fm_resource_allocations` (`id`, `resource_id`, `employee_id`, `quan
 (2, 87, 36, 5, '2025-01-26 05:55:00', '2032-01-27 05:55:00', 'Allocated', 'new commers', '2025-01-26 17:04:36'),
 (3, 90, 36, 5, '2025-01-26 12:02:00', '2038-01-26 12:02:00', 'Allocated', 'new commers', '2025-01-26 17:06:27'),
 (4, 90, 36, 5, '2025-01-14 05:55:00', '2045-01-26 11:01:00', 'Allocated', 'new commers', '2025-01-26 17:14:04'),
-(5, 87, 36, 2, '2025-02-20 12:22:00', '2025-05-29 12:02:00', 'Allocated', 'test', '2025-02-20 20:51:36');
+(5, 87, 36, 2, '2025-02-20 12:22:00', '2025-05-29 12:02:00', 'Allocated', 'test', '2025-02-20 20:51:36'),
+(6, 81, 36, 12, '2025-03-28 23:33:00', '2025-03-28 23:33:00', 'Allocated', 'qweqw', '2025-03-27 20:49:16');
 
 -- --------------------------------------------------------
 
@@ -355,15 +472,15 @@ INSERT INTO `fm_resource_requests` (`id`, `resource_id`, `employee_id`, `quantit
 (3, 90, 36, 2, 'Pupose Testing', 'Approved', '2024-12-29 04:38:04', NULL, NULL),
 (4, 81, 4, 3, 'e', 'Approved', '2025-01-26 02:38:38', NULL, NULL),
 (5, 82, 4, 5, 'HIRAM', 'Approved', '2025-01-26 02:48:32', NULL, NULL),
-(6, 82, 4, 33, '33', 'Pending', '2025-01-26 02:49:06', NULL, NULL),
-(7, 82, 4, 1, 'Client Meeting', 'Pending', '2024-12-29 00:45:00', NULL, NULL),
+(6, 82, 4, 33, '33', 'Rejected', '2025-01-26 02:49:06', NULL, NULL),
+(7, 82, 4, 1, 'Client Meeting', 'Approved', '2024-12-29 00:45:00', NULL, NULL),
 (8, 97, 36, 4, 'Training Session', 'Approved', '2024-12-29 01:00:00', 2, '2024-12-30 02:00:00'),
-(9, 98, 36, 2, 'Equipment Maintenance', 'Pending', '2024-12-29 02:15:00', NULL, NULL),
+(9, 98, 36, 2, 'Equipment Maintenance', 'Approved', '2024-12-29 02:15:00', NULL, NULL),
 (10, 90, 4, 6, 'Research Materials', 'Approved', '2024-12-29 03:30:00', 3, '2024-12-30 04:00:00'),
 (11, 90, 39, 8, 'Conference Attendance', 'Rejected', '2024-12-29 04:45:00', NULL, NULL),
 (12, 97, 4, 7, 'Software License', 'Approved', '2024-12-29 05:00:00', NULL, NULL),
 (13, 98, 39, 9, 'Hardware Upgrade', 'Approved', '2024-12-29 06:15:00', 4, '2024-12-30 07:00:00'),
-(14, 81, 36, 5, 'Office Supplies', 'Pending', '2024-12-28 21:00:00', NULL, NULL),
+(14, 81, 36, 5, 'Office Supplies', 'Approved', '2024-12-28 21:00:00', NULL, NULL),
 (15, 81, 39, 10, 'Project A Materials', 'Approved', '2024-12-28 22:15:00', 1, '2024-12-29 23:00:00'),
 (16, 82, 36, 3, 'Team Building Event', 'Rejected', '2024-12-28 23:30:00', NULL, NULL),
 (17, 81, 36, 4, 'Office Renovation', 'Approved', '2024-11-01 02:00:00', NULL, NULL),
@@ -376,8 +493,11 @@ INSERT INTO `fm_resource_requests` (`id`, `resource_id`, `employee_id`, `quantit
 (24, 90, 4, 7, 'Research Project', 'Approved', '2024-11-26 09:45:00', NULL, NULL),
 (25, 90, 36, 9, 'Marketing Materials', 'Approved', '2024-11-29 10:00:00', NULL, NULL),
 (26, 81, 36, 10, 'IT Support', 'Approved', '2024-11-30 11:15:00', 4, '2024-12-01 12:00:00'),
-(27, 99, 36, 10, 'test', 'Pending', '2025-02-20 12:50:15', NULL, NULL),
-(28, 82, 4, 90, 'testing feb 20', 'Rejected', '2025-02-20 13:17:03', NULL, NULL);
+(27, 99, 36, 10, 'test', 'Approved', '2025-02-20 12:50:15', NULL, NULL),
+(28, 82, 4, 90, 'testing feb 20', 'Rejected', '2025-02-20 13:17:03', NULL, NULL),
+(29, 81, 4, 23, 'asdasdasd', 'Approved', '2025-03-26 14:27:34', NULL, NULL),
+(30, 100, 4, 1, 'adasdasd', 'Approved', '2025-03-26 14:29:27', NULL, NULL),
+(31, 81, 4, 5, 'wrwere', 'Pending', '2025-03-28 13:18:59', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -402,8 +522,8 @@ INSERT INTO `fm_rooms` (`id`, `name`, `location`, `capacity`, `status`) VALUES
 (2, 'test1', 'test1', 3, 'Booked'),
 (3, 'IT', 'BCP 2nd floor', NULL, 'Booked'),
 (4, 'czc', 'zxc', 3, 'Booked'),
-(5, 'sd', 's', 3, 'Booked'),
-(6, 'bcvb', 'ccv', 4, 'Available'),
+(5, 'sd', 's', 3, 'Available'),
+(6, 'bcvb', 'ccv', 4, 'Booked'),
 (7, 'room', '22', 3, 'Booked'),
 (8, 'table', 'table', 2, 'Booked'),
 (9, 'rty', 'rty', 4, 'Booked'),
@@ -415,11 +535,12 @@ INSERT INTO `fm_rooms` (`id`, `name`, `location`, `capacity`, `status`) VALUES
 (15, 'sdad', 'adasd', 233, 'Available'),
 (16, 'asdasd', 'asasdasd', 21, 'Booked'),
 (17, 'sdfsd', 'fsdff', 23, 'Booked'),
-(18, 'Room 6', 'adasd', 23, 'Booked'),
-(20, 'Room4', 'aaaaaaaa', 5, 'Available'),
+(18, 'Room 6', 'adasd', 23, 'Available'),
+(20, 'Room4', 'aaaaaaaa', 5, 'Booked'),
 (21, 'Room3', 'test-book moto', 123, 'Available'),
 (22, 'Room 2', 'Room 2', 200, 'Available'),
-(23, 'Room 1 update', 'Location 1', 200, 'Booked');
+(23, 'Room 1 update', 'Location 1', 200, 'Available'),
+(24, 'test-update', 'test', 234, 'Available');
 
 -- --------------------------------------------------------
 
@@ -435,6 +556,17 @@ CREATE TABLE `jobroles` (
   `SalaryRangeMin` decimal(10,2) DEFAULT NULL,
   `SalaryRangeMax` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `jobroles`
+--
+
+INSERT INTO `jobroles` (`JobRoleID`, `JobTitle`, `JobDescription`, `DepartmentID`, `SalaryRangeMin`, `SalaryRangeMax`) VALUES
+(1, 'HR Manager', 'Oversees HR operations.', 8, 50000.00, 80000.00),
+(2, 'IT Specialist', 'Manages IT infrastructure.', 9, 45000.00, 70000.00),
+(3, 'Financial Analyst', 'Analyzes financial data.', 10, 55000.00, 85000.00),
+(4, 'Marketing Coordinator', 'Coordinates marketing campaigns.', 11, 40000.00, 60000.00),
+(5, 'Operations Manager', 'Manages daily operations.', 12, 60000.00, 90000.00);
 
 -- --------------------------------------------------------
 
@@ -460,19 +592,19 @@ CREATE TABLE `job_postings` (
 --
 
 INSERT INTO `job_postings` (`id`, `job_title`, `job_description`, `requirements`, `location`, `salary_range`, `status`, `created_at`, `DepartmentID`, `EmployeeID`) VALUES
-(57, 'HR Manager', 'Oversee the HR department and manage all HR functions, including recruitment, employee relations, training, and compliance.', 'Bachelor’s degree in Human Resources, Business Administration, or related field\r\n5+ years of HR experience, with at least 2 years in a management role\r\nStrong knowledge of labor laws and regulations.', 'Bestlink College of the Philippines', 'PHP 60,000 - PHP 100,000 per month.', 'Open', '2024-11-02 11:05:54', 8, 44),
-(58, 'HR Coordinator', 'Assist in recruitment activities, onboarding of new hires, and maintaining employee records.\r\nSupport HR projects and initiatives, including training and employee engagement programs.', 'Bachelor’s degree in Human Resource Management or related field.\r\n1-3 years of HR experience.\r\nGood communication and organizational skills.', 'Bestlink College of the Philippines', 'PHP 25,000 - PHP 45,000 per month.', 'Open', '2024-11-02 12:30:44', 8, NULL),
-(59, 'Systems Administrator', 'Manage and maintain school servers, networks, and computer systems.\r\nEnsure system availability, security, and performance.', 'Bachelor’s degree in Computer Science, Information Technology, or related field.\r\n3-5 years of experience in systems administration.\r\nFamiliarity with server management and network protocols.', 'Bestlink College of the Philippines', 'PHP 30,000 - PHP 60,000 per month.', 'Open', '2024-11-02 12:31:56', 9, NULL),
-(60, 'Network Administrator', 'Configure, maintain, and troubleshoot the school\'s network infrastructure.\r\nMonitor network performance and security.', 'Bachelor’s degree in Information Technology, Network Engineering, or related field.\r\n3+ years of experience in network administration.\r\nKnowledge of network protocols, routers, and firewalls.', 'Bestlink College of the Philippines', 'PHP 30,000 - PHP 55,000 per month.', 'Open', '2024-11-02 12:32:31', 9, NULL),
-(61, 'Maintenance Supervisor', 'Supervise maintenance staff and coordinate repair and maintenance activities for the school.\r\nEnsure that all facilities are safe and comply with relevant regulations.', 'Diploma or Bachelor’s degree in Engineering, Facilities Management, or related field.\r\n3-5 years of experience in facilities maintenance.\r\nKnowledge of building systems (HVAC, electrical, plumbing).', 'Bestlink College of the Philippines', 'PHP 30,000 - PHP 60,000 per month.', 'Open', '2024-11-02 12:34:00', 11, NULL),
-(62, 'Software Engineer', 'Develop and maintain software applications.', 'Bachelor’s degree in Computer Science or related field.', 'Bestlink College of the Philippines', 'PHP 40,000 - PHP 70,000 per month.', 'Open', '2025-01-26 03:14:16', 9, NULL),
-(63, 'HR Manager', 'Oversee the HR department and manage all HR functions.', 'Bachelor’s degree in Human Resources.', 'Bestlink College of the Philippines', 'PHP 60,000 - PHP 100,000 per month.', 'Open', '2025-01-26 03:14:16', 8, NULL),
-(64, 'Network Administrator', 'Manage and maintain network infrastructure.', 'Bachelor’s degree in IT.', 'Bestlink College of the Philippines', 'PHP 30,000 - PHP 55,000 per month.', 'Open', '2025-01-26 03:14:16', 9, NULL),
-(65, 'Data Analyst', 'Analyze data and provide insights.', 'Bachelor’s degree in Statistics or related field.', 'Bestlink College of the Philippines', 'PHP 35,000 - PHP 60,000 per month.', 'Open', '2025-01-26 03:14:16', 10, NULL),
-(66, 'Web Developer', 'Develop and maintain websites.', 'Bachelor’s degree in Computer Science.', 'Bestlink College of the Philippines', 'PHP 40,000 - PHP 70,000 per month.', 'Open', '2025-01-26 03:14:16', 9, NULL),
-(67, 'Graphic Designer', 'Create visual concepts.', 'Bachelor’s degree in Design.', 'Bestlink College of the Philippines', 'PHP 25,000 - PHP 50,000 per month.', 'Open', '2025-01-26 03:14:16', 11, NULL),
+(57, 'HR Manager', 'Oversee the HR department and manage all HR functions, including recruitment, employee relations, training, and compliance.', 'Bachelor’s degree in Human Resources, Business Administration, or related field\r\n5+ years of HR experience, with at least 2 years in a management role\r\nStrong knowledge of labor laws and regulations.', 'Bestlink College of the Philippines', 'PHP 60,000 - PHP 100,000 per month.', 'Closed', '2024-11-02 11:05:54', 8, 44),
+(58, 'HR Coordinator', 'Assist in recruitment activities, onboarding of new hires, and maintaining employee records.\r\nSupport HR projects and initiatives, including training and employee engagement programs.', 'Bachelor’s degree in Human Resource Management or related field.\r\n1-3 years of HR experience.\r\nGood communication and organizational skills.', 'Bestlink College of the Philippines', 'PHP 25,000 - PHP 45,000 per month.', 'Open', '2024-11-02 12:30:44', 8, 47),
+(59, 'Systems Administrator', 'Manage and maintain school servers, networks, and computer systems.\r\nEnsure system availability, security, and performance.', 'Bachelor’s degree in Computer Science, Information Technology, or related field.\r\n3-5 years of experience in systems administration.\r\nFamiliarity with server management and network protocols.', 'Bestlink College of the Philippines', 'PHP 30,000 - PHP 60,000 per month.', 'Open', '2024-11-02 12:31:56', 9, 48),
+(60, 'Network Administrator', 'Configure, maintain, and troubleshoot the school\'s network infrastructure.\r\nMonitor network performance and security.', 'Bachelor’s degree in Information Technology, Network Engineering, or related field.\r\n3+ years of experience in network administration.\r\nKnowledge of network protocols, routers, and firewalls.', 'Bestlink College of the Philippines', 'PHP 30,000 - PHP 55,000 per month.', 'Open', '2024-11-02 12:32:31', 9, 49),
+(61, 'Maintenance Supervisor', 'Supervise maintenance staff and coordinate repair and maintenance activities for the school.\r\nEnsure that all facilities are safe and comply with relevant regulations.', 'Diploma or Bachelor’s degree in Engineering, Facilities Management, or related field.\r\n3-5 years of experience in facilities maintenance.\r\nKnowledge of building systems (HVAC, electrical, plumbing).', 'Bestlink College of the Philippines', 'PHP 30,000 - PHP 60,000 per month.', 'Closed', '2024-11-02 12:34:00', 11, 50),
+(62, 'Software Engineer', 'Develop and maintain software applications.', 'Bachelor’s degree in Computer Science or related field.', 'Bestlink College of the Philippines', 'PHP 40,000 - PHP 70,000 per month.', 'Open', '2025-01-26 03:14:16', 9, 51),
+(63, 'HR Manager', 'Oversee the HR department and manage all HR functions.', 'Bachelor’s degree in Human Resources.', 'Bestlink College of the Philippines', 'PHP 60,000 - PHP 100,000 per month.', 'Open', '2025-01-26 03:14:16', 8, 52),
+(64, 'Network Administrator', 'Manage and maintain network infrastructure.', 'Bachelor’s degree in IT.', 'Bestlink College of the Philippines', 'PHP 30,000 - PHP 55,000 per month.', 'Open', '2025-01-26 03:14:16', 9, 53),
+(65, 'Data Analyst', 'Analyze data and provide insights.', 'Bachelor’s degree in Statistics or related field.', 'Bestlink College of the Philippines', 'PHP 35,000 - PHP 60,000 per month.', 'Open', '2025-01-26 03:14:16', 10, 46),
+(66, 'Web Developer', 'Develop and maintain websites.', 'Bachelor’s degree in Computer Science.', 'Bestlink College of the Philippines', 'PHP 40,000 - PHP 70,000 per month.', 'Open', '2025-01-26 03:14:16', 9, 45),
+(67, 'Graphic Designer', 'Create visual concepts.', 'Bachelor’s degree in Design.', 'Bestlink College of the Philippines', 'PHP 25,000 - PHP 50,000 per month.', 'Open', '2025-01-26 03:14:16', 11, 45),
 (68, 'Sales Executive', 'Drive sales and manage client relationships.', 'Bachelor’s degree in Business.', 'Bestlink College of the Philippines', 'PHP 30,000 - PHP 55,000 per month.', 'Open', '2025-01-26 03:14:16', 12, NULL),
-(69, 'Content Writer', 'Create content for various platforms.', 'Bachelor’s degree in Communications.', 'Bestlink College of the Philippines', 'PHP 25,000 - PHP 45,000 per month.', 'Open', '2025-01-26 03:14:16', 10, NULL),
+(69, 'Content Writer', 'Create content for various platforms.', 'Bachelor’s degree in Communications.', 'Bestlink College of the Philippines', 'PHP 25,000 - PHP 45,000 per month.', 'Closed', '2025-01-26 03:14:16', 10, NULL),
 (70, 'IT Support', 'Provide technical support to users.', 'Bachelor’s degree in IT.', 'Bestlink College of the Philippines', 'PHP 20,000 - PHP 40,000 per month.', 'Open', '2025-01-26 03:14:16', 9, NULL),
 (71, 'Project Manager', 'Manage projects from initiation to closure.', 'Bachelor’s degree in Management.', 'Bestlink College of the Philippines', 'PHP 50,000 - PHP 90,000 per month.', 'Open', '2025-01-26 03:14:16', 8, NULL);
 
@@ -506,7 +638,8 @@ INSERT INTO `performanceevaluations` (`EvaluationID`, `EmployeeID`, `EvaluationD
 (7, 51, '2025-01-26', NULL, 75, 'Needs improvement in the first quarter.', 'Quarterly'),
 (8, 52, '2025-01-26', NULL, 92, 'Outstanding performance in the first quarter.', 'Quarterly'),
 (9, 53, '2025-01-26', NULL, 70, 'Satisfactory performance in the first quarter.', 'Quarterly'),
-(10, 54, '2025-01-26', NULL, 85, 'Good performance in the first quarter.', 'Quarterly');
+(10, 54, '2025-01-26', NULL, 85, 'Good performance in the first quarter.', 'Quarterly'),
+(11, 44, '2025-03-22', 47, 87, 'Good performance in the first quarter.', 'Quarterly');
 
 -- --------------------------------------------------------
 
@@ -525,10 +658,10 @@ CREATE TABLE `permissions` (
 --
 
 INSERT INTO `permissions` (`id`, `name`, `description`) VALUES
-(1, 'create_users', NULL),
-(2, 'edit_users', NULL),
-(3, 'delete_users', NULL),
-(4, 'view_reports', NULL);
+(1, 'CREATE', NULL),
+(2, 'EDIT', NULL),
+(3, 'DELETE', NULL),
+(4, 'VIEW', NULL);
 
 -- --------------------------------------------------------
 
@@ -562,10 +695,12 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`RoleID`, `RoleName`, `Description`) VALUES
-(1, 'admin', NULL),
-(2, 'superadmin', NULL),
-(5, 'manager', NULL),
-(6, 'employee', NULL);
+(1, 'admin', ''),
+(2, 'superadmin', ''),
+(3, 'manager', ''),
+(4, 'employee', ''),
+(5, 'staff', ''),
+(6, 'applicant', '');
 
 -- --------------------------------------------------------
 
@@ -587,7 +722,13 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES
 (1, 2),
 (1, 3),
 (1, 4),
-(2, 4);
+(2, 2),
+(2, 4),
+(4, 1),
+(4, 2),
+(4, 4),
+(5, 4),
+(6, 4);
 
 -- --------------------------------------------------------
 
@@ -619,7 +760,8 @@ INSERT INTO `trainingprograms` (`TrainingID`, `TrainingName`, `Description`, `St
 (7, 'Time Management', 'Training on effective time management skills.', '2025-01-26', '2025-02-25', 'Fiona Green', 51),
 (8, 'Conflict Resolution', 'Training on resolving workplace conflicts.', '2025-01-26', '2025-02-25', 'George Harris', 52),
 (9, 'Creative Thinking', 'Training on enhancing creative thinking skills.', '2025-01-26', '2025-02-25', 'Hannah Ivers', 53),
-(10, 'Team Building', 'Training on building effective teams.', '2025-01-26', '2025-02-25', 'Jane Smith', 54);
+(10, 'Team Building', 'Training on building effective teams.', '2025-01-26', '2025-02-25', 'Jane Smith', 54),
+(11, 'Basic Programming Training', 'Study Basic Programming', '2025-03-22', '2025-03-31', NULL, 44);
 
 -- --------------------------------------------------------
 
@@ -677,7 +819,7 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `usertype` enum('admin','employee','manager','New Hire') NOT NULL DEFAULT 'admin',
+  `usertype` enum('admin','employee','manager','superadmin','New Hire') NOT NULL DEFAULT 'admin',
   `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
   `lastLogin` datetime DEFAULT current_timestamp(),
   `applicant_id` int(11) DEFAULT NULL
@@ -688,12 +830,12 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `usertype`, `createdAt`, `lastLogin`, `applicant_id`) VALUES
-(4, 'employee', '$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq', 'employee', '2024-09-24 15:23:39', NULL, NULL),
-(36, 'admin', '$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq', 'admin', '2024-11-13 15:45:50', '2024-11-13 00:00:00', NULL),
+(4, 'employee', '$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq', 'employee', '2024-09-24 15:23:39', NULL, 43),
+(36, 'admin', '$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq', 'admin', '2024-11-13 15:45:50', '2024-11-13 00:00:00', 49),
 (39, 'manager', '$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq', 'manager', '2024-11-13 16:02:44', '2024-11-14 00:00:00', 44),
-(40, 'johndoe', '$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq', 'employee', '2025-01-26 03:14:16', '2025-01-26 11:14:16', 52),
-(41, 'janesmith', '$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq', 'employee', '2025-01-26 03:14:16', '2025-01-26 11:14:16', 53),
-(42, 'alicejohnson', '$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq', 'employee', '2025-01-26 03:14:16', '2025-01-26 11:14:16', 54),
+(40, 'superadmin', '$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq', 'superadmin', '2025-01-26 03:14:16', '2025-01-26 11:14:16', 52),
+(41, 'nonteaching', '$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq', 'employee', '2025-01-26 03:14:16', '2025-01-26 11:14:16', 53),
+(42, 'teaching', '$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq', 'employee', '2025-01-26 03:14:16', '2025-01-26 11:14:16', 54),
 (43, 'bobbrown', '$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq', 'employee', '2025-01-26 03:14:16', '2025-01-26 11:14:16', 55),
 (44, 'charliedavis', '$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq', 'employee', '2025-01-26 03:14:16', '2025-01-26 11:14:16', 56),
 (45, 'dianaevans', '$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq', 'employee', '2025-01-26 03:14:16', '2025-01-26 11:14:16', 57),
@@ -904,19 +1046,19 @@ ALTER TABLE `analyticsreports`
 -- AUTO_INCREMENT for table `applicants`
 --
 ALTER TABLE `applicants`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
 -- AUTO_INCREMENT for table `attendanceleave`
 --
 ALTER TABLE `attendanceleave`
-  MODIFY `AttendanceID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `AttendanceID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT for table `compensationbenefits`
 --
 ALTER TABLE `compensationbenefits`
-  MODIFY `CompensationID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `CompensationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `departments`
@@ -928,7 +1070,7 @@ ALTER TABLE `departments`
 -- AUTO_INCREMENT for table `documents`
 --
 ALTER TABLE `documents`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `employees`
@@ -940,37 +1082,37 @@ ALTER TABLE `employees`
 -- AUTO_INCREMENT for table `fm_bookings`
 --
 ALTER TABLE `fm_bookings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `fm_resources`
 --
 ALTER TABLE `fm_resources`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- AUTO_INCREMENT for table `fm_resource_allocations`
 --
 ALTER TABLE `fm_resource_allocations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `fm_resource_requests`
 --
 ALTER TABLE `fm_resource_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `fm_rooms`
 --
 ALTER TABLE `fm_rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `jobroles`
 --
 ALTER TABLE `jobroles`
-  MODIFY `JobRoleID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `JobRoleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `job_postings`
@@ -982,13 +1124,13 @@ ALTER TABLE `job_postings`
 -- AUTO_INCREMENT for table `performanceevaluations`
 --
 ALTER TABLE `performanceevaluations`
-  MODIFY `EvaluationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `EvaluationID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `recruitment`
@@ -1000,13 +1142,13 @@ ALTER TABLE `recruitment`
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `RoleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `RoleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `trainingprograms`
 --
 ALTER TABLE `trainingprograms`
-  MODIFY `TrainingID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `TrainingID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `training_assignments`
@@ -1112,6 +1254,7 @@ ALTER TABLE `recruitment`
 -- Constraints for table `role_permissions`
 --
 ALTER TABLE `role_permissions`
+  ADD CONSTRAINT `fk_role_permissions` FOREIGN KEY (`role_id`) REFERENCES `roles` (`RoleID`) ON DELETE CASCADE,
   ADD CONSTRAINT `role_permissions_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`RoleID`) ON DELETE CASCADE,
   ADD CONSTRAINT `role_permissions_ibfk_2` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE;
 

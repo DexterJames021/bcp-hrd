@@ -1,6 +1,10 @@
 <!-- training main dashboard -->
 <?php
 require "../../config/db_talent.php";
+require '../../auth/mysqli_accesscontrol.php';
+
+$userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
+access_log($userData);
 
 // Fetch the count of training assignments
 $assignment_count = 0;

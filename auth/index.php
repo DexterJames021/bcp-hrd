@@ -35,20 +35,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     case 'employee':
                         header("Location: ../portal/index.php");
                         exit;
-                    case 'super_admin':
-                        header("Location: ../super_admin/index.php");
-                        exit;
                     case 'staff':
                         header("Location: ../admin/talent/onboarding/new_hire/step1.php");
                         exit;
                     default:
-                        echo "<script>alert('405 No permission to access this portal.');</script>";
+                        $err = '405 No permission to access this portal.';
                 }
             } else {
-                echo "<script>alert('Incorrect password.');</script>";
+                $err = 'Incorrect password.';
             }
         } else {
-            echo "<script>alert('Username not found.');</script>";
+            $err = 'Username not found.';
         }
     }
 }

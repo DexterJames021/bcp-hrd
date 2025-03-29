@@ -1,6 +1,10 @@
 <!-- training main dashboard -->
 <?php
 require "../../config/db_talent.php";
+require '../../auth/mysqli_accesscontrol.php';
+
+$userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
+access_log($userData);
 $sql = "SELECT * FROM job_postings";
 $result = $conn->query($sql);
 ?>
