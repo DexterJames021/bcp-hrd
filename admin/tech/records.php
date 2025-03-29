@@ -345,19 +345,19 @@ access_log($userData);
                                 </div> -->
                             </div>
                             <div class="card-body">
-                                <table id="trainingList">
-                                    <thead>
+                                <table class="table">
+                                    <thead class="thead-light">
                                         <tr>
                                             <th>Training Name</th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
+                                            <th>Description</th>
+                                            <th>StartDate</th>
+                                            <th>EndDate</th>
+                                            <th>Instructor</th>
+                                            <th>Training Status</th>
+                                            <th>Completion Date</th>
                                         </tr>
                                     </thead>
-                                    <tbody></tbody>
+                                    <tbody id="trainingList"></tbody>
                                 </table>
                             </div>
 
