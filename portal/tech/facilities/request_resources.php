@@ -14,7 +14,8 @@ if (!isset($_SESSION['usertype']) || $_SESSION['usertype'] != 'employee') {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- check if bato-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- check if bato-->
     <link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <script defer src="../../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
@@ -31,7 +32,8 @@ if (!isset($_SESSION['usertype']) || $_SESSION['usertype'] != 'employee') {
     <link rel="stylesheet" href="../../../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
 
     <!-- icon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
 
     <!-- jQuery -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
@@ -68,9 +70,12 @@ if (!isset($_SESSION['usertype']) || $_SESSION['usertype'] != 'employee') {
         <div class="dashboard-header ">
             <nav class="navbar navbar-expand-lg bg-white fixed-top  ">
                 <a class="navbar-brand" href="index.php">
-                    <img src="../../../assets/images/bcp-hrd-logo.jpg" alt="" class="" style="height: 3rem;width: auto;">
+                    <img src="../../../assets/images/bcp-hrd-logo.jpg" alt="" class=""
+                        style="height: 3rem;width: auto;">
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse " id="navbarSupportedContent">
@@ -81,7 +86,9 @@ if (!isset($_SESSION['usertype']) || $_SESSION['usertype'] != 'employee') {
                             </div>
                         </li>
                         <li class="nav-item dropdown notification">
-                            <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span class="indicator"></span></a>
+                            <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span
+                                    class="indicator"></span></a>
                             <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                                 <li>
                                     <div class="notification-title"> Notification</div>
@@ -89,32 +96,44 @@ if (!isset($_SESSION['usertype']) || $_SESSION['usertype'] != 'employee') {
                                         <div class="list-group">
                                             <a href="#" class="list-group-item list-group-item-action active">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Jeremy Rakestraw</span>accepted your invitation to join the team.
+                                                    <div class="notification-list-user-img"><img src="#" alt=""
+                                                            class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span
+                                                            class="notification-list-user-name">Jeremy
+                                                            Rakestraw</span>accepted your invitation to join the team.
                                                         <div class="notification-date">2 min ago</div>
                                                     </div>
                                                 </div>
                                             </a>
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">John Abraham </span>is now following you
+                                                    <div class="notification-list-user-img"><img src="#" alt=""
+                                                            class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span
+                                                            class="notification-list-user-name">John Abraham </span>is
+                                                        now following you
                                                         <div class="notification-date">2 days ago</div>
                                                     </div>
                                                 </div>
                                             </a>
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Monaan Pechi</span> is watching your main repository
+                                                    <div class="notification-list-user-img"><img src="#" alt=""
+                                                            class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span
+                                                            class="notification-list-user-name">Monaan Pechi</span> is
+                                                        watching your main repository
                                                         <div class="notification-date">2 min ago</div>
                                                     </div>
                                                 </div>
                                             </a>
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Jessica Caruso</span>accepted your invitation to join the team.
+                                                    <div class="notification-list-user-img"><img src="#" alt=""
+                                                            class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span
+                                                            class="notification-list-user-name">Jessica
+                                                            Caruso</span>accepted your invitation to join the team.
                                                         <div class="notification-date">2 min ago</div>
                                                     </div>
                                                 </div>
@@ -160,15 +179,19 @@ if (!isset($_SESSION['usertype']) || $_SESSION['usertype'] != 'employee') {
                             </ul>
                         </li> -->
                         <li class="nav-item dropdown nav-user">
-                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="#" alt="" class="user-avatar-md rounded-circle"></a>
-                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
+                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="#" alt=""
+                                    class="user-avatar-md rounded-circle"></a>
+                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown"
+                                aria-labelledby="navbarDropdownMenuLink2">
                                 <div class="nav-user-info">
                                     <h5 class="mb-0 text-white nav-user-name"> <?= $_SESSION['username'] ?> </h5>
                                     <span class="status"></span><span class="ml-2">Available</span>
                                 </div>
                                 <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Account</a>
                                 <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
-                                <a class="dropdown-item" href="../../../auth/logout.php"><i class="fas fa-power-off mr-2"></i>Logout</a>
+                                <a class="dropdown-item" href="../../../auth/logout.php"><i
+                                        class="fas fa-power-off mr-2"></i>Logout</a>
                             </div>
                         </li>
                     </ul>
@@ -185,7 +208,8 @@ if (!isset($_SESSION['usertype']) || $_SESSION['usertype'] != 'employee') {
             <div class="menu-list">
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <a class="d-xl-none d-lg-none" href="#">Dashboard</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
@@ -200,11 +224,15 @@ if (!isset($_SESSION['usertype']) || $_SESSION['usertype'] != 'employee') {
                             </li>
                             <!-- temp -->
                             <li class="nav-item ">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fa fa-fw fa-user-circle"></i>employee <span class="badge badge-success">6</span></a>
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-1" aria-controls="submenu-1"><i
+                                        class="fa fa-fw fa-user-circle"></i>employee <span
+                                        class="badge badge-success">6</span></a>
                                 <div id="submenu-1" class="collapse submenu bg-light">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1-2" aria-controls="submenu-1-2">Lorem, ipsum.</a>
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                                data-target="#submenu-1-2" aria-controls="submenu-1-2">Lorem, ipsum.</a>
                                             <div id="submenu-1-2" class="collapse submenu bg-light">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
@@ -223,13 +251,16 @@ if (!isset($_SESSION['usertype']) || $_SESSION['usertype'] != 'employee') {
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="./records-management/Records.php">Lorem, ipsum dolor.</a>
+                                            <a class="nav-link" href="./records-management/Records.php">Lorem, ipsum
+                                                dolor.</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="dashboard-sales.html">Lorem, ipsum dolor.</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1-1" aria-controls="submenu-1-1">Lorem, ipsum dolor.</a>
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                                data-target="#submenu-1-1" aria-controls="submenu-1-1">Lorem, ipsum
+                                                dolor.</a>
                                             <div id="submenu-1-1" class="collapse submenu bg-light">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
@@ -249,7 +280,8 @@ if (!isset($_SESSION['usertype']) || $_SESSION['usertype'] != 'employee') {
                             </li>
                             <!-- facilities -->
                             <li class="nav-item ">
-                                <a class="nav-link active" href="./index.php" data-toggle="collapse" aria-expanded="true" data-target="#submenu-2" aria-controls="submenu-2">
+                                <a class="nav-link active" href="./index.php" data-toggle="collapse"
+                                    aria-expanded="true" data-target="#submenu-2" aria-controls="submenu-2">
                                     <i class="fa fa-fw fa-user-circle"></i>Facilites and Resources
                                     <!-- <span class="badge badge-success">6</span> -->
                                 </a>
@@ -259,7 +291,8 @@ if (!isset($_SESSION['usertype']) || $_SESSION['usertype'] != 'employee') {
                                             <a class="nav-link" href="./book_facility.php">Book Facility</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link active" href="./request_resources.php">Request Resources</a>
+                                            <a class="nav-link active" href="./request_resources.php">Request
+                                                Resources</a>
                                         </li>
                                         <!-- <li class="nav-item">
                                             <a class="nav-link" href="./survey.php">Survey</a>
@@ -348,36 +381,93 @@ if (!isset($_SESSION['usertype']) || $_SESSION['usertype'] != 'employee') {
                 <!-- pageheader  -->
                 <!-- ============================================================== -->
                 <div class="row">
-                    <div class="page-header d-flex justify-content-between">
-                        <h2 class="pageheader-title">Available Resources </h2>
+                    <!-- <div class="page-header d-flex justify-content-between">
                         <div class="btn-group" role="group" aria-label="Request a Boom or Cancel">
-                            <button type="button" class="btn btn-primary float-right"
-                                data-toggle="modal" data-target="#requestResourcesModal">
+                            <button type="button" class="btn btn-primary float-right" data-toggle="modal"
+                                data-target="#requestResourcesModal">
                                 <i class="fas fa-fw fa-bell"></i>
-                                <span>| Request a Room</span>
+                                <span>| Request a resources</span>
                             </button>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+
+                        <div class="col-6">
                             <div class="card">
                                 <div class="card-header">
-                                    <!-- <h4>Available Resources</h4> -->
+                                    <h2 class="pageheader-title">Available Items</h2>
+
                                 </div>
                                 <div class="card-body">
                                     <table id="ResourcesTable" class="table table-hover">
                                         <thead class="thead-light">
                                             <tr>
-                                                <td>#</td>
+                                                <!-- <td>#</td> -->
                                                 <td>Name</td>
-                                                <td>Status</td>
+                                                <!-- <td>Status</td> -->
                                                 <td>Available Quantity</td>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
                                     </table>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h2 class="pageheader-title">Item Request Form
+                                        <span class=""
+                                            title="Cancellations for requested items are not supported. Please ensure your request is final.">
+                                            <i class="bi bi-info-circle-fill text-sm"></i>
+                                        </span>
+                                    </h2>
+                                </div>
+                                <div class="card-body">
+                                    <form id="resourceRequestForm">
+                                        <div class="mb-3">
+                                            <label for="resource">Select Resource:</label>
+                                            <select id="resource_id" class="form-control" name="resource_id">
+                                            </select>
+                                        </div>
+                                        <input type="hidden" id="employee_id" value="<?= $_SESSION['user_id'] ?>"
+                                            name="employee_id" required />
+                                        <div class="mb-3">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label for="quantity">Quantity:</label>
+                                                    <input type="number" id="quantity" class="form-control"
+                                                        name="quantity" min="1" required />
+                                                    <div class="d-none invalid-feedback">
+                                                        Requested quantity exceeds available stock.
+                                                    </div>
+                                                </div>
+                                                <div class="col mt-3">
+                                                    <div class="input-group">
+                                                        <label for="quantity_overview" class="input-group-text"><i
+                                                                class="bi bi-archive-fill"></i></label>
+                                                        <input type="text" id="quantity_overview" value="0 Stocks"
+                                                            class="form-control" disabled />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+
+                                            <label for="purpose">Purpose:</label>
+                                            <textarea id="purpose" name="purpose" class="form-control" rows="10"
+                                                required></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <button type="submit" class="submit-request btn btn-outline-primary">Submit
+                                                Request</button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="card-footer"></div>
                             </div>
                         </div>
                     </div>
@@ -400,20 +490,24 @@ if (!isset($_SESSION['usertype']) || $_SESSION['usertype'] != 'employee') {
                                                 <select id="resource_id" class="form-control" name="resource_id">
                                                 </select>
                                             </div>
-                                            <input type="hidden" id="employee_id" value="<?= $_SESSION['user_id'] ?>" name="employee_id" required />
+                                            <input type="hidden" id="employee_id" value="<?= $_SESSION['user_id'] ?>"
+                                                name="employee_id" required />
                                             <div class="mb-3">
                                                 <div class="row">
                                                     <div class="col">
                                                         <label for="quantity">Quantity:</label>
-                                                        <input type="number" id="quantity" class="form-control" name="quantity" min="1" required />
+                                                        <input type="number" id="quantity" class="form-control"
+                                                            name="quantity" min="1" required />
                                                         <div class="d-none invalid-feedback">
                                                             Requested quantity exceeds available stock.
                                                         </div>
                                                     </div>
                                                     <div class="col mt-3">
                                                         <div class="input-group">
-                                                            <label for="quantity_overview" class="input-group-text"><i class="bi bi-archive-fill"></i></label>
-                                                            <input type="text" id="quantity_overview" value="0 Stocks" class="form-control" disabled />
+                                                            <label for="quantity_overview" class="input-group-text"><i
+                                                                    class="bi bi-archive-fill"></i></label>
+                                                            <input type="text" id="quantity_overview" value="0 Stocks"
+                                                                class="form-control" disabled />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -422,10 +516,13 @@ if (!isset($_SESSION['usertype']) || $_SESSION['usertype'] != 'employee') {
                                             <div class="mb-3">
 
                                                 <label for="purpose">Purpose:</label>
-                                                <textarea id="purpose" name="purpose" class="form-control" required></textarea>
+                                                <textarea id="purpose" name="purpose" class="form-control"
+                                                    required></textarea>
                                             </div>
                                             <div class="mb-3">
-                                                <button type="submit" class="submit-request btn btn-outline-primary">Submit Request</button>
+                                                <button type="submit"
+                                                    class="submit-request btn btn-outline-primary">Submit
+                                                    Request</button>
                                             </div>
                                         </form>
 
