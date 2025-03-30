@@ -1,14 +1,9 @@
-<?php session_start();
+<?php
+require '../../../config/Database.php';
+require '../../../auth/accesscontrol.php';
 
-//usertype: admin, super-admin
-
-// if (isset($_SESSION['usertype']) !== 'super-admin' && isset($_SESSION['usertype']) !== 'admin') {
-//     http_response_code(403);
-//     Header('Location: ../../../auth/403.php');
-//     // echo json_encode(['error' => 'Access Denied']);/
-//     exit;
-// }
-
+$userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
+access_log($userData);
 
 
 ?>
@@ -203,142 +198,144 @@
         <!-- wrapper  -->
         <!-- ============================================================== -->
         <div class="dashboard-wrapper">
-
-            <!-- analytics -->
-            <div id="analyticPage" class="container-fluid dashboard-content">
-                <!-- ============================================================== -->
-                <!-- pageheader  -->
-                <!-- ============================================================== -->
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="page-header d-flex justify-content-between">
-                            <h2 class="pageheader-title">Facility Analytics </h2>
-                            <div class="btn-group m-1">
-                                <button type="button" onclick="window.print()"
-                                    class="btn btn-outline-primary">Print</button>
-                                <button type="button" id="logsView" class="btn btn-outline-primary">Logs</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row d-flex">
-                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
-
-                        <!-- utilization -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Over Utilized</h4>
-                            </div>
-                            <!-- utilize -->
-                            <div class="card-body" width="100%" height="100%">
-                                <canvas id="facilityUtilization"></canvas>
-                            </div>
-                        </div>
-
-                        <!-- category -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Categorization </h4>
-                            </div>
-                            <div class="card-body">
-                                <table id="facilityTable">
-                                    <thead>
-                                        <tr>
-                                            <td>Facility Name</td>
-                                            <td>Location</td>
-                                            <td>Capacity</td>
-                                            <td>Status</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
-
-                        <!-- distribution -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Status Distribution</h4>
-                            </div>
-                            <div class="card-body" width="100%" height="100%">
-                                <canvas id="bookingStatusDistribution"></canvas>
-                            </div>
-                        </div>
-
-                        <!-- Bookings trend -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Booking Trends</h4>
-                            </div>
-                            <div class="card-body">
-                                <canvas id="bookingTrends"></canvas>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-
-
-            <!-- logs page -->
-            <div id="logPage" class="container-fluid dashboard-content" style="display:none;">
-                <!-- ============================================================== -->
-                <!-- pageheader  -->
-                <!-- ============================================================== -->
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="page-header d-flex justify-content-between">
-                            <h2 class="pageheader-title">Facility Booking Logs </h2>
-                            <div class="btn-group m-1">
-                                <button id="analyticView" type="button" class="btn btn-outline-primary">Back</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between ">
-                                <div class="d-flex ">
-
+            <?php if ($userData && in_array("VIEW", $userData['permissions'])): ?>
+                <!-- analytics -->
+                <div id="analyticPage" class="container-fluid dashboard-content">
+                    <!-- ============================================================== -->
+                    <!-- pageheader  -->
+                    <!-- ============================================================== -->
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="page-header d-flex justify-content-between">
+                                <h2 class="pageheader-title">Facility Analytics </h2>
+                                <div class="btn-group m-1">
+                                    <button type="button" onclick="window.print()"
+                                        class="btn btn-outline-primary">Print</button>
+                                    <button type="button" id="logsView" class="btn btn-outline-primary">Logs</button>
                                 </div>
-                                <div>
-                                    <button type="button" id="openModalBtn" class="btn btn-outline-primary float-right"
-                                        data-toggle="modal" data-target="#reportModal">Generate Report</button>
-                                    <!--
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row d-flex">
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
+
+                            <!-- utilization -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Over Utilized</h4>
+                                </div>
+                                <!-- utilize -->
+                                <div class="card-body" width="100%" height="100%">
+                                    <canvas id="facilityUtilization"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- category -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Categorization </h4>
+                                </div>
+                                <div class="card-body">
+                                    <table id="facilityTable">
+                                        <thead>
+                                            <tr>
+                                                <td>Facility Name</td>
+                                                <td>Location</td>
+                                                <td>Capacity</td>
+                                                <td>Status</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
+
+                            <!-- distribution -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Status Distribution</h4>
+                                </div>
+                                <div class="card-body" width="100%" height="100%">
+                                    <canvas id="bookingStatusDistribution"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Bookings trend -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Booking Trends</h4>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="bookingTrends"></canvas>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- logs page -->
+                <div id="logPage" class="container-fluid dashboard-content" style="display:none;">
+                    <!-- ============================================================== -->
+                    <!-- pageheader  -->
+                    <!-- ============================================================== -->
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="page-header d-flex justify-content-between">
+                                <h2 class="pageheader-title">Facility Booking Logs </h2>
+                                <div class="btn-group m-1">
+                                    <button id="analyticView" type="button" class="btn btn-outline-primary">Back</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between ">
+                                    <div class="d-flex ">
+
+                                    </div>
+                                    <div>
+                                        <button type="button" id="openModalBtn" class="btn btn-outline-primary float-right"
+                                            data-toggle="modal" data-target="#reportModal">Generate Report</button>
+                                        <!--
                                             logs number
                                             suggestion not need 
                                             what is trend
                                         -->
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="card-body">
-                                <table id="LogbookingTable" class="table table-hover" width="100%">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th>Employee</th>
-                                            <th>Room</th>
-                                            <th>Date</th>
-                                            <th>Time</th>
-                                            <th>Purpose</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
+                                <div class="card-body">
+                                    <table id="LogbookingTable" class="table table-hover" width="100%">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th>Employee</th>
+                                                <th>Room</th>
+                                                <th>Date</th>
+                                                <th>Time</th>
+                                                <th>Purpose</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-
+            <?php else: ?>
+                <?php include_once "../../403.php"; ?>
+            <?php endif; ?>
         </div>
 
 

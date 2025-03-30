@@ -377,6 +377,7 @@ access_log($userData);
                                                         <th>Start</th>
                                                         <th>End</th>
                                                         <th>Status</th>
+                                                        <th>Returned</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody></tbody>
