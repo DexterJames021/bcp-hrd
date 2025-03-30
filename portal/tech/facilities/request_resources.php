@@ -1,9 +1,9 @@
 <?php
-session_start();
+require '../../../config/Database.php';
+require '../../../auth/accesscontrol.php';
 
-if (!isset($_SESSION['usertype']) || $_SESSION['usertype'] != 'employee') {
-    header("Location: ../auth/index.php");
-}
+$userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
+access_log($userData);
 
 ?>
 <!doctype html>
@@ -377,11 +377,12 @@ if (!isset($_SESSION['usertype']) || $_SESSION['usertype'] != 'employee') {
         <!-- ============================================================== -->
         <div class="dashboard-wrapper">
             <div class="container-fluid dashboard-content ">
-                <!-- ============================================================== -->
-                <!-- pageheader  -->
-                <!-- ============================================================== -->
-                <div class="row">
-                    <!-- <div class="page-header d-flex justify-content-between">
+                <?php if ($userData && in_array("VIEW", $userData['permissions'])): ?>
+                    <!-- ============================================================== -->
+                    <!-- pageheader  -->
+                    <!-- ============================================================== -->
+                    <div class="row">
+                        <!-- <div class="page-header d-flex justify-content-between">
                         <div class="btn-group" role="group" aria-label="Request a Boom or Cancel">
                             <button type="button" class="btn btn-primary float-right" data-toggle="modal"
                                 data-target="#requestResourcesModal">
@@ -391,99 +392,40 @@ if (!isset($_SESSION['usertype']) || $_SESSION['usertype'] != 'employee') {
                         </div>
                     </div> -->
 
-                    <div class="row">
+                        <div class="row">
 
-                        <div class="col-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h2 class="pageheader-title">Available Items</h2>
-
-                                </div>
-                                <div class="card-body">
-                                    <table id="ResourcesTable" class="table table-hover">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <!-- <td>#</td> -->
-                                                <td>Name</td>
-                                                <!-- <td>Status</td> -->
-                                                <td>Available Quantity</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h2 class="pageheader-title">Item Request Form
-                                        <span class=""
-                                            title="Cancellations for requested items are not supported. Please ensure your request is final.">
-                                            <i class="bi bi-info-circle-fill text-sm"></i>
-                                        </span>
-                                    </h2>
-                                </div>
-                                <div class="card-body">
-                                    <form id="resourceRequestForm">
-                                        <div class="mb-3">
-                                            <label for="resource">Select Resource:</label>
-                                            <select id="resource_id" class="form-control" name="resource_id">
-                                            </select>
-                                        </div>
-                                        <input type="hidden" id="employee_id" value="<?= $_SESSION['user_id'] ?>"
-                                            name="employee_id" required />
-                                        <div class="mb-3">
-                                            <div class="row">
-                                                <div class="col">
-                                                    <label for="quantity">Quantity:</label>
-                                                    <input type="number" id="quantity" class="form-control"
-                                                        name="quantity" min="1" required />
-                                                    <div class="d-none invalid-feedback">
-                                                        Requested quantity exceeds available stock.
-                                                    </div>
-                                                </div>
-                                                <div class="col mt-3">
-                                                    <div class="input-group">
-                                                        <label for="quantity_overview" class="input-group-text"><i
-                                                                class="bi bi-archive-fill"></i></label>
-                                                        <input type="text" id="quantity_overview" value="0 Stocks"
-                                                            class="form-control" disabled />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-3">
-
-                                            <label for="purpose">Purpose:</label>
-                                            <textarea id="purpose" name="purpose" class="form-control" rows="10"
-                                                required></textarea>
-                                        </div>
-                                        <div class="mb-3">
-                                            <button type="submit" class="submit-request btn btn-outline-primary">Submit
-                                                Request</button>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="card-footer"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- request resources -->
-                    <div id="add-modal" class="row">
-                        <div class="modal fade" id="requestResourcesModal" role="dialog">
-                            <div class="modal-dialog">
-
-                                <!-- Modal content-->
-                                <div class="modal-content ">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Request Resources</h4>
-                                        <button type="button" data-dismiss="modal">&times;</button>
+                            <div class="col-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h2 class="pageheader-title">Available Items</h2>
                                     </div>
-                                    <div class="modal-body">
+                                    <div class="card-body">
+                                        <table id="ResourcesTable" class="table table-hover">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <!-- <td>#</td> -->
+                                                    <td>Name</td>
+                                                    <!-- <td>Status</td> -->
+                                                    <td>Available Quantity</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h2 class="pageheader-title">Item Request Form
+                                            <span class=""
+                                                title="Cancellations for requested items are not supported. Please ensure your request is final.">
+                                                <i class="bi bi-info-circle-fill text-sm"></i>
+                                            </span>
+                                        </h2>
+                                    </div>
+                                    <div class="card-body">
                                         <form id="resourceRequestForm">
                                             <div class="mb-3">
                                                 <label for="resource">Select Resource:</label>
@@ -516,43 +458,110 @@ if (!isset($_SESSION['usertype']) || $_SESSION['usertype'] != 'employee') {
                                             <div class="mb-3">
 
                                                 <label for="purpose">Purpose:</label>
-                                                <textarea id="purpose" name="purpose" class="form-control"
+                                                <textarea id="purpose" name="purpose" class="form-control" rows="10"
                                                     required></textarea>
                                             </div>
                                             <div class="mb-3">
-                                                <button type="submit"
-                                                    class="submit-request btn btn-outline-primary">Submit
-                                                    Request</button>
+                                                <?php if ($userData && in_array("CREATE", $userData['permissions'])): ?>
+                                                    <button type="submit" class="submit-request btn btn-outline-primary">Submit
+                                                        Request</button>
+                                                <?php else: ?>
+                                                    <button type="submit" disabled class="submit-request btn btn-outline-primary">Submit
+                                                        Request</button>
+                                                <?php endif; ?>
                                             </div>
+
                                         </form>
+                                    </div>
+                                    <div class="card-footer"></div>
+                                </div>
+                            </div>
+                        </div>
 
-                                        <div id="response"></div>
+                        <!-- request resources -->
+                        <div id="add-modal" class="row">
+                            <div class="modal fade" id="requestResourcesModal" role="dialog">
+                                <div class="modal-dialog">
 
+                                    <!-- Modal content-->
+                                    <div class="modal-content ">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Request Resources</h4>
+                                            <button type="button" data-dismiss="modal">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="resourceRequestForm">
+                                                <div class="mb-3">
+                                                    <label for="resource">Select Resource:</label>
+                                                    <select id="resource_id" class="form-control" name="resource_id">
+                                                    </select>
+                                                </div>
+                                                <input type="hidden" id="employee_id" value="<?= $_SESSION['user_id'] ?>"
+                                                    name="employee_id" required />
+                                                <div class="mb-3">
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <label for="quantity">Quantity:</label>
+                                                            <input type="number" id="quantity" class="form-control"
+                                                                name="quantity" min="1" required />
+                                                            <div class="d-none invalid-feedback">
+                                                                Requested quantity exceeds available stock.
+                                                            </div>
+                                                        </div>
+                                                        <div class="col mt-3">
+                                                            <div class="input-group">
+                                                                <label for="quantity_overview" class="input-group-text"><i
+                                                                        class="bi bi-archive-fill"></i></label>
+                                                                <input type="text" id="quantity_overview" value="0 Stocks"
+                                                                    class="form-control" disabled />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mb-3">
+
+                                                    <label for="purpose">Purpose:</label>
+                                                    <textarea id="purpose" name="purpose" class="form-control"
+                                                        required></textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <button type="submit"
+                                                        class="submit-request btn btn-outline-primary">Submit
+                                                        Request</button>
+                                                </div>
+                                            </form>
+
+                                            <div id="response"></div>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- bs notification -->
-                    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-                        <div id="added" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
-                            <div class="toast-body bg-success text-light">
-                                Added, Successfully.
+                        <!-- bs notification -->
+                        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                            <div id="added" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div class="toast-body bg-success text-light">
+                                    Added, Successfully.
+                                </div>
                             </div>
-                        </div>
-                        <div id="status" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
-                            <div class="toast-body bg-success text-light">
-                                Status updated and email sent!
+                            <div id="status" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div class="toast-body bg-success text-light">
+                                    Status updated and email sent!
+                                </div>
                             </div>
-                        </div>
-                        <div id="error" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
-                            <div class="toast-body bg-danger text-light">
-                                Something went wrong.
+                            <div id="error" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div class="toast-body bg-danger text-light">
+                                    Something went wrong.
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                <?php else: ?>
+                    <?php include_once "../../403.php"; ?>
+                <?php endif; ?>
             </div>
         </div>
         <!-- ============================================================== -->

@@ -1,5 +1,6 @@
 $(function () {
     console.log('Document is ready');
+    console.log('Permission js',userPermissions);
     // const bookingTable = $('#bookingTable').DataTable();
 
     const baseURL = '../../../admin/tech/includes/encode/facility_api.php?action=';
@@ -142,10 +143,19 @@ $(function () {
                     <strong>Status:</strong> ${status}<br>
                 </div>
 
-                <button id="cancelBooking" data-room="${event.extendedProps.room}" class="btn btn-sm btn-outline-danger mt-3 ${status == 'Approved' ? 'd-none' : ''} " ${status == 'Cancelled' ? 'disabled' : ''}>
+                <button 
+                    id="cancelBooking" 
+                    data-room="${event.extendedProps.room}" 
+                    class="btn btn-sm btn-outline-danger mt-3 ${status == 'Approved' ? 'd-none' : ''} " ${status == 'Cancelled' ? 'disabled' : ''}
+                    ${Array.isArray(userPermissions) && userPermissions.includes("EDIT")? '' : 'disabled' }
+                >
                     Cancel Booking
                 </button>
             `;
+
+            if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
+
+            }
             $('#eventDetails').html(details);
             $('#eventBookedModal').modal('show'); // Show the details modal
 
