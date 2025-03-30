@@ -300,7 +300,7 @@ access_log($userData);
                             <!-- usage -->
                             <div class="card">
                                 <div class="card-header">
-                                    <h4>Usage Patterns</h4>
+                                    <h4>Ranking Usage</h4>
                                 </div>
                                 <div class="card-body">
                                     <canvas id="usagePatterns"></canvas>
