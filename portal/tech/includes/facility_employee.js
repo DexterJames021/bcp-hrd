@@ -3,7 +3,7 @@ $(function () {
     console.log('Permission js',userPermissions);
     // const bookingTable = $('#bookingTable').DataTable();
 
-    const baseURL = '../../../admin/tech/includes/encode/facility_api.php?action=';
+    const baseURL = '../../admin/tech/includes/encode/facility_api.php?action=';
 
     function loadRooms() {
         $.get(baseURL + 'fetch_avail_room',
