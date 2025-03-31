@@ -56,14 +56,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     echo $email_status;
 
     // Redirect back to the manage applications page
-    header("Location: ../recruitment.php?job_id=" . $_GET['job_id'] . "#applicant");
+    $job_id = isset($_GET['job_id']) ? $_GET['job_id'] : ''; // Siguraduhing may value
+header("Location: ../recruitment.php?job_id=" . $job_id . "#applicant");
+exit();
 
-    exit();
 } else {
     // If not a POST request, redirect to the manage applications page
-    header("Location: ../recruitment.php?job_id=" . $_GET['job_id'] . "#applicant");
+    $job_id = isset($_GET['job_id']) ? $_GET['job_id'] : ''; // Siguraduhing may value
+header("Location: ../recruitment.php?job_id=" . $job_id . "#applicant");
+exit();
 
-    exit();
 }
 
 // Function to send email notification based on the applicant's status

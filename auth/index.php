@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     case 'employee':
                         header("Location: ../portal/index.php");
                         exit;
-                    case 'staff':
+                    case 'New Hire':
                         header("Location: ../admin/talent/onboarding/new_hire/step1.php");
                         exit;
                     default:

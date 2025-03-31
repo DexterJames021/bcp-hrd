@@ -252,10 +252,10 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                             </li>
                             <!-- Talent Management -->
                             <li class="nav-item">
-                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'recruitment.php' || basename($_SERVER['PHP_SELF']) == 'onboarding.php' || basename($_SERVER['PHP_SELF']) == 'indextalent.php') ? 'active' : ''; ?>"
+                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'recruitment.php' || basename($_SERVER['PHP_SELF']) == 'employees.php' || basename($_SERVER['PHP_SELF']) == 'onboarding.php' || basename($_SERVER['PHP_SELF']) == 'indextalent.php') ? 'active' : ''; ?>"
                                     href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2"
                                     aria-controls="submenu-2">
-                                    <i class="fa fa-fw fa-rocket"></i> Talent Management
+                                    <i class="fa fa-fw fa-rocket"></i> Employee Management
                                 </a>
 
 
@@ -265,6 +265,12 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                                             <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'indextalent.php') ? 'active' : ''; ?>"
                                                 href="<?php echo $base_url; ?>/admin/talent/indextalent.php">
                                                 Dashboard
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'employees.php') ? 'active' : ''; ?>"
+                                                href="<?php echo $base_url; ?>/admin/talent/employees.php">
+                                                Employees
                                             </a>
                                         </li>
                                         <li class="nav-item">
@@ -279,12 +285,7 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                                                 Onboarding
                                             </a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'talentretention.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/admin/talent/talentretention.php">
-                                                Talent Retention
-                                            </a>
-                                        </li>
+                                        
                                         <li class="nav-item">
                                             <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'succession.php') ? 'active' : ''; ?>"
                                                 href="<?php echo $base_url; ?>/admin/talent/succession.php">
