@@ -7,7 +7,7 @@
         left: 0;
         width: 100vw;
         height: 100vh;
-        background-color: rgb(1, 69, 205);
+        background-color: #0e0c28;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -42,7 +42,7 @@
 
     </div>
 </div>
-<script>
+<!-- <script>
     $(document).ajaxStart(function() {
   
         
@@ -51,4 +51,4 @@
         $(this).remove();
     });
 });
-</script>
+</script> -->
