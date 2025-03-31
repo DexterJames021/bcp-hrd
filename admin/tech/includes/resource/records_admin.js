@@ -61,7 +61,8 @@ $(function () {
         dom: 'Bfrtip',
         buttons: ['csv', 'excel', 'pdf', 'print'],
     });
-    
+
+
 
     //performance chart
     function renderPerformanceChart(score) {
@@ -184,35 +185,27 @@ $(function () {
             success: function (response) {
                 console.table(response); // Log the response to verify its structure
 
-                // Ensure the response is an array
                 const dataArray = Array.isArray(response) ? response : [response];
 
-                if ($.fn.DataTable.isDataTable("#trainingList")) {
-                    $("#trainingList").DataTable().destroy();
-                }
-        
-                // Clear the table content to avoid duplication
                 $("#trainingList").empty();
 
-                // Initialize DataTable with the fetched data
-                $("#trainingList").DataTable({
-                    autoWidth: true,
-                    processing: true,
-                    data: dataArray, // Pass the fetched data as an array
-                    columns: [
-                        { title: "Training Name", data: "TrainingName" },
-                        { title: "Description", data: "Description" },
-                        { title: "Start Date", data: "StartDate" },
-                        { title: "End Date", data: "EndDate" },
-                        { title: "Instructor", data: "Instructor" },
-                        { title: "Training Status", data: "TrainingStatus" },
-                        { title: "Completion Date", data: "CompletionDate" }
-                    ]
+                dataArray.forEach(function (training) {
+                    const row = `
+                <tr>
+                    <td>${training.TrainingName || ''}</td>
+                    <td>${training.Description || ''}</td>
+                    <td>${training.StartDate || ''}</td>
+                    <td>${training.EndDate || ''}</td>
+                    <td>${training.Instructor || ''}</td>
+                    <td>${training.TrainingStatus || ''}</td>
+                    <td>${training.CompletionDate || ''}</td>
+                </tr>
+            `;
+                    $("#trainingList").append(row);
                 });
             },
             error: function (xhr, status, error) {
                 console.error("AJAX Error:", status, error);
-                alert('An error occurred while fetching training data');
             }
         });
     });

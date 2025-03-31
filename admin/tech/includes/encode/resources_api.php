@@ -69,8 +69,29 @@ switch ($action) {
         }
         break;
 
+    case 'update_allocation_status':
+        if (!isset($_POST['id'])) {
+            echo json_encode(['success' => false, 'message' => 'Resource ID is required.']);
+            return;
+        }
+
+        $id = $_POST['id'];
+
+        $success = $resource->updateAllocationStatus($id);
+
+        if ($success) {
+            echo json_encode(['success' => true, 'message' => 'Resource updated successfully.']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Failed to update resource.']);
+        }
+        break;
+
     case 'get_resources_available':
         echo json_encode($resource->getAvailableResource());
+        break;
+
+    case 'get_allocation_log':
+        echo json_encode($resource->getAllocatedResourcesLog());
         break;
 
     case 'request_resources':

@@ -180,12 +180,53 @@ $(function () {
             data.status === "Allocated";
           return isOverdue
             ? `<span class="badge bg-danger">Overdue</span>`
-            : `<span class="badge bg-info">${data.status}</span>`;
+            : `<span class="badge bg-secondary">${data.status}</span>`;
         },
       },
+      {
+        title: "Return Action",
+        data: null,
+        render: function (data) {
+          let returntemplate = '';
+
+          if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
+            returntemplate = `<button class="returnBtn btn btn-outline-white" data-return="${data.id}"  title="Return?">
+                              <i class="bi bi-archive-fill"></i>
+                              </button>`;
+          }
+          return returntemplate || '<i class="bi bi-ban text-danger" title="No permission" style="font-size:x-large;"></i>';
+        }
+      }
     ],
   });
 
+  $(document).on("click", ".returnBtn", function () {
+    const returnid = $(this).data("return")
+    console.log('return id', returnid);
+
+    $.ajax({
+      url: "./includes/encode/resources_api.php?action=update_allocation_status",
+      method: "POST",
+      dataType: "JSON",
+      data: {
+        id: returnid,
+      },
+      success: function (response) {
+        if (response.success) {
+          $("#added").toast("show");
+          allocationTable.ajax.reload();
+        } else {
+          $("#error").toast("show");
+        }
+      },
+      error: function () {
+        $("#error").toast("show");
+      },
+    });
+  })
+
+
+  //! not use
   $("#allocationTable").on("click", ".dropdown-item", function () {
     const row = $(this).closest("tr");
     const status = $(this).text().trim();

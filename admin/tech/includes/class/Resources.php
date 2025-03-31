@@ -61,6 +61,17 @@ class Resources
         return $stmt->execute($data); // Pass only the $data array to execute()
     }
 
+    public function updateAllocationStatus($id)
+    {
+        $q = "UPDATE fm_resource_allocations 
+            SET 
+                status = 'Returned'
+            WHERE id = :id";
+
+        $stmt = $this->conn->prepare($q);
+        return $stmt->execute(['id' => $id]);
+    }
+
     public function delete_asset($id)
     {
         $q = "DELETE FROM {$this->table} WHERE id=:id";
@@ -216,6 +227,23 @@ class Resources
     }
 
     public function getAllocatedResources()
+    {
+        try {
+            $q = "SELECT ra.* , fr.name as resource_name , us.username 
+                FROM fm_resource_allocations ra 
+                JOIN fm_resources fr ON ra.resource_id = fr.id 
+                JOIN users us ON ra.employee_id = us.id 
+                WHERE ra.status != 'Returned'
+                ORDER BY ra.id DESC; ";
+            $stmt = $this->conn->prepare($q);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function getAllocatedResourcesLog()
     {
         try {
             $q = "SELECT ra.* , fr.name as resource_name , us.username 
