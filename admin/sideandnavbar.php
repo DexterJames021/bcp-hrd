@@ -68,7 +68,7 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                                 <div class="notification-title"> Notification</div>
                                 <div class="notification-list">
                                     <div class="list-group">
-                                        <a href="#" class="list-group-item list-group-item-action active">
+                                        <!--  <a href="#" class="list-group-item list-group-item-action active">
                                             <div class="notification-info">
                                                 <div class="notification-list-user-img"><img src="#" alt=""
                                                         class="user-avatar-md rounded-circle"></div>
@@ -78,7 +78,7 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                                                     <div class="notification-date">2 min ago</div>
                                                 </div>
                                             </div>
-                                        </a>
+                                             </a>
                                         <a href="#" class="list-group-item list-group-item-action">
                                             <div class="notification-info">
                                                 <div class="notification-list-user-img"><img src="#" alt=""
@@ -100,16 +100,10 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                                                     <div class="notification-date">2 min ago</div>
                                                 </div>
                                             </div>
-                                        </a>
+                                        </a> -->
                                         <a href="#" class="list-group-item list-group-item-action">
-                                            <div class="notification-info">
-                                                <div class="notification-list-user-img"><img src="#" alt=""
-                                                        class="user-avatar-md rounded-circle"></div>
-                                                <div class="notification-list-user-block"><span
-                                                        class="notification-list-user-name">Jessica
-                                                        Caruso</span>accepted your invitation to join the team.
-                                                    <div class="notification-date">2 min ago</div>
-                                                </div>
+                                            <div class="notification-list-user-block"><span
+                                                    class="notification-list-user-name">No notification</span>
                                             </div>
                                         </a>
                                     </div>
@@ -285,7 +279,7 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                                                 Onboarding
                                             </a>
                                         </li>
-                                        
+
                                         <li class="nav-item">
                                             <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'succession.php') ? 'active' : ''; ?>"
                                                 href="<?php echo $base_url; ?>/admin/talent/succession.php">
@@ -451,6 +445,7 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                                 </div>
                             </li>
                         <?php else: ?>
+                            <!-- SUPER ADMIN NAVIGATION -->
                             <li class="nav-item">
                                 <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : ''; ?>"
                                     href="<?php echo $base_url; ?>/admin/index.php">
