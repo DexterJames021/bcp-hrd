@@ -118,8 +118,8 @@ $employee_count = $row['count'];
         <th class="border-0">No.</th>
         <th class="border-0">First Name</th>
         <th class="border-0">Last Name</th>
-        <th class="border-0">Email</th>
-        <th class="border-0">Phone</th>
+        <th class="border-0">Job Position</th>
+        <th class="border-0">Department</th>
         <th class="border-0">Status</th>
         <th class="border-0">Action</th>
     </tr>
@@ -127,8 +127,14 @@ $employee_count = $row['count'];
 
 <tbody>
     <?php
-    // Query to fetch employee data from the database
-    $sql = "SELECT EmployeeID, FirstName, LastName, Email, Phone, DOB, Status FROM employees";
+    // Query to fetch employee data along with job position and department using joins
+    $sql = "SELECT e.EmployeeID, e.FirstName, e.LastName, jp.job_title, d.DepartmentName, e.Status 
+            FROM employees e
+            JOIN users u ON e.UserID = u.id 
+            JOIN applicants a ON u.applicant_id = a.id 
+            JOIN job_postings jp ON a.job_id = jp.id  -- Job posting and applicant job link
+            JOIN departments d ON a.DepartmentID = d.DepartmentID"; // Department and applicant department link
+    
     $result = $conn->query($sql);
 
     $counter = 1; // Initialize counter for numbering
@@ -139,9 +145,8 @@ $employee_count = $row['count'];
             echo "<td>" . $counter . "</td>"; // Display row number
             echo "<td>" . htmlspecialchars($row['FirstName']) . "</td>";
             echo "<td>" . htmlspecialchars($row['LastName']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['Email']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['Phone']) . "</td>";
-
+            echo "<td>" . htmlspecialchars($row['job_title']) . "</td>"; // Display Job Position
+            echo "<td>" . htmlspecialchars($row['DepartmentName']) . "</td>"; // Display Department Name
             echo "<td>" . htmlspecialchars($row['Status']) . "</td>";
             echo "<td>
                     <button class='btn btn-info btn-sm btn-action' 
@@ -150,8 +155,8 @@ $employee_count = $row['count'];
                         data-employeeid='" . htmlspecialchars($row['EmployeeID']) . "' 
                         data-firstname='" . htmlspecialchars($row['FirstName']) . "' 
                         data-lastname='" . htmlspecialchars($row['LastName']) . "' 
-                        data-email='" . htmlspecialchars($row['Email']) . "' 
-                        data-phone='" . htmlspecialchars($row['Phone']) . "' 
+                        data-jobtitle='" . htmlspecialchars($row['job_title']) . "' 
+                        data-department='" . htmlspecialchars($row['DepartmentName']) . "' 
                         data-status='" . htmlspecialchars($row['Status']) . "'>View Info</button>
                 </td>";
             echo "</tr>";
@@ -159,10 +164,13 @@ $employee_count = $row['count'];
             $counter++; // Increment counter
         }
     } else {
-        echo "<tr><td colspan='8'>No employees found.</td></tr>";
+        echo "<tr><td colspan='7'>No employees found.</td></tr>";
     }
     ?>
 </tbody>
+
+
+
 
 
                                         </table>
