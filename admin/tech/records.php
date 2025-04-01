@@ -15,7 +15,7 @@ access_log($userData);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- icon -->
-    <link rel="shortcut icon" href= "../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
+    <link rel="shortcut icon" href="../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -358,6 +358,29 @@ access_log($userData);
                                         </tr>
                                     </thead>
                                     <tbody id="trainingList"></tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <!-- Compensation  list -->
+                        <div class="card ">
+                            <div class="card-title p-3 d-flex justify-content-between">
+                                <h3><span id="compensationName"></span> Compensation</h3>
+                                <!-- <div>
+                                    <button id="backButton" class="btn btn-outline-light d-inline">Back to List</button>
+                                </div> -->
+                            </div>
+                            <div class="card-body">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Base Salary</th>
+                                            <th>Bonus</th>
+                                            <th>Benefit Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="compensationList"></tbody>
                                 </table>
                             </div>
 

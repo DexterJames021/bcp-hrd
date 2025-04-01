@@ -1,11 +1,11 @@
 $(function () {
-    
-    const baseURL = 
-    window.location.hostname === "localhost"
-    ? "http://localhost/bcp-hrd/admin/tech/includes/encode/users_api.php?action="
-    : "https://yourdomain.com/bcp-hrd/admin/tech/encode/users_api.php?action=";
-  
-    
+
+    const baseURL =
+        window.location.hostname === "localhost"
+            ? "http://localhost/bcp-hrd/admin/tech/includes/encode/users_api.php?action="
+            : "https://yourdomain.com/bcp-hrd/admin/tech/encode/users_api.php?action=";
+
+
     let performanceChartInstance = null;
 
     $('#RecordsTable').DataTable({
@@ -214,6 +214,36 @@ $(function () {
                 console.error("AJAX Error:", status, error);
             }
         });
+
+        //salary
+        $.ajax({
+            url: baseURL + 'get_by_id_salary',
+            method: 'POST',
+            data: { id: employeeId },
+            dataType: 'json',
+            success: function (response) {
+                console.log("salary", response);
+
+                const dataArray = Array.isArray(response) ? response : [response];
+
+                $("#trainingList").empty();
+
+                dataArray.forEach(function (compen) {
+                    const row = `
+                <tr>
+                    <td>${compen.BaseSalary || ''}</td>
+                    <td>${compen.Bonus || ''}</td>
+                    <td>${compen.BenefitValue || ''}</td>
+                </tr>
+            `;
+                    $("#compensationList").append(row);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error:", status, error);
+            }
+        });
+
     });
 
     $('#backButton').on('click', function () {
