@@ -2,7 +2,10 @@ $(function () {
     console.log('connect');
     console.log("JS ROLE PASS:  ", userPermissions);
 
-    const BaseURL = "./includes/encode/facility_api.php?action=";
+    const BaseURL = 
+    window.location.hostname === "localhost"
+    ? "http://localhost/bcp-hrd/admin/tech/includes/encode/facility_api.php?action="
+    : "https://yourdomain.com/bcp-hrd/admin/tech/encode/facility_api.php?action=";
 
     $("#openModalBtn").on("click", function () {
         $("#reportModal").modal("show");
@@ -52,8 +55,8 @@ $(function () {
             render: function (data) {
                 let buttons = '';
                 // console.log("Checking Permissions for:", row.id);
-                console.log("User Has UPDATE:", userPermissions.includes("EDIT"));
-                console.log("User Has DELETE:", userPermissions.includes("DELETE"));
+                // console.log("User Has UPDATE:", userPermissions.includes("EDIT"));
+                // console.log("User Has DELETE:", userPermissions.includes("DELETE"));
 
                 if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
                     buttons += `<button class="edit-btn btn my-1" data-id="${data.id}" title="UPDATE">
@@ -77,7 +80,7 @@ $(function () {
 
     function loadAnalytics() {
         $.ajax({
-            url: BaseURL + "action=get_all_room",
+            url: BaseURL + "get_all_room",
             method: "POST",
             dataType: "JSON",
             success: function (data) {
@@ -110,11 +113,11 @@ $(function () {
                 $('#EditFacilityForm input[name="edit_capacity"]').val(room.capacity);
                 $('#EditFacilityForm select[name="edit_status"]').val(room.status);
             } else {
-                alert('Failed to load room details.');
+                $("#error").toast("show")
             }
         }, 'json').fail(function (xhr, status, error) {
             console.error("Error fetching room data:", error);
-            alert('An error occurred while fetching the room details.');
+            $("#error").toast("show")
         });
     });
 
@@ -131,11 +134,11 @@ $(function () {
                 $('#editRoomModal').modal('hide');
                 bookingTable.ajax.reload();
             } else {
-                alert(response.error || 'Failed to update facility.');
+                $("#error").toast("show")
             }
         }, 'json').fail(function (xhr, status, error) {
             console.error("Error updating room:", error);
-            alert('An error occurred while updating the facility.');
+            $("#error").toast("show")
         });
     });
 
@@ -145,14 +148,14 @@ $(function () {
         if (confirm('Are you sure you want to delete this facility?')) {
             $.post(BaseURL + 'delete_room', { id }, function (response) {
                 if (response.success) {
-                    alert('Facility deleted successfully!');
+                    $("#delete").toast("show")
                     bookingTable.ajax.reload();
                 } else {
-                    alert(response.error || 'Failed to delete facility.');
+                    $("#error").toast("show")
                 }
             }, 'json').fail(function (xhr, status, error) {
                 console.error("Error deleting room:", error);
-                alert('An error occurred while deleting the facility.');
+                $("#error").toast("show")
             });
         }
     });
@@ -206,8 +209,8 @@ $(function () {
             render: function (data) {
                 let buttons = '';
                 // console.log("Checking Permissions for:", row.id);
-                console.log("User Has UPDATE:", userPermissions.includes("EDIT"));
-                console.log("User Has DELETE:", userPermissions.includes("DELETE"));
+                // console.log("User Has UPDATE:", userPermissions.includes("EDIT"));
+                // console.log("User Has DELETE:", userPermissions.includes("DELETE"));
 
                 if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
                     buttons += `<button 

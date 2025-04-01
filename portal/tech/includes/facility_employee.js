@@ -3,7 +3,12 @@ $(function () {
     console.log('Permission js',userPermissions);
     // const bookingTable = $('#bookingTable').DataTable();
 
-    const baseURL = '../../admin/tech/includes/encode/facility_api.php?action=';
+
+    const baseURL =
+    window.location.hostname === "localhost"
+      ? "http://localhost/bcp-hrd/admin/tech/includes/encode/facility_api.php?action="
+      : "https://yourdomain.com/bcp-hrd/admin/tech/encode/facility_api.php?action=";
+
 
     function loadRooms() {
         $.get(baseURL + 'fetch_avail_room',
@@ -17,7 +22,7 @@ $(function () {
     }
 
     function loadRooms2() {
-        $.get('../../../admin/tech/includes/encode/facility_api.php?action=fetch_avail_room',
+        $.get(baseURL + 'fetch_avail_room',
             function (data) {
                 const rooms = JSON.parse(data);
                 $('#roomSelect2').empty().append('<option value="" selected disabled hidden>Select Room</option>');

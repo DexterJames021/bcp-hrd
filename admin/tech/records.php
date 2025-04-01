@@ -1,7 +1,7 @@
 <!-- tech record  -->
 <?php
-require '../../config/Database.php';
-require '../../auth/accesscontrol.php';
+require __DIR__ . '../../../config/Database.php';
+require __DIR__ . '../../../auth/accesscontrol.php';
 
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);
@@ -15,7 +15,7 @@ access_log($userData);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- icon -->
-    <link rel="shortcut icon" href="../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
+    <link rel="shortcut icon" href= "../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">

@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 header("Access-Control-Allow-Origin: *"); //  domain
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
-// header("Content-Type: application/json");
+// header("Content-Type: application/json"); employee b 
 
 require '../class/Room.php';
 require '../class/Booking.php';

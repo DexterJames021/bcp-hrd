@@ -1,6 +1,19 @@
 $(function () {
 
-    const BaseURL = "../includes/encode/facility_api.php?action=";
+    const BaseURLREs = 
+    window.location.hostname === "localhost"
+    ? "http://localhost/bcp-hrd/admin/tech/includes/encode/resources_api.php?action="
+    : "https://yourdomain.com/bcp-hrd/admin/tech/encode/resources_api.php?action=";
+
+    const BaseURLFac = 
+    window.location.hostname === "localhost"
+    ? "http://localhost/bcp-hrd/admin/tech/includes/encode/facility_api.php?action="
+    : "https://yourdomain.com/bcp-hrd/admin/tech/encode/facility_api.php?action=";
+
+    const GenURL = 
+    window.location.hostname === "localhost"
+    ? "http://localhost/bcp-hrd/admin/tech/includes/encode/report_api.php?action="
+    : "https://yourdomain.com/bcp-hrd/admin/tech/encode/report_api.php?action=";
 
     let generatedReport = "";
 
@@ -12,7 +25,7 @@ $(function () {
         $("#downloadBtn").hide();
 
         $.ajax({
-            url: "../includes/encode/resources_api.php?action=fetch_all_request",
+            url: BaseURLREs + "fetch_all_request",
             method: "POST",
             dataType: "JSON",
             success: function (logs) {
@@ -34,7 +47,7 @@ $(function () {
         $("#downloadBtn").hide();
 
         $.ajax({
-            url: "../includes/encode/facility_api.php?action=fetch_all_book_adm",
+            url: BaseURLFac + "fetch_all_book_adm",
             method: "POST",
             dataType: "JSON",
             success: function (logs) {
@@ -53,7 +66,7 @@ $(function () {
         let logSummary = JSON.stringify(filteredLogs, null, 2);
 
         $.ajax({
-            url: "../includes/encode/report_api.php",
+            url: GenURL,
             method: "POST",
             data: {
                 message: `Generate a structured facility usage report based only on the provided data.  
@@ -106,7 +119,7 @@ $(function () {
         let logSummary = JSON.stringify(filteredLogs, null, 2);
 
         $.ajax({
-            url: "../includes/encode/report_api.php",
+            url: GenURL,
             method: "POST",
             data: {
                 message: `FORMAL : Generate a structured assets/resources usage report based only on the provided data.  
@@ -173,7 +186,7 @@ $(function () {
         let blob = new Blob([generatedReport], { type: "text/plain" });
         let link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = `Facility_Log_Report ${new Date().getDate()}.pdf`;
+        link.download = `Log_Report ${new Date().getDate()}.pdf`;
         link.click();
     });
 

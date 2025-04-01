@@ -1,8 +1,11 @@
 console.log("connect");
 
 $(function () {
+
   const baseURL =
-    "../../admin/tech/includes/encode/resources_api.php?action=";
+    window.location.hostname === "localhost"
+      ? "http://localhost/bcp-hrd/admin/tech/includes/encode/resources_api.php?action="
+      : "https://yourdomain.com/bcp-hrd/admin/tech/encode/resources_api.php?action=";
 
   const ResourcesTable = $("#ResourcesTable").DataTable({
     processing: true,
@@ -70,25 +73,28 @@ $(function () {
     const formData = $(this).serialize();
     console.log(formData);
 
-    $.post(
-      baseURL + "request_resources",
-      formData,
-      function (response) {
-        if (response.success) {
-        //   alert("Request submitted successfully!");
+
+    if (confirm('Make sure the request is final?')) {
+      $.post(
+        baseURL + "request_resources",
+        formData,
+        function (response) {
+          if (response.success) {
+            //   alert("Request submitted successfully!");
             $('#added').toast('show');
-          $("#resourceRequestForm")[0].reset();
-          ResourcesTable.ajax.reload();
-        } else {
+            $("#resourceRequestForm")[0].reset();
+            ResourcesTable.ajax.reload();
+          } else {
             $('#error').toast('show');
 
-        //   alert("Failed to submit request: " + response.message);
-        }
-      },
-      "json"
-    ).fail(function () {
-      alert("Error processing your request.");
-    });
+            //   alert("Failed to submit request: " + response.message);
+          }
+        },
+        "json"
+      ).fail(function () {
+        alert("Error processing your request.");
+      });
+    }
   });
 
   loadResourcesSelectTag();

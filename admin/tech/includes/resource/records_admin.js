@@ -1,5 +1,11 @@
 $(function () {
-    const baseURL = "./includes/encode/users_api.php?action=";
+    
+    const baseURL = 
+    window.location.hostname === "localhost"
+    ? "http://localhost/bcp-hrd/admin/tech/includes/encode/users_api.php?action="
+    : "https://yourdomain.com/bcp-hrd/admin/tech/encode/users_api.php?action=";
+  
+    
     let performanceChartInstance = null;
 
     $('#RecordsTable').DataTable({

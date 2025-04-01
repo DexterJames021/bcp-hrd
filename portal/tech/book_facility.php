@@ -87,7 +87,7 @@ access_log($userData);
                     <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="page-header d-flex justify-content-between">
-                                <h2 class="pageheader-title">Facility Booking </h2>
+                                <h2 class="pageheader-title">Events and Booking </h2>
                                 <div class="btn-group" role="group" aria-label="Request a Boom or Cancel">
                                     <?php if ($userData && in_array("CREATE", $userData['permissions'])): ?>
                                         <button type="button" class="btn btn-primary float-right" data-toggle="modal"

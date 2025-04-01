@@ -2,7 +2,11 @@ $(function () {
   // ASSETS
   console.log("RESOURCES ADMIN");
   console.log("JS ROLE PASS:  ", userPermissions);
-  const BaseURL = "./includes/encode/resources_api.php?action=";
+  
+  const BaseURL =
+    window.location.hostname === "localhost"
+      ? "http://localhost/bcp-hrd/admin/tech/includes/encode/resources_api.php?action="
+      : "https://yourdomain.com/bcp-hrd/admin/tech/encode/resources_api.php?action=";
 
   const resourcesTable = $("#ResourcesTable").DataTable({
     processing: true,
@@ -169,7 +173,7 @@ $(function () {
 
           if (data.status == 'Approved') {
             if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
-                  returntemplate = `<button id="returnBtnItem" class=" btn " data-request-id="${data.id}"  title="Return?">
+              returntemplate = `<button id="returnBtnItem" class=" btn " data-request-id="${data.id}"  title="Return?">
                   <i class="bi bi-archive-fill"></i>
               </button>`;
             }

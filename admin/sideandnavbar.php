@@ -331,11 +331,11 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                                                 </ul>
                                             </div>
                                         </li>
-                                        <li class="nav-item">
+                                        <!-- <li class="nav-item">
                                             <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'records.php') ? 'active' : ''; ?>"
                                                 href="<?php echo $base_url; ?>/admin/tech/records.php">Employee Personnel
                                                 Records</a>
-                                        </li>
+                                        </li> -->
                                         <!-- <li class="nav-item">
                                         <a class="nav-link < ?php echo (basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : ''; ?>"
                                             href="< ?php echo $base_url; ?>/admin/tech/reports.php">Administrative
@@ -446,10 +446,84 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'usercontrol.php') ? 'active' : ''; ?>"
-                                    href="<?php echo $base_url; ?>/admin/tech/usercontrol.php">
-                                    <i class="bi bi-person-fill-gear"></i>User Control</a>
+                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'resource_list.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'room_book_list.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'records.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'usercontrol.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'facilities.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'resources.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : ''; ?>" href="#"
+                                    data-toggle="collapse" aria-expanded="false" data-target="#submenu-3"
+                                    aria-controls="submenu-3"><i class="fas fa-fw fa-chart-pie"></i> Tech & Analytics</a>
+                                <div id="submenu-3" class="collapse submenu <?php echo (basename($_SERVER['PHP_SELF']) == 'resource_list.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'room_book_list.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'records.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'usercontrol.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'resources.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'facilities.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'show' : ''; ?>">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                                data-target="#submenu-3-1" aria-controls="submenu-3-1">Facilities &
+                                                Resources</a>
+                                            <div id="submenu-3-1"
+                                                class="collapse submenu <?php echo (basename($_SERVER['PHP_SELF']) == 'resource_list.php' ||
+                                                    basename($_SERVER['PHP_SELF']) == 'room_book_list.php') ? 'show' : ''; ?>">
+                                                <ul class="nav flex-column">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'resource_list.php') ? 'active' : ''; ?>"
+                                                            href="<?php echo $base_url; ?>/admin/tech/resource_list.php">Resources
+                                                            Management</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'room_book_list.php') ? 'active' : ''; ?>"
+                                                            href="<?php echo $base_url; ?>/admin/tech/room_book_list.php">Facility
+                                                            Management</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'records.php') ? 'active' : ''; ?>"
+                                                href="<?php echo $base_url; ?>/admin/tech/records.php">Employee Personnel
+                                                Records</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'usercontrol.php') ? 'active' : ''; ?>"
+                                                href="<?php echo $base_url; ?>/admin/tech/usercontrol.php">
+                                                <!-- <i class="bi bi-person-fill-gear"></i> -->
+                                                User Control</a>
+                                        </li>
+                                        <!-- <li class="nav-item">
+                                        <a class="nav-link < ?php echo (basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : ''; ?>"
+                                            href="< ?php echo $base_url; ?>/admin/tech/reports.php">Administrative
+                                            Report</a>
+                                    </li> -->
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                                data-target="#submenu-3-2" aria-controls="submenu-3-2">Analytics</a>
+                                            <div id="submenu-3-2" class="collapse submenu  <?php echo (basename($_SERVER['PHP_SELF']) == 'resources.php' ||
+                                                basename($_SERVER['PHP_SELF']) == 'facilities.php') ? 'show' : ''; ?>">
+                                                <ul class="nav flex-column">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'facilities.php') ? 'active' : ''; ?>"
+                                                            href="<?php echo $base_url; ?>/admin/tech/analytics/facilities.php">Monitor
+                                                            Facilities</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'resources.php') ? 'active' : ''; ?>"
+                                                            href="<?php echo $base_url; ?>/admin/tech/analytics/resources.php">Monitor
+                                                            Resources</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li>
+
+                                    </ul>
+                                </div>
                             </li>
+
                         <?php endif; ?>
                     </ul>
                 </div>

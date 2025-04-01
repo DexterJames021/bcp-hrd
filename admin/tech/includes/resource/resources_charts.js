@@ -1,4 +1,10 @@
 $(function () {
+  
+  const BaseUrl =
+    window.location.hostname === "localhost"
+      ? "http://localhost/bcp-hrd/admin/tech/includes/encode/resources_api.php?action="
+      : "https://yourdomain.com/bcp-hrd/admin/tech/encode/resources_api.php?action=";
+
   $("#logsView").on("click", function () {
     // console.log("true")
     $("#analyticPage").hide();
@@ -9,7 +15,7 @@ $(function () {
     processing: true,
     dom: "Bfrtip",
     ajax: {
-      url: "../includes/encode/resources_api.php?action=fetch_all_request",
+      url: BaseUrl + "fetch_all_request",
       dataType: "json",
       dataSrc: "",
     },
@@ -36,7 +42,7 @@ $(function () {
   });
 
   $.ajax({
-    url: "../includes/encode/resources_api.php?action=usage_patterns", // Replace with your API URL
+    url: BaseUrl + "usage_patterns", // Replace with your API URL
     type: "POST",
     dataType: "json",
     success: function (response) {
@@ -68,7 +74,7 @@ $(function () {
     console.log(startDate);
     if (startDate && endDate) {
       $.ajax({
-        url: "../includes/encode/resources_api.php?action=usage_patterns",
+        url: BaseUrl + "usage_patterns",
         type: "POST",
         data: {
           start_date: startDate,
@@ -104,7 +110,7 @@ $(function () {
   });
 
   $.ajax({
-    url: "../includes/encode/resources_api.php?action=requests_trend", // Replace with your API URL
+    url: BaseUrl + "requests_trend", // Replace with your API URL
     type: "POST",
     dataSrc: "",
     dataType: "json",
@@ -133,7 +139,7 @@ $(function () {
   });
 
   $.ajax({
-    url: "../includes/encode/resources_api.php?action=unused_resources",
+    url: BaseUrl + "unused_resources",
     type: "GET",
     dataType: "json",
     success: function (response) {
@@ -189,7 +195,7 @@ $(function () {
   });
 
   $.ajax({
-    url: "../includes/encode/resources_api.php?action=categorize_resources",
+    url: BaseUrl + "categorize_resources",
     type: "POST",
     dataType: "json",
     success: function (response) {

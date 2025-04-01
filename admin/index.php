@@ -1,9 +1,11 @@
 <?php
-require "../config/db_talent.php";
-require '../auth/mysqli_accesscontrol.php';
+require __DIR__ . "../../config/db_talent.php";
+require __DIR__ .'../../auth/mysqli_accesscontrol.php';
 
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);
+
+echo "console.log(ROOT +++++++++++ ".$_SERVER['DOCUMENT_ROOT'].")";
 
 
 // Fetch total employees
