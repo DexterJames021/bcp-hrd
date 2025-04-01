@@ -152,14 +152,17 @@ $(function () {
             if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
               buttons += `<button type="button" class="btn-approve btn my-1" data-id="${data.id}" title="APPROVE">
               <i class="bi bi-check-circle text-success" style="font-size:x-large;"></i>
-              </button>`;
-            }
-
-            if (Array.isArray(userPermissions) && userPermissions.includes("DELETE")) {
-              buttons += `<button type="button" class="btn-reject btn my-1" data-id="${data.id}" title="REJECT">
+              </button>
+              <button type="button" class="btn-reject btn my-1" data-id="${data.id}" title="REJECT">
               <i class="bi bi-x-circle text-danger" style="font-size:x-large;"></i>
               </button>`;
             }
+//DELETE
+            // if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) { 
+              // buttons += `<button type="button" class="btn-reject btn my-1" data-id="${data.id}" title="REJECT">
+              // <i class="bi bi-x-circle text-danger" style="font-size:x-large;"></i>
+              // </button>`;
+            // }
           }
 
           return buttons || '<i  title="No action"></i>';

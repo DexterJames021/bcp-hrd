@@ -331,11 +331,11 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                                                 </ul>
                                             </div>
                                         </li>
-                                        <!-- <li class="nav-item">
+                                        <li class="nav-item">
                                             <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'records.php') ? 'active' : ''; ?>"
                                                 href="<?php echo $base_url; ?>/admin/tech/records.php">Employee Personnel
                                                 Records</a>
-                                        </li> -->
+                                        </li>
                                         <!-- <li class="nav-item">
                                         <a class="nav-link < ?php echo (basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : ''; ?>"
                                             href="< ?php echo $base_url; ?>/admin/tech/reports.php">Administrative

@@ -2,10 +2,10 @@ $(function () {
     console.log('connect');
     console.log("JS ROLE PASS:  ", userPermissions);
 
-    const BaseURL = 
-    window.location.hostname === "localhost"
-    ? "http://localhost/bcp-hrd/admin/tech/includes/encode/facility_api.php?action="
-    : "https://yourdomain.com/bcp-hrd/admin/tech/encode/facility_api.php?action=";
+    const BaseURL =
+        window.location.hostname === "localhost"
+            ? "http://localhost/bcp-hrd/admin/tech/includes/encode/facility_api.php?action="
+            : "https://yourdomain.com/bcp-hrd/admin/tech/encode/facility_api.php?action=";
 
     $("#openModalBtn").on("click", function () {
         $("#reportModal").modal("show");
@@ -104,7 +104,7 @@ $(function () {
     $(document).on('click', '.edit-btn', function () {
         const id = $(this).data('id');
 
-        $.get( BaseURL + `get_room_by_id`, { id }, function (room) {
+        $.get(BaseURL + `get_room_by_id`, { id }, function (room) {
             if (room) {
                 $('#editRoomModal').modal('show');
                 $('#EditFacilityForm input[name="edit_id"]').val(room.id);
@@ -126,7 +126,7 @@ $(function () {
 
         const formData = $(this).serialize();
 
-        $.post( BaseURL + 'update_room', formData, function (response) {
+        $.post(BaseURL + 'update_room', formData, function (response) {
             if (response.success) {
                 // alert('Facility updated successfully!');
                 $('#room_updated').toast('show');
@@ -214,18 +214,23 @@ $(function () {
 
                 if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
                     buttons += `<button 
-                        class="approve-btn btn my-1" 
-                        data-id="${data.id}">
-                        <i class="bi bi-check-circle text-success" style="font-size:x-large;"></i>
-                </button>`;
+                                        class="approve-btn btn my-1" 
+                                        data-id="${data.id}">
+                                        <i class="bi bi-check-circle text-success" style="font-size:x-large;"></i>
+                                </button>
+                                <button class="reject-btn btn my-1"
+                                        data-id="${data.id}">
+                                        <i class="bi bi-x-circle text-danger" style="font-size:x-large;"></i>
+                                </button>
+                                `;
                 }
 
-                if (Array.isArray(userPermissions) && userPermissions.includes("DELETE")) {
-                    buttons += `<button class="reject-btn btn my-1"
-                        data-id="${data.id}">
-                        <i class="bi bi-x-circle text-danger" style="font-size:x-large;"></i>
-                 </button>`;
-                }
+                // if (Array.isArray(userPermissions) && userPermissions.includes("DELETE")) {
+                //     buttons += `<button class="reject-btn btn my-1"
+                //         data-id="${data.id}">
+                //         <i class="bi bi-x-circle text-danger" style="font-size:x-large;"></i>
+                //  </button>`;
+                // }
 
                 return buttons || '<i class="bi bi-ban text-danger" title="No permission" style="font-size:x-large;"></i>';
             },
@@ -390,7 +395,7 @@ $(function () {
     // Booking form submission except admin and super
     $('#bookingForm').on('submit', function (e) {
         e.preventDefault();
-        $.post( BaseURL + 'create_booking',
+        $.post(BaseURL + 'create_booking',
             $(this).serialize(),
             function (response) {
                 if (response.success) {
@@ -410,7 +415,7 @@ $(function () {
         console.log(e.target);
         e.preventDefault();
         // console.log($(this).serialize());
-        $.post( BaseURL + 'create_room',
+        $.post(BaseURL + 'create_room',
             $(this).serialize(),
             function (response) {
                 if (response.success) {
