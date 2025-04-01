@@ -1,13 +1,15 @@
 $(function () {
   // ASSETS
+  console.log("RESOURCES ADMIN");
   console.log("JS ROLE PASS:  ", userPermissions);
+  const BaseURL = "./includes/encode/resources_api.php?action=";
 
   const resourcesTable = $("#ResourcesTable").DataTable({
     processing: true,
     width: "100%",
     dom: "Bfrtip",
     ajax: {
-      url: "./includes/encode/resources_api.php?action=fetch_all",
+      url: BaseURL + "fetch_all",
       dataType: "json",
       dataSrc: "",
     },
@@ -57,16 +59,19 @@ $(function () {
           // console.log("User Has DELETE:", userPermissions.includes("DELETE"));
 
           if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
-            buttons += `<button class="update btn btn" data-id="${data.id}" title="UPDATE">
+            buttons += `<button class="update btn btn-action" data-id="${data.id}" title="UPDATE">
                           <i class="bi bi-pencil-square text-primary"  style="font-size:x-large;"></i>
                       </button>`;
           }
 
           if (Array.isArray(userPermissions) && userPermissions.includes("DELETE")) {
-            buttons += `<button class="delete btn btn" data-id="${data.id}" title="UPDATE">
+            buttons += `<button class="delete btn btn-action" data-id="${data.id}" title="UPDATE">
                         <i class="bi bi-trash-fill text-danger"  style="font-size:x-large;"></i>
                     </button>`;
+
           }
+
+
 
           return buttons || '<i class="bi bi-ban text-danger" title="No permission" style="font-size:x-large;"></i>';
         },
@@ -77,7 +82,7 @@ $(function () {
 
   function loadAnalytics() {
     $.ajax({
-      url: "./includes/encode/resources_api.php?action=fetch_all",
+      url: BaseURL + "fetch_all",
       method: "POST",
       dataType: "JSON",
       success: function (data) {
@@ -102,7 +107,7 @@ $(function () {
     width: "100%",
     processing: true,
     ajax: {
-      url: "./includes/encode/resources_api.php?action=get_pending_request",
+      url: BaseURL + "get_pending_request",
       type: "POST",
       dataType: "JSON",
       dataSrc: "",
@@ -129,7 +134,7 @@ $(function () {
         data: "status",
       },
       {
-        title: "Action",
+        title: "Approval",
         data: null,
         ordering: true,
         render: function (data) {
@@ -138,28 +143,75 @@ $(function () {
           // console.log("User Has UPDATE:", userPermissions.includes("EDIT"));
           // console.log("User Has DELETE:", userPermissions.includes("DELETE"));
 
-          if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
-            buttons += `<button type="button" class="btn-approve btn my-1" data-id="${data.id}" title="APPROVE">
-                            <i class="bi bi-check-circle text-success" style="font-size:x-large;"></i>
-                        </button>`;
+          if (data.status == 'Pending') {
+
+            if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
+              buttons += `<button type="button" class="btn-approve btn my-1" data-id="${data.id}" title="APPROVE">
+              <i class="bi bi-check-circle text-success" style="font-size:x-large;"></i>
+              </button>`;
+            }
+
+            if (Array.isArray(userPermissions) && userPermissions.includes("DELETE")) {
+              buttons += `<button type="button" class="btn-reject btn my-1" data-id="${data.id}" title="REJECT">
+              <i class="bi bi-x-circle text-danger" style="font-size:x-large;"></i>
+              </button>`;
+            }
           }
 
-          if (Array.isArray(userPermissions) && userPermissions.includes("DELETE")) {
-            buttons += `<button type="button" class="btn-reject btn my-1" data-id="${data.id}" title="REJECT">
-                              <i class="bi bi-x-circle text-danger" style="font-size:x-large;"></i>
-                        </button>`;
-          }
-
-          return buttons || '<i class="bi bi-ban text-danger" title="No permission" style="font-size:x-large;"></i>';
+          return buttons || '<i  title="No action"></i>';
         },
       },
+      {
+        title: "Return Action",
+        data: null,
+        render: function (data) {
+          let returntemplate = '';
+
+          if (data.status == 'Approved') {
+            if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
+                  returntemplate = `<button id="returnBtnItem" class=" btn " data-request-id="${data.id}"  title="Return?">
+                  <i class="bi bi-archive-fill"></i>
+              </button>`;
+            }
+          }
+
+          return returntemplate || '<i  title="No action"></i>';
+        }
+      }
     ],
   });
+
+  $(document).on("click", "#returnBtnItem", function () {
+    let request_id = $(this).data("request-id");
+    console.log('request id', request_id);
+    $.ajax({
+      url: BaseURL + "return_all",
+      method: "POST",
+      dataType: "JSON",
+      data: { request_id: request_id },
+      success: function (response) {
+        console.log("Server Response:", response);
+        if (response.success) {
+          $("#added").toast("show");
+          requestsTable.ajax.reload();
+        } else {
+          $("#error").toast("show");
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("AJAX Error:", error);
+        console.log("Raw Response:", xhr.responseText); // Log server response
+      },
+    });
+  });
+
+
+
 
   const allocationTable = $("#allocationTable").DataTable({
     processing: true,
     ajax: {
-      url: "./includes/encode/resources_api.php?action=get_allocated_resources",
+      url: BaseURL + "get_allocated_resources",
       method: "POST",
       dataType: "json",
       dataSrc: "",
@@ -200,12 +252,13 @@ $(function () {
     ],
   });
 
+  //! allocation return buttin
   $(document).on("click", ".returnBtn", function () {
     const returnid = $(this).data("return")
     console.log('return id', returnid);
 
     $.ajax({
-      url: "./includes/encode/resources_api.php?action=update_allocation_status",
+      url: BaseURL + "update_allocation_status",
       method: "POST",
       dataType: "JSON",
       data: {
@@ -233,7 +286,7 @@ $(function () {
     const allocationId = row.data("id");
 
     $.ajax({
-      url: "./includes/encode/resources_api.php?action=update_status_allocated_resources",
+      url: BaseURL + "update_status_allocated_resources",
       method: "POST",
       data: {
         allocation_id: allocationId,
@@ -254,8 +307,7 @@ $(function () {
   });
 
   function loadRoomsSelectTag() {
-    $.get(
-      "./includes/encode/resources_api.php?action=get_resources_available",
+    $.get(BaseURL + "get_resources_available",
       function (data) {
         $("#resource_id")
           .empty()
@@ -274,8 +326,7 @@ $(function () {
   }
 
   function loadAllocatedSelectTag() {
-    $.get(
-      "./includes/encode/resources_api.php?action=get_resources_available",
+    $.get(BaseURL + "get_resources_available",
       function (data) {
         $("#allocate_id")
           .empty()
@@ -346,8 +397,7 @@ $(function () {
 
     // console.log($(this).serialize())
 
-    $.post(
-      "./includes/encode/resources_api.php?action=add_new_resource",
+    $.post(BaseURL + "add_new_resource",
       $(this).serialize(),
       function (response) {
         // console.log(response)
@@ -371,8 +421,7 @@ $(function () {
 
   $(document).on("click", ".delete", function () {
     const id = $(this).data("id");
-    $.post(
-      "./includes/encode/resources_api.php?action=delete_resource",
+    $.post(BaseURL + "delete_resource",
       {
         id,
       },
@@ -389,8 +438,7 @@ $(function () {
 
   $(document).on("click", ".update", function () {
     const id = $(this).data("id");
-    $.post(
-      `./includes/encode/resources_api.php?action=get_allocated_resources_by_ID`,
+    $.post(BaseURL + `get_allocated_resources_by_ID`,
       { id: id },
       function (resource) {
         if (resource) {
@@ -427,8 +475,7 @@ $(function () {
       next_maintenance: $("#edit_next_maintenance").val(),
     };
 
-    $.post(
-      `./includes/encode/resources_api.php?action=update_resource`,
+    $.post(BaseURL + `update_resource`,
       formData,
       function (response) {
         if (response.success) {
@@ -452,8 +499,7 @@ $(function () {
     const formData = $(this).serialize();
     console.log(formData);
 
-    $.post(
-      "./includes/encode/resources_api.php?action=request_resources",
+    $.post(BaseURL + "request_resources",
       formData,
       function (response) {
         if (response.success) {
@@ -477,8 +523,7 @@ $(function () {
     // if (!confirm(`Are you sure you want to ${action} this request?`)) return;
 
     // console.log(requestId + action)
-    $.post(
-      "./includes/encode/resources_api.php?action=update_request_status",
+    $.post(BaseURL + "update_request_status",
       {
         request_id: requestId,
         status: action,
@@ -504,8 +549,7 @@ $(function () {
     const formData = $(this).serialize();
     // console.log(formData)
 
-    $.post(
-      "./includes/encode/resources_api.php?action=allocate_resource",
+    $.post(BaseURL + "allocate_resource",
       formData,
       function (response) {
         if (response.success) {
@@ -526,4 +570,4 @@ $(function () {
   loadAllocatedSelectTag();
   loadRoomsSelectTag();
   loadAnalytics();
-}); //end
+});

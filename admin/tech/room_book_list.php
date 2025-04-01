@@ -236,7 +236,7 @@ access_log($userData);
                         <div class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="text-muted">Total Resources</h5>
+                                    <h5 class="text-muted">Total Facilities</h5>
                                     <div class="metric-value d-inline-block">
                                         <h1 id="total-card" class="mb-1">0</h1>
                                     </div>
