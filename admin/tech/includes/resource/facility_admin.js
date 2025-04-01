@@ -2,6 +2,8 @@ $(function () {
     console.log('connect');
     console.log("JS ROLE PASS:  ", userPermissions);
 
+    const BaseURL = "./includes/encode/facility_api.php?action=";
+
     $("#openModalBtn").on("click", function () {
         $("#reportModal").modal("show");
     });
@@ -12,7 +14,7 @@ $(function () {
         processing: true,
         dom: 'Bfrtip',
         ajax: {
-            url: './includes/encode/facility_api.php?action=get_all_room',
+            url: BaseURL + 'get_all_room',
             type: 'POST',
             dataType: 'json',
             dataSrc: ''
@@ -75,7 +77,7 @@ $(function () {
 
     function loadAnalytics() {
         $.ajax({
-            url: "./includes/encode/facility_api.php?action=get_all_room",
+            url: BaseURL + "action=get_all_room",
             method: "POST",
             dataType: "JSON",
             success: function (data) {
@@ -99,7 +101,7 @@ $(function () {
     $(document).on('click', '.edit-btn', function () {
         const id = $(this).data('id');
 
-        $.get(`./includes/encode/facility_api.php?action=get_room_by_id`, { id }, function (room) {
+        $.get( BaseURL + `get_room_by_id`, { id }, function (room) {
             if (room) {
                 $('#editRoomModal').modal('show');
                 $('#EditFacilityForm input[name="edit_id"]').val(room.id);
@@ -121,7 +123,7 @@ $(function () {
 
         const formData = $(this).serialize();
 
-        $.post('./includes/encode/facility_api.php?action=update_room', formData, function (response) {
+        $.post( BaseURL + 'update_room', formData, function (response) {
             if (response.success) {
                 // alert('Facility updated successfully!');
                 $('#room_updated').toast('show');
@@ -141,7 +143,7 @@ $(function () {
         const id = $(this).data('id');
 
         if (confirm('Are you sure you want to delete this facility?')) {
-            $.post('./includes/encode/facility_api.php?action=delete_room', { id }, function (response) {
+            $.post(BaseURL + 'delete_room', { id }, function (response) {
                 if (response.success) {
                     alert('Facility deleted successfully!');
                     bookingTable.ajax.reload();
@@ -173,7 +175,7 @@ $(function () {
     const bookingTable = $('#bookingTable').DataTable({
         processing: true,
         ajax: {
-            url: './includes/encode/facility_api.php?action=fetch_avail_book',
+            url: BaseURL + 'fetch_avail_book',
             dataType: 'json',
             dataSrc: '',
         },
@@ -246,7 +248,7 @@ $(function () {
 
     function updateRoomStatus(id, status) {
         $.ajax({
-            url: './includes/encode/facility_api.php?action=update_book_status',
+            url: BaseURL + 'update_book_status',
             type: 'POST',
             data: {
                 id: id,
@@ -278,7 +280,7 @@ $(function () {
         console.log(booking_id, room_id);
 
         $.ajax({
-            url: './includes/encode/facility_api.php?action=end_booking',
+            url: BaseURL + 'end_booking',
             type: 'POST',
             data: {
                 // action: 'end_booking',
@@ -311,7 +313,7 @@ $(function () {
      */
     function loadActiveRoomTable() {
         $.ajax({
-            url: './includes/encode/facility_api.php?action=get_all_approved_bookings',
+            url: BaseURL + 'get_all_approved_bookings',
             dataType: 'json',
             success: (data) => {
                 const rows = data.map(room => {
@@ -372,7 +374,7 @@ $(function () {
 
     // Function to load room select options
     function loadRoomsSelectTag() {
-        $.get('./includes/encode/facility_api.php?action=fetch_avail_room',
+        $.get(BaseURL + 'fetch_avail_room',
             function (data) {
                 const rooms = JSON.parse(data);
                 $('#roomSelect').empty().append('<option value="" selected disabled hidden>Select Room</option>');
@@ -385,8 +387,7 @@ $(function () {
     // Booking form submission except admin and super
     $('#bookingForm').on('submit', function (e) {
         e.preventDefault();
-        $.post(
-            './includes/encode/facility_api.php?action=create_booking',
+        $.post( BaseURL + 'create_booking',
             $(this).serialize(),
             function (response) {
                 if (response.success) {
@@ -406,8 +407,7 @@ $(function () {
         console.log(e.target);
         e.preventDefault();
         // console.log($(this).serialize());
-        $.post(
-            './includes/encode/facility_api.php?action=create_room',
+        $.post( BaseURL + 'create_room',
             $(this).serialize(),
             function (response) {
                 if (response.success) {
