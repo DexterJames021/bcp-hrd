@@ -185,7 +185,7 @@ if (isset($_SESSION['usertype']) && $_SESSION['usertype'] == 'manager' ||  $_SES
         <!-- ============================================================== -->
         <!-- left sidebar -->
         <!-- ============================================================== -->
-        <div class="nav-left-sidebar sidebar-dark ">
+        <div class="nav-left-sidebar sidebar-primary ">
             <div class="menu-list ">
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <a class="d-xl-none d-lg-none" href="index.php">Human Resource Dept.</a>
@@ -202,10 +202,12 @@ if (isset($_SESSION['usertype']) && $_SESSION['usertype'] == 'manager' ||  $_SES
                                     <i class="fas fa-fw fa-home"></i> Dashboard
                                 </a>
                             </li>
-                            <li class="nav-item ">
-                                <a class="nav-link " href="./tech/facility.php">
-                                <i class="fas fa-fw fa-inbox"></i>Facility & Resources
-                                </a>
+                            <li class="nav-item">
+                                <a class="nav-link " href="./tech/resources.php">Resources Management</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " href="./tech/facility.php">Facility
+                                    Management</a>
                             </li>
                             <!-- <li class="nav-item">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-7" aria-controls="submenu-7">
@@ -258,7 +260,12 @@ if (isset($_SESSION['usertype']) && $_SESSION['usertype'] == 'manager' ||  $_SES
                 </div>
 
                 <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-body"></div>
+                        </div>
 
+                    </div>
                 </div>
 
             </div>

@@ -8,7 +8,7 @@ $(function () {
 
     let performanceChartInstance = null;
 
-    $('#RecordsTable').DataTable({
+    let recordsTable = $('#RecordsTable').DataTable({
         processing: true,
         // stateSave: true, //? para san to
         // "bDestroy": true,
@@ -127,6 +127,7 @@ $(function () {
             success: function (response) {
                 console.log("Employee Info Response:", response);
                 if (response) {
+                    recordsTable.ajax.reload();
                     $('#employeeListView').hide();
                     $('#employeeDetailView').show();
 
@@ -140,6 +141,8 @@ $(function () {
                 } else {
                     alert('Employee not found');
                 }
+
+                recordsTable.ajax.reload();
             },
             error: function (xhr, status, error) {
                 console.error("Employee Info AJAX Error:", status, error);
@@ -169,7 +172,7 @@ $(function () {
                     $('#performanceScore').html(response.PerformanceScore + "%" ?? '<small><i>not set</i></small>');
                     $('#trainingAttendee').html(response.FirstName + "," ?? '<small><i>not set</i></small>');
 
-
+                    recordsTable.ajax.reload();
                     renderPerformanceChart(response.PerformanceScore);
 
                 } else {
@@ -189,7 +192,7 @@ $(function () {
             data: { id: employeeId },
             dataType: 'json',
             success: function (response) {
-                console.table(response); // Log the response to verify its structure
+                console.table("TRAINING", response); // Log the response to verify its structure
 
                 const dataArray = Array.isArray(response) ? response : [response];
 
@@ -207,6 +210,7 @@ $(function () {
                     <td>${training.CompletionDate || ''}</td>
                 </tr>
             `;
+                    recordsTable.ajax.reload();
                     $("#trainingList").append(row);
                 });
             },
@@ -226,7 +230,7 @@ $(function () {
 
                 const dataArray = Array.isArray(response) ? response : [response];
 
-                $("#trainingList").empty();
+                $("#compensationList").empty();
 
                 dataArray.forEach(function (compen) {
                     const row = `
@@ -236,6 +240,7 @@ $(function () {
                     <td>${compen.BenefitValue || ''}</td>
                 </tr>
             `;
+                    recordsTable.ajax.reload();
                     $("#compensationList").append(row);
                 });
             },
@@ -262,7 +267,8 @@ $(function () {
             success: function (response) {
                 if (response.success) {
                     $('#status').toast('show')
-                    location.reload(); // Reload page or refresh the employee list
+                    location.reload();
+                    recordsTable.ajax.reload(); 
                 } else {
                     $('#error').toast('show')
                 }

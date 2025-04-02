@@ -129,6 +129,7 @@ $employeesJSON = json_encode($employeesData);
                 <!-- ============================================================== -->
                 <!-- <div class="ecommerce-widget"> -->
 
+                <?php if ($userData && in_array("VIEW", $userData['permissions'])): ?>
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
@@ -195,6 +196,10 @@ $employeesJSON = json_encode($employeesData);
                         </div>
                     </div> <!-- End of Col-12 -->
                 </div> <!-- End of Row -->
+
+                <?php else: ?>
+                <?php include_once "./403.php"; ?>
+            <?php endif; ?>
 
                 <!-- Chart.js Library -->
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

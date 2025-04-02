@@ -1,6 +1,6 @@
 <?php
-require __DIR__ .  '../../../config/Database.php';
-require __DIR__ .  '../../../auth/accesscontrol.php';
+require __DIR__ . '../../../config/Database.php';
+require __DIR__ . '../../../auth/accesscontrol.php';
 
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);
@@ -12,31 +12,26 @@ access_log($userData);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <!-- icon -->
     <link rel="shortcut icon" href="../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- check if bato-->
-    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <script defer src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-
-    <!-- datatable:  cs -->
-    <link rel="stylesheet" href="../../node_modules/datatables.net-dt/css/dataTables.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-
-    <!-- main js -->
-    <link rel="stylesheet" href="../../assets/libs/css/style.css">
 
     <!-- assts csss -->
     <link rel="stylesheet" href="../../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
     <link rel="stylesheet" href="../../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
     <link rel="stylesheet" href="../../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
 
-    <!-- icon -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+
+    <!-- main cs -->
+    <link rel="stylesheet" href="../../assets/libs/css/style.css">
+
+    <!-- datatable:  cs -->
+    <link rel="stylesheet" href="../../node_modules/datatables.net-dt/css/dataTables.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+
+    <!-- Bootstrap JS -->
+    <script defer src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <!-- jQuery -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
@@ -51,16 +46,52 @@ access_log($userData);
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
-    <!-- main js -->
-    <script src="../../assets/libs/js/main-js.js"></script>
+    <!-- DataTables Buttons -->
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
 
-    <!-- custom -->
-    <script type="module" src="./includes/resource/report_admin.js"></script>
+    <!-- JSZip and pdfmake -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
 
     <!-- slimscroll js -->
-    <script src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <script type="module" src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <script type="module" src="../../assets/libs/js/main-js.js"></script>
 
-    <title>Admin Dashboard</title>
+
+    <!-- custom js -->
+    <script type="module" src="./includes/resource/employee_report_admin.js"></script>
+
+
+    <!-- charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <title>Report and Analytics</title>
+    <style>
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            /* Hide elements you don't want in the print version */
+            button, a {
+                display: none !important;
+            }
+
+            /* Ensure the content expands to full page */
+            .report-container {
+                width: 100%;
+                height: 100vh;
+                page-break-before: always;
+            }
+        }
+        </style>
 </head>
 
 <body>
@@ -185,27 +216,125 @@ access_log($userData);
         <!-- ============================================================== -->
         <!-- wrapper  -->
         <!-- ============================================================== -->
-        <div class="dashboard-wrapper">
+        <div class="dashboard-wrapper ">
             <?php if ($userData && in_array("VIEW", $userData['permissions'])): ?>
-                <div class="container-fluid dashboard-content ">
+                <!-- analytics -->
+                <div id="analyticPage" class="container-fluid dashboard-content">
                     <!-- ============================================================== -->
                     <!-- pageheader  -->
                     <!-- ============================================================== -->
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="page-header d-flex justify-content-between">
+                                <h2 class="pageheader-title">Reports and Analytics</h2>
+                                <div class="btn-group m-1">
+                                    <button type="button" onclick="printReport()"
+                                        class="btn btn-outline-primary">Print</button>
+                                    <button type="button" id="logsView" class="btn btn-outline-primary">Logs</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                    <!-- table log gererate report ng bookings table -->
+                    <div class="row d-flex report-container">
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
+
+                            <!-- utilization -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Over Utilized</h4>
+                                </div>
+                                <!-- utilize -->
+                                <div class="card-body" width="100%" height="100%">
+                                    <canvas id="facilityUtilization"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- category -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Categorization </h4>
+                                </div>
+                                <div class="card-body">
+                                    <table id="facilityTable">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                <td>Location</td>
+                                                <td>Capacity</td>
+                                                <td>Status</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
+
+                            <!-- distribution -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Status Distribution</h4>
+                                </div>
+                                <div class="card-body" width="100%" height="100%">
+                                    <canvas id="bookingStatusDistribution"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Bookings trend -->
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Booking Trends</h4>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="bookingTrends"></canvas>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- logs page -->
+                <div id="logPage" class="container-fluid dashboard-content" style="display:none;">
+                    <!-- ============================================================== -->
+                    <!-- pageheader  -->
+                    <!-- ============================================================== -->
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="page-header d-flex justify-content-between">
+                                <h2 class="pageheader-title">Reports </h2>
+                                <div class="btn-group m-1">
+                                    <button id="analyticView" type="button" class="btn btn-outline-primary">Back</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between ">
-                                    <h1>Employee Usage Report</h1>
+                                    <div class="d-flex ">
+
+                                    </div>
                                     <div>
-                                        <button type="button" class="btn btn-primary float-right" data-toggle="modal">AI
-                                            Generate Report</button>
+                                        <button type="button" id="openModalBtn" class="btn btn-outline-primary float-right"
+                                            data-toggle="modal" data-target="#reportModal">Generate Report</button>
+                                        <!--
+                                            logs number
+                                            suggestion not need 
+                                            what is trend
+                                        -->
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <table id="LogbookingTable">
-                                        <thead>
+                                    <table id="LogbookingTable" class="table table-hover" width="100%">
+                                        <thead class="thead-light">
                                             <tr>
                                                 <th>Employee</th>
                                                 <th>Room</th>
@@ -218,14 +347,13 @@ access_log($userData);
                                         <tbody></tbody>
                                     </table>
                                 </div>
-                                <div class="card-footer"></div>
                             </div>
                         </div>
                     </div>
-
                 </div>
+
             <?php else: ?>
-                <?php include_once "../403.php"; ?>
+                <?php include_once "../../403.php"; ?>
             <?php endif; ?>
         </div>
 
