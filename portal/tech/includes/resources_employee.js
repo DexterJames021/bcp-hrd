@@ -74,7 +74,7 @@ $(function () {
     console.log(formData);
 
 
-    if (confirm('Make sure the request is final?')) {
+    if (confirm('Make sure the request is final.')) {
       $.post(
         baseURL + "request_resources",
         formData,
@@ -92,7 +92,7 @@ $(function () {
         },
         "json"
       ).fail(function () {
-        alert("Error processing your request.");
+        $('#error').toast('show');
       });
     }
   });
