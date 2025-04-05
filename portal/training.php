@@ -89,7 +89,7 @@ access_log($userData);
                                 <h2 class="pageheader-title">Welcome, <?= $_SESSION["username"] ?>! </h2>
                             </div>
                             <div class="card-body">
-                                <div id="employeeCalendar"></div>
+                                
                             </div>
                         </div>
                     </div>

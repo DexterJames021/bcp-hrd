@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Validate required fields
     if ($training_id === 0 || $employee_id === 0) {
         $_SESSION['error_message'] = "Please provide valid values for all required fields.";
-        header("Location: ../onboarding.php"); // Adjust the redirect URL as necessary
+        header("Location: ../succession.php"); // Adjust the redirect URL as necessary
         exit;
     }
 
@@ -25,18 +25,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $row = $result->fetch_assoc();
             if ($row['count'] > 0) {
                 $_SESSION['error_message'] = "This training is already assigned to the selected employee.";
-                header("Location: ../onboarding.php"); // Adjust the redirect URL as necessary
+                header("Location: ../succession.php"); // Adjust the redirect URL as necessary
                 exit;
             }
         } else {
             $_SESSION['error_message'] = "Error checking existing assignment: " . $conn->error;
-            header("Location: ../onboarding.php");
+            header("Location: ../succession.php");
             exit;
         }
         $stmt->close();
     } else {
         $_SESSION['error_message'] = "Error preparing statement for assignment check: " . $conn->error;
-        header("Location: ../onboarding.php");
+        header("Location: ../succession.php");
         exit;
     }
 
@@ -46,21 +46,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("iis", $training_id, $employee_id, $completion_date);
         if ($stmt->execute()) {
             $_SESSION['success_message'] = "Training assigned successfully!";
-            header("Location: ../onboarding.php"); // Adjust the redirect URL as necessary
+            header("Location: ../succession.php"); // Adjust the redirect URL as necessary
             exit;
         } else {
             $_SESSION['error_message'] = "Error assigning training: " . $conn->error;
-            header("Location: ../onboarding.php");
+            header("Location: ../succession.php");
             exit;
         }
     } else {
         $_SESSION['error_message'] = "Error preparing statement to assign training: " . $conn->error;
-        header("Location: ../onboarding.php");
+        header("Location: ../succession.php");
         exit;
     }
 } else {
     $_SESSION['error_message'] = "Invalid request method.";
-    header("Location: ../onboarding.php");
+    header("Location: ../succession.php");
     exit;
 }
 ?>

@@ -9,12 +9,14 @@ $email = $_POST['email'];
 $phone = $_POST['phone'];
 $address = $_POST['address'];
 $dob = $_POST['dob'];
+$hire_date = $_POST['hire_date']; // Get hire date from hidden input
+$salary = $_POST['salary']; // Get salary from hidden input
 
-// Insert into employees table
-$insert_query = "INSERT INTO employees (FirstName, LastName, Email, Phone, Address, DOB, UserID) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?)";
+// Insert into employees table, including HireDate and Salary
+$insert_query = "INSERT INTO employees (FirstName, LastName, Email, Phone, Address, DOB, HireDate, Salary, UserID) 
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 $insert_stmt = $conn->prepare($insert_query);
-$insert_stmt->bind_param("ssssssi", $first_name, $last_name, $email, $phone, $address, $dob, $user_id);
+$insert_stmt->bind_param("ssssssssi", $first_name, $last_name, $email, $phone, $address, $dob, $hire_date, $salary, $user_id);
 
 if ($insert_stmt->execute()) {
     // ✅ UPDATE `onboarding_step` to 2 (Step 2 na next)

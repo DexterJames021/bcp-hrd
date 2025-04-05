@@ -1,0 +1,528 @@
+<?php
+require "../../config/db_talent.php";
+require '../../auth/mysqli_accesscontrol.php';
+
+$userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
+access_log($userData);
+
+// Fetch the count of training assignments
+$assignment_count = 0;
+$sql = "SELECT COUNT(*) AS count FROM training_assignments";
+if ($result = $conn->query($sql)) {
+    $row = $result->fetch_assoc();
+    $assignment_count = $row['count'];
+}
+
+
+// Fetch the count of training sessions from the database
+$sql = "SELECT COUNT(*) AS training_count FROM training_sessions";
+$result = $conn->query($sql);
+
+// Get the count value
+$trainingCount = 0;
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $trainingCount = $row['training_count'];
+}
+// Fetch applicants with status 'Hired'
+$hiredApplicants = [];
+$query = "SELECT id, applicant_name FROM applicants WHERE status = 'Hired'";
+$result = mysqli_query($conn, $query);
+
+if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $hiredApplicants[] = $row; // Add hired applicants to the array
+    }
+} else {
+    $_SESSION['error_message'] = "Error fetching applicants: " . mysqli_error($conn);
+}
+?>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Succession Planning</title>
+    <link rel="shortcut icon" href="../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="../../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <link rel="stylesheet" href="../../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
+    <link rel="stylesheet" href="../../assets/vendor/fonts/circular-std/style.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styledash6.css">
+    <link rel="stylesheet" href="../../assets/libs/css/style.css">
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+    <!-- jQuery (Required for Bootstrap & DataTables) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap Bundle JS (Includes Popper.js) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <!-- Custom JS (Loaded last with defer to prevent blocking) -->
+    <script defer src="../../assets/libs/js/global-script.js"></script>
+    <script defer src="../../assets/libs/js/main-js.js"></script>
+    <script defer src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+</head>
+
+
+
+<body>
+    <div class="dashboard-main-wrapper">
+    <?php include '../sideandnavbar.php'; ?>
+        <div class="dashboard-wrapper">
+               
+                <div class="container-fluid dashboard-content ">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body"> 
+                                    <h1>Succession Planning</h1>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="card bg-light text-white">
+                                                <div class="card-body">
+                                                    <h5>Total Trainings</h5>
+                                                    <h3><?php echo $trainingCount; ?></h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="card bg-light text-dark">
+                                                <div class="card-body">
+                                                    <h5>Total Assign</h5>
+                                                    <h3><?php echo $assignment_count; ?></h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                    <hr>
+                    <?php
+// Check if an error message is set
+if (isset($_SESSION['error_message'])) {
+    echo '
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        ' . $_SESSION['error_message'] . '
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    
+    <script>
+        // Auto-dismiss the alert after 5 seconds
+        setTimeout(function() {
+            var alert = document.querySelector(".alert");
+            if (alert) {
+                var bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 5000); // 5000 ms = 5 seconds
+    </script>
+    ';
+
+    // Unset the message after displaying it to prevent it from showing again on page reload
+    unset($_SESSION['error_message']);
+}
+?>
+                 <?php
+// Check if a success message is set
+if (isset($_SESSION['success_message'])) {
+    echo '
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        ' . $_SESSION['success_message'] . '
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    
+    <script>
+        // Auto-dismiss the alert after 5 seconds
+        setTimeout(function() {
+            var alert = document.querySelector(".alert");
+            if (alert) {
+                var bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 5000); // 5000 ms = 5 seconds
+    </script>
+    ';
+
+    // Unset the message after displaying it to prevent it from showing again on page reload
+    unset($_SESSION['success_message']);
+}
+?>
+
+
+
+
+
+
+                    
+                                                            <!-- Bootstrap Modal -->
+                                        <div class="modal fade" id="assignTrainingModal" tabindex="-1" role="dialog" aria-labelledby="assignTrainingModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="assignTrainingModalLabel">Assign Training</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form action="onboarding/assign_training.php" method="POST"> <!-- Adjust action URL as needed -->
+                                                <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="training_id">Training ID</label>
+                                                    <select class="form-control" id="training_id" name="training_id" required>
+                                                    <option value="" disabled selected>Select Training</option>
+                                                    <?php
+                                                    // Fetch available trainings from the database
+                                                    $trainingSql = "SELECT training_id, training_name FROM training_sessions";
+                                                    $trainingResult = $conn->query($trainingSql);
+                                                    if ($trainingResult->num_rows > 0) {
+                                                        while ($trainingRow = $trainingResult->fetch_assoc()) {
+                                                            echo "<option value='" . $trainingRow['training_id'] . "'>" . htmlspecialchars($trainingRow['training_name']) . " </option>";
+                                                        }
+                                                    } else {
+                                                        echo "<option value='' disabled>No trainings available</option>";
+                                                    }
+                                                    ?>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="employee_id">Employee Name</label>
+                                                    <select class="form-control" id="employee_id" name="employee_id" required>
+                                                    <option value="" disabled selected>Select Employee</option>
+                                                    <?php
+                                                    // Fetch available employees from the database
+                                                    $employeeSql = "SELECT EmployeeID, CONCAT(FirstName, ' ', LastName) AS employee_name FROM employees";
+                                                    $employeeResult = $conn->query($employeeSql);
+                                                    if ($employeeResult->num_rows > 0) {
+                                                        while ($employeeRow = $employeeResult->fetch_assoc()) {
+                                                            echo "<option value='" . $employeeRow['EmployeeID'] . "'>" . htmlspecialchars($employeeRow['employee_name']) . " </option>";
+                                                        }
+                                                    } else {
+                                                        echo "<option value='' disabled>No employees available</option>";
+                                                    }
+                                                    ?>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="completion_date">Completion Date</label>
+                                                    <input type="date" class="form-control" id="completion_date" name="completion_date">
+                                                </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Assign Training</button>
+                                                </div>
+                                            </form>
+                                            </div>
+                                        </div>
+                                        </div>
+
+                                        <!-- Add Training Modal -->
+                                        <div class="modal fade" id="addTrainingModal" tabindex="-1" role="dialog" aria-labelledby="addTrainingModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="addTrainingModalLabel">Add Training</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <form method="POST" action="onboarding/add_training.php">
+                                                        <div class="modal-body">
+                                                            <!-- Training Title -->
+                                                            <div class="form-group">
+                                                                <label for="training_title">Training Title</label>
+                                                                <input type="text" name="training_title" id="training_title" class="form-control" required>
+                                                            </div>
+                                                            <!-- Training Description -->
+                                                            <div class="form-group">
+                                                                <label for="training_description">Description</label>
+                                                                <textarea name="training_description" id="training_description" class="form-control" rows="4" required></textarea>
+                                                            </div>
+                                                            <!-- Trainer -->
+                                                            <div class="form-group">
+                                                                <label for="trainer">Trainer</label>
+                                                                <input type="text" name="trainer" id="trainer" class="form-control" required>
+                                                            </div>
+                                                            <!-- Department (Optional or Required based on your use case) -->
+                                                            <div class="form-group">
+                                                                <label for="department">Department</label>
+                                                                <select name="department" id="department" class="form-control" required>
+                                                                    <option value="">Select Department</option>
+                                                                    <!-- You can fetch departments from your DB -->
+                                                                    <?php
+                                                                    // Assuming you have a departments table
+                                                                    $result = $conn->query("SELECT DepartmentID, DepartmentName FROM departments");
+                                                                    while ($row = $result->fetch_assoc()) {
+                                                                        echo "<option value='{$row['DepartmentID']}'>{$row['DepartmentName']}</option>";
+                                                                    }
+                                                                    ?>
+                                                                </select>
+                                                            </div>
+                                                            <!-- Optional: Training Materials -->
+                                                            <div class="form-group">
+                                                                <label for="training_materials">Training Materials (Optional)</label>
+                                                                <textarea name="training_materials" id="training_materials" class="form-control" rows="3"></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary">Add Training</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+                                        <!-- Bootstrap JS -->
+
+
+                                        <script>
+                                        // Script to populate the modal fields with the employee data
+                                        $('#editEmployeeModal').on('show.bs.modal', function (event) {
+                                            var button = $(event.relatedTarget); // Button that triggered the modal
+                                            var EmployeeID = button.data('employeeid');
+                                            var FirstName = button.data('firstname');
+                                            var LastName = button.data('lastname');
+                                            var Email = button.data('email');
+                                            var Phone = button.data('phone');
+                                            var Status = button.data('status');
+
+                                            // Fill in the modal fields with the corresponding data
+                                            var modal = $(this);
+                                            modal.find('#editEmployeeID').val(EmployeeID);
+                                            modal.find('#editFirstName').val(FirstName);
+                                            modal.find('#editLastName').val(LastName);
+                                            modal.find('#editEmail').val(Email);
+                                            modal.find('#editPhone').val(Phone);
+                                            modal.find('#editStatus').val(Status);
+                                        });
+                                        </script>
+                                        <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="training-sessions-tab" data-toggle="tab" href="#training-sessions" role="tab" aria-controls="training-sessions" aria-selected="false">Training Sessions</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="training-assignments-tab" data-toggle="tab" href="#training-assignments" role="tab" aria-controls="training-assignments" aria-selected="false">Training Assignments</a>
+                                            </li>
+                                            
+                                        </ul>
+                                        <div class="tab-content" id="dashboardTabContent">
+                                            <!-- Training Sessions Tab -->
+                                            <div class="tab-pane fade show active" id="training-sessions" role="tabpanel" aria-labelledby="training-sessions-tab">
+                                            <div class="row">
+                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                            <div class="card">
+                                            <div class="card-header d-flex justify-content-between">
+                                                <h1 class="card-title">Training Sessions</h1>
+                                                <div class="btn-group">
+                                                    <?php if ($userData && in_array("CREATE", $userData['permissions'])): ?>
+                                                        <button type="button" class="btn btn-outline-primary float-right"
+                                                            data-toggle="modal" data-target="#addTrainingModal">Add Training</button>
+                                                    <?php else: ?>
+                                                        <button type="button" class="btn btn-outline-primary float-right"
+                                                            data-toggle="modal" data-target="#addTrainingModal" disabled>Add Training</button>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                        <table id="myTable" class="table table-hover" style="width:100%">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th>Training</th>
+                                                <th>Trainer</th> 
+                                                <th>Department</th> 
+                                                <th>Description</th> 
+                                                <th>Materials</th> 
+                                                <th>Actions</th> 
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            // SQL query to fetch training sessions with department name
+                                            $sql = "SELECT ts.training_id, ts.training_name, ts.training_description, ts.trainer, 
+                                                    d.DepartmentID AS department, d.DepartmentName AS department_name, 
+                                                    ts.training_materials, ts.created_at
+                                                    FROM training_sessions ts
+                                                    LEFT JOIN departments d ON ts.department = d.DepartmentID"; 
+
+                                            $result = $conn->query($sql);
+
+                                            if ($result->num_rows > 0) {
+                                                while($row = $result->fetch_assoc()) {
+                                                    echo "<tr>";
+                                                    echo "<td>" . htmlspecialchars($row['training_name']) . "</td>";
+                                                    echo "<td>" . htmlspecialchars($row['trainer']) . "</td>"; 
+                                                    echo "<td>" . htmlspecialchars($row['department_name']) . "</td>"; 
+                                                    echo "<td>" . htmlspecialchars($row['training_description']) . "</td>"; 
+                                                    echo "<td>" . htmlspecialchars($row['training_materials']) . "</td>"; 
+                                                    
+                                                    // Action Icons (Edit & Delete)
+                                                    echo "<td>
+                                                            <a href='#' 
+                                                                data-toggle='modal' 
+                                                                data-target='#editTrainingModal' 
+                                                                data-id='" . $row['training_id'] . "' 
+                                                                data-training_name='" . htmlspecialchars($row['training_name']) . "' 
+                                                                data-trainer='" . htmlspecialchars($row['trainer']) . "' 
+                                                                data-department='" . htmlspecialchars($row['department']) . "' 
+                                                                data-training_description='" . htmlspecialchars($row['training_description']) . "' 
+                                                                data-training_materials='" . htmlspecialchars($row['training_materials']) . "' 
+                                                                class='text-warning mx-2'>
+                                                                <i class='fas fa-edit'></i> <!-- Edit Icon -->
+                                                            </a>
+
+                                                            <a href='onboarding/delete_training.php?id=" . htmlspecialchars($row['training_id']) . "' 
+                                                                class='text-danger mx-2' 
+                                                                onclick='return confirm(\"Are you sure you want to delete this training?\");'>
+                                                                <i class='fas fa-trash'></i> <!-- Delete Icon -->
+                                                            </a>
+                                                        </td>";
+                                                    echo "</tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan='6' class='text-center'>No training sessions found.</td></tr>"; 
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                         <!-- Training Assignments Tab -->
+                                        <div class="tab-pane fade" id="training-assignments" role="tabpanel" aria-labelledby="training-assignments-tab">
+                                            <div class="row">
+                                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">    
+                                                    <div class="card">
+                                                        <div class="card-header d-flex justify-content-between">
+                                                                                <h1 class="card-title">Training Assignments </h1>
+                                                                                <div class="btn-group">
+                                                <?php if ($userData && in_array("CREATE", $userData['permissions'])): ?>
+                                                    <button type="button" class="btn btn-outline-primary float-right"
+                                                        data-toggle="modal" data-target="#assignTrainingModal">Assign</button>
+                                                <?php else: ?>
+                                                    <button type="button" class="btn btn-outline-primary float-right"
+                                                        data-toggle="modal" data-target="#assignTrainingModal" disabled>Assign</button>
+                                                <?php endif; ?>
+                                            </div>
+                                                                            </div>
+                                                <div class="card-body">
+                                                <table id="myTable1" class="table table-hover" style="width:100%">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th>Employee</th>
+                                                <th>Training</th>
+                                                <th>Status</th>
+                                                <th>Completion Date</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+    <?php
+    // Query to fetch training assignment data from the database
+    $sql = "SELECT ta.assignment_id, e.FirstName, e.LastName, tr.training_name, ta.status, ta.completion_date
+            FROM training_assignments ta
+            JOIN employees e ON ta.employee_id = e.EmployeeID
+            JOIN training_sessions tr ON ta.training_id = tr.training_id";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td>" . htmlspecialchars($row['FirstName']) . " " . htmlspecialchars($row['LastName']) . "</td>"; // Employee Name
+            echo "<td>" . htmlspecialchars($row['training_name']) . "</td>"; // Training Title
+            echo "<td>" . htmlspecialchars($row['status']) . "</td>"; // Status
+            $completion_date = $row['completion_date'] ? date('M d, Y', strtotime($row['completion_date'])) : 'N/A'; // Format: Nov 31, 2020
+            echo "<td>" . htmlspecialchars($completion_date) . "</td>"; // Completion Date formatted
+
+            // Action Buttons (Icons Only)
+            echo "<td>";
+            
+            if ($row['status'] == 'Not Started') {
+                // Show delete icon for "Not Started" status
+                echo "<a href='onboarding/delete_assignment.php?id=" . $row['assignment_id'] . "' 
+                        class='text-danger mx-2' 
+                        onclick='return confirm(\"Are you sure you want to delete this assignment?\");'>
+                        <i class='fas fa-trash'></i> <!-- Delete Icon -->
+                      </a>";
+            } elseif ($row['status'] == 'In Progress') {
+                // Show complete button and delete icon for "In Progress" status
+                echo "<a href='onboarding/complete_assignment.php?id=" . $row['assignment_id'] . "' 
+                        class='text-success mx-2'>
+                        <i class='fas fa-check'></i> <!-- Complete Icon -->
+                      </a>";
+
+                echo "<a href='onboarding/delete_assignment.php?id=" . $row['assignment_id'] . "' 
+                        class='text-danger mx-2' 
+                        onclick='return confirm(\"Are you sure you want to delete this assignment?\");'>
+                        <i class='fas fa-trash'></i> <!-- Delete Icon -->
+                      </a>";
+            }
+            
+            echo "</td>";
+
+            echo "</tr>";
+        }
+    } else {
+        echo "<tr><td colspan='5' class='text-center'>No training assignments found.</td></tr>"; // Adjusted colspan
+    }
+    ?>
+</tbody>
+
+
+
+                                    </table>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>                     
+                                        
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+<script>
+    $(document).ready(function() {
+        $('#myTable').DataTable({
+            "lengthMenu": [10, 25, 50, 100], 
+            "paging": true,
+            "searching": true,
+            "ordering": true
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#myTable1').DataTable({
+            "lengthMenu": [10, 25, 50, 100], 
+            "paging": true,
+            "searching": true,
+            "ordering": true
+        });
+    });
+</script>
+</body>
+</html>

@@ -17,7 +17,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 
             if ($row['employeeCount'] > 0) {
                 // If the user is associated with an employee, show error message
-                $_SESSION['error_message'] = "Cannot delete this user because they are associated with an employee.";
+                $_SESSION['error_message'] = "You do not have permission to delete applicants.";
                 header("Location: ../onboarding.php"); // Redirect back to the onboarding page
                 exit;
             } else {

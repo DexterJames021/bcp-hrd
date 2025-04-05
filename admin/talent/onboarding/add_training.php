@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Redirect to the previous page or any other page
-    header('Location: ../onboarding.php');  // Adjust this to your needs
+    header('Location: ../succession.php');  // Adjust this to your needs
     exit();
 }
 ?>

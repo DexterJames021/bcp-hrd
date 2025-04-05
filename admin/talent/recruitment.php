@@ -73,27 +73,33 @@ $department_result = $conn->query($department_sql);
 
     <!-- ✅ FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
-    <!-- ✅ Custom Styles -->
-    <link rel="stylesheet" type="text/css" href="styledash6.css">
-    <link rel="stylesheet" href="../../assets/libs/css/style.css">
+    <link rel="stylesheet" href="../../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
     <link rel="stylesheet" href="../../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
     <link rel="stylesheet" href="../../assets/vendor/fonts/circular-std/style.css">
 
+    <!-- ✅ Custom Styles -->
+    <link rel="stylesheet" href="styledash6.css">
+    <link rel="stylesheet" href="../../assets/libs/css/style.css">
+    <link rel="stylesheet" href="../../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
+    <link rel="stylesheet" href="../../assets/vendor/fonts/circular-std/style.css">
+ <!-- ✅ jQuery (Kailangan bago ang DataTables) -->
+
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- ✅ DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 
-    
+   
 
-    <!-- ✅ DataTables JavaScript -->
+    <!-- ✅ DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <!-- ✅ Slimscroll (if needed) -->
+    <script defer src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 
     <!-- ✅ Custom JavaScript Files -->
     <script defer src="../../assets/libs/js/global-script.js"></script>
     <script defer src="../../assets/libs/js/main-js.js"></script>
-
-    <!-- ✅ Slimscroll (if needed) -->
-    <script defer src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 
     <!-- ✅ Auto-hide Alert (5s) -->
     <script>
@@ -104,20 +110,12 @@ $department_result = $conn->query($department_sql);
                     alert.style.display = 'none';
                 }, 5000); // Hide alert after 5 seconds
             }
-        });
-    </script>
 
-    <!-- ✅ Initialize DataTables -->
-    <script>
-        $(document).ready(function () {
+            // ✅ Initialize DataTables
             $('#yourTableID').DataTable(); // ⚠️ Palitan ng actual table ID mo
         });
     </script>
 
-     <!-- Custom JS (Loaded last with defer to prevent blocking) -->
-     <script defer src="../../assets/libs/js/global-script.js"></script>
-    <script defer src="../../assets/libs/js/main-js.js"></script>
-    <script defer src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 </head>
 
 
@@ -147,6 +145,7 @@ $department_result = $conn->query($department_sql);
         <!-- ============================================================== -->
         <div class="dashboard-wrapper">
             <!-- <div class="dashboard-ecommerce"> -->
+            <?php if ($userData && in_array("VIEW", $userData['permissions'])): ?>
             <div class="container-fluid dashboard-content ">
                 <!-- ============================================================== -->
                 <!-- pageheader  -->
@@ -250,68 +249,69 @@ $department_result = $conn->query($department_sql);
                         </tr>
                     </thead>
                     <tbody>
-    <?php
-    $counter = 1; // Move the counter outside the loop
+<?php
+$counter = 1; // Move the counter outside the loop
 
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            // Fetch the count of applicants for the specific job ID
-            $jobId = $row['id'];
-            $applicantCountSql = "SELECT COUNT(*) as totalApplicants FROM applicants WHERE job_id = ?";
-            $stmt = $conn->prepare($applicantCountSql);
-            $stmt->bind_param("i", $jobId);
-            $stmt->execute();
-            $resultApplicants = $stmt->get_result();
-            $applicantCount = 0;
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        // Fetch the count of applicants for the specific job ID, excluding "Hired" status
+        $jobId = $row['id'];
+        $applicantCountSql = "SELECT COUNT(*) as totalApplicants FROM applicants WHERE job_id = ? AND status != 'Hired'";
+        $stmt = $conn->prepare($applicantCountSql);
+        $stmt->bind_param("i", $jobId);
+        $stmt->execute();
+        $resultApplicants = $stmt->get_result();
+        $applicantCount = 0;
 
-            if ($resultApplicants->num_rows > 0) {
-                $countRow = $resultApplicants->fetch_assoc();
-                $applicantCount = $countRow['totalApplicants'];
-            }
-
-            echo "<tr>";
-            echo "<td>" . $counter . "</td>"; // Correct numbering
-            echo "<td>" . htmlspecialchars($row['job_title']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['status']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['department_name']) . "</td>";
-            echo "<td>
-                    <button data-toggle='modal' 
-                            data-target='#editJobModal' 
-                            data-id='" . htmlspecialchars($row['id']) . "' 
-                            data-title='" . htmlspecialchars($row['job_title']) . "' 
-                            data-description='" . htmlspecialchars($row['job_description']) . "' 
-                            data-requirements='" . htmlspecialchars($row['requirements']) . "' 
-                            data-location='" . htmlspecialchars($row['location']) . "' 
-                            data-salary='" . htmlspecialchars($row['salary_range']) . "' 
-                            data-status='" . htmlspecialchars($row['status']) . "' 
-                            title='Edit Job' 
-                            style='border: none; background: none; cursor: pointer; margin-right: 10px;'>
-                        <i class='fas fa-edit' style='font-size: 16px; color: #007bff;'></i>
-                    </button>
-
-                    <a href='recruitment/delete_job.php?id=" . htmlspecialchars($row['id']) . "' 
-                       onclick='return confirm(\"Are you sure you want to delete this job posting?\");' 
-                       title='Delete Job' 
-                       style='margin-right: 10px; text-decoration: none;'>
-                        <i class='fas fa-trash-alt' style='font-size: 16px; color: #dc3545;'></i>
-                    </a>
-
-                    <a href='recruitment.php?job_id=" . htmlspecialchars($row['id']) . "#applicant' 
-                       title='View Applicants' 
-                       style='text-decoration: none; color: inherit;'>
-                        <i class='fas fa-users' style='font-size: 16px; color: #28a745;'></i> 
-                        <span style='margin-left: 5px;'>" . $applicantCount . "</span>
-                    </a>
-                </td>";
-            echo "</tr>";
-
-            $counter++; // Increment counter correctly
+        if ($resultApplicants->num_rows > 0) {
+            $countRow = $resultApplicants->fetch_assoc();
+            $applicantCount = $countRow['totalApplicants'];
         }
-    } else {
-        echo "<tr><td colspan='4'>No job postings found.</td></tr>"; // Adjusted colspan
+
+        echo "<tr>";
+        echo "<td>" . $counter . "</td>"; // Correct numbering
+        echo "<td>" . htmlspecialchars($row['job_title']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['status']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['department_name']) . "</td>";
+        echo "<td>
+                <button data-toggle='modal' 
+                        data-target='#editJobModal' 
+                        data-id='" . htmlspecialchars($row['id']) . "' 
+                        data-title='" . htmlspecialchars($row['job_title']) . "' 
+                        data-description='" . htmlspecialchars($row['job_description']) . "' 
+                        data-requirements='" . htmlspecialchars($row['requirements']) . "' 
+                        data-location='" . htmlspecialchars($row['location']) . "' 
+                        data-salary='" . htmlspecialchars($row['salary_range']) . "' 
+                        data-status='" . htmlspecialchars($row['status']) . "' 
+                        title='Edit Job' 
+                        style='border: none; background: none; cursor: pointer; margin-right: 10px;'>
+                    <i class='fas fa-edit' style='font-size: 16px; color: #007bff;'></i>
+                </button>
+
+                <a href='recruitment/delete_job.php?id=" . htmlspecialchars($row['id']) . "' 
+                   onclick='return confirm(\"Are you sure you want to delete this job posting?\");' 
+                   title='Delete Job' 
+                   style='margin-right: 10px; text-decoration: none;'>
+                    <i class='fas fa-trash-alt' style='font-size: 16px; color: #dc3545;'></i>
+                </a>
+
+                <a href='recruitment.php?job_id=" . htmlspecialchars($row['id']) . "#applicant' 
+                   title='View Applicants' 
+                   style='text-decoration: none; color: inherit;'>
+                    <i class='fas fa-users' style='font-size: 16px; color: #28a745;'></i> 
+                    <span style='margin-left: 5px;'>" . $applicantCount . "</span>
+                </a>
+            </td>";
+        echo "</tr>";
+
+        $counter++; // Increment counter correctly
     }
-    ?>
+} else {
+    echo "<tr><td colspan='4'>No job postings found.</td></tr>"; // Adjusted colspan
+}
+?>
 </tbody>
+
 
 
 
@@ -815,7 +815,7 @@ $department_result = $conn->query($department_sql);
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
@@ -870,6 +870,9 @@ $department_result = $conn->query($department_sql);
             </div> -->
             <!-- ============================================================== -->
             <!-- end footer -->
+            <?php else: ?>
+                <?php include_once "../403.php"; ?>
+            <?php endif; ?>
             <!-- ============================================================== -->
         </div>
         <!-- ============================================================== -->
@@ -879,57 +882,56 @@ $department_result = $conn->query($department_sql);
     <!-- ============================================================== -->
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
-        <!-- jQuery (Kailangan para gumana ang DataTables) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- DataTables JS -->
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
-<!-- DataTables CSS (Kung wala pa) -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-
-    <script>
+<script>
     $(document).ready(function() {
-        $('#myJobs').DataTable({
-            "lengthMenu": [10, 25, 50, 100], 
-            "paging": true,
-            "searching": true,
-            "ordering": true
-        });
+        if ($("#myJobs tbody tr").length > 1) { // Ensure at least one row exists
+            $('#myJobs').DataTable({
+                "lengthMenu": [10, 25, 50, 100], 
+                "paging": true,
+                "searching": true,
+                "ordering": true
+            });
+        }
     });
 </script>
 <script>
     $(document).ready(function() {
-        $('#myDepartments').DataTable({
-            "lengthMenu": [10, 25, 50, 100], 
-            "paging": true,
-            "searching": true,
-            "ordering": true
-        });
+        if ($("#myDepartments tbody tr").length > 1) { // Ensure at least one row exists
+            $('#myDepartments').DataTable({
+                "lengthMenu": [10, 25, 50, 100], 
+                "paging": true,
+                "searching": true,
+                "ordering": true
+            });
+        }
     });
 </script>
 <script>
     $(document).ready(function() {
-        $('#myOpens').DataTable({
-            "lengthMenu": [10, 25, 50, 100], 
-            "paging": true,
-            "searching": true,
-            "ordering": true
-        });
+        if ($("#myOpens tbody tr").length > 1) { // Ensure at least one row exists
+            $('#myOpens').DataTable({
+                "lengthMenu": [10, 25, 50, 100], 
+                "paging": true,
+                "searching": true,
+                "ordering": true
+            });
+        }
     });
 </script>
 <script>
     $(document).ready(function() {
-        $('#myApplicants').DataTable({
-            "lengthMenu": [10, 25, 50, 100], 
-            "paging": true,
-            "searching": true,
-            "ordering": true
-        });
+        if ($("#myApplicants tbody tr").length > 1) { // Ensure at least one row exists
+            $('#myApplicants').DataTable({
+                "lengthMenu": [10, 25, 50, 100], 
+                "paging": true,
+                "searching": true,
+                "ordering": true
+            });
+        }
     });
 </script>
-
 </body>
 
 </html>
