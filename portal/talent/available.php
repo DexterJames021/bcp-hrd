@@ -80,12 +80,52 @@ access_log($userData);
                 <!-- ============================================================== -->
                 <!-- pageheader  -->
                 <!-- ============================================================== -->
+                <?php
+if (isset($_SESSION['success_message'])) {
+    echo '
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        ' . $_SESSION['success_message'] . '
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <script>
+        setTimeout(function() {
+            var alert = document.querySelector(".alert");
+            if (alert) {
+                var bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 5000);
+    </script>
+    ';
+    unset($_SESSION['success_message']);
+}
+
+if (isset($_SESSION['error_message'])) {
+    echo '
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        ' . $_SESSION['error_message'] . '
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <script>
+        setTimeout(function() {
+            var alert = document.querySelector(".alert");
+            if (alert) {
+                var bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 5000);
+    </script>
+    ';
+    unset($_SESSION['error_message']);
+}
+?>
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="card">
                             <div class="card-header">
                                 <h2 class="pageheader-title">Available Training</h2>
                             </div>
+
                             <div class="card-body">
     <!-- Table for Training Sessions -->
     <table id="trainingTable" class="table table-hover" style="100%">

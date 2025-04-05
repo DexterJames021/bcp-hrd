@@ -46,9 +46,9 @@ if ($result) {
     <title>Succession Planning</title>
     <link rel="shortcut icon" href="../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
 
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS (latest version) -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
+<!-- ✅ Bootstrap CSS -->
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="../../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
     <link rel="stylesheet" href="../../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
@@ -70,11 +70,13 @@ if ($result) {
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
+    <!-- Bootstrap 5 (Optional, remove if you only need Bootstrap 4) -->
     <!-- Custom JS (Loaded last with defer to prevent blocking) -->
     <script defer src="../../assets/libs/js/global-script.js"></script>
     <script defer src="../../assets/libs/js/main-js.js"></script>
     <script defer src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 </head>
+
 
 
 
@@ -108,13 +110,16 @@ if ($result) {
                                         </div>
                                     </div>
                     <hr>
-                    <?php
+
+<?php
 // Check if an error message is set
 if (isset($_SESSION['error_message'])) {
     echo '
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         ' . $_SESSION['error_message'] . '
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     
     <script>
@@ -133,13 +138,16 @@ if (isset($_SESSION['error_message'])) {
     unset($_SESSION['error_message']);
 }
 ?>
-                 <?php
+
+<?php
 // Check if a success message is set
 if (isset($_SESSION['success_message'])) {
     echo '
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         ' . $_SESSION['success_message'] . '
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     
     <script>
@@ -162,70 +170,75 @@ if (isset($_SESSION['success_message'])) {
 
 
 
-
-
                     
                                                             <!-- Bootstrap Modal -->
-                                        <div class="modal fade" id="assignTrainingModal" tabindex="-1" role="dialog" aria-labelledby="assignTrainingModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="assignTrainingModalLabel">Assign Training</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <form action="onboarding/assign_training.php" method="POST"> <!-- Adjust action URL as needed -->
-                                                <div class="modal-body">
-                                                <div class="form-group">
-                                                    <label for="training_id">Training ID</label>
-                                                    <select class="form-control" id="training_id" name="training_id" required>
-                                                    <option value="" disabled selected>Select Training</option>
-                                                    <?php
-                                                    // Fetch available trainings from the database
-                                                    $trainingSql = "SELECT training_id, training_name FROM training_sessions";
-                                                    $trainingResult = $conn->query($trainingSql);
-                                                    if ($trainingResult->num_rows > 0) {
-                                                        while ($trainingRow = $trainingResult->fetch_assoc()) {
-                                                            echo "<option value='" . $trainingRow['training_id'] . "'>" . htmlspecialchars($trainingRow['training_name']) . " </option>";
-                                                        }
-                                                    } else {
-                                                        echo "<option value='' disabled>No trainings available</option>";
-                                                    }
-                                                    ?>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="employee_id">Employee Name</label>
-                                                    <select class="form-control" id="employee_id" name="employee_id" required>
-                                                    <option value="" disabled selected>Select Employee</option>
-                                                    <?php
-                                                    // Fetch available employees from the database
-                                                    $employeeSql = "SELECT EmployeeID, CONCAT(FirstName, ' ', LastName) AS employee_name FROM employees";
-                                                    $employeeResult = $conn->query($employeeSql);
-                                                    if ($employeeResult->num_rows > 0) {
-                                                        while ($employeeRow = $employeeResult->fetch_assoc()) {
-                                                            echo "<option value='" . $employeeRow['EmployeeID'] . "'>" . htmlspecialchars($employeeRow['employee_name']) . " </option>";
-                                                        }
-                                                    } else {
-                                                        echo "<option value='' disabled>No employees available</option>";
-                                                    }
-                                                    ?>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="completion_date">Completion Date</label>
-                                                    <input type="date" class="form-control" id="completion_date" name="completion_date">
-                                                </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Assign Training</button>
-                                                </div>
-                                            </form>
-                                            </div>
-                                        </div>
-                                        </div>
+                                                            <div class="modal fade" id="assignTrainingModal" tabindex="-1" role="dialog" aria-labelledby="assignTrainingModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="assignTrainingModalLabel">Assign Training</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="onboarding/assign_training.php" method="POST">
+                <div class="modal-body">
+                    <!-- Training Name Dropdown -->
+                    <div class="form-group">
+                        <label for="training_id">Training Name</label>
+                        <select class="form-control" id="training_id" name="training_id" required>
+                            <option value="" disabled selected>Select Training</option>
+                            <?php
+                            // Fetch available trainings from the database
+                            $trainingSql = "SELECT training_id, training_name FROM training_sessions";
+                            $trainingResult = $conn->query($trainingSql);
+                            if ($trainingResult->num_rows > 0) {
+                                while ($trainingRow = $trainingResult->fetch_assoc()) {
+                                    echo "<option value='" . $trainingRow['training_id'] . "'>" . htmlspecialchars($trainingRow['training_name']) . " </option>";
+                                }
+                            } else {
+                                echo "<option value='' disabled>No trainings available</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <!-- Employee Name Dropdown -->
+                    <div class="form-group">
+                        <label for="employee_id">Employee Name</label>
+                        <select class="form-control" id="employee_id" name="employee_id" required>
+                            <option value="" disabled selected>Select Employee</option>
+                            <?php
+                            // Fetch available employees from the database
+                            $employeeSql = "SELECT EmployeeID, CONCAT(FirstName, ' ', LastName) AS employee_name FROM employees";
+                            $employeeResult = $conn->query($employeeSql);
+                            if ($employeeResult->num_rows > 0) {
+                                while ($employeeRow = $employeeResult->fetch_assoc()) {
+                                    echo "<option value='" . $employeeRow['EmployeeID'] . "'>" . htmlspecialchars($employeeRow['employee_name']) . " </option>";
+                                }
+                            } else {
+                                echo "<option value='' disabled>No employees available</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <!-- Completion Date -->
+                    <div class="form-group">
+                        <label for="completion_date">Completion Date</label>
+                        <input type="date" class="form-control" id="completion_date" name="completion_date" required>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Assign Training</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
                                         <!-- Add Training Modal -->
                                         <div class="modal fade" id="addTrainingModal" tabindex="-1" role="dialog" aria-labelledby="addTrainingModalLabel" aria-hidden="true">
@@ -317,7 +330,9 @@ if (isset($_SESSION['success_message'])) {
                                             <li class="nav-item">
                                                 <a class="nav-link" id="training-assignments-tab" data-toggle="tab" href="#training-assignments" role="tab" aria-controls="training-assignments" aria-selected="false">Training Assignments</a>
                                             </li>
-                                            
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="training-applicants-tab" data-toggle="tab" href="#training-applicants" role="tab" aria-controls="training-applicants" aria-selected="false">Training Applicants</a>
+                                            </li>
                                         </ul>
                                         <div class="tab-content" id="dashboardTabContent">
                                             <!-- Training Sessions Tab -->
@@ -435,11 +450,12 @@ if (isset($_SESSION['success_message'])) {
                                         </thead>
                                         <tbody>
     <?php
-    // Query to fetch training assignment data from the database
-    $sql = "SELECT ta.assignment_id, e.FirstName, e.LastName, tr.training_name, ta.status, ta.completion_date
+    // Query to fetch training assignment data from the database, including grade if available
+    $sql = "SELECT ta.assignment_id, e.FirstName, e.LastName, tr.training_name, ta.status, ta.completion_date, tg.grade
             FROM training_assignments ta
             JOIN employees e ON ta.employee_id = e.EmployeeID
-            JOIN training_sessions tr ON ta.training_id = tr.training_id";
+            JOIN training_sessions tr ON ta.training_id = tr.training_id
+            LEFT JOIN training_grades tg ON ta.assignment_id = tg.assignment_id"; // LEFT JOIN to get grade info
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -453,7 +469,7 @@ if (isset($_SESSION['success_message'])) {
 
             // Action Buttons (Icons Only)
             echo "<td>";
-            
+
             if ($row['status'] == 'Not Started') {
                 // Show delete icon for "Not Started" status
                 echo "<a href='onboarding/delete_assignment.php?id=" . $row['assignment_id'] . "' 
@@ -462,17 +478,26 @@ if (isset($_SESSION['success_message'])) {
                         <i class='fas fa-trash'></i> <!-- Delete Icon -->
                       </a>";
             } elseif ($row['status'] == 'In Progress') {
-                // Show complete button and delete icon for "In Progress" status
-                echo "<a href='onboarding/complete_assignment.php?id=" . $row['assignment_id'] . "' 
-                        class='text-success mx-2'>
+                // Show complete button for "In Progress" status
+                echo "<a href='#' 
+                        class='text-success mx-2' 
+                        onclick='completeWithGrade(" . $row['assignment_id'] . ")'>
                         <i class='fas fa-check'></i> <!-- Complete Icon -->
-                      </a>";
+                    </a>";
 
+                // Show delete icon for "In Progress" status
                 echo "<a href='onboarding/delete_assignment.php?id=" . $row['assignment_id'] . "' 
                         class='text-danger mx-2' 
                         onclick='return confirm(\"Are you sure you want to delete this assignment?\");'>
                         <i class='fas fa-trash'></i> <!-- Delete Icon -->
                       </a>";
+            } elseif ($row['status'] == 'Completed') {
+                // Show the grade for "Completed" status
+                if (isset($row['grade'])) {
+                    echo "<span>Rating: " . htmlspecialchars($row['grade']) . "%</span>";
+                } else {
+                    echo "<span>No grade assigned</span>";
+                }
             }
             
             echo "</td>";
@@ -487,14 +512,131 @@ if (isset($_SESSION['success_message'])) {
 
 
 
+
+
                                     </table>
+
+<!-- Modal for Grade Input -->
+<!-- Modal for grade input -->
+<div class="modal fade" id="gradeModal" tabindex="-1" aria-labelledby="gradeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="gradeModalLabel">Assign Grade</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label for="grade">Select Grade:</label>
+        <select id="grade" class="form-control">
+          <option value="25">25%</option>
+          <option value="50">50%</option>
+          <option value="75">75%</option>
+          <option value="100">100%</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="saveGradeBtn">Save Grade</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+function completeWithGrade(assignmentId) {
+    // Store the assignmentId globally to use when the user saves the grade
+    window.assignmentId = assignmentId;
+
+    // Show the modal
+    $('#gradeModal').modal('show');
+}
+
+// Handle the saving of the grade from the modal
+$('#saveGradeBtn').on('click', function() {
+    const grade = $('#grade').val(); // Get the selected grade
+
+    if (grade) {
+        // Redirect with assignment ID and selected grade
+        window.location.href = `onboarding/complete_assignment.php?id=${window.assignmentId}&grade=${encodeURIComponent(grade)}`;
+    } else {
+        alert("Please select a grade.");
+    }
+});
+</script>
 
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>                     
-                                        
+                                        <div class="tab-pane fade" id="training-applicants" role="tabpanel" aria-labelledby="training-applicants-tab">
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h1 class="card-title">Training Applicants</h1>
+                </div>
+                <div class="card-body">
+                    <table id="myTable2" class="table table-hover" style="width:100%">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Applicant Name</th>
+                                <th>Training</th>
+                                <th>Applied Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            // Query to fetch training applicants data from the database
+                            $sql = "SELECT ta.application_id, e.EmployeeID as employee_id, e.FirstName, e.LastName, tr.training_name, ta.training_id, tr.training_name, ta.applied_at
+                            FROM training_applications ta
+                            JOIN employees e ON ta.employee_id = e.EmployeeID
+                            JOIN training_sessions tr ON ta.training_id = tr.training_id"; 
+
+                            $result = $conn->query($sql);
+
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "<tr>";
+                                    echo "<td>" . htmlspecialchars($row['FirstName']) . " " . htmlspecialchars($row['LastName']) . "</td>"; // Applicant Name
+                                    echo "<td>" . htmlspecialchars($row['training_name']) . "</td>"; // Training Title
+                                    $applied_date = $row['applied_at'] ? date('M d, Y', strtotime($row['applied_at'])) : 'N/A'; // Format: Nov 31, 2020
+                                    echo "<td>" . htmlspecialchars($applied_date) . "</td>"; // Applied Date formatted
+
+                                    // Action Buttons (Icons Only)
+                                    echo "<td>";
+
+                                    // For all applicants, show the "Assign Training" button
+                                    echo "<a href='#' class='btn btn-outline-primary mx-2' 
+                                            data-toggle='modal' 
+                                            data-target='#assignTrainingModal' 
+                                            data-employee-id='" . $row['employee_id'] . "' 
+                                            data-employee-name='" . htmlspecialchars($row['FirstName']) . " " . htmlspecialchars($row['LastName']) . "' 
+                                            data-training-id='" . $row['training_id'] . "' 
+                                            data-training-name='" . htmlspecialchars($row['training_name']) . "'>
+                                            Assign Training
+                                        </a>";
+
+                                    echo "</td>";
+                                    echo "</tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='4' class='text-center'>No training applicants found.</td></tr>"; // Adjusted colspan
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
                                 </div>
                             </div>
@@ -504,24 +646,67 @@ if (isset($_SESSION['success_message'])) {
 
         </div>
     </div>
+    <script>
+$('#assignTrainingModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    var employeeId = button.data('employee-id');
+    var employeeName = button.data('employee-name');
+    var trainingId = button.data('training-id');
+    var trainingName = button.data('training-name');
+    
+    var modal = $(this);
+
+    // If employee and training are passed (from Apply section), pre-fill them
+    if (employeeId && trainingId) {
+        modal.find('#employee_id').val(employeeId); // Set the employee ID in the dropdown
+        modal.find('#training_id').val(trainingId); // Set the training ID in the dropdown
+        modal.find('#completion_date').val(""); // Optionally, reset the completion date field
+        modal.find('.modal-title').text('Assign Training to ' + employeeName); // Change the modal title
+    } else {
+        // If no employee or training is passed (general case), keep selections as empty/default
+        modal.find('.modal-title').text('Assign Training'); // Default title
+        modal.find('#employee_id').val(""); // Leave employee dropdown empty
+        modal.find('#training_id').val(""); // Leave training dropdown empty
+        modal.find('#completion_date').val(""); // Reset completion date field
+    }
+});
+
+</script>
+
 <script>
     $(document).ready(function() {
-        $('#myTable').DataTable({
-            "lengthMenu": [10, 25, 50, 100], 
-            "paging": true,
-            "searching": true,
-            "ordering": true
-        });
+        if ($("#myTable tbody tr").length > 1) { // Ensure at least one row exists
+            $('#myTable').DataTable({
+                "lengthMenu": [10, 25, 50, 100], 
+                "paging": true,
+                "searching": true,
+                "ordering": true
+            });
+        }
     });
 </script>
 <script>
     $(document).ready(function() {
-        $('#myTable1').DataTable({
-            "lengthMenu": [10, 25, 50, 100], 
-            "paging": true,
-            "searching": true,
-            "ordering": true
-        });
+        if ($("#myTable1 tbody tr").length > 1) { // Ensure at least one row exists
+            $('#myTable1').DataTable({
+                "lengthMenu": [10, 25, 50, 100], 
+                "paging": true,
+                "searching": true,
+                "ordering": true
+            });
+        }
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        if ($("#myTable2 tbody tr").length > 1) { // Ensure at least one row exists
+            $('#myTable2').DataTable({
+                "lengthMenu": [10, 25, 50, 100], 
+                "paging": true,
+                "searching": true,
+                "ordering": true
+            });
+        }
     });
 </script>
 </body>

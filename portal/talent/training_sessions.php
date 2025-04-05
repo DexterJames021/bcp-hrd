@@ -172,7 +172,6 @@ if ($result && $result->num_rows > 0) {
         echo '</td>';
 
         // Add Action button (Start) if status is not In Progress or Completed
-        // Add the 'Start' button if status is 'Not Started'
         if ($row['status'] == 'Not Started') {
             // Display the form with the 'Start' button and confirmation prompt
             echo '<td>
@@ -181,12 +180,37 @@ if ($result && $result->num_rows > 0) {
                         <button type="button" class="btn btn-primary btn-sm" onclick="confirmStart()">Start</button>
                     </form>
                   </td>';
+        } elseif ($row['status'] == 'In Progress') {
+            // Display nothing if it's in progress, or provide a "Complete" button depending on your logic
+            echo '<td>In Progress</td>';
+        } elseif ($row['status'] == 'Completed') {
+            // If status is completed, display grade in Action column
+            echo '<td>';
+            // Query the grade for this training session
+            $gradeQuery = "
+                SELECT tg.grade 
+                FROM training_grades tg
+                JOIN training_assignments ta ON tg.assignment_id = ta.assignment_id
+                WHERE ta.assignment_id = ?";
+                
+            if ($gradeStmt = $conn->prepare($gradeQuery)) {
+                $gradeStmt->bind_param("i", $row['assignment_id']);
+                $gradeStmt->execute();
+                $gradeResult = $gradeStmt->get_result();
+                if ($gradeResult->num_rows > 0) {
+                    $gradeRow = $gradeResult->fetch_assoc();
+                    echo '<span class="badge badge-success">Grade: ' . htmlspecialchars($gradeRow['grade']) . '%</span>';
+                } else {
+                    echo 'No grade assigned yet';
+                }
+                $gradeStmt->close();
+            }
+            echo '</td>';
         } else {
-            // Display an empty cell if the status is not 'Not Started'
+            // For other statuses (e.g., 'Not Started', you could also display a default message)
             echo '<td></td>';
         }
 
-        
         echo '</tr>';
     }
 } else {
@@ -194,8 +218,8 @@ if ($result && $result->num_rows > 0) {
     echo '<tr><td colspan="8" class="text-center">You have no assigned training sessions at the moment.</td></tr>';
 }
 ?>
-
 </tbody>
+
 <script>
     function confirmStart() {
         // Ask for confirmation before starting the training
