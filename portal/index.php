@@ -1,6 +1,11 @@
 <?php
+<<<<<<< HEAD
 require "../config/db_talent.php";
 require '../auth/mysqli_accesscontrol.php';
+=======
+require "../config/Database.php";
+require '../auth/accesscontrol.php';
+>>>>>>> 9308d433153038ad55bcea2fcf37bced059c30e6
 
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);
@@ -70,12 +75,15 @@ access_log($userData);
         <!-- navbar -->
         <!-- ============================================================== -->
         <?php include 'sideandnavbar.php'; ?>
+<<<<<<< HEAD
         <!-- ============================================================== -->
         <!-- end left sidebar -->
         <!-- ============================================================== -->
         <!-- ============================================================== -->
         <!-- wrapper  -->
         <!-- ============================================================== -->
+=======
+>>>>>>> 9308d433153038ad55bcea2fcf37bced059c30e6
         <div class="dashboard-wrapper">
             <!-- <div class="dashboard-ecommerce"> -->
             <div class="container-fluid dashboard-content ">

@@ -1,8 +1,9 @@
 $(function () {
     console.log('Document is ready');
+    console.log('Permission js',userPermissions);
     // const bookingTable = $('#bookingTable').DataTable();
 
-    const baseURL = '../../../admin/tech/includes/encode/facility_api.php?action=';
+    const baseURL = '../../admin/tech/includes/encode/facility_api.php?action=';
 
     function loadRooms() {
         $.get(baseURL + 'fetch_avail_room',
@@ -138,13 +139,23 @@ $(function () {
                 <strong>Facility:</strong> ${event.title}<br>
                 <strong>Start:</strong> ${event.start}<br>
                 <strong>End:</strong> ${event.end}<br>
-                <div class="badge ${status == 'Approved' ? 'badge-danger' : 'badge-light'} d-block py-3 px-auto mt-2">
+                <div class="badge ${status == 'Approved' ? 'badge-success' : (status == 'Pending' ? 'badge-secondary' : 'badge-danger')} d-block py-3 px-auto mt-2">
                     <strong>Status:</strong> ${status}<br>
                 </div>
-                <button id="cancelBooking" data-room="${event.extendedProps.room}" class="btn btn-sm btn-outline-danger mt-3" ${status == 'Cancelled' ? 'disabled' : ''}>
+
+                <button 
+                    id="cancelBooking" 
+                    data-room="${event.extendedProps.room}" 
+                    class="btn btn-sm btn-outline-danger mt-3 ${status == 'Approved' ? 'd-none' : ''} " ${status == 'Cancelled' ? 'disabled' : ''}
+                    ${Array.isArray(userPermissions) && userPermissions.includes("EDIT")? '' : 'disabled' }
+                >
                     Cancel Booking
                 </button>
             `;
+
+            if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
+
+            }
             $('#eventDetails').html(details);
             $('#eventBookedModal').modal('show'); // Show the details modal
 

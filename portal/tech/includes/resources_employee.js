@@ -2,7 +2,7 @@ console.log("connect");
 
 $(function () {
   const baseURL =
-    "../../../admin/tech/includes/encode/resources_api.php?action=";
+    "../../admin/tech/includes/encode/resources_api.php?action=";
 
   const ResourcesTable = $("#ResourcesTable").DataTable({
     processing: true,
@@ -13,15 +13,15 @@ $(function () {
       dataSrc: "",
     },
     columns: [
-      {
-        data: "id",
-      },
+      // {
+      //   data: "id",
+      // },
       {
         data: "name",
       },
-      {
-        data: "status",
-      },
+      // {
+      //   data: "status",
+      // },
       {
         data: "quantity",
       },

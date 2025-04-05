@@ -1,4 +1,13 @@
 <?php
+
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(['error' => 'Unauthorized access']);
+    http_response_code(403);
+    exit;
+}
+
 header("Content-Type: application/json");
 
 $apiKey = "AIzaSyDzeOhS2fVFzHHBxGbZCZO60XcNthL9GGc";
