@@ -1,8 +1,7 @@
 <?php
 require "../config/db_talent.php";
-require "../config/Database.php";
 require '../auth/mysqli_accesscontrol.php';
-require '../auth/accesscontrol.php';
+
 
 
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
