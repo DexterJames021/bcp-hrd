@@ -38,8 +38,8 @@ switch ($action) {
             ':category' => $_POST['category'],
             ':quantity' => $_POST['quantity'],
             ':status' => $_POST['status'],
-            ':next_maintenance' => $_POST['next_maintenance'],
-            ':last_maintenance' => $_POST['last_maintenance'],
+            ':next_maintenance' => !empty($_POST['next_maintenance']) ? $_POST['next_maintenance'] : NULL,
+            ':last_maintenance' => !empty($_POST['last_maintenance']) ? $_POST['last_maintenance'] : NULL,
             ':location' => $_POST['location'],
         ];
 
@@ -71,8 +71,8 @@ switch ($action) {
             ':quantity' => $_POST['quantity'],
             ':location' => $_POST['location'],
             ':status' => $_POST['status'],
-            ':last_maintenance' => $_POST['last_maintenance'],
-            ':next_maintenance' => $_POST['next_maintenance'],
+            ':last_maintenance' => !empty($_POST['last_maintenance']) ? $_POST['last_maintenance'] : NULL,
+            ':next_maintenance' => !empty($_POST['next_maintenance']) ? $_POST['next_maintenance'] : NULL,
         ];
 
         $success = $resource->update_resource($id, $data);
