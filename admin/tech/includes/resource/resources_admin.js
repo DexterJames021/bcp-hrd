@@ -41,17 +41,17 @@ $(function () {
       {
         data: "status",
       },
-      {
-        data: "last_maintenance",
-        defaultContent: "<i>Not set</i>",
-      },
-      {
-        data: "created_at",
-      },
-      {
-        data: "next_maintenance",
-        defaultContent: "<i>Not set</i>",
-      },
+      // {
+      //   data: "last_maintenance",
+      //   defaultContent: "<i>Not set</i>",
+      // },
+      // {
+      //   data: "created_at",
+      // },
+      // {
+      //   data: "next_maintenance",
+      //   defaultContent: "<i>Not set</i>",
+      // },
       {
         title: "Action",
         data: null,
@@ -64,13 +64,13 @@ $(function () {
 
           if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
             buttons += `<button class="update btn btn-action" data-id="${data.id}" title="UPDATE">
-                          <i class="bi bi-pencil-square text-primary"  style="font-size:x-large;"></i>
+                          <i class="bi bi-pencil-square text-primary"  style="font-size:large;"></i>
                       </button>`;
           }
 
           if (Array.isArray(userPermissions) && userPermissions.includes("DELETE")) {
-            buttons += `<button class="delete btn btn-action" data-id="${data.id}" title="UPDATE">
-                        <i class="bi bi-trash-fill text-danger"  style="font-size:x-large;"></i>
+            buttons += `<button class="delete btn btn-action" data-id="${data.id}" title="DELETE">
+                        <i class="bi bi-trash-fill text-danger"  style="font-size:large;"></i>
                     </button>`;
 
           }
@@ -432,6 +432,8 @@ $(function () {
 
   $(document).on("click", ".delete", function () {
     const id = $(this).data("id");
+
+    if (confirm('Are you sure you want to delete this asset?')) {
     $.post(BaseURL + "delete_resource",
       {
         id,
@@ -441,10 +443,14 @@ $(function () {
           resourcesTable.ajax.reload();
           loadRoomsSelectTag();
           $("#deleted").toast("show");
+        }else {
+          $("#error").toast("show");
         }
       },
       "json"
     );
+
+  }
   });
 
   $(document).on("click", ".update", function () {

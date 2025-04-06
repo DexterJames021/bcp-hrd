@@ -49,7 +49,13 @@ switch ($action) {
     case 'delete_resource':
         if (!isset($_POST['id']))
             return false;
-        echo json_encode(['success' => $resource->delete_asset($_POST['id'])]);
+
+            $delete = $resource->delete_asset($_POST['id']);
+            if($delete){
+                echo json_encode(['success'=> true]);
+            }else {
+                echo json_encode(['success'=> false]);
+            }
         break;
 
     case 'update_resource':

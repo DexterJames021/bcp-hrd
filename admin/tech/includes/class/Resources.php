@@ -74,9 +74,13 @@ class Resources
 
     public function delete_asset($id)
     {
-        $q = "DELETE FROM {$this->table} WHERE id=:id";
-        $stmt = $this->conn->prepare($q);
-        return $stmt->execute(['id' => $id]);
+        try {
+            $q = "DELETE FROM {$this->table} WHERE id=:id";
+            $stmt = $this->conn->prepare($q);
+            return $stmt->execute(['id' => $id]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function getAvailableResource()
