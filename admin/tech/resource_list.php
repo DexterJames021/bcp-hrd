@@ -331,6 +331,7 @@ access_log($userData);
                                                         <th>by</th>
                                                         <th>resource</th>
                                                         <th>Quantity</th>
+                                                        <th>purpose</th>
                                                         <th>Requested at</th>
                                                         <th>Status</th>
                                                         <th>Return</th>

@@ -147,7 +147,7 @@ access_log($userData);
                                         </div>
                                         <div class="mb-3">
                                             <label for="bookingDate" class="form-label">Booking Date</label>
-                                            <input type="text" id="bookingDate" name="booking_date" class="form-control"
+                                            <input type="date" id="bookingDate" name="booking_date" class="form-control"
                                                 readonly>
                                         </div>
                                         <div class="mb-2">

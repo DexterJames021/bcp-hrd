@@ -1,19 +1,19 @@
 $(function () {
 
-    const BaseURLREs = 
-    window.location.hostname === "localhost"
-    ? "http://localhost/bcp-hrd/admin/tech/includes/encode/resources_api.php?action="
-    : "https://yourdomain.com/bcp-hrd/admin/tech/encode/resources_api.php?action=";
+    const BaseURLREs =
+        window.location.hostname === "localhost"
+            ? "http://localhost/bcp-hrd/admin/tech/includes/encode/resources_api.php?action="
+            : "https://yourdomain.com/bcp-hrd/admin/tech/encode/resources_api.php?action=";
 
-    const BaseURLFac = 
-    window.location.hostname === "localhost"
-    ? "http://localhost/bcp-hrd/admin/tech/includes/encode/facility_api.php?action="
-    : "https://yourdomain.com/bcp-hrd/admin/tech/encode/facility_api.php?action=";
+    const BaseURLFac =
+        window.location.hostname === "localhost"
+            ? "http://localhost/bcp-hrd/admin/tech/includes/encode/facility_api.php?action="
+            : "https://yourdomain.com/bcp-hrd/admin/tech/encode/facility_api.php?action=";
 
-    const GenURL = 
-    window.location.hostname === "localhost"
-    ? "http://localhost/bcp-hrd/admin/tech/includes/encode/report_api.php?action="
-    : "https://yourdomain.com/bcp-hrd/admin/tech/encode/report_api.php?action=";
+    const GenURL =
+        window.location.hostname === "localhost"
+            ? "http://localhost/bcp-hrd/admin/tech/includes/encode/report_api.php?action="
+            : "https://yourdomain.com/bcp-hrd/admin/tech/encode/report_api.php?action=";
 
     let generatedReport = "";
 
@@ -78,19 +78,19 @@ $(function () {
                 ----------------------  
                 Date: [YYYY-MM-DD]  
             
+                Analysis:  
+                - Summarize key trends based on the provided data.
+
                 Facility Usage Summary:  
                 - Facility: [Name]  
                 - Usage: [Purpose]  
                 - Time: [Start - End]  
-                - Attendees: [Count]  
-            
-                Analysis:  
-                - Summarize key trends based on the provided data.  
+                - Attendees: [Count]    
             
                 Suggestions:  
                 - Recommend optimizations based on the most and least used facilities.  
-                Do not create new data. Only analyze and summarize the given log data.`  
-            },                       
+                Do not create new data. Only analyze and summarize the given log data.`
+            },
             dataType: "json",
             success: function (response) {
                 console.log("AI Response:", response);
@@ -130,19 +130,19 @@ $(function () {
                 Follow this format:  
                 ----------------------  
                 Date: [YYYY-MM-DD]  
+
+                Analysis:  
+                - Summarize key trends based on the provided data. 
             
                 Resources Usage Summary:  
                 - assets: [Name]  
                 - Usage: [Purpose]  
-                - Time: [Start - End]  
-            
-                Analysis:  
-                - Summarize key trends based on the provided data.  
+                - Time: [Start - End]   
             
                 Suggestions:  
                 - Recommend optimizations based on the most and least used resources.  
-                Do not create new data. Only analyze and summarize the given log data.`  
-            },                       
+                Do not create new data. Only analyze and summarize the given log data.`
+            },
             dataType: "json",
             success: function (response) {
                 console.log("AI Response:", response);
@@ -190,5 +190,5 @@ $(function () {
         link.click();
     });
 
-    
+
 });

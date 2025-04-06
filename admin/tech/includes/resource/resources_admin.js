@@ -130,6 +130,10 @@ $(function () {
         data: "quantity",
       },
       {
+        title: "Purpose",
+        data: "purpose"	
+      },
+      {
         title: "Requested at",
         data: "requested_at",
       },
