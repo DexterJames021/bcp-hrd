@@ -25,7 +25,7 @@ if (isset($_GET['applicant_id'])) {
         }
     } catch (mysqli_sql_exception $e) {
         // Handle any errors that occur during the deletion process
-        $_SESSION['message'] = "Error: Could not delete applicant.";
+        $_SESSION['message'] = "You do not have permission to delete applicants.";
         $_SESSION['message_type'] = "danger"; // Set the error message type
     }
 

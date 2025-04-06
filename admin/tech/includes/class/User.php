@@ -176,5 +176,21 @@ class User
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public function getEmployeeSalary($id)
+    {
+        $q = "SELECT e.EmployeeID, 
+                CONCAT(e.FirstName, ' ', e.LastName) AS FullName, 
+                cb.BaseSalary, 
+                cb.Bonus, 
+                cb.BenefitValue 
+                FROM employees e 
+                LEFT JOIN compensationbenefits cb ON e.EmployeeID = cb.EmployeeID 
+                WHERE e.EmployeeID = :id; ";
+
+        $stmt = $this->conn->prepare($q);
+        $stmt->execute([':id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+     
 
 }

@@ -1,12 +1,14 @@
 <!-- Resources -->
 <?php
-include_once '../../config/Database.php';
-include_once '../../auth/accesscontrol.php';
+include_once __DIR__ .  '../../../config/Database.php';
+include_once __DIR__ .  '../../../auth/accesscontrol.php';
 
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);
 
 
+// $DEPLOY_URL = ($_SERVER['HTTPS  '] ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/bcp-hrd';
+// echo $DEPLOY_URL;
 ?>
 <!doctype html>
 <html lang="en">
@@ -329,8 +331,10 @@ access_log($userData);
                                                         <th>by</th>
                                                         <th>resource</th>
                                                         <th>Quantity</th>
+                                                        <th>purpose</th>
                                                         <th>Requested at</th>
                                                         <th>Status</th>
+                                                        <th>Return</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -398,11 +402,15 @@ access_log($userData);
                                             <h2 class="card-title">Resources Management</h2>
                                             <div class="btn-group">
                                                 <?php if ($userData && in_array("CREATE", $userData['permissions'])): ?>
-                                                    <button type="button" class="btn btn-outline-primary float-right"
-                                                        data-toggle="modal" data-target="#addAsset">+</button>
+                                                    <button type="button" class="btn float-right"
+                                                        data-toggle="modal" data-target="#addAsset">
+                                                        <i class="bi bi-plus-circle-fill text-primary" style="font-size:x-large;"></i>
+                                                    </button>
                                                 <?php else: ?>
-                                                    <button type="button" class="btn btn-outline-primary float-right"
-                                                        data-toggle="modal" data-target="#addAsset" disabled>+</button>
+                                                    <button type="button" class="btn float-right"
+                                                        data-toggle="modal" data-target="#addAsset" disabled>
+                                                        <i class="bi bi-plus-circle-fill text-primary" style="font-size:x-large;"></i>
+                                                    </button>
                                                 <?php endif; ?>
                                             </div>
                                         </div>

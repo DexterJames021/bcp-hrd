@@ -32,6 +32,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     case 'superadmin':
                         header("Location: ../admin/index.php");
                         exit;
+                    case 'manager':
+                        header("Location: ../manager/index.php");
+                        exit;
                     case 'employee':
                         header("Location: ../portal/index.php");
                         exit;

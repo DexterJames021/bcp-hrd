@@ -131,7 +131,7 @@ class Resources
                     FROM fm_resource_requests rr 
                     JOIN fm_resources re ON rr.resource_id = re.id 
                     JOIN users us ON rr.employee_id = us.id 
-                    WHERE rr.status = 'Pending'; ";
+                    WHERE rr.status = 'Pending' || rr.status = 'Approved'; ";
             $stmt = $this->conn->prepare($q);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -173,7 +173,7 @@ class Resources
             }
 
             // Update request status
-            $updateRequestQuery = "UPDATE fm_resource_requests SET status = :status WHERE id = :id";
+            $updateRequestQuery = "UPDATE fm_resource_requests SET status = :status, approved_at = NOW() WHERE id = :id";
             $stmt = $this->conn->prepare($updateRequestQuery);
             $stmt->execute([
                 ':status' => $status,
@@ -429,4 +429,54 @@ class Resources
             return $e->getMessage();
         }
     }
+
+    public function returnResource($request_id)
+    {
+        try {
+            $this->conn->beginTransaction();
+
+            // ✅ Get the requested quantity and resource_id first
+            $getQuantityQuery = "SELECT resource_id, quantity 
+                                 FROM fm_resource_requests 
+                                 WHERE id = :request_id";
+            $stmt0 = $this->conn->prepare($getQuantityQuery);
+            $stmt0->bindParam(":request_id", $request_id, PDO::PARAM_INT);
+            $stmt0->execute();
+            $requestData = $stmt0->fetch(PDO::FETCH_ASSOC);
+
+            if (!$requestData) {
+                throw new Exception("Request ID not found.");
+            }
+
+            $resource_id = $requestData['resource_id'];
+            $requested_quantity = $requestData['quantity']; // Quantity to return
+
+            // ✅ Update the request status to 'Returned' and set return_date
+            $updateRequestQuery = "UPDATE fm_resource_requests 
+                                   SET status = 'Returned', return_date = NOW() 
+                                   WHERE id = :request_id";
+            $stmt1 = $this->conn->prepare($updateRequestQuery);
+            $stmt1->bindParam(":request_id", $request_id, PDO::PARAM_INT);
+            $stmt1->execute();
+
+            // ✅ Update the resource quantity by adding back the requested amount
+            $updateResourceQuery = "UPDATE fm_resources 
+                                    SET quantity = quantity + :requested_quantity, 
+                                        status = 'Available' 
+                                    WHERE id = :resource_id";
+            $stmt2 = $this->conn->prepare($updateResourceQuery);
+            $stmt2->bindParam(":requested_quantity", $requested_quantity, PDO::PARAM_INT);
+            $stmt2->bindParam(":resource_id", $resource_id, PDO::PARAM_INT);
+            $stmt2->execute();
+
+            $this->conn->commit();
+            return ["success" => true, "message" => "Resource returned successfully!"];
+        } catch (Exception $e) {
+            $this->conn->rollBack();
+            return ["success" => false, "message" => $e->getMessage()];
+        }
+    }
+
+
+
 }

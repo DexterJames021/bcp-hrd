@@ -1,7 +1,6 @@
 $(function () {
   // ASSETS
   console.log("RESOURCES ADMIN");
-  console.log("JS ROLE PASS:  ", userPermissions);
   
   const BaseURL =
     window.location.hostname === "localhost"
@@ -62,19 +61,12 @@ $(function () {
           // console.log("User Has UPDATE:", userPermissions.includes("EDIT"));
           // console.log("User Has DELETE:", userPermissions.includes("DELETE"));
 
-          if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
-            buttons += `<button class="update btn btn-action" data-id="${data.id}" title="UPDATE">
+            buttons = `<button class="update btn btn-action" data-id="${data.id}" title="UPDATE">
                           <i class="bi bi-pencil-square text-primary"  style="font-size:x-large;"></i>
-                      </button>`;
-          }
-
-          if (Array.isArray(userPermissions) && userPermissions.includes("DELETE")) {
-            buttons += `<button class="delete btn btn-action" data-id="${data.id}" title="UPDATE">
+                      </button>
+                      <button class="delete btn btn-action" data-id="${data.id}" title="UPDATE">
                         <i class="bi bi-trash-fill text-danger"  style="font-size:x-large;"></i>
                     </button>`;
-
-          }
-
 
 
           return buttons || '<i class="bi bi-ban text-danger" title="No permission" style="font-size:x-large;"></i>';
@@ -130,10 +122,6 @@ $(function () {
         data: "quantity",
       },
       {
-        title: "Purpose",
-        data: "purpose"	
-      },
-      {
         title: "Requested at",
         data: "requested_at",
       },
@@ -153,14 +141,12 @@ $(function () {
 
           if (data.status == 'Pending') {
 
-            if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
               buttons += `<button type="button" class="btn-approve btn my-1" data-id="${data.id}" title="APPROVE">
               <i class="bi bi-check-circle text-success" style="font-size:x-large;"></i>
               </button>
               <button type="button" class="btn-reject btn my-1" data-id="${data.id}" title="REJECT">
               <i class="bi bi-x-circle text-danger" style="font-size:x-large;"></i>
               </button>`;
-            }
 //DELETE
             // if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) { 
               // buttons += `<button type="button" class="btn-reject btn my-1" data-id="${data.id}" title="REJECT">
@@ -179,11 +165,9 @@ $(function () {
           let returntemplate = '';
 
           if (data.status == 'Approved') {
-            if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
               returntemplate = `<button id="returnBtnItem" class=" btn " data-request-id="${data.id}"  title="Return?">
                   <i class="bi bi-archive-fill"></i>
               </button>`;
-            }
           }
 
           return returntemplate || '<i  title="No action"></i>';
@@ -252,11 +236,9 @@ $(function () {
         render: function (data) {
           let returntemplate = '';
 
-          if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
             returntemplate = `<button class="returnBtn btn btn-outline-white" data-return="${data.id}"  title="Return?">
                               <i class="bi bi-archive-fill"></i>
                               </button>`;
-          }
           return returntemplate || '<i class="bi bi-ban text-danger" title="No permission" style="font-size:x-large;"></i>';
         }
       }

@@ -1,7 +1,7 @@
 <!-- tech record  -->
 <?php
-require '../../config/Database.php';
-require '../../auth/accesscontrol.php';
+require __DIR__ . '../../../config/Database.php';
+require __DIR__ . '../../../auth/accesscontrol.php';
 
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);
@@ -358,6 +358,29 @@ access_log($userData);
                                         </tr>
                                     </thead>
                                     <tbody id="trainingList"></tbody>
+                                </table>
+                            </div>
+
+                        </div>
+
+                        <!-- Compensation  list -->
+                        <div class="card ">
+                            <div class="card-title p-3 d-flex justify-content-between">
+                                <h3><span id="compensationName"></span> Compensation</h3>
+                                <!-- <div>
+                                    <button id="backButton" class="btn btn-outline-light d-inline">Back to List</button>
+                                </div> -->
+                            </div>
+                            <div class="card-body">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Base Salary</th>
+                                            <th>Bonus</th>
+                                            <th>Benefit Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="compensationList"></tbody>
                                 </table>
                             </div>
 

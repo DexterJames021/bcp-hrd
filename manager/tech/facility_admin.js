@@ -1,6 +1,5 @@
 $(function () {
     console.log('connect');
-    console.log("JS ROLE PASS:  ", userPermissions);
 
     const BaseURL =
         window.location.hostname === "localhost"
@@ -53,24 +52,19 @@ $(function () {
             title: 'Action',
             data: null,
             render: function (data) {
-                let buttons = '';
                 // console.log("Checking Permissions for:", row.id);
                 // console.log("User Has UPDATE:", userPermissions.includes("EDIT"));
                 // console.log("User Has DELETE:", userPermissions.includes("DELETE"));
 
-                if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
-                    buttons += `<button class="edit-btn btn my-1" data-id="${data.id}" title="UPDATE">
+                   let buttons = `<button class="edit-btn btn my-1" data-id="${data.id}" title="UPDATE">
                             <i class="bi bi-pencil-square text-primary" style="font-size:large;"></i>
-                        </button>`;
-                }
-
-                if (Array.isArray(userPermissions) && userPermissions.includes("DELETE")) {
-                    buttons += `<button class="delete-btn btn my-1" data-id="${data.id}" title="DELETE">
+                        </button>
+                        <button class="delete-btn btn my-1" data-id="${data.id}" title="DELETE">
                             <i class="bi bi-trash text-danger" style="font-size:large;"></i>
                         </button>`;
-                }
+              
 
-                return buttons || '<i class="bi bi-ban text-danger" title="No permission" style="font-size:x-large;"></i>';
+                return buttons ;
             },
             orderable: false,
         }
@@ -212,7 +206,6 @@ $(function () {
                 // console.log("User Has UPDATE:", userPermissions.includes("EDIT"));
                 // console.log("User Has DELETE:", userPermissions.includes("DELETE"));
 
-                if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
                     buttons += `<button 
                                         class="approve-btn btn my-1" 
                                         data-id="${data.id}">
@@ -223,7 +216,6 @@ $(function () {
                                         <i class="bi bi-x-circle text-danger" style="font-size:x-large;"></i>
                                 </button>
                                 `;
-                }
 
                 // if (Array.isArray(userPermissions) && userPermissions.includes("DELETE")) {
                 //     buttons += `<button class="reject-btn btn my-1"
@@ -232,7 +224,7 @@ $(function () {
                 //  </button>`;
                 // }
 
-                return buttons || '<i class="bi bi-ban text-danger" title="No permission" style="font-size:x-large;"></i>';
+                return buttons ;
             },
             orderable: false,
         }
@@ -332,7 +324,6 @@ $(function () {
 
                     let actionContent;
 
-                    if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
                         if (currentTime >= endTime) {
                             actionContent = `
                             <button class="done-btn btn text-success" data-id="${room.id}" data-room_id="${room.room_id}" style='font-size: x-large;'>
@@ -348,9 +339,6 @@ $(function () {
                             </span>`;
                         }
 
-                    } else {
-                        actionContent = '<i class="bi bi-ban text-danger" title="No permission" style="font-size:x-large;"></i>';
-                    }
 
                     return `
                     <tr  data-bs-toggle="tooltip" 

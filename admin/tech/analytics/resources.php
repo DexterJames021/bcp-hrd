@@ -1,7 +1,6 @@
 <?php
-
-require '../../../config/Database.php';
-require '../../../auth/accesscontrol.php';
+include_once __DIR__ .  '../../../../config/Database.php';
+include_once __DIR__ .  '../../../../auth/accesscontrol.php';
 
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);

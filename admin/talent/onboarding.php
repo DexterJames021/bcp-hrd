@@ -143,6 +143,7 @@ if ($result) {
         <!-- wrapper  -->
         <!-- ============================================================== -->
         <div class="dashboard-wrapper">
+            <?php if ($userData && in_array("VIEW", $userData['permissions'])): ?>
             <!-- <div class="dashboard-ecommerce"> -->
             <div class="container-fluid dashboard-content ">
                 <!-- ============================================================== -->
@@ -197,22 +198,7 @@ if ($result) {
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="card bg-light text-white">
-                                            <div class="card-body">
-                                                <h5>Total Trainings</h5>
-                                                <h3><?php echo $trainingCount; ?></h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="card bg-light text-dark">
-                                            <div class="card-body">
-                                                <h5>Total Assign</h5>
-                                                <h3><?php echo $assignment_count; ?></h3>
-                                            </div>
-                                        </div>
-                                    </div>
+                
                                     <div class="col-md-3">
                                         <div class="card bg-light text-dark">
                                             <div class="card-body">
@@ -375,99 +361,95 @@ $('#editEmployeeModal').on('show.bs.modal', function (event) {
         <a class="nav-link active" id="users-tab" data-toggle="tab" href="#users" role="tab" aria-controls="users" aria-selected="true">Users</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link " id="training-sessions-tab" data-toggle="tab" href="#training-sessions" role="tab" aria-controls="training-sessions" aria-selected="false">Training Sessions</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="training-assignments-tab" data-toggle="tab" href="#training-assignments" role="tab" aria-controls="training-assignments" aria-selected="false">Training Assignments</a>
-    </li>
+    <a class="nav-link" id="pending-onboarding-tab" data-toggle="tab" href="#pending-onboarding" role="tab" aria-controls="pending-onboarding" aria-selected="false">Pending Onboarding</a>
+</li>
+
     
 </ul>
 
 <div class="tab-content" id="dashboardTabContent">
-    <!-- Training Sessions Tab -->
-    <div class="tab-pane fade " id="training-sessions" role="tabpanel" aria-labelledby="training-sessions-tab">
+    <!-- pending onboarding Tab -->
+    <div class="tab-pane fade " id="pending-onboarding" role="tabpanel" aria-labelledby="pending-onboarding-tab">
     <div class="row">
-    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-    <div class="card">
-    <div class="card-header d-flex justify-content-between">
-        <h1 class="card-title">Training Sessions</h1>
-        <div class="btn-group">
-            <?php if ($userData && in_array("CREATE", $userData['permissions'])): ?>
-                <button type="button" class="btn btn-outline-primary float-right"
-                    data-toggle="modal" data-target="#addTrainingModal">Add Training</button>
-            <?php else: ?>
-                <button type="button" class="btn btn-outline-primary float-right"
-                    data-toggle="modal" data-target="#addTrainingModal" disabled>Add Training</button>
-            <?php endif; ?>
-        </div>
-    </div>
-                                        <div class="card-body">
-                                        <table id="myTable" class="table table-hover" style="width:100%">
-    <thead class="thead-light">
-        <tr>
-            <th>Training</th>
-            <th>Trainer</th> 
-            <th>Department</th> 
-            <th>Description</th> 
-            <th>Materials</th> 
-            <th>Actions</th> 
-        </tr>
-    </thead>
-    <tbody>
-        <?php
-        // SQL query to fetch training sessions with department name
-        $sql = "SELECT ts.training_id, ts.training_name, ts.training_description, ts.trainer, 
-                d.DepartmentID AS department, d.DepartmentName AS department_name, 
-                ts.training_materials, ts.created_at
-                FROM training_sessions ts
-                LEFT JOIN departments d ON ts.department = d.DepartmentID"; 
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h1 class="card-title">Hired, No Account Yet</h1>
+                </div>
+                <div class="card-body">
+                    <table id="pendingTable" class="table table-hover" style="width:100%">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Applicant Name</th>
+                                <th>Email</th>
+                                <th>Job Applied</th>
+                                <th>Department</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            // Fetch applicants who do not have accounts yet
+                            $sql = "SELECT a.id, a.applicant_name, a.email, j.job_title, d.DepartmentName, a.status
+                            FROM applicants a
+                            LEFT JOIN job_postings j ON a.job_id = j.id
+                            LEFT JOIN departments d ON j.DepartmentID = d.DepartmentID
+                            LEFT JOIN users u ON a.id = u.applicant_id
+                            WHERE u.applicant_id IS NULL AND a.status = 'Hired'"; // Only hired applicants without accounts
 
-        $result = $conn->query($sql);
+                            $result = $conn->query($sql);
 
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>" . htmlspecialchars($row['training_name']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['trainer']) . "</td>"; 
-                echo "<td>" . htmlspecialchars($row['department_name']) . "</td>"; 
-                echo "<td>" . htmlspecialchars($row['training_description']) . "</td>"; 
-                echo "<td>" . htmlspecialchars($row['training_materials']) . "</td>"; 
-                
-                // Action Icons (Edit & Delete)
-                echo "<td>
-                        <a href='#' 
-                            data-toggle='modal' 
-                            data-target='#editTrainingModal' 
-                            data-id='" . $row['training_id'] . "' 
-                            data-training_name='" . htmlspecialchars($row['training_name']) . "' 
-                            data-trainer='" . htmlspecialchars($row['trainer']) . "' 
-                            data-department='" . htmlspecialchars($row['department']) . "' 
-                            data-training_description='" . htmlspecialchars($row['training_description']) . "' 
-                            data-training_materials='" . htmlspecialchars($row['training_materials']) . "' 
-                            class='text-warning mx-2'>
-                            <i class='fas fa-edit'></i> <!-- Edit Icon -->
-                        </a>
-
-                        <a href='onboarding/delete_training.php?id=" . htmlspecialchars($row['training_id']) . "' 
-                            class='text-danger mx-2' 
-                            onclick='return confirm(\"Are you sure you want to delete this training?\");'>
-                            <i class='fas fa-trash'></i> <!-- Delete Icon -->
-                        </a>
-                    </td>";
-                echo "</tr>";
-            }
-        } else {
-            echo "<tr><td colspan='6' class='text-center'>No training sessions found.</td></tr>"; 
-        }
-        ?>
-    </tbody>
-</table>
-
-                                        </div>
-    </div>
-    </div>
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "<tr>";
+                                    echo "<td>" . htmlspecialchars($row['applicant_name']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['email']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['job_title']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['DepartmentName']) . "</td>";
+                                    echo "<td><span class='badge badge-warning'>Pending</span></td>"; // Display actual status
+                        
+                                    // Action to create an account
+                                    echo "<td>
+                                            <a href='#' 
+                                                data-toggle='modal' 
+                                                data-target='#createAccountModal' 
+                                                data-id='" . $row['id'] . "' 
+                                                data-name='" . htmlspecialchars($row['applicant_name']) . "' 
+                                                data-email='" . htmlspecialchars($row['email']) . "' 
+                                                class='btn btn-outline-success btn-sm create-account-btn'>
+                                                Create Account
+                                            </a>
+                                        </td>";
+                                    echo "</tr>";
+                                    
+                                }
+                            } else {
+                                // Ensure proper column count in empty state
+                                echo "<tr>
+                                <td colspan='6' class='text-center'>No pending hired applicants for onboarding.</td>
+                              </tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+<script>
+$(document).ready(function () {
+    $('.create-account-btn').click(function () {
+        var applicantId = $(this).data('id');
+        var applicantName = $(this).data('name');
+        var applicantEmail = $(this).data('email');
+
+        $('#applicant_id').val(applicantId);
+    });
+});
+</script>
+
     <!-- Training Assignments Tab -->
     <div class="tab-pane fade" id="training-assignments" role="tabpanel" aria-labelledby="training-assignments-tab">
     <div class="row">
@@ -601,16 +583,7 @@ $('#editEmployeeModal').on('show.bs.modal', function (event) {
 
             // Action Buttons (Icons Only)
             echo "<td>
-                    <a href='#' 
-                        data-toggle='modal' 
-                        data-target='#editUserModal' 
-                        data-id='" . $row['id'] . "' 
-                        data-username='" . $row['username'] . "' 
-                        data-usertype='" . $row['usertype'] . "' 
-                        class='text-warning mx-2'>
-                        <i class='fas fa-edit'></i> <!-- Edit Icon -->
-                    </a>
-
+                
                     <a href='onboarding/delete_user.php?id=" . $row['id'] . "' 
                         class='text-danger mx-2' 
                         onclick='return confirm(\"Are you sure you want to delete this user?\");'>
@@ -824,6 +797,9 @@ $(document).ready(function () {
             </div> -->
             <!-- ============================================================== -->
             <!-- end footer -->
+            <?php else: ?>
+                <?php include_once "../403.php"; ?>
+            <?php endif; ?>
             <!-- ============================================================== -->
         </div>
         <!-- ============================================================== -->
@@ -843,34 +819,29 @@ $(document).ready(function () {
 <!-- DataTables CSS (Kung wala pa) -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     
-    <script>
-    $(document).ready(function() {
-        $('#myTable').DataTable({
-            "lengthMenu": [10, 25, 50, 100], 
-            "paging": true,
-            "searching": true,
-            "ordering": true
-        });
-    });
-</script>
 <script>
     $(document).ready(function() {
-        $('#myTable1').DataTable({
-            "lengthMenu": [10, 25, 50, 100], 
-            "paging": true,
-            "searching": true,
-            "ordering": true
-        });
+        if ($("#pendingTable tbody tr").length > 1) { // Ensure at least one row exists
+            $('#pendingTable').DataTable({
+                "lengthMenu": [10, 25, 50, 100], 
+                "paging": true,
+                "searching": true,
+                "ordering": true
+            });
+        }
     });
 </script>
+
 <script>
     $(document).ready(function() {
-        $('#myTable2').DataTable({
-            "lengthMenu": [10, 25, 50, 100], 
-            "paging": true,
-            "searching": true,
-            "ordering": true
-        });
+        if ($("#myTable2 tbody tr").length > 1) { // Ensure at least one row exists
+            $('#myTable2').DataTable({
+                "lengthMenu": [10, 25, 50, 100], 
+                "paging": true,
+                "searching": true,
+                "ordering": true
+            });
+        }
     });
 </script>
 </body>

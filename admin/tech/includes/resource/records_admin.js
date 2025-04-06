@@ -1,8 +1,14 @@
 $(function () {
-    const baseURL = "./includes/encode/users_api.php?action=";
+
+    const baseURL =
+        window.location.hostname === "localhost"
+            ? "http://localhost/bcp-hrd/admin/tech/includes/encode/users_api.php?action="
+            : "https://yourdomain.com/bcp-hrd/admin/tech/encode/users_api.php?action=";
+
+
     let performanceChartInstance = null;
 
-    $('#RecordsTable').DataTable({
+    let recordsTable = $('#RecordsTable').DataTable({
         processing: true,
         // stateSave: true, //? para san to
         // "bDestroy": true,
@@ -121,6 +127,7 @@ $(function () {
             success: function (response) {
                 console.log("Employee Info Response:", response);
                 if (response) {
+                    recordsTable.ajax.reload();
                     $('#employeeListView').hide();
                     $('#employeeDetailView').show();
 
@@ -134,6 +141,8 @@ $(function () {
                 } else {
                     alert('Employee not found');
                 }
+
+                recordsTable.ajax.reload();
             },
             error: function (xhr, status, error) {
                 console.error("Employee Info AJAX Error:", status, error);
@@ -163,7 +172,7 @@ $(function () {
                     $('#performanceScore').html(response.PerformanceScore + "%" ?? '<small><i>not set</i></small>');
                     $('#trainingAttendee').html(response.FirstName + "," ?? '<small><i>not set</i></small>');
 
-
+                    recordsTable.ajax.reload();
                     renderPerformanceChart(response.PerformanceScore);
 
                 } else {
@@ -183,7 +192,7 @@ $(function () {
             data: { id: employeeId },
             dataType: 'json',
             success: function (response) {
-                console.table(response); // Log the response to verify its structure
+                console.table("TRAINING", response); // Log the response to verify its structure
 
                 const dataArray = Array.isArray(response) ? response : [response];
 
@@ -201,6 +210,7 @@ $(function () {
                     <td>${training.CompletionDate || ''}</td>
                 </tr>
             `;
+                    recordsTable.ajax.reload();
                     $("#trainingList").append(row);
                 });
             },
@@ -208,6 +218,37 @@ $(function () {
                 console.error("AJAX Error:", status, error);
             }
         });
+
+        //salary
+        $.ajax({
+            url: baseURL + 'get_by_id_salary',
+            method: 'POST',
+            data: { id: employeeId },
+            dataType: 'json',
+            success: function (response) {
+                console.log("salary", response);
+
+                const dataArray = Array.isArray(response) ? response : [response];
+
+                $("#compensationList").empty();
+
+                dataArray.forEach(function (compen) {
+                    const row = `
+                <tr>
+                    <td>${compen.BaseSalary || ''}</td>
+                    <td>${compen.Bonus || ''}</td>
+                    <td>${compen.BenefitValue || ''}</td>
+                </tr>
+            `;
+                    recordsTable.ajax.reload();
+                    $("#compensationList").append(row);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Error:", status, error);
+            }
+        });
+
     });
 
     $('#backButton').on('click', function () {
@@ -226,7 +267,8 @@ $(function () {
             success: function (response) {
                 if (response.success) {
                     $('#status').toast('show')
-                    location.reload(); // Reload page or refresh the employee list
+                    location.reload();
+                    recordsTable.ajax.reload(); 
                 } else {
                     $('#error').toast('show')
                 }

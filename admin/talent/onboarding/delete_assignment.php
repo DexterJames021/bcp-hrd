@@ -24,37 +24,37 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                     // Execute the deletion of the assignment record
                     if ($stmt->execute()) {
                         $_SESSION['success_message'] = "Assignment deleted successfully!";
-                        header("Location: ../onboarding.php"); // Redirect back to the assignments page
+                        header("Location: ../succession.php"); // Redirect back to the assignments page
                         exit;
                     } else {
                         $_SESSION['error_message'] = "Error deleting assignment: " . $conn->error;
-                        header("Location: ../onboarding.php");
+                        header("Location: ../succession.php");
                         exit;
                     }
                 } else {
                     $_SESSION['error_message'] = "Error preparing statement to delete assignment: " . $conn->error;
-                    header("Location: ../onboarding.php");
+                    header("Location: ../succession.php");
                     exit;
                 }
             } else {
                 // If the assignment does not exist
                 $_SESSION['error_message'] = "Assignment not found.";
-                header("Location: ../onboarding.php"); // Redirect back to the assignments page
+                header("Location: ../succession.php"); // Redirect back to the assignments page
                 exit;
             }
         } else {
             $_SESSION['error_message'] = "Error checking assignment existence: " . $conn->error;
-            header("Location: ../onboarding.php");
+            header("Location: ../succession.php");
             exit;
         }
     } else {
         $_SESSION['error_message'] = "Error preparing statement to check assignment existence: " . $conn->error;
-        header("Location: ../onboarding.php");
+        header("Location: ../succession.php");
         exit;
     }
 } else {
     $_SESSION['error_message'] = "No assignment ID specified.";
-    header("Location: ../onboarding.php");
+    header("Location: ../succession.php");
     exit;
 }
 ?>

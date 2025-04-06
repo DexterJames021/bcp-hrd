@@ -2,8 +2,6 @@
 require "../config/db_talent.php";
 require '../auth/mysqli_accesscontrol.php';
 
-
-
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);
 
@@ -72,14 +70,12 @@ access_log($userData);
         <!-- navbar -->
         <!-- ============================================================== -->
         <?php include 'sideandnavbar.php'; ?>
-
         <!-- ============================================================== -->
         <!-- end left sidebar -->
         <!-- ============================================================== -->
         <!-- ============================================================== -->
         <!-- wrapper  -->
         <!-- ============================================================== -->
-
         <div class="dashboard-wrapper">
             <!-- <div class="dashboard-ecommerce"> -->
             <div class="container-fluid dashboard-content ">
@@ -93,7 +89,7 @@ access_log($userData);
                                 <h2 class="pageheader-title">Welcome, <?= $_SESSION["username"] ?>! </h2>
                             </div>
                             <div class="card-body">
-                                <div id="employeeCalendar"></div>
+                                
                             </div>
                         </div>
                     </div>

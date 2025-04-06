@@ -210,6 +210,21 @@ switch ($action) {
         echo json_encode($resource->CategorizedResources());
         break;
 
+    case 'return_all':
+        if (empty($_POST['request_id'])) {
+            echo json_encode(['success' => false, 'message' => 'Request ID is required.']);
+            exit;
+        }
+
+        $request_id = $_POST['request_id'];
+        $result = $resource->returnResource($request_id);
+        echo json_encode($result);
+        break;
+
+
+
+
+
     default:
         return null;
 }

@@ -399,6 +399,8 @@ $(document).ready(function(){
     <h3>Personal Information</h3>
     <form id="onboardingForm">
     <input type="hidden" name="UserID" value="<?= $_SESSION['user_id']; ?>">
+    <input type="hidden" name="hire_date" value="<?= date('Y-m-d'); ?>"> <!-- Default to today's date -->
+    <input type="hidden" name="salary" value="0"> <!-- Default salary value -->
 
     <div class="row">
         <div class="col-md-6">

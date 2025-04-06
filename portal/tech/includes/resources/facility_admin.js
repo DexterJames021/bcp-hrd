@@ -11,6 +11,23 @@ $(function () {
         $("#reportModal").modal("show");
     });
 
+    function printReport() {
+        // Get report content
+        var reportContent = document.getElementById("report").innerHTML;
+        
+        // Create a new print window
+        var printWindow = window.open('', '', 'width=900,height=600');
+        printWindow.document.write('<html><head><title>Report</title>');
+        printWindow.document.write('<style>@media print { body { margin: 0; padding: 0; } }</style></head><body>');
+        printWindow.document.write(reportContent);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        
+        // Print and close window
+        printWindow.print();
+        printWindow.close();
+    }
+
     // facility table
     const AllRoomTable = $('#roomTable').DataTable({
         autoWidth: true,

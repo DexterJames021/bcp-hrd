@@ -1,45 +1,16 @@
 $(function () {
   console.log("asdasd");
 
-  const BaseURL = 
+  const BaseURL =
   window.location.hostname === "localhost"
-  ? "http://localhost/bcp-hrd/admin/tech/includes/encode/facility_api.php?action="
-  : "https://yourdomain.com/bcp-hrd/admin/tech/encode/facility_api.php?action=";
+      ? "http://localhost/bcp-hrd/admin/tech/includes/encode/facility_api.php?action="
+      : "https://yourdomain.com/bcp-hrd/admin/tech/encode/facility_api.php?action=";
 
-  $("#logsView").on("click", function () {
-    // console.log("true")
-    $("#analyticPage").hide();
-    $("#logPage").show();
 
-    // $("#LogRequestTable").DataTable({
-    //   processing: true,
-    //   dom: "Bfrtip",
-    //   ajax: {
-    //     url: "../includes/encode/resources_api.php?action=fetch_all",
-    //     dataType: "json",
-    //     dataSrc: ''
-    //   },
-    //   columns: [
-    //     {
-    //       data: "name",
-    //     },
-    //     {
-    //       data: "category",
-    //     },
-    //     {
-    //       data: "quantity",
-    //     },
-    //     {
-    //       data: "location",
-    //     },
-    //   ],
-    // });
-  });
-
-  $("#analyticView").on("click", function () {
-    $("#logPage").hide();
-    $("#analyticPage").show();
-  });
+  // $("#analyticView").on("click", function () {
+  //   $("#logPage").hide();
+  //   $("#analyticPage").show();
+  // });
 
   // utilize
   $.ajax({

@@ -1,11 +1,5 @@
 <?php
 
-use Admin\Tech\Includes\Class\Assets;
-
-session_start();
-
-require_once '../../config/Database.php';
-require_once './includes/class/Task.php';
 
 
 

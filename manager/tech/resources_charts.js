@@ -5,41 +5,17 @@ $(function () {
       ? "http://localhost/bcp-hrd/admin/tech/includes/encode/resources_api.php?action="
       : "https://yourdomain.com/bcp-hrd/admin/tech/encode/resources_api.php?action=";
 
-  $("#logsView").on("click", function () {
-    // console.log("true")
-    $("#analyticPage").hide();
-    $("#logPage").show();
-  });
-
-  $("#LogRequestTable").DataTable({
-    processing: true,
-    dom: "Bfrtip",
-    ajax: {
-      url: BaseUrl + "fetch_all_request",
-      dataType: "json",
-      dataSrc: "",
-    },
-    columns: [
-      {
-        data: "name",
-      },
-      {
-        data: "quantity",
-      },
-      {
-        data: "status",
-      },
-      {
-        data: "requested_at",
-      },
-    ],
-  });
-
-  $("#analyticView").on("click", function () {
-    // console.log("true")
-    $("#logPage").hide();
-    $("#analyticPage").show();
-  });
+      $("#chartBTN").on("click", function () {
+        if ($("#facChart").is(":visible")) {
+            $("#facChart").hide();
+            $("#resChart").show();
+            $(this).html("Resource "+ "<i class='bi bi-bar-chart'></i>");
+        } else {
+            $("#facChart").show();
+            $("#resChart").hide();
+            $(this).html("Facility " + "<i class='bi bi-bar-chart-fill'></i>");
+        }
+    });
 
   $.ajax({
     url: BaseUrl + "usage_patterns", // Replace with your API URL

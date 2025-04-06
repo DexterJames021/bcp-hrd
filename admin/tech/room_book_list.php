@@ -1,6 +1,6 @@
 <?php
-require '../../config/Database.php';
-require '../../auth/accesscontrol.php';
+include_once __DIR__ .  '../../../config/Database.php';
+include_once __DIR__ .  '../../../auth/accesscontrol.php';
 
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);
@@ -236,12 +236,9 @@ access_log($userData);
                         <div class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="text-muted">Total Resources</h5>
+                                    <h5 class="text-muted">Total Facilities</h5>
                                     <div class="metric-value d-inline-block">
                                         <h1 id="total-card" class="mb-1">0</h1>
-                                    </div>
-                                    <div class="metric-label d-inline-block float-right text-success font-weight-bold">
-                                        <!-- <span><i class="fa fa-fw fa-arrow-up"></i></span><span>0.1%</span> -->
                                     </div>
                                 </div>
                                 <div id="sparkline-revenue"></div>
@@ -250,7 +247,7 @@ access_log($userData);
                         <div class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="text-muted">Booked</h5>
+                                    <h5 class="text-muted">In Maintenance</h5>
                                     <div class="metric-value d-inline-block">
                                         <h1 id="on-book" class="mb-1">0</h1>
                                     </div>
@@ -267,9 +264,6 @@ access_log($userData);
                                     <h5 class="text-muted">Available</h5>
                                     <div class="metric-value d-inline-block">
                                         <h1 id="available" class="mb-1">0.00</h1>
-                                    </div>
-                                    <div class="metric-label d-inline-block float-right text-primary font-weight-bold">
-                                        <span>N/A</span>
                                     </div>
                                 </div>
                                 <div id="sparkline-revenue3"></div>
@@ -377,12 +371,12 @@ access_log($userData);
                                             <?php if ($userData && in_array("CREATE", $userData['permissions'])): ?>
                                                 <button type="button" class="btn float-right" data-toggle="modal"
                                                     data-target="#AddroomModal">
-                                                    <i class="bi bi-plus-circle-fill text-primary" style="font-size:large;"></i>
+                                                    <i class="bi bi-plus-circle-fill text-primary" style="font-size:x-large;"></i>
                                                 </button>
                                             <?php else: ?>
                                                 <button type="button" class="btn float-right" data-toggle="modal"
                                                     data-target="#AddroomModal" disabled>
-                                                    <i class="bi bi-plus-circle-fill text-primary" style="font-size:large;"></i>
+                                                    <i class="bi bi-plus-circle-fill text-primary" style="font-size:x-large;"></i>
                                                 </button>
                                             <?php endif; ?>
                                         </div>
@@ -563,6 +557,11 @@ access_log($userData);
                 <div id="room_updated" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-body bg-success text-light">
                         Update Facility Successfully.
+                    </div>
+                </div>
+                <div id="delete" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body bg-success text-light">
+                        Delete Facility Successfully.
                     </div>
                 </div>
                 <div id="done" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">

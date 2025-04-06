@@ -50,7 +50,16 @@ $employee_count = $row['count'];
 
     <!-- Slimscroll JS (if needed) -->
     <script defer type="module" src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    
+         <!-- jQuery (Kailangan para gumana ang DataTables) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+<!-- DataTables CSS (Kung wala pa) -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 </head>
 
 
@@ -77,8 +86,9 @@ $employee_count = $row['count'];
         <!-- ============================================================== -->
         <div class="dashboard-wrapper">
             <!-- <div class="dashboard-ecommerce"> -->
-                
+            <?php if ($userData && in_array("VIEW", $userData['permissions'])): ?>
             <div class="container-fluid dashboard-content ">
+                
                 <!-- ============================================================== -->
                 <!-- pageheader  -->
                 <!-- ============================================================== -->
@@ -118,7 +128,7 @@ $employee_count = $row['count'];
         <th class="border-0">No.</th>
         <th class="border-0">First Name</th>
         <th class="border-0">Last Name</th>
-        <th class="border-0">Job Position</th>
+        <th class="border-0">Job Title</th>
         <th class="border-0">Department</th>
         <th class="border-0">Status</th>
         <th class="border-0">Action</th>
@@ -128,13 +138,14 @@ $employee_count = $row['count'];
 <tbody>
     <?php
     // Query to fetch employee data along with job position and department using joins
-    $sql = "SELECT e.EmployeeID, e.FirstName, e.LastName, jp.job_title, d.DepartmentName, e.Status 
-            FROM employees e
-            JOIN users u ON e.UserID = u.id 
-            JOIN applicants a ON u.applicant_id = a.id 
-            JOIN job_postings jp ON a.job_id = jp.id  -- Job posting and applicant job link
-            JOIN departments d ON a.DepartmentID = d.DepartmentID"; // Department and applicant department link
-    
+    $sql = "SELECT e.EmployeeID, e.FirstName, e.LastName, e.Email, e.Phone, e.Address, e.DOB, 
+               e.HireDate, e.Salary, jp.job_title, d.DepartmentName, e.Status 
+        FROM employees e
+        JOIN users u ON e.UserID = u.id 
+        JOIN applicants a ON u.applicant_id = a.id 
+        JOIN job_postings jp ON a.job_id = jp.id  
+        JOIN departments d ON a.DepartmentID = d.DepartmentID";
+
     $result = $conn->query($sql);
 
     $counter = 1; // Initialize counter for numbering
@@ -148,17 +159,29 @@ $employee_count = $row['count'];
             echo "<td>" . htmlspecialchars($row['job_title']) . "</td>"; // Display Job Position
             echo "<td>" . htmlspecialchars($row['DepartmentName']) . "</td>"; // Display Department Name
             echo "<td>" . htmlspecialchars($row['Status']) . "</td>";
-            echo "<td>
-                    <button class='btn btn-info btn-sm btn-action' 
-                        data-toggle='modal' 
-                        data-target='#viewEmployeeModal' 
-                        data-employeeid='" . htmlspecialchars($row['EmployeeID']) . "' 
-                        data-firstname='" . htmlspecialchars($row['FirstName']) . "' 
-                        data-lastname='" . htmlspecialchars($row['LastName']) . "' 
-                        data-jobtitle='" . htmlspecialchars($row['job_title']) . "' 
-                        data-department='" . htmlspecialchars($row['DepartmentName']) . "' 
-                        data-status='" . htmlspecialchars($row['Status']) . "'>View Info</button>
-                </td>";
+            echo "<td class='text-center'>
+        <!-- View Info Button -->
+        <button class='btn btn-info btn-sm btn-action mx-1' 
+            data-toggle='modal' 
+            data-target='#viewEmployeeModal' 
+            data-employeeid='" . htmlspecialchars($row['EmployeeID']) . "' 
+            data-firstname='" . htmlspecialchars($row['FirstName']) . "' 
+            data-lastname='" . htmlspecialchars($row['LastName']) . "' 
+            data-jobtitle='" . htmlspecialchars($row['job_title']) . "' 
+            data-department='" . htmlspecialchars($row['DepartmentName']) . "' 
+            data-status='" . htmlspecialchars($row['Status']) . "'
+            data-email='" . htmlspecialchars($row['Email']) . "' 
+            data-phone='" . htmlspecialchars($row['Phone']) . "' 
+            data-address='" . htmlspecialchars($row['Address']) . "' 
+            data-dob='" . htmlspecialchars($row['DOB']) . "' 
+            data-hiredate='" . htmlspecialchars($row['HireDate']) . "' 
+            data-salary='" . htmlspecialchars($row['Salary']) . "'>
+            <i class='fas fa-eye'></i> 
+        </button>
+
+        <!-- Delete Button -->
+    </td>";
+
             echo "</tr>";
 
             $counter++; // Increment counter
@@ -168,6 +191,57 @@ $employee_count = $row['count'];
     }
     ?>
 </tbody>
+
+<div class="modal fade" id="viewEmployeeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg"> <!-- Ginawang mas malaki -->
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Employee Full Information</h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <!-- Image Section with a Border Box (2x2 Size) -->
+                    <div class="col-md-4 text-center">
+                        <div class="border p-3 mb-3" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+                            <img id="EmployeePhoto" 
+                                 src="https://via.placeholder.com/200" 
+                                 class="img-fluid rounded mb-3" 
+                                 alt="Employee Photo"
+                                 style="width: 100%; height: 200px; object-fit: cover;">
+                        </div>
+                        <h6 class="text-muted">Employee Photo</h6>
+                    </div>
+
+                    <!-- Information Section -->
+                    <div class="col-md-8">
+                        <p><strong>Employee ID:</strong> <span id="EmployeeID"></span></p>
+                        <p><strong>Name:</strong> <span id="FullName"></span></p>
+                        <p><strong>Job Title:</strong> <span id="JobTitle"></span></p>
+                        <p><strong>Department:</strong> <span id="DepartmentName"></span></p>
+                        <p><strong>Status:</strong> <span id="Status"></span></p>
+                        <hr>
+                        <p><strong>Email:</strong> <span id="Email"></span></p>
+                        <p><strong>Phone:</strong> <span id="Phone"></span></p>
+                        <p><strong>Address:</strong> <span id="Address"></span></p>
+                        <p><strong>Date of Birth:</strong> <span id="DOB"></span></p>
+                        <p><strong>Hire Date:</strong> <span id="HireDate"></span></p>
+                        <p><strong>Salary:</strong> <span id="Salary"></span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 
 
 
@@ -251,6 +325,7 @@ $('#editEmployeeModal').on('show.bs.modal', function (event) {
     modal.find('#editEmail').val(Email);
     modal.find('#editPhone').val(Phone);
     modal.find('#editStatus').val(Status);
+    
 });
 </script>
                                     </div>
@@ -278,6 +353,9 @@ $('#editEmployeeModal').on('show.bs.modal', function (event) {
                     </div>
                 </div>
             </div> -->
+            <?php else: ?>
+                <?php include_once "../403.php"; ?>
+            <?php endif; ?>
             <!-- ============================================================== -->
             <!-- end footer -->
             <!-- ============================================================== -->
@@ -290,17 +368,40 @@ $('#editEmployeeModal').on('show.bs.modal', function (event) {
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
 
-         <!-- jQuery (Kailangan para gumana ang DataTables) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- DataTables JS -->
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    
+<script>
+    $(document).ready(function () {
+        $('.btn-action').on('click', function () {
+            var EmployeeID = $(this).data('employeeid'); // Parehas na capitalization
+            var FirstName = $(this).data('firstname');
+            var LastName = $(this).data('lastname');
+            var JobTitle = $(this).data('jobtitle');
+            var DepartmentName = $(this).data('department');
+            var Status = $(this).data('status');
+            var Email = $(this).data('email');
+            var Phone = $(this).data('phone');
+            var Address = $(this).data('address');
+            var DOB = $(this).data('dob');
+            var HireDate = $(this).data('hiredate');
+            var Salary = $(this).data('salary');
 
-<!-- DataTables CSS (Kung wala pa) -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-
-    <script>
+            // I-fill up ang modal fields
+            $('#viewEmployeeModal #EmployeeID').text(EmployeeID);
+            $('#viewEmployeeModal #FullName').text(FirstName + ' ' + LastName);
+            $('#viewEmployeeModal #JobTitle').text(JobTitle);
+            $('#viewEmployeeModal #DepartmentName').text(DepartmentName);
+            $('#viewEmployeeModal #Status').text(Status);
+            $('#viewEmployeeModal #Email').text(Email);
+            $('#viewEmployeeModal #Phone').text(Phone);
+            $('#viewEmployeeModal #Address').text(Address);
+            $('#viewEmployeeModal #DOB').text(DOB);
+            $('#viewEmployeeModal #HireDate').text(HireDate);
+            $('#viewEmployeeModal #Salary').text(Salary);
+        });
+    });
+</script>
+<script>
     $(document).ready(function() {
         $('#RecordsTable').DataTable({
             "lengthMenu": [10, 25, 50, 100], 
@@ -310,6 +411,7 @@ $('#editEmployeeModal').on('show.bs.modal', function (event) {
         });
     });
 </script>
+
 </body>
 
 </html>

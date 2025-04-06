@@ -83,7 +83,17 @@ switch ($action) {
             echo json_encode(['error' => 'Employee not found']);
         }
         break;
+    case 'get_by_id_salary':
+        $id = $_POST['id'] ?? null;
 
+        $result = $user->getEmployeeSalary($id);
+        if ($result) {
+            echo json_encode($result);
+        } else {
+            echo json_encode(['error' => 'Employee not found']);
+        }
+        break;
+        
 
 
     default:
