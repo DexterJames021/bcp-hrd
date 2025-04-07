@@ -479,12 +479,12 @@ access_log($userData);
                                         <input type="number" name="edit_capacity" id="edit_capacity"
                                             class="form-control" required>
                                     </div>
-                                    <div class="mb-2">
+                                    <!-- <div class="mb-2">
                                         <label for="edit_status">Status:</label>
                                         <select name="edit_status" id="edit_status" class="form-control">
                                             <option selected value="Available">Available</option>
                                         </select>
-                                    </div>
+                                    </div> -->
                                     <div class="mb-2">
                                         <button type="submit" class="btn btn-primary">Save Changes</button>
                                     </div>

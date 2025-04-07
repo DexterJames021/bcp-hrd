@@ -52,10 +52,10 @@ class Room
         return $stmt->execute($data);
     }
 
-    public function updateRoom($id, $name, $location, $capacity, $status)
+    public function updateRoom($id, $name, $location, $capacity)
     {
         $q = "UPDATE {$this->table} 
-              SET name = :name, location = :location, capacity = :capacity, status = :status 
+              SET name = :name, location = :location, capacity = :capacity
               WHERE id = :id";
 
         $stmt = $this->conn->prepare($q);
@@ -64,7 +64,6 @@ class Room
             ':name' => $name,
             ':location' => $location,
             ':capacity' => $capacity,
-            ':status' => $status,
         ]);
     }
 
