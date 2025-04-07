@@ -61,7 +61,7 @@ $(function () {
           // console.log("User Has UPDATE:", userPermissions.includes("EDIT"));
           // console.log("User Has DELETE:", userPermissions.includes("DELETE"));
 
-          if (Array.isArray(userPermissions) && userPermissions.includes("UPDATE")) {
+          if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
             buttons += `<button class="update btn btn-action" data-id="${data.id}" title="UPDATE">
                           <i class="bi bi-pencil-square text-primary"  style="font-size:x-large;"></i>
                       </button>`;
@@ -143,7 +143,7 @@ $(function () {
           // console.log("User Has UPDATE:", userPermissions.includes("EDIT"));
           // console.log("User Has DELETE:", userPermissions.includes("DELETE"));
 
-          if (Array.isArray(userPermissions) && userPermissions.includes("UPDATE")) {
+          if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
             if (data.status == 'Pending') {
 
               buttons += `<button type="button" class="btn-approve btn my-1" data-id="${data.id}" title="APPROVE">
@@ -163,7 +163,7 @@ $(function () {
         data: null,
         render: function (data) {
           let returntemplate = '';
-          if (Array.isArray(userPermissions) && userPermissions.includes("UPDATE")) {
+          if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
             if (data.status == 'Approved') {
               returntemplate = `<button id="returnBtnItem" class=" btn " data-request-id="${data.id}"  title="Return?">
                   <i class="bi bi-archive-fill"></i>
@@ -236,7 +236,7 @@ $(function () {
         render: function (data) {
           let returntemplate = '';
 
-          if (Array.isArray(userPermissions) && userPermissions.includes("UPDATE")) {
+          if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
             returntemplate = `<button class="returnBtn btn btn-outline-white" data-return="${data.id}"  title="Return?">
                               <i class="bi bi-archive-fill"></i>
                               </button>`;

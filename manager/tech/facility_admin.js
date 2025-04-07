@@ -222,7 +222,7 @@ $(function () {
                                 `;
                 }
 
-                if (Array.isArray(userPermissions) && userPermissions.includes("DELETE")) {
+                if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
                     buttons += `<button class="reject-btn btn my-1"
                                         data-id="${data.id}">
                                         <i class="bi bi-x-circle text-danger" style="font-size:x-large;"></i>
