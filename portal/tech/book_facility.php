@@ -147,7 +147,7 @@ access_log($userData);
                                         </div>
                                         <div class="mb-3">
                                             <label for="bookingDate" class="form-label">Booking Date</label>
-                                            <input type="date" id="bookingDate" name="booking_date" class="form-control"
+                                            <input type="text" id="bookingDate" name="booking_date" class="form-control"
                                                 readonly>
                                         </div>
                                         <div class="mb-2">
@@ -215,7 +215,7 @@ access_log($userData);
                                             </div>
                                             <div class="mb-2">
                                                 <label for="bookingReason" class="form-label">Booking Date</label>
-                                                <input type="date" name="booking_date" class="form-control" required>
+                                                <input type="date" id="bookDateForm" name="booking_date" class="form-control" required>
                                             </div>
                                             <div class="mb-2">
                                                 <label for="bookingReason" class="form-label">Start Time</label>
@@ -261,6 +261,11 @@ access_log($userData);
                 <div id="error" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-body bg-danger text-light">
                         Something went wrong.
+                    </div>
+                </div>
+                <div id="pastDate" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body bg-danger text-light">
+                        You cannot book past dates!
                     </div>
                 </div>
             </div>

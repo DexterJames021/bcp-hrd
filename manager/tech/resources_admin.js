@@ -1,7 +1,7 @@
 $(function () {
   // ASSETS
   console.log("RESOURCES ADMIN");
-  
+
   const BaseURL =
     window.location.hostname === "localhost"
       ? "http://localhost/bcp-hrd/admin/tech/includes/encode/resources_api.php?action="
@@ -44,9 +44,9 @@ $(function () {
         data: "last_maintenance",
         defaultContent: "<i>Not set</i>",
       },
-      {
-        data: "created_at",
-      },
+      // {
+      //   data: "created_at",
+      // },
       {
         data: "next_maintenance",
         defaultContent: "<i>Not set</i>",
@@ -61,15 +61,19 @@ $(function () {
           // console.log("User Has UPDATE:", userPermissions.includes("EDIT"));
           // console.log("User Has DELETE:", userPermissions.includes("DELETE"));
 
-            buttons = `<button class="update btn btn-action" data-id="${data.id}" title="UPDATE">
+          if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
+            buttons += `<button class="update btn btn-action" data-id="${data.id}" title="UPDATE">
                           <i class="bi bi-pencil-square text-primary"  style="font-size:x-large;"></i>
-                      </button>
-                      <button class="delete btn btn-action" data-id="${data.id}" title="UPDATE">
+                      </button>`;
+          }
+
+          if (Array.isArray(userPermissions) && userPermissions.includes("DELETE")) {
+            buttons += `<button class="delete btn btn-action" data-id="${data.id}" title="DELETE">
                         <i class="bi bi-trash-fill text-danger"  style="font-size:x-large;"></i>
-                    </button>`;
+                    </button>`
+          }
 
-
-          return buttons || '<i class="bi bi-ban text-danger" title="No permission" style="font-size:x-large;"></i>';
+          return buttons || '';
         },
       },
     ],
@@ -139,7 +143,8 @@ $(function () {
           // console.log("User Has UPDATE:", userPermissions.includes("EDIT"));
           // console.log("User Has DELETE:", userPermissions.includes("DELETE"));
 
-          if (data.status == 'Pending') {
+          if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
+            if (data.status == 'Pending') {
 
               buttons += `<button type="button" class="btn-approve btn my-1" data-id="${data.id}" title="APPROVE">
               <i class="bi bi-check-circle text-success" style="font-size:x-large;"></i>
@@ -147,12 +152,7 @@ $(function () {
               <button type="button" class="btn-reject btn my-1" data-id="${data.id}" title="REJECT">
               <i class="bi bi-x-circle text-danger" style="font-size:x-large;"></i>
               </button>`;
-//DELETE
-            // if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) { 
-              // buttons += `<button type="button" class="btn-reject btn my-1" data-id="${data.id}" title="REJECT">
-              // <i class="bi bi-x-circle text-danger" style="font-size:x-large;"></i>
-              // </button>`;
-            // }
+            }
           }
 
           return buttons || '<i  title="No action"></i>';
@@ -163,13 +163,13 @@ $(function () {
         data: null,
         render: function (data) {
           let returntemplate = '';
-
-          if (data.status == 'Approved') {
+          if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
+            if (data.status == 'Approved') {
               returntemplate = `<button id="returnBtnItem" class=" btn " data-request-id="${data.id}"  title="Return?">
                   <i class="bi bi-archive-fill"></i>
               </button>`;
+            }
           }
-
           return returntemplate || '<i  title="No action"></i>';
         }
       }
@@ -236,10 +236,13 @@ $(function () {
         render: function (data) {
           let returntemplate = '';
 
+          if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
             returntemplate = `<button class="returnBtn btn btn-outline-white" data-return="${data.id}"  title="Return?">
                               <i class="bi bi-archive-fill"></i>
                               </button>`;
-          return returntemplate || '<i class="bi bi-ban text-danger" title="No permission" style="font-size:x-large;"></i>';
+          }
+
+          return returntemplate || '';
         }
       }
     ],

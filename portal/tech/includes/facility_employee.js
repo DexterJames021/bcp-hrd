@@ -35,9 +35,27 @@ $(function () {
 
 
     //!bookform not fixed set date
+    //on calendar form
     $('#bookingForm').on('submit', function (e) {
         console.log('book data set: ' + $(this).serialize());
         e.preventDefault();
+
+        let bookingDate = new Date($('#bookingDate').val());
+        let today = new Date();
+        
+        // Remove time part for accurate date comparison
+        today.setHours(0, 0, 0, 0);
+        bookingDate.setHours(0, 0, 0, 0);
+    
+        // Validate if the selected date is in the past
+        if (bookingDate < today) {
+           $("#pastDate").toast("show")
+           $('#bookingForm')[0].reset();
+           $('#Addbooking').modal('hide');
+            return; // Stop further execution
+        }
+
+
         $.post(baseURL + 'create_booking',
             $(this).serialize(),
             function (response) {
@@ -63,6 +81,21 @@ $(function () {
     $('#bookingForm2').on('submit', function (e) {
         console.log('book not fixed set date' + $(this).serialize());
         e.preventDefault();
+
+        let bookingDate = new Date($('#bookDateForm').val());
+        let today = new Date();
+        
+        // Remove time part for accurate date comparison
+        today.setHours(0, 0, 0, 0);
+        bookingDate.setHours(0, 0, 0, 0);
+    
+        if (bookingDate < today) {
+            $("#pastDate").toast("show")
+            $('#bookingForm2')[0].reset();
+            $('#Addbooking').modal('dispose');
+             return; // Stop further execution
+         }
+
         $.post(baseURL + 'create_booking',
             $(this).serialize(),
             function (response) {

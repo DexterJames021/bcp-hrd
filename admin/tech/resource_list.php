@@ -418,18 +418,18 @@ access_log($userData);
                                             <div class="table-responsive">
                                                 <table id="ResourcesTable" style="width: 100%;" class="table table-hover">
                                                     <thead class="thead-light">
-                                                        <tr class="border-0">
-                                                            <th class="border-0">#</th>
-                                                            <th class="border-0">Name</th>
-                                                            <th class="border-0">Category</th>
-                                                            <th class="border-0">Quantity</th>
-                                                            <th class="border-0">Location</th>
-                                                            <th class="border-0">Status</th>
-                                                            <th class="border-0">Last maintenance</th>
-                                                            <th class="border-0">Next maintenance</th>
-                                                            <th class="border-0">Created at</th>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Name</th>
+                                                            <th>Category</th>
+                                                            <th>Quantity</th>
+                                                            <th>Location</th>
+                                                            <th>Status</th>
+                                                            <!-- <th>Last maintenance</th>
+                                                            <th>Next maintenance</th> -->
+                                                            <!-- <th>Created at</th> -->
                                                             <?php if ($userData && in_array("CREATE", $userData['permissions'])): ?>
-                                                                <th class="border-0">Action</th>
+                                                                <th>Action</th>
                                                             <?php else: ?>
                                                                 <th class=" border-0">Action</th>
                                                             <?php endif; ?>

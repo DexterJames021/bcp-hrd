@@ -247,7 +247,7 @@ access_log($userData);
                         <div class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-12">
                             <div class="card">
                                 <div class="card-body">
-                                    <h5 class="text-muted">In Maintenance</h5>
+                                    <h5 class="text-muted">Booked</h5>
                                     <div class="metric-value d-inline-block">
                                         <h1 id="on-book" class="mb-1">0</h1>
                                     </div>
@@ -479,12 +479,12 @@ access_log($userData);
                                         <input type="number" name="edit_capacity" id="edit_capacity"
                                             class="form-control" required>
                                     </div>
-                                    <div class="mb-2">
+                                    <!-- <div class="mb-2">
                                         <label for="edit_status">Status:</label>
                                         <select name="edit_status" id="edit_status" class="form-control">
                                             <option selected value="Available">Available</option>
                                         </select>
-                                    </div>
+                                    </div> -->
                                     <div class="mb-2">
                                         <button type="submit" class="btn btn-primary">Save Changes</button>
                                     </div>

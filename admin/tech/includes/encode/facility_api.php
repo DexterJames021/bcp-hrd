@@ -19,10 +19,11 @@ require '../../../../config/Database.php';
 
 use Admin\Tech\Includes\Class\Room;
 use Admin\Tech\Includes\Class\Booking;
-// use Admin\Tech\Includes\Class\Email;
+use Admin\Tech\Includes\Class\Email;
 
 $room = new Room($conn);
 $booking = new Booking($conn);
+$mail = new Email();
 $action = $_GET['action'] ?? null;
 
 //todo: filter($_POST['id'], FILTER_SANITIZE_NUMBER_INT) implement this
@@ -61,6 +62,48 @@ switch ($action) {
         echo json_encode($booking->getAll());
         break;
 
+    //approval with mail
+    // case 'update_book_status':
+    //     $id = $_POST['id'];
+    //     $status = $_POST['status'];
+
+    //     // First get booking details before updating
+    //     $bookingDetails = $booking->getBookings($id);
+
+    //     if (!$bookingDetails) {
+    //         echo json_encode(['failed' => 'Booking not found']);
+    //         break;
+    //     }
+
+    //     // Update the status
+    //     if ($booking->updateStatus($id, $status)) {
+    //         // Prepare email notification
+    //         $toEmail = $bookingDetails['email']; // Assuming your booking has an email field
+    //         $subject = "Your Booking Status Update";
+
+    //         if ($status === 'approved') {
+    //             $message = "Your booking #{$id} has been approved. Thank you for using our service!";
+    //         } else {
+    //             $message = "Your booking #{$id} has been rejected. Please contact support for more information.";
+    //         }
+
+    //         // Send email notification
+    //         $emailResult = $email->sendEmailNotification($toEmail, $subject, $message);
+
+    //         if ($emailResult === true) {
+    //             echo json_encode(['success' => 'Status updated and notification sent']);
+    //         } else {
+    //             // Status was updated but email failed
+    //             echo json_encode([
+    //                 'success' => 'Status updated but email failed',
+    //                 'email_error' => $emailResult
+    //             ]);
+    //         }
+    //     } else {
+    //         echo json_encode(['failed' => 'Status update failed']);
+    //     }
+    //     break;
+    //approval without mail
     case 'update_book_status':
         $id = $_POST['id'];
         $status = $_POST['status'];
@@ -105,13 +148,14 @@ switch ($action) {
         echo json_encode($booking->checkEndedBookings());
         break;
 
-        //todo: get all approve and pending display all
+    //todo: get all approve and pending display all
     case 'get_facility_events':
         echo json_encode($booking->getFacilityEvents());
         break;
 
     case 'mark_inactive':
-        if (!isset($_POST['id'])) return false;
+        if (!isset($_POST['id']))
+            return false;
 
         $id = $_POST['id'];
         echo json_encode(['success' => $booking->markRoomAvailable($id)]);
@@ -130,7 +174,7 @@ switch ($action) {
 
     case 'update_room':
         // Validate input
-        if (empty($_POST['edit_id']) || empty($_POST['edit_name']) || empty($_POST['edit_location']) || empty($_POST['edit_capacity']) || empty($_POST['edit_status'])) {
+        if (empty($_POST['edit_id']) || empty($_POST['edit_name']) || empty($_POST['edit_location']) || empty($_POST['edit_capacity'])) {
             echo json_encode(['error' => 'All fields are required']);
             exit;
         }
@@ -139,10 +183,11 @@ switch ($action) {
         $name = $_POST['edit_name'];
         $location = $_POST['edit_location'];
         $capacity = $_POST['edit_capacity'];
-        $status = $_POST['edit_status'];
+        // $status = $_POST['edit_status'];
+        // $status = !empty($_POST['edit_status']) ? $_POST['edit_status'] : NULL;
 
         // Update room details
-        $updated = $room->updateRoom($id, $name, $location, $capacity, $status);
+        $updated = $room->updateRoom($id, $name, $location, $capacity);
 
         if ($updated) {
             echo json_encode(['success' => true]);
@@ -187,7 +232,7 @@ switch ($action) {
         }
         break;
 
-        //! not use
+    //! not use
     case 'update_booking_status':
         if (empty($_POST['id']) || empty($_POST['status'])) {
             echo json_encode(['success' => false, 'message' => 'Booking ID and status are required.']);
