@@ -1,10 +1,10 @@
 <!-- Resources -->
 <?php
-// include_once __DIR__ .  '../../../config/Database.php';
-// include_once __DIR__ .  '../../../auth/accesscontrol.php';
+include_once __DIR__ . '../../../config/Database.php';
+include_once __DIR__ . '../../../auth/accesscontrol.php';
 
-// $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
-// access_log($userData);
+$userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
+access_log($userData);
 
 
 // $DEPLOY_URL = ($_SERVER['HTTPS  '] ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/bcp-hrd';
@@ -84,8 +84,9 @@
 </head>
 
 <body>
-
-
+    <script>
+        var userPermissions = <?= json_encode($userData['permissions']); ?>;
+    </script>
     <!-- ============================================================== -->
     <!-- main wrapper -->
     <!-- ============================================================== -->
@@ -262,7 +263,7 @@
                     </ul>
             </div>
             </nav>
-        </div>        <!-- ============================================================== -->
+        </div> <!-- ============================================================== -->
         <!-- end left sidebar -->
         <!-- ============================================================== -->
 
@@ -271,9 +272,10 @@
         <!-- ============================================================== -->
 
         <div class="dashboard-wrapper">
-            <div class="container-fluid dashboard-content ">
+            <?php if ($userData && in_array("VIEW", $userData['permissions'])): ?>
+                <div class="container-fluid dashboard-content ">
                     <!-- analytics -->
-             
+
 
                     <!-- tab navigation -->
                     <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
@@ -343,10 +345,15 @@
                                                 </span>
                                             </h2>
                                             <div class="btn-group">
+                                                <?php if ($userData && in_array("CREATE", $userData['permissions'])): ?>
                                                     <button type="button" class="btn btn-outline-primary float-right"
                                                         data-toggle="modal" data-target="#allocateForm">Allocate
                                                         Resource</button>
-                                          
+                                                <?php else: ?>
+                                                    <button disabled type="button" class="btn btn-outline-primary float-right"
+                                                        data-toggle="modal" data-target="#allocateForm">Allocate
+                                                        Resource</button>
+                                                <?php endif; ?>
 
                                             </div>
                                         </div>
@@ -380,11 +387,19 @@
                                         <div class="card-header d-flex justify-content-between">
                                             <h2 class="card-title">Resources Management</h2>
                                             <div class="btn-group">
-                                                    <button type="button" class="btn float-right"
-                                                        data-toggle="modal" data-target="#addAsset">
-                                                        <i class="bi bi-plus-circle-fill text-primary" style="font-size:x-large;"></i>
+                                                <?php if ($userData && in_array("CREATE", $userData['permissions'])): ?>
+                                                    <button type="button" class="btn float-right" data-toggle="modal"
+                                                        data-target="#addAsset">
+                                                        <i class="bi bi-plus-circle-fill text-primary"
+                                                            style="font-size:x-large;"></i>
                                                     </button>
-                                              
+                                                <?php else: ?>
+                                                    <button disabled type="button" class="btn float-right" data-toggle="modal"
+                                                        data-target="#addAsset">
+                                                        <i class="bi bi-plus-circle-fill text-primary"
+                                                            style="font-size:x-large;"></i>
+                                                    </button>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                         <div class="card-body">
@@ -400,9 +415,9 @@
                                                             <th class="border-0">Status</th>
                                                             <th class="border-0">Last maintenance</th>
                                                             <th class="border-0">Next maintenance</th>
-                                                            <th class="border-0">Created at</th>
-                                                                <th class="border-0">Action</th>
-                                                           
+                                                            <!-- <th class="border-0">Created at</th> -->
+                                                            <th class="border-0">Action</th>
+
                                                         </tr>
                                                     </thead>
                                                     <tbody></tbody>
@@ -416,292 +431,295 @@
                         </div>
 
                     </div>
-            </div>
+                </div>
 
-            <!-- add modal -->
-            <div id="add-modal" class="row">
-                <div class="modal fade" id="addAsset" role="dialog">
-                    <div class="modal-dialog">
+                <!-- add modal -->
+                <div id="add-modal" class="row">
+                    <div class="modal fade" id="addAsset" role="dialog">
+                        <div class="modal-dialog">
 
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Add Asset</h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Add Asset</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-                            </div>
-                            <div class="modal-body">
-                                <form id="assets_form">
-                                    <div class="mb-3">
-                                        <label for="name" class="form-label">Name:</label>
-                                        <input type="text" class="form-control" required name="name" id="name"
-                                            placeholder="Asset Name">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="category" class="form-label">Category:</label>
-                                        <input type="text" class="form-control" name="category" id="category"
-                                            placeholder="Category">
-                                        <!-- <label for="task" class="task-valid d-none text-danger">This field is required!</label> -->
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="quantity" class="form-label">Quantity:</label>
-                                        <input type="number" class="form-control" name="quantity" id="quantity"
-                                            placeholder="Quantity">
+                                </div>
+                                <div class="modal-body">
+                                    <form id="assets_form">
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Name:</label>
+                                            <input type="text" class="form-control" required name="name" id="name"
+                                                placeholder="Asset Name">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="category" class="form-label">Category:</label>
+                                            <input type="text" class="form-control" name="category" id="category"
+                                                placeholder="Category">
+                                            <!-- <label for="task" class="task-valid d-none text-danger">This field is required!</label> -->
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="quantity" class="form-label">Quantity:</label>
+                                            <input type="number" class="form-control" name="quantity" id="quantity"
+                                                placeholder="Quantity">
 
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="location" class="form-label">Location:</label>
-                                        <input type="text" class="form-control" required name="location" id="location"
-                                            placeholder="Location">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="location" class="form-label">Location:</label>
+                                            <input type="text" class="form-control" required name="location" id="location"
+                                                placeholder="Location">
 
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="status">Status:</label>
-                                        <select name="status" id="status" class="form-control  required form-select"
-                                            id="assign" aria-label="Default select example" required='required'>
-                                            <option value="Available">Available</option>
-                                            <option value="In Maintenance">In Maintenance</option>
-                                            <option value="Damaged">Damaged</option>
-                                            <label for="assign" class="assign-valid d-none text-danger">This field is
-                                                required!</label>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="last_maintenance" class="form-label">Last Maintenance:</label>
-                                        <input type="date" class="form-control" name="last_maintenance"
-                                            id="last_maintenance">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="next_maintenance" class="form-label">Next Maintenance:</label>
-                                        <input type="date" class="form-control" name="next_maintenance"
-                                            id="next_maintenance">
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="submit" id="submit-btn" class="btn btn-primary">Submit</button>
-                                        <button type="button" id="close-btn" class="btn btn-default"
-                                            data-dismiss="modal">Close</button>
-                                    </div>
-                                </form>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="status">Status:</label>
+                                            <select name="status" id="status" class="form-control  required form-select"
+                                                id="assign" aria-label="Default select example" required='required'>
+                                                <option value="Available">Available</option>
+                                                <option value="In Maintenance">In Maintenance</option>
+                                                <option value="Damaged">Damaged</option>
+                                                <label for="assign" class="assign-valid d-none text-danger">This field is
+                                                    required!</label>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="last_maintenance" class="form-label">Last Maintenance:</label>
+                                            <input type="date" class="form-control" name="last_maintenance"
+                                                id="last_maintenance">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="next_maintenance" class="form-label">Next Maintenance:</label>
+                                            <input type="date" class="form-control" name="next_maintenance"
+                                                id="next_maintenance">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" id="submit-btn" class="btn btn-primary">Submit</button>
+                                            <button type="button" id="close-btn" class="btn btn-default"
+                                                data-dismiss="modal">Close</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!--  edit resources modal -->
-            <div id="add-modal" class="row">
-                <div class="modal fade" id="EditResourcesModal" role="dialog">
-                    <div class="modal-dialog">
+                <!--  edit resources modal -->
+                <div id="add-modal" class="row">
+                    <div class="modal fade" id="EditResourcesModal" role="dialog">
+                        <div class="modal-dialog">
 
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Edit Asset</h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="editResourceFrom">
-                                    <div class="mb-3">
-                                        <label for="name" class="form-label">Name:</label>
-                                        <input type="text" class="form-control" required name="edit_name" id="edit_name"
-                                            placeholder="Asset Name">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="category" class="form-label">Category:</label>
-                                        <input type="text" class="form-control" name="edit_category" id="edit_category"
-                                            placeholder="Category">
-                                        <!-- <label for="task" class="task-valid d-none text-danger">This field is required!</label> -->
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="quantity" class="form-label">Quantity:</label>
-                                        <input type="number" class="form-control" name="edit_quantity"
-                                            id="edit_quantity" placeholder="Quantity">
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Edit Asset</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="editResourceFrom">
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Name:</label>
+                                            <input type="text" class="form-control" required name="edit_name" id="edit_name"
+                                                placeholder="Asset Name">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="category" class="form-label">Category:</label>
+                                            <input type="text" class="form-control" name="edit_category" id="edit_category"
+                                                placeholder="Category">
+                                            <!-- <label for="task" class="task-valid d-none text-danger">This field is required!</label> -->
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="quantity" class="form-label">Quantity:</label>
+                                            <input type="number" class="form-control" name="edit_quantity"
+                                                id="edit_quantity" placeholder="Quantity">
 
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="location" class="form-label">Location:</label>
-                                        <input type="text" class="form-control" required name="edit_location"
-                                            id="edit_location" placeholder="Location">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="location" class="form-label">Location:</label>
+                                            <input type="text" class="form-control" required name="edit_location"
+                                                id="edit_location" placeholder="Location">
 
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="status">Status:</label>
-                                        <select name="edit_status" id="edit_status" class="form-control form-select"
-                                            aria-label="Default select example" required='required'>
-                                            <option value="Available">Available</option>
-                                            <option value="In Maintenance">In Maintenance</option>
-                                            <option value="Damaged">Damaged</option>
-                                            <label for="assign" class="assign-valid d-none text-danger">This field is
-                                                required!</label>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="last_maintenance" class="form-label">Last Maintenance:</label>
-                                        <input type="date" class="form-control" name="edit_last_maintenance"
-                                            id="edit_last_maintenance">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="next_maintenance" class="form-label">Next Maintenance:</label>
-                                        <input type="date" class="form-control" name="edit_next_maintenance"
-                                            id="edit_next_maintenance">
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="submit" id="submit-btn" class="btn btn-primary">Submit</button>
-                                        <button type="button" id="close-btn" class="btn btn-default"
-                                            data-dismiss="modal">Close</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- allocation -->
-            <div id="add-modal" class="row">
-                <div class="modal fade" id="allocateForm" role="dialog">
-                    <div class="modal-dialog">
-
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Allocate</h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-
-                            </div>
-                            <div class="modal-body">
-                                <form id="resourceAllocationForm">
-                                    <div class="mb-3">
-                                        <label for="allocate">Name:</label>
-                                        <select id="allocate_id" name="allocate_id" class="form-control" required>
-                                        </select>
-                                    </div>
-                                    <input type="hidden" id="employee_id" class="form-control"
-                                        value="<?= $_SESSION['user_id'] ?>" name="employee_id" />
-                                    <div class="mb-3">
-                                        <label for="quantity">Quantity:</label>
-                                        <input type="number" id="quantity" class="form-control" name="quantity" min="1"
-                                            required />
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="allocation_start">Allocation Start</label>
-                                        <input type="datetime-local" id="allocation_start" class="form-control"
-                                            name="allocation_start" required />
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="allocation_end">Allocation End</label>
-                                        <input type="datetime-local" id="allocation_end" class="form-control"
-                                            name="allocation_end" />
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="notes">Notes:</label>
-                                        <textarea id="notes" name="notes" class="form-control"
-                                            placeholder="Notes (optional)"></textarea>
-                                    </div>
-                                    <div class="mb-3">
-                                        <button type="submit" class="btn btn-outline-primary">Allocate Resource</button>
-                                    </div>
-                                </form>
-
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="status">Status:</label>
+                                            <select name="edit_status" id="edit_status" class="form-control form-select"
+                                                aria-label="Default select example" required='required'>
+                                                <option value="Available">Available</option>
+                                                <option value="In Maintenance">In Maintenance</option>
+                                                <option value="Damaged">Damaged</option>
+                                                <label for="assign" class="assign-valid d-none text-danger">This field is
+                                                    required!</label>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="last_maintenance" class="form-label">Last Maintenance:</label>
+                                            <input type="date" class="form-control" name="edit_last_maintenance"
+                                                id="edit_last_maintenance">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="next_maintenance" class="form-label">Next Maintenance:</label>
+                                            <input type="date" class="form-control" name="edit_next_maintenance"
+                                                id="edit_next_maintenance">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" id="submit-btn" class="btn btn-primary">Submit</button>
+                                            <button type="button" id="close-btn" class="btn btn-default"
+                                                data-dismiss="modal">Close</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- request resources -->
-            <div id="add-modal" class="row">
-                <div class="modal fade" id="requestModal" role="dialog">
-                    <div class="modal-dialog">
+                <!-- allocation -->
+                <div id="add-modal" class="row">
+                    <div class="modal fade" id="allocateForm" role="dialog">
+                        <div class="modal-dialog">
 
-                        <!-- Modal content-->
-                        <div class="modal-content ">
-                            <div class="modal-header">
-                                <h4 class="modal-title">Request Resources</h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Allocate</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                                </div>
+                                <div class="modal-body">
+                                    <form id="resourceAllocationForm">
+                                        <div class="mb-3">
+                                            <label for="allocate">Name:</label>
+                                            <select id="allocate_id" name="allocate_id" class="form-control" required>
+                                            </select>
+                                        </div>
+                                        <input type="hidden" id="employee_id" class="form-control"
+                                            value="<?= $_SESSION['user_id'] ?>" name="employee_id" />
+                                        <div class="mb-3">
+                                            <label for="quantity">Quantity:</label>
+                                            <input type="number" id="quantity" class="form-control" name="quantity" min="1"
+                                                required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="allocation_start">Allocation Start</label>
+                                            <input type="datetime-local" id="allocation_start" class="form-control"
+                                                name="allocation_start" required />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="allocation_end">Allocation End</label>
+                                            <input type="datetime-local" id="allocation_end" class="form-control"
+                                                name="allocation_end" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="notes">Notes:</label>
+                                            <textarea id="notes" name="notes" class="form-control"
+                                                placeholder="Notes (optional)"></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <button type="submit" class="btn btn-outline-primary">Allocate Resource</button>
+                                        </div>
+                                    </form>
+
+                                </div>
                             </div>
-                            <div class="modal-body">
-                                <form id="resourceRequestForm">
-                                    <div class="mb-3">
-                                        <label for="resource">Select Resource:</label>
-                                        <select id="resource_id" class="form-control" name="resource_id">
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <div class="row">
-                                            <div class="col">
-                                                <label for="quantity">Quantity:</label>
-                                                <input type="number" id="quantity" class="form-control" name="quantity"
-                                                    min="1" required />
-                                                <div class="d-none invalid-feedback">
-                                                    Requested quantity exceeds available stock.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- request resources -->
+                <div id="add-modal" class="row">
+                    <div class="modal fade" id="requestModal" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content ">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Request Resources</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="resourceRequestForm">
+                                        <div class="mb-3">
+                                            <label for="resource">Select Resource:</label>
+                                            <select id="resource_id" class="form-control" name="resource_id">
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label for="quantity">Quantity:</label>
+                                                    <input type="number" id="quantity" class="form-control" name="quantity"
+                                                        min="1" required />
+                                                    <div class="d-none invalid-feedback">
+                                                        Requested quantity exceeds available stock.
+                                                    </div>
+                                                    <input type="hidden" id="employee_id"
+                                                        value="<?= $_SESSION['user_id'] ?>" name="employee_id" required />
                                                 </div>
-                                                <input type="hidden" id="employee_id"
-                                                    value="<?= $_SESSION['user_id'] ?>" name="employee_id" required />
-                                            </div>
-                                            <div class="col mt-3">
-                                                <div class="input-group">
-                                                    <label for="quantity_overview" class="input-group-text"><i
-                                                            class="bi bi-archive-fill"></i></label>
-                                                    <input type="text" id="quantity_overview" value="0 Stocks"
-                                                        class="form-control" disabled />
+                                                <div class="col mt-3">
+                                                    <div class="input-group">
+                                                        <label for="quantity_overview" class="input-group-text"><i
+                                                                class="bi bi-archive-fill"></i></label>
+                                                        <input type="text" id="quantity_overview" value="0 Stocks"
+                                                            class="form-control" disabled />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <div class="mb-3">
+                                        <div class="mb-3">
 
-                                        <label for="purpose">Purpose:</label>
-                                        <textarea id="purpose" name="purpose" class="form-control" required></textarea>
-                                    </div>
-                                    <div class="mb-3">
-                                        <button type="submit" class="submit-request btn btn-outline-primary">Submit
-                                            Request</button>
-                                    </div>
-                                </form>
+                                            <label for="purpose">Purpose:</label>
+                                            <textarea id="purpose" name="purpose" class="form-control" required></textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <button type="submit" class="submit-request btn btn-outline-primary">Submit
+                                                Request</button>
+                                        </div>
+                                    </form>
 
-                                <div id="response"></div>
+                                    <div id="response"></div>
 
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- bs toast  -->
-            <div class="toast-container position-fixed bottom-0 end-0 p-3">
-                <div id="deleted" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-body bg-danger text-light">
-                        Deleted, Successfully.
+                <!-- bs toast  -->
+                <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                    <div id="deleted" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-body bg-danger text-light">
+                            Deleted, Successfully.
+                        </div>
+                    </div>
+                    <div id="error" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-body bg-warning text-light">
+                            Something went wrong.
+                        </div>
+                    </div>
+                    <div id="added" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-body bg-success text-light">
+                            Added, Successfully.
+                        </div>
+                    </div>
+                    <div id="updated" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-body bg-success text-light">
+                            Updated, Successfully.
+                        </div>
+                    </div>
+                    <div id="approved" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-body bg-success text-light">
+                            Updated, Successfully.
+                        </div>
+                    </div>
+                    <div id="rejected" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-body bg-danger text-light">
+                            Updated, Successfully.
+                        </div>
                     </div>
                 </div>
-                <div id="error" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-body bg-warning text-light">
-                        Something went wrong.
-                    </div>
-                </div>
-                <div id="added" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-body bg-success text-light">
-                        Added, Successfully.
-                    </div>
-                </div>
-                <div id="updated" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-body bg-success text-light">
-                        Updated, Successfully.
-                    </div>
-                </div>
-                <div id="approved" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-body bg-success text-light">
-                        Updated, Successfully.
-                    </div>
-                </div>
-                <div id="rejected" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-body bg-danger text-light">
-                        Updated, Successfully.
-                    </div>
-                </div>
-            </div>
+            <?php else: ?>
+                <?php include_once "../../admin/403.php"; ?>
+            <?php endif; ?>
         </div>
     </div>
     <!-- ============================================================== -->
