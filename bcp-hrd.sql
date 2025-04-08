@@ -52,7 +52,7 @@ CREATE TABLE `applicants` (
   KEY `FK_Applicants_DepartmentID` (`DepartmentID`),
   CONSTRAINT `FK_Applicants_DepartmentID` FOREIGN KEY (`DepartmentID`) REFERENCES `departments` (`DepartmentID`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `applicants_ibfk_1` FOREIGN KEY (`job_id`) REFERENCES `job_postings` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `applicants` */
 
@@ -66,16 +66,22 @@ insert  into `applicants`(`id`,`job_id`,`applicant_name`,`email`,`resume_path`,`
 (53,63,'Jane Smith','janesmith@example.com','uploads/resume/janesmith.txt','Rejected','2025-01-26 11:14:16',NULL,NULL,8),
 (54,64,'Alice Johnson','alicejohnson@example.com','uploads/resume/alicejohnson.txt','Hired','2025-01-26 11:14:16','2025-03-30','16:19:00',9),
 (55,65,'Bob Brown','bobbrown@example.com','uploads/resume/bobbrown.txt','Rejected','2025-01-26 11:14:16','2025-03-30','16:29:00',10),
-(56,66,'Charlie Davis','charliedavis@example.com','uploads/resume/charliedavis.txt','Selected for Interview','2025-01-26 11:14:16',NULL,NULL,9),
-(57,67,'Diana Evans','dianaevans@example.com','uploads/resume/dianaevans.txt','Pending','2025-01-26 11:14:16',NULL,NULL,11),
+(56,66,'Charlie Davis','charliedavis@example.com','uploads/resume/charliedavis.txt','Hired','2025-01-26 11:14:16','2025-04-01','22:42:00',9),
+(57,67,'Diana Evans','dianaevans@example.com','uploads/resume/dianaevans.txt','Hired','2025-01-26 11:14:16','2025-04-01','22:43:00',11),
 (58,68,'Ethan Foster','ethanfoster@example.com','uploads/resume/ethanfoster.txt','Pending','2025-01-26 11:14:16',NULL,NULL,12),
 (59,69,'Fiona Green','fionagreen@example.com','uploads/resume/fionagreen.txt','Hired','2025-01-26 11:14:16','2025-03-30','16:45:00',10),
 (60,70,'George Harris','georgeharris@example.com','uploads/resume/georgeharris.txt','Pending','2025-01-26 11:14:16',NULL,NULL,9),
 (61,71,'Hannah Ivers','hannahivers@example.com','uploads/resume/hannahivers.txt','Pending','2025-01-26 11:14:16',NULL,NULL,8),
-(62,58,'test','test@gmail.com','uploads/resume/dexter-schoolresume.docx','Pending','2025-03-26 20:28:46',NULL,NULL,8),
+(62,58,'test','test@gmail.com','uploads/resume/dexter-schoolresume.docx','Hired','2025-03-26 20:28:46','2025-04-01','22:45:00',8),
 (63,58,'qwe','qwe@masd.com','uploads/resume/internship-memorandum-of-agreement-between-student-and-company.docx','Hired','2025-03-26 20:47:03','2025-03-30','19:38:00',8),
 (67,67,'JEREMY','apundarjeremy@gmail.com','uploads/resume/RESUME-FOR-OJT-JA.docx','Hired','2025-03-30 19:20:28','2025-03-30','19:28:00',11),
-(68,65,'Jeremy Apundar','apundarjeremy@gmail.com','uploads/resume/RESUME-FOR-OJT-JA.docx','Hired','2025-03-30 23:26:23','2025-03-30','23:27:00',10);
+(68,65,'Jeremy Apundar','apundarjeremy@gmail.com','uploads/resume/RESUME-FOR-OJT-JA.docx','Hired','2025-03-30 23:26:23','2025-03-30','23:27:00',10),
+(69,72,'test applicant','apundarjeremy@gmail.com','uploads/resume/GMAIL-ACC.txt','Hired','2025-04-01 11:35:48','2025-04-01','11:36:00',15),
+(70,63,'test3','test3@gmail.com','uploads/resume/ACCOUNT-1.txt','Hired','2025-04-01 22:51:18','2025-04-01','23:14:00',8),
+(71,62,'applicant1','apundarjeremy@gmail.com','uploads/resume/Aljhon Resume.docx','Pending','2025-04-05 16:33:23',NULL,NULL,9),
+(72,66,'Penpen ','apundarjeremy@gmail.com','uploads/resume/Aljhon Resume.docx','Hired','2025-04-05 16:43:42','2025-04-06','13:00:00',9),
+(73,73,'PENPEN','apundarjeremy@gmail.com','uploads/resume/Aljhon Resume.docx','Hired','2025-04-05 17:08:32','2025-04-06','13:10:00',15),
+(74,74,'PENPEN','apundarjeremy@gmail.com','uploads/resume/Aljhon Resume.docx','Hired','2025-04-05 17:14:53','2025-04-06','13:15:00',15);
 
 /*Table structure for table `attendanceleave` */
 
@@ -215,7 +221,7 @@ CREATE TABLE `departments` (
   PRIMARY KEY (`DepartmentID`),
   KEY `FK_Departments_ManagerID` (`ManagerID`),
   CONSTRAINT `FK_Departments_ManagerID` FOREIGN KEY (`ManagerID`) REFERENCES `employees` (`EmployeeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `departments` */
 
@@ -224,7 +230,8 @@ insert  into `departments`(`DepartmentID`,`DepartmentName`,`ManagerID`) values
 (9,'IT Department',NULL),
 (10,'Finance and Accounting',NULL),
 (11,'Facilities Management',NULL),
-(12,'Teacher Department',NULL);
+(12,'Teacher Department',NULL),
+(15,'Test department',NULL);
 
 /*Table structure for table `documents` */
 
@@ -239,7 +246,7 @@ CREATE TABLE `documents` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `documents_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `documents` */
 
@@ -256,7 +263,9 @@ insert  into `documents`(`id`,`user_id`,`document_name`,`file_path`,`uploaded_at
 (28,36,'BOSS Q 2.txt','uploads/documents/BOSS Q 1.txt','2025-03-22 19:36:05'),
 (29,36,'BOSS Q 3.txt','uploads/documents/BOSS Q 1.txt','2025-03-22 19:36:05'),
 (36,53,'bootstrap.txt','uploads/bootstrap.txt','2025-03-31 15:43:34'),
-(38,54,'Aljhon Resume.docx','uploads/Aljhon Resume.docx','2025-03-31 15:45:46');
+(38,54,'Aljhon Resume.docx','uploads/Aljhon Resume.docx','2025-03-31 15:45:46'),
+(39,55,'GMAIL-ACC.txt','uploads/GMAIL-ACC.txt','2025-04-01 11:39:27'),
+(42,60,'1-INDORSEMENT-FOR-INTERNSHIP.docx','uploads/1-INDORSEMENT-FOR-INTERNSHIP.docx','2025-04-05 17:18:16');
 
 /*Table structure for table `employees` */
 
@@ -279,12 +288,12 @@ CREATE TABLE `employees` (
   UNIQUE KEY `Email` (`Email`),
   KEY `FK_Employees_UserID` (`UserID`),
   CONSTRAINT `FK_Employees_UserID` FOREIGN KEY (`UserID`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `employees` */
 
 insert  into `employees`(`EmployeeID`,`FirstName`,`LastName`,`Email`,`Phone`,`Address`,`DOB`,`HireDate`,`Salary`,`Status`,`UserID`,`PolicyAgreed`) values 
-(44,'Lukes','Francio','luefrancio@gmail.com','09485234501','Silicon Valley','2004-11-14','2024-11-13',30000.00,'Active',39,1),
+(44,'Lukese','Francio','luefrancio@gmail.com','09485234501','Silicon Valley','2004-11-14','2024-11-13',30000.00,'Active',39,1),
 (45,'John','Doe','johndoe@example.com','09123456789','123 Main St','1990-01-01','2025-01-26',50000.00,'Active',40,1),
 (46,'Jane','Smith','janesmith@example.com','09123456780','124 Main St','1991-02-02','2025-01-26',60000.00,'Active',41,1),
 (47,'Alice','Johnson','alicejohnson@example.com','09123456781','125 Main St','1992-03-03','2025-01-26',55000.00,'Active',42,1),
@@ -294,13 +303,15 @@ insert  into `employees`(`EmployeeID`,`FirstName`,`LastName`,`Email`,`Phone`,`Ad
 (51,'Ethan','Foster','ethanfoster@example.com','09123456785','129 Main St','1996-07-07','2025-01-26',46000.00,'Active',46,1),
 (52,'Fiona','Green','fionagreen@example.com','09123456786','130 Main St','1997-08-08','2025-01-26',45000.00,'Active',47,1),
 (53,'George','Harris','georgeharris@example.com','09123456787','131 Main St','1998-09-09','2025-01-26',44000.00,'Active',48,1),
-(54,'Hannah','Ivers','hannahivers@example.com','09123456788','132 Main St','1999-10-10','2025-01-26',43000.00,'Active',49,1),
-(55,'STEPH','CURRY','curry@gmail.com','0931203129','Golden State','2025-03-30','2025-03-30',NULL,'Active',50,1),
-(56,'jeremy','apundar','apundar@gmail.com','129047812409','S PALAY','2025-03-30','2025-03-30',NULL,'Active',51,1),
-(57,'qwe','qwe','qwe@gmail.com','12381249','ccsss','2025-03-30','2025-03-30',NULL,'Active',52,1),
-(76,'TEST','WATER','TESTWATER@GMAIL.COM','1234567890','SAPANG PALAY PROPER','2002-07-31',NULL,NULL,'Active',54,1),
-(78,'Jeremy','Apundar','apundarjeremy@gmail.com','09485234501','SAPANG PALAY PROPER','2002-07-31',NULL,NULL,'Active',53,1),
-(79,'qwerty','qwerty','qwertyaa@gmail.com','09485234501','SAPANG PALAY PROPER','2002-07-31',NULL,NULL,'Active',54,1);
+(54,'Hannahs','Ivers','hannahivers@example.com','09123456788','132 Main St','1999-10-10','2025-01-26',43000.00,'Active',49,1),
+(55,'STEPH','CURRY','curry@gmail.com','0931203129','Golden State','2025-03-30','2025-03-30',10.00,'Active',50,1),
+(56,'jeremy','apundar','apundar@gmail.com','129047812409','S PALAY','2025-03-30','2025-03-30',1.00,'Active',51,1),
+(57,'qwe','qwe','qwe@gmail.com','12381249','ccsss','2025-03-30','2025-03-30',1.00,'Active',52,1),
+(76,'TEST','WATER','TESTWATER@GMAIL.COM','1234567890','SAPANG PALAY PROPER','2002-07-31','2025-04-01',10.00,'Active',54,1),
+(78,'Jeremy','Apundar','apundarjeremy@gmail.com','09485234501','SAPANG PALAY PROPER','2002-07-31','2025-04-01',10.00,'Active',53,1),
+(79,'qwerty','qwerty','qwertyaa@gmail.com','09485234501','SAPANG PALAY PROPER','2002-07-31','2025-04-01',10.00,'Active',54,1),
+(81,'test','applicant','apundar1jeremy@gmail.com','09485234501','Sapang Palay','2002-07-31','2025-04-01',10.00,'Active',55,1),
+(87,'Penpen','DelaFuente','penpen@gmail.com','09485234501','Citrus','2002-07-31','2025-04-05',0.00,'Active',60,1);
 
 /*Table structure for table `fm_bookings` */
 
@@ -559,7 +570,7 @@ CREATE TABLE `job_postings` (
   KEY `fk_employee` (`EmployeeID`),
   CONSTRAINT `FK_JobPostings_DepartmentID` FOREIGN KEY (`DepartmentID`) REFERENCES `departments` (`DepartmentID`),
   CONSTRAINT `fk_employee` FOREIGN KEY (`EmployeeID`) REFERENCES `employees` (`EmployeeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `job_postings` */
 
@@ -578,7 +589,10 @@ insert  into `job_postings`(`id`,`job_title`,`job_description`,`requirements`,`l
 (68,'Sales Executive','Drive sales and manage client relationships.','Bachelor’s degree in Business.','Bestlink College of the Philippines','PHP 30,000 - PHP 55,000 per month.','Open','2025-01-26 11:14:16',12,NULL),
 (69,'Content Writer','Create content for various platforms.','Bachelor’s degree in Communications.','Bestlink College of the Philippines','PHP 25,000 - PHP 45,000 per month.','Closed','2025-01-26 11:14:16',10,NULL),
 (70,'IT Support','Provide technical support to users.','Bachelor’s degree in IT.','Bestlink College of the Philippines','PHP 20,000 - PHP 40,000 per month.','Open','2025-01-26 11:14:16',9,NULL),
-(71,'Project Manager','Manage projects from initiation to closure.','Bachelor’s degree in Management.','Bestlink College of the Philippines','PHP 50,000 - PHP 90,000 per month.','Open','2025-01-26 11:14:16',8,NULL);
+(71,'Project Manager','Manage projects from initiation to closure.','Bachelor’s degree in Management.','Bestlink College of the Philippines','PHP 50,000 - PHP 90,000 per month.','Open','2025-01-26 11:14:16',8,NULL),
+(72,'TEST JOB','TEST JOB','TEST JOB','TEST JOB LOCATION','3000','Open','2025-04-01 11:34:57',15,NULL),
+(73,'TESTING JOBS','TESTING JOBS','TESTING JOBS','BESTLINK','30000 - 50000','Open','2025-04-05 17:07:40',15,NULL),
+(74,'JOB TESTING','JOB TESTING','JOB TESTING','BESTLINK','30000 - 50000','Open','2025-04-05 17:14:10',15,NULL);
 
 /*Table structure for table `jobroles` */
 
@@ -730,6 +744,30 @@ insert  into `roles`(`RoleID`,`RoleName`,`Description`) values
 (5,'staff',''),
 (6,'applicant','');
 
+/*Table structure for table `training_applications` */
+
+DROP TABLE IF EXISTS `training_applications`;
+
+CREATE TABLE `training_applications` (
+  `application_id` int(11) NOT NULL AUTO_INCREMENT,
+  `employee_id` int(11) DEFAULT NULL,
+  `training_id` int(11) DEFAULT NULL,
+  `status` enum('Pending','Approved','Rejected') DEFAULT 'Pending',
+  `applied_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`application_id`),
+  KEY `employee_id` (`employee_id`),
+  KEY `training_id` (`training_id`),
+  CONSTRAINT `training_applications_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`EmployeeID`),
+  CONSTRAINT `training_applications_ibfk_2` FOREIGN KEY (`training_id`) REFERENCES `training_sessions` (`training_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `training_applications` */
+
+insert  into `training_applications`(`application_id`,`employee_id`,`training_id`,`status`,`applied_at`) values 
+(27,87,16,'Pending','2025-04-05 23:40:35'),
+(28,87,3,'Pending','2025-04-06 00:03:06'),
+(29,87,17,'Pending','2025-04-06 00:03:10');
+
 /*Table structure for table `training_assignments` */
 
 DROP TABLE IF EXISTS `training_assignments`;
@@ -745,13 +783,37 @@ CREATE TABLE `training_assignments` (
   KEY `fk_training_id` (`training_id`),
   CONSTRAINT `fk_training_id` FOREIGN KEY (`training_id`) REFERENCES `training_sessions` (`training_id`),
   CONSTRAINT `training_assignments_ibfk_2` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`EmployeeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `training_assignments` */
 
 insert  into `training_assignments`(`assignment_id`,`training_id`,`employee_id`,`status`,`completion_date`) values 
-(4,3,44,'Not Started','2024-11-16'),
-(5,4,44,'Not Started','2024-11-16');
+(8,4,81,'Completed','2025-04-05'),
+(10,3,81,'Completed','2025-04-05'),
+(11,16,81,'In Progress','2025-04-05'),
+(12,17,87,'Completed','2025-04-05'),
+(13,16,87,'Not Started','2025-04-07'),
+(14,3,87,'Not Started','2025-04-06');
+
+/*Table structure for table `training_grades` */
+
+DROP TABLE IF EXISTS `training_grades`;
+
+CREATE TABLE `training_grades` (
+  `grade_id` int(11) NOT NULL AUTO_INCREMENT,
+  `assignment_id` int(11) DEFAULT NULL,
+  `grade` decimal(5,2) DEFAULT NULL,
+  PRIMARY KEY (`grade_id`),
+  KEY `assignment_id` (`assignment_id`),
+  CONSTRAINT `training_grades_ibfk_1` FOREIGN KEY (`assignment_id`) REFERENCES `training_assignments` (`assignment_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `training_grades` */
+
+insert  into `training_grades`(`grade_id`,`assignment_id`,`grade`) values 
+(1,12,95.00),
+(2,10,100.00),
+(3,8,25.00);
 
 /*Table structure for table `training_sessions` */
 
@@ -768,13 +830,15 @@ CREATE TABLE `training_sessions` (
   PRIMARY KEY (`training_id`),
   KEY `department` (`department`),
   CONSTRAINT `training_sessions_ibfk_1` FOREIGN KEY (`department`) REFERENCES `departments` (`DepartmentID`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `training_sessions` */
 
 insert  into `training_sessions`(`training_id`,`training_name`,`training_description`,`trainer`,`department`,`training_materials`,`created_at`) values 
 (3,'BASKETBALL','BRING YOUR OWN BALLPEN','LeBron James',12,'SAWADA','2024-11-14 01:18:30'),
-(4,'VOLLEYBALL','VOLLEYBALL','ALYSSA VALDEZ',11,'VOLLEYBALL','2024-11-14 01:41:38');
+(4,'VOLLEYBALL','VOLLEYBALL','ALYSSA VALDEZ',11,'VOLLEYBALL','2024-11-14 01:41:38'),
+(16,'ASDFGH','ASDFGH','ASDFGH',9,'ASDFGH','2025-04-01 17:18:44'),
+(17,'TEST TRAINING','TEST TRAINING','TEST TRAINER',15,'TEST TRAINING','2025-04-05 17:19:31');
 
 /*Table structure for table `trainingprograms` */
 
@@ -840,7 +904,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `Username` (`username`),
   KEY `fk_applicant` (`applicant_id`),
   CONSTRAINT `fk_applicant` FOREIGN KEY (`applicant_id`) REFERENCES `applicants` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `users` */
 
@@ -862,7 +926,10 @@ insert  into `users`(`id`,`username`,`password`,`usertype`,`createdAt`,`lastLogi
 (51,'jeremy','$2y$10$4p8IAOQXo3Vs9iL2Iqt4/uI/67YEK8JpN3Hl32efwJHG2UUhJ/yG2','employee','2025-03-30 19:29:55','2025-03-30 19:29:55',67,1),
 (52,'qwe','$2y$10$pS3HTrwvopNbcGVQyML03.yJ9IFpn2Gpn9qOJVbD1.7IzBwuZiw4q','employee','2025-03-30 19:38:56','2025-03-30 19:38:56',63,1),
 (53,'@Ap8080','$2y$10$jfhjrRwAj/iV5m/FCC7RZOI1kg/6P6xGhH.e/naQntETMjb.wMRoW','employee','2025-03-30 23:28:13','2025-03-30 23:28:13',68,4),
-(54,'test','$2y$10$f0fGjn9Dp5tPN/R4rTum8On18JYrqBxmcSGZQ7GIkFAvpMs/SMILW','employee','2025-03-31 10:55:17','2025-03-31 10:55:17',50,4);
+(54,'test','$2y$10$f0fGjn9Dp5tPN/R4rTum8On18JYrqBxmcSGZQ7GIkFAvpMs/SMILW','employee','2025-03-31 10:55:17','2025-03-31 10:55:17',50,4),
+(55,'testapplicant','$2y$10$8IL60mGl5.Jg9/881xDX2.9VxvuoXBeEHXtQhHuef7mCXQiRX7mce','employee','2025-04-01 11:37:50','2025-04-01 11:37:50',69,4),
+(59,'test3','$2y$10$BPFqQOUSxltXeK7K.cqwh.gZd2XHtEFz3UUCOcRnyjxwzgQWrcZPu','employee','2025-04-05 16:55:40','2025-04-05 16:55:40',70,4),
+(60,'penpen','$2y$10$SClvv0Bd9VAcEktm9pNps.AsZvcnB1MtbBvypSGm0g5iv1cy5/r8q','employee','2025-04-05 17:16:57','2025-04-05 17:16:57',74,4);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
