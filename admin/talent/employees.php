@@ -1,4 +1,3 @@
-<!-- training main dashboard -->
 <?php
 require "../../config/db_talent.php";
 require '../../auth/mysqli_accesscontrol.php';
@@ -6,12 +5,25 @@ require '../../auth/mysqli_accesscontrol.php';
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);
 
-// Assuming you have a connection to your database already set up
-$sql = "SELECT COUNT(*) AS count FROM employees";
+$usertype = $userData['role'];
+
+// SQL query to count total, active, and inactive employees
+$sql = "SELECT 
+            COUNT(*) AS total_count,
+            COUNT(CASE WHEN Status = 'Active' THEN 1 END) AS active_count,
+            COUNT(CASE WHEN Status = 'Inactive' THEN 1 END) AS inactive_count
+        FROM employees";
+
 $result = $conn->query($sql);
 $row = $result->fetch_assoc();
-$employee_count = $row['count'];
+
+// Get the counts of total, active, and inactive employees
+$total_count = $row['total_count'];
+$active_count = $row['active_count'];
+$inactive_count = $row['inactive_count'];
+
 ?>
+
 
 <!doctype html>
 <html lang="en">
@@ -92,7 +104,7 @@ $employee_count = $row['count'];
                 <!-- ============================================================== -->
                 <!-- pageheader  -->
                 <!-- ============================================================== -->
-        
+                 
                 <!-- ============================================================== -->
                 <!-- end pageheader  -->
                 <!-- ============================================================== -->
@@ -109,7 +121,23 @@ $employee_count = $row['count'];
                                         <div class="card bg-light text-white">
                                             <div class="card-body">
                                                 <h5>Total Employees</h5>
-                                                <h3><?php echo $employee_count; ?></h3>
+                                                <h3><?php echo $total_count; ?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-light text-white">
+                                            <div class="card-body">
+                                                <h5>Active Employees</h5>
+                                                <h3><?php echo $active_count; ?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-light text-white">
+                                            <div class="card-body">
+                                                <h5>Inactive Employees</h5>
+                                                <h3><?php echo $inactive_count; ?></h3>
                                             </div>
                                         </div>
                                     </div>
@@ -117,6 +145,20 @@ $employee_count = $row['count'];
             
 
 <hr>
+<?php
+if (isset($_SESSION['message'])) {
+    $type = $_SESSION['message_type'] ?? 'info'; // fallback to 'info' if not set
+    echo "<div class='alert alert-$type alert-dismissible fade show' role='alert'>
+            {$_SESSION['message']}
+            <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                <span aria-hidden='true'>&times;</span>
+            </button>
+          </div>";
+    unset($_SESSION['message']);
+    unset($_SESSION['message_type']);
+}
+?>
+
 <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="card">
@@ -150,6 +192,9 @@ $employee_count = $row['count'];
 
     $counter = 1; // Initialize counter for numbering
 
+    // Assuming you have already retrieved $userData from the session or database as shown earlier
+    $usertype = $userData['role']; // Fetching usertype from session or database
+
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             echo "<tr>";
@@ -160,27 +205,53 @@ $employee_count = $row['count'];
             echo "<td>" . htmlspecialchars($row['DepartmentName']) . "</td>"; // Display Department Name
             echo "<td>" . htmlspecialchars($row['Status']) . "</td>";
             echo "<td class='text-center'>
-        <!-- View Info Button -->
-        <button class='btn btn-info btn-sm btn-action mx-1' 
-            data-toggle='modal' 
-            data-target='#viewEmployeeModal' 
-            data-employeeid='" . htmlspecialchars($row['EmployeeID']) . "' 
-            data-firstname='" . htmlspecialchars($row['FirstName']) . "' 
-            data-lastname='" . htmlspecialchars($row['LastName']) . "' 
-            data-jobtitle='" . htmlspecialchars($row['job_title']) . "' 
-            data-department='" . htmlspecialchars($row['DepartmentName']) . "' 
-            data-status='" . htmlspecialchars($row['Status']) . "'
-            data-email='" . htmlspecialchars($row['Email']) . "' 
-            data-phone='" . htmlspecialchars($row['Phone']) . "' 
-            data-address='" . htmlspecialchars($row['Address']) . "' 
-            data-dob='" . htmlspecialchars($row['DOB']) . "' 
-            data-hiredate='" . htmlspecialchars($row['HireDate']) . "' 
-            data-salary='" . htmlspecialchars($row['Salary']) . "'>
-            <i class='fas fa-eye'></i> 
-        </button>
+                <!-- View Info Button -->
+                <button class='btn btn-info btn-sm btn-action mx-1' 
+                    data-toggle='modal' 
+                    data-target='#viewEmployeeModal' 
+                    data-employeeid='" . htmlspecialchars($row['EmployeeID']) . "' 
+                    data-firstname='" . htmlspecialchars($row['FirstName']) . "' 
+                    data-lastname='" . htmlspecialchars($row['LastName']) . "' 
+                    data-jobtitle='" . htmlspecialchars($row['job_title']) . "' 
+                    data-department='" . htmlspecialchars($row['DepartmentName']) . "' 
+                    data-status='" . htmlspecialchars($row['Status']) . "' 
+                    data-email='" . htmlspecialchars($row['Email']) . "' 
+                    data-phone='" . htmlspecialchars($row['Phone']) . "' 
+                    data-address='" . htmlspecialchars($row['Address']) . "' 
+                    data-dob='" . htmlspecialchars($row['DOB']) . "' 
+                    data-hiredate='" . htmlspecialchars($row['HireDate']) . "' 
+                    data-salary='" . htmlspecialchars($row['Salary']) . "'>
+                    <i class='fas fa-eye'></i> 
+                </button>";
 
-        <!-- Delete Button -->
-    </td>";
+            // Check if the user is a super admin and show the delete button
+            
+            
+            // Check if the user is either 'superadmin' or 'admin'
+            if ($usertype == 'superadmin') {
+                echo "
+                    <a href='onboarding/delete_employee.php?id=" . htmlspecialchars($row['EmployeeID']) . "&action=delete'
+                       onclick='return confirm(\"Are you sure you want to delete this employee?\");'
+                       title='Delete Employee'
+                       style='margin-right: 10px; text-decoration: none;'>
+                        <i class='fas fa-trash-alt' style='font-size: 16px; color: #dc3545;'></i>
+                    </a>
+                ";
+            } elseif ($usertype == 'admin') {
+                echo "
+                    <a href='onboarding/delete_employee.php?id=" . htmlspecialchars($row['EmployeeID']) . "&action=softdelete'
+                       onclick='return confirm(\"Are you sure you want to mark this employee as inactive?\");'
+                       title='Deactivate Employee'
+                       style='margin-right: 10px; text-decoration: none;'>
+                        <i class='fas fa-trash-alt' style='font-size: 16px; color: #dc3545;'></i>
+                    </a>
+                ";
+            }
+            
+            
+            
+            
+            echo "</td>";
 
             echo "</tr>";
 
@@ -192,52 +263,103 @@ $employee_count = $row['count'];
     ?>
 </tbody>
 
-<div class="modal fade" id="viewEmployeeModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg"> <!-- Ginawang mas malaki -->
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">Employee Full Information</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <!-- Image Section with a Border Box (2x2 Size) -->
-                    <div class="col-md-4 text-center">
-                        <div class="border p-3 mb-3" style="border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-                            <img id="EmployeePhoto" 
-                                 src="https://via.placeholder.com/200" 
-                                 class="img-fluid rounded mb-3" 
-                                 alt="Employee Photo"
-                                 style="width: 100%; height: 200px; object-fit: cover;">
-                        </div>
-                        <h6 class="text-muted">Employee Photo</h6>
-                    </div>
 
-                    <!-- Information Section -->
-                    <div class="col-md-8">
-                        <p><strong>Employee ID:</strong> <span id="EmployeeID"></span></p>
-                        <p><strong>Name:</strong> <span id="FullName"></span></p>
-                        <p><strong>Job Title:</strong> <span id="JobTitle"></span></p>
-                        <p><strong>Department:</strong> <span id="DepartmentName"></span></p>
-                        <p><strong>Status:</strong> <span id="Status"></span></p>
-                        <hr>
-                        <p><strong>Email:</strong> <span id="Email"></span></p>
-                        <p><strong>Phone:</strong> <span id="Phone"></span></p>
-                        <p><strong>Address:</strong> <span id="Address"></span></p>
-                        <p><strong>Date of Birth:</strong> <span id="DOB"></span></p>
-                        <p><strong>Hire Date:</strong> <span id="HireDate"></span></p>
-                        <p><strong>Salary:</strong> <span id="Salary"></span></p>
-                    </div>
-                </div>
+
+<!-- View Employee Modal (Horizontal ID Card Style with Print Button) -->
+<div class="modal fade" id="viewEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="viewEmployeeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" style="border-radius: 15px; border: 2px solid #007bff;">
+
+      <!-- Header -->
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="viewEmployeeModalLabel"><i class="fas fa-id-badge"></i> Employee ID Card</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body" style="background-color: #f8f9fa;">
+        <div class="d-flex flex-row align-items-center" id="idCardContent">
+          
+          <!-- Employee Photo -->
+          <div class="text-center p-3">
+            <img id="EmployeePhoto"
+              src="https://via.placeholder.com/200"
+              class="img-thumbnail rounded border border-primary"
+              alt=""
+              style="width: 180px; height: 180px; object-fit: cover;">
+            <h6 class="mt-2 text-muted"></h6>
+          </div>
+
+          <!-- Employee Info -->
+          <div class="pl-4 w-100">
+            <h4 id="FullName" class="text-uppercase font-weight-bold text-primary mb-2">Full Name</h4>
+            <div class="row">
+              <div class="col-md-6">
+                <p><strong>Employee ID:</strong> <span id="EmployeeID"></span></p>
+                <p><strong>Job Title:</strong> <span id="JobTitle" ></span></p>
+                <p><strong>Department:</strong> <span id="DepartmentName"></span></p>
+                <p><strong>Status:</strong> <span id="Status"></span></p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>Email:</strong> <span id="Email"></span></p>
+                <p><strong>Phone:</strong> <span id="Phone"></span></p>
+                <p><strong>Date of Birth:</strong> <span id="DOB"></span></p>
+                <p><strong>Hire Date:</strong> <span id="HireDate"></span></p>
+              </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
+            <p><strong>Address:</strong> <span id="Address"></span></p>
+            <p><strong>Salary:</strong> <span id="Salary"></span></p>
+          </div>
+
         </div>
+      </div>
+
+      <!-- Footer with Print Button -->
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button onclick="printIDCard()" class="btn btn-primary"><i class="fas fa-print"></i> Print</button>
+      </div>
+
     </div>
+  </div>
 </div>
+<script>
+function printIDCard() {
+  const content = document.getElementById("idCardContent").innerHTML;
+  const myWindow = window.open('', '', 'width=900,height=600');
+
+  myWindow.document.write(`
+    <html>
+      <head>
+        <title>Print Employee ID</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <style>
+          body { font-family: Arial, sans-serif; padding: 20px; }
+          .badge { font-size: 14px; }
+          img { object-fit: cover; border: 2px solid #007bff; }
+          h2 { color: #007bff; }
+        </style>
+      </head>
+      <body>
+        <h2 class="text-center mb-4">Employee ID Card</h2>
+        <div class="d-flex flex-row align-items-center">
+          ${content}
+        </div>
+      </body>
+    </html>
+  `);
+
+  myWindow.document.close();
+  myWindow.focus();
+  myWindow.print();
+  myWindow.close();
+}
+</script>
+
+
+
 
 
 
@@ -401,17 +523,19 @@ $('#editEmployeeModal').on('show.bs.modal', function (event) {
         });
     });
 </script>
+
 <script>
     $(document).ready(function() {
-        $('#RecordsTable').DataTable({
-            "lengthMenu": [10, 25, 50, 100], 
-            "paging": true,
-            "searching": true,
-            "ordering": true
-        });
+        if ($("#RecordsTable tbody tr").length > 1) { // Ensure at least one row exists
+            $('#RecordsTable').DataTable({
+                "lengthMenu": [10, 25, 50, 100], 
+                "paging": true,
+                "searching": true,
+                "ordering": true
+            });
+        }
     });
 </script>
-
 </body>
 
 </html>

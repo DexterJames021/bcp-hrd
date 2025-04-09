@@ -544,15 +544,7 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                                                 Succession Planning
                                             </a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'career.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/admin/talent/career.php">
-                                                Career Development
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/tabs.html">Tabs</a>
-                                        </li>
+                                
                                     </ul>
                                 </div>
                             </li>

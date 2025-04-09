@@ -77,7 +77,7 @@ if ($result) {
 } else {
     $_SESSION['error_message'] = "Error fetching pending applicants: " . mysqli_error($conn);
 }
-
+$usertype = $userData['role'];
 ?>
 
 <!doctype html>
@@ -333,7 +333,8 @@ if ($result) {
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <!-- Bootstrap JS -->
 
-
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 // Script to populate the modal fields with the employee data
 $('#editEmployeeModal').on('show.bs.modal', function (event) {
@@ -525,35 +526,69 @@ $(document).ready(function () {
             </div>
         </div>
     </div>
-          </div></div>      
-    <!-- Users Tab -->
-    <div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="users-tab">
-        <div class="card">
-        <div class="card-header d-flex justify-content-between">
-                                            <h1>Users </h1>
-                                            <div class="btn-group">
-    <?php if ($userData && in_array("CREATE", $userData['permissions'])): ?>
-        <button type="button" class="btn btn-outline-primary float-right"
-            data-toggle="modal" data-target="#createAccountModal">Add User</button>
-    <?php else: ?>
-        <button type="button" class="btn btn-outline-primary float-right"
-            data-toggle="modal" data-target="#createAccountModal" disabled>Add User</button>
-    <?php endif; ?>
+          </div></div>     
+          
+
+<!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="onboarding/update_user.php" method="POST" id="editUserForm">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="usertype">User Type</label>
+                        <select class="form-control" id="usertype" name="usertype" required>
+                            <option value="admin">Admin</option>
+                            <option value="employee">Employee</option>
+                            <option value="manager">Manager</option>
+                            <option value="superadmin">SuperAdmin</option>
+                           
+                        </select>
+                    </div>
+                    <input type="hidden" id="user_id" name="id">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-                                        </div>
-            <div class="card-body">
+
+  <!-- Users Tab -->
+<div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="users-tab">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between">
+            <h1>Users</h1>
+            <div class="btn-group">
+                
+                    <button type="button" class="btn btn-outline-primary float-right"
+                        data-toggle="modal" data-target="#createAccountModal">Add User</button>
+              
+                   
+            </div>
+        </div>
+        <div class="card-body">
             <table id="myTable2" class="table table-hover" style="width:100%">
-            <thead class="thead-light">
-    <tr>
-        <th>No.</th>
-        <th>Username</th>
-        <th>Usertype</th>
-        <th>Name</th>
-        <th>Onboarding Step</th>
-        <th>Action</th>
-    </tr>
-</thead>
-<tbody>
+                <thead class="thead-light">
+                    <tr>
+                        <th>No.</th>
+                        <th>Username</th>
+                        <th>Usertype</th>
+                        <th>Name</th>
+                        <th>Onboarding Step</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
     <?php
     // Fetch users and their onboarding steps
     $sql = "SELECT u.id, u.username, u.usertype, a.applicant_name, u.onboarding_step 
@@ -581,15 +616,34 @@ $(document).ready(function () {
                 echo "<td>N/A</td>"; // If no onboarding step available
             }
 
-            // Action Buttons (Icons Only)
-            echo "<td>
-                
-                    <a href='onboarding/delete_user.php?id=" . $row['id'] . "' 
-                        class='text-danger mx-2' 
-                        onclick='return confirm(\"Are you sure you want to delete this user?\");'>
-                        <i class='fas fa-trash'></i> <!-- Delete Icon -->
-                    </a>
-                </td>";
+            // Action Buttons (Edit and Delete Icons) - Show a permission message if not superadmin
+            if ($_SESSION['usertype'] == 'superadmin') {
+                echo "<td>
+                        <a href='#' 
+                           class='text-primary mx-2 editUser' 
+                           data-id='" . $row['id'] . "' 
+                           data-username='" . $row['username'] . "' 
+                           data-usertype='" . $row['usertype'] . "' 
+                           data-applicant_name='" . $row['applicant_name'] . "' 
+                           data-toggle='modal' 
+                           data-target='#editUserModal'
+                           title='Edit User'>
+                           <i class='fas fa-edit'></i> <!-- Edit Icon -->
+                        </a>
+                        <a href='onboarding/delete_user.php?id=" . $row['id'] . "' 
+                           class='text-danger mx-2' 
+                           onclick='return confirm(\"Are you sure you want to delete this user?\");'
+                           title='Delete User'>
+                           <i class='fas fa-trash'></i> <!-- Delete Icon -->
+                        </a>
+                    </td>";
+            } else {
+                // If not superadmin, display "No Permission" message
+                echo "<td>
+                        <span class='text-danger'>No permission</span>
+                    </td>";
+            }
+
             echo "</tr>";
             $counter++; // Increment counter
         }
@@ -599,14 +653,27 @@ $(document).ready(function () {
     ?>
 </tbody>
 
-</table>
 
-            </div>
+            </table>
         </div>
     </div>
 </div>
+<script>
+$(document).ready(function() {
+    // When clicking on edit icon
+    $('.editUser').click(function() {
+        var userId = $(this).data('id');
+        var username = $(this).data('username');
+        var userType = $(this).data('usertype');
 
+        // Populate the modal fields
+        $('#editUserModal #username').val(username);
+        $('#editUserModal #usertype').val(userType);
+        $('#editUserModal #user_id').val(userId);
+    });
+});
 
+</script>
 <hr><br>
 <!-- Edit Training Modal -->
 <div class="modal fade" id="editTrainingModal" tabindex="-1" role="dialog" aria-labelledby="editTrainingModalLabel" aria-hidden="true">
@@ -743,8 +810,20 @@ $(document).ready(function () {
                     <div class="form-group">
                         <label for="usertype">User Type</label>
                         <select class="form-control" id="usertype" name="usertype" required>
-                            <option value="">Select User Type</option>
-                            <option value="New Hire">New Account</option>
+                        <option value="">Select User Type</option>
+        
+        <!-- If admin is logged in, only show New Hire option -->
+        <?php if ($usertype === 'admin'): ?>
+            <option value="New Hire">New Account</option>
+        
+        <!-- If superadmin is logged in, show options for admin, employee, superadmin, and New Hire -->
+        <?php elseif ($usertype === 'superadmin'): ?>
+            <option value="New Hire">New Account</option>
+            <option value="admin">Admin</option>
+            <option value="employee">Employee</option>
+            <option value="superadmin">Superadmin</option>
+        
+        <?php endif; ?>
                         </select>
                     </div>
                 </div>

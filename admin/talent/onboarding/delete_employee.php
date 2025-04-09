@@ -1,51 +1,60 @@
 <?php
-session_start();
-require "../../../config/db_talent.php"; // Include the database connection
+// Include the database connection
+require "../../../config/db_talent.php";
+session_start(); // Start the session
 
-// Check if the employee ID is provided via GET request
-if (isset($_GET['id']) && !empty($_GET['id'])) {
-    $employeeId = $_GET['id'];
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
 
-    // Step 1: Delete the related records in the training_assignments table
-    $deleteTrainingAssignmentsSQL = "DELETE FROM training_assignments WHERE employee_id = ?";
-    if ($stmtDeleteTrainingAssignments = $conn->prepare($deleteTrainingAssignmentsSQL)) {
-        $stmtDeleteTrainingAssignments->bind_param("i", $employeeId);
+    // Check user type
+    $usertype = $_SESSION['usertype']; // Assuming user type is stored in session
 
-        // Execute deletion of the related records
-        if ($stmtDeleteTrainingAssignments->execute()) {
-            $stmtDeleteTrainingAssignments->close(); // Close the statement after execution
+    // SUPERADMIN OVERRIDE: Disable foreign key checks temporarily for complete deletion
+    if ($usertype == 'superadmin') {
+        $conn->query("SET FOREIGN_KEY_CHECKS = 0");
+
+        // Delete employee even if there are foreign key constraints
+        $deleteEmployeeSql = "DELETE FROM employees WHERE EmployeeID = ?";
+        $deleteStmt = $conn->prepare($deleteEmployeeSql);
+        $deleteStmt->bind_param("i", $id);
+
+        if ($deleteStmt->execute()) {
+            $_SESSION['message'] = "Employee and all related records have been permanently deleted.";
+            $_SESSION['message_type'] = "success";
         } else {
-            $_SESSION['error_message'] = "Error deleting training assignments: " . $conn->error;
-            header("Location: ../onboarding.php");
-            exit;
+            $_SESSION['message'] = "Error deleting employee: " . $conn->error;
+            $_SESSION['message_type'] = "danger";
+        }
+
+        // Re-enable foreign key checks
+        $conn->query("SET FOREIGN_KEY_CHECKS = 1");
+    }
+
+    // ADMIN: Soft delete by marking status as 'Inactive'
+    if ($usertype == 'admin') {
+        // Mark the employee status as 'Inactive'
+        $updateStatusSql = "UPDATE employees SET Status = 'Inactive' WHERE EmployeeID = ?";
+        $updateStmt = $conn->prepare($updateStatusSql);
+        $updateStmt->bind_param("i", $id);
+
+        if ($updateStmt->execute()) {
+            $_SESSION['message'] = "Employee marked as inactive successfully.";
+            $_SESSION['message_type'] = "success";
+        } else {
+            $_SESSION['message'] = "Error marking employee as inactive: " . $conn->error;
+            $_SESSION['message_type'] = "danger";
         }
     }
 
-    // Step 2: Now delete the employee record
-    $deleteEmployeeSQL = "DELETE FROM employees WHERE EmployeeID = ?";
-    if ($stmtDeleteEmployee = $conn->prepare($deleteEmployeeSQL)) {
-        $stmtDeleteEmployee->bind_param("i", $employeeId);
-
-        // Execute the deletion of the employee record
-        if ($stmtDeleteEmployee->execute()) {
-            $_SESSION['success_message'] = "Employee and related records deleted successfully!";
-            $stmtDeleteEmployee->close(); // Close the statement after execution
-            header("Location: ../onboarding.php"); // Redirect back to the onboarding page or employee list page
-            exit;
-        } else {
-            $_SESSION['error_message'] = "Error deleting employee: " . $conn->error;
-            $stmtDeleteEmployee->close(); // Close the statement even on error
-            header("Location: ../onboarding.php");
-            exit;
-        }
-    } else {
-        $_SESSION['error_message'] = "Error preparing statement to delete employee: " . $conn->error;
-        header("Location: ../onboarding.php");
-        exit;
-    }
+    // Redirect back to the employee list page after handling
+    header("Location: ../employees.php");
+    exit;
 } else {
-    $_SESSION['error_message'] = "No employee ID specified.";
-    header("Location: ../onboarding.php");
+    $_SESSION['message'] = "Invalid request.";
+    $_SESSION['message_type'] = "danger";
+    header("Location: ../employees.php");
     exit;
 }
+
+$conn->close();
 ?>

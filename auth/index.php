@@ -23,26 +23,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['user_id'] = $user->id;
                 $_SESSION['username'] = $user->username;
                 $_SESSION['usertype'] = $user->usertype;
+                $_SESSION['onboarding_step'] = $user->onboarding_step; // Store onboarding step in session
 
-                // Redirect based on user type
-                switch ($user->usertype) {
-                    case 'admin':
-                        header("Location: ../admin/index.php");
-                        exit;
-                    case 'superadmin':
-                        header("Location: ../admin/index.php");
-                        exit;
-                    case 'manager':
-                        header("Location: ../manager/index.php");
-                        exit;
-                    case 'employee':
-                        header("Location: ../portal/index.php");
-                        exit;
-                    case 'New Hire':
-                        header("Location: ../admin/talent/onboarding/new_hire/step1.php");
-                        exit;
-                    default:
-                        $err = '405 No permission to access this portal.';
+                // Check the user's onboarding step status
+                if ($user->onboarding_step < 4) {
+                    // If onboarding step is not complete, redirect to the appropriate step
+                    header("Location: ../admin/talent/onboarding/new_hire/step1.php");
+                    exit;
+                } else {
+                    // If onboarding is complete, proceed based on usertype
+                    switch ($user->usertype) {
+                        case 'admin':
+                        case 'superadmin':
+                            header("Location: ../admin/index.php");
+                            exit;
+                        case 'manager':
+                            header("Location: ../manager/index.php");
+                            exit;
+                        case 'employee':
+                            header("Location: ../portal/index.php");
+                            exit;
+                        default:
+                            $err = '405 No permission to access this portal.';
+                    }
                 }
             } else {
                 $err = 'Incorrect password.';

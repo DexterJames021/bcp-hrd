@@ -60,7 +60,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Hired</title>
+    <title>Onboarding</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -595,39 +595,9 @@ document.getElementById('changePasswordForm').addEventListener('submit', functio
     </form>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function(){
-        // Enable the Finish button when the checkbox is checked
-        $("#agree").change(function() {
-            if ($(this).is(":checked")) {
-                $("#finishBtn").prop("disabled", false);
-            } else {
-                $("#finishBtn").prop("disabled", true);
-            }
-        });
 
-        // Handle form submission
-        $("#policyAgreementForm").submit(function(event) {
-            event.preventDefault(); // Prevent default form submission
 
-            $.ajax({
-                url: "finalize_onboarding.php", // PHP script to finalize onboarding
-                type: "POST",
-                data: $(this).serialize(),
-                success: function(response) {
-                    if (response.trim() === "success") {
-                        alert("You have successfully completed your onboarding! You are now an employee.");
-                        // Redirect user or load the employee portal
-                        window.location.href = "../../../../portal/index.php"; // Redirect to employee portal
-                    } else {
-                        alert("Error: " + response);
-                    }
-                }
-            });
-        });
-    });
-</script>
+
 
                                 
                             </div>
@@ -724,7 +694,53 @@ $(document).ready(function(){
 </script>
 
 
+<script>
+    $(document).ready(function(){
+        // Enable the Finish button when the checkbox is checked
+        $("#agree").change(function() {
+            if ($(this).is(":checked")) {
+                $("#finishBtn").prop("disabled", false);
+            } else {
+                $("#finishBtn").prop("disabled", true);
+            }
+        });
 
+        // Handle form submission
+        $("#policyAgreementForm").submit(function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            $.ajax({
+                url: "finalize_onboarding.php", // PHP script to finalize onboarding
+                type: "POST",
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.trim() === "employee") {
+                        alert("You have successfully completed your onboarding! You are now an employee.");
+                        // Redirect user to employee portal
+                        window.location.href = "../../../../portal/index.php"; // Redirect to employee portal
+                    } else if (response.trim() === "admin") {
+                        alert("You are an admin. Redirecting to admin portal.");
+                        // Redirect user to admin portal
+                        window.location.href = "../../../../admin/index.php"; // Redirect to admin portal
+                    } else if (response.trim() === "manager") {
+                        alert("You are a manager. Redirecting to manager portal.");
+                        // Redirect user to manager portal
+                        window.location.href = "../../../../manager/index.php"; // Redirect to manager portal
+                    } else if (response.trim() === "superadmin") {
+                        alert("You are a superadmin. Redirecting to superadmin portal.");
+                        // Redirect user to superadmin portal
+                        window.location.href = "../../../../admin/index.php"; // Redirect to superadmin portal
+                    } else {
+                        alert("Error: " + response); // Show error message
+                    }
+                },
+                error: function() {
+                    alert("There was an error processing your request. Please try again.");
+                }
+            });
+        });
+    });
+</script>
 
 </body>
 </html>

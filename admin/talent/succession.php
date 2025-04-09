@@ -343,13 +343,11 @@ if (isset($_SESSION['success_message'])) {
                                             <div class="card-header d-flex justify-content-between">
                                                 <h1 class="card-title">Training Sessions</h1>
                                                 <div class="btn-group">
-                                                    <?php if ($userData && in_array("CREATE", $userData['permissions'])): ?>
+                                                
                                                         <button type="button" class="btn btn-outline-primary float-right"
                                                             data-toggle="modal" data-target="#addTrainingModal">Add Training</button>
-                                                    <?php else: ?>
-                                                        <button type="button" class="btn btn-outline-primary float-right"
-                                                            data-toggle="modal" data-target="#addTrainingModal" disabled>Add Training</button>
-                                                    <?php endif; ?>
+                                                
+                                                 
                                                 </div>
                                             </div>
                                             <div class="card-body">
@@ -428,13 +426,10 @@ if (isset($_SESSION['success_message'])) {
                                                         <div class="card-header d-flex justify-content-between">
                                                                                 <h1 class="card-title">Training Assignments </h1>
                                                                                 <div class="btn-group">
-                                                <?php if ($userData && in_array("CREATE", $userData['permissions'])): ?>
+                        
                                                     <button type="button" class="btn btn-outline-primary float-right"
                                                         data-toggle="modal" data-target="#assignTrainingModal">Assign</button>
-                                                <?php else: ?>
-                                                    <button type="button" class="btn btn-outline-primary float-right"
-                                                        data-toggle="modal" data-target="#assignTrainingModal" disabled>Assign</button>
-                                                <?php endif; ?>
+                                                
                                             </div>
                                                                             </div>
                                                 <div class="card-body">
@@ -445,7 +440,7 @@ if (isset($_SESSION['success_message'])) {
                                                 <th>Training</th>
                                                 <th>Status</th>
                                                 <th>Completion Date</th>
-                                                <th>Action</th>
+                                                <th>Rating 1-5</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -494,7 +489,7 @@ if (isset($_SESSION['success_message'])) {
             } elseif ($row['status'] == 'Completed') {
                 // Show the grade for "Completed" status
                 if (isset($row['grade'])) {
-                    echo "<span>Rating: " . htmlspecialchars($row['grade']) . "%</span>";
+                    echo "<span> " . htmlspecialchars($row['grade']) . " Stars</span>";
                 } else {
                     echo "<span>No grade assigned</span>";
                 }
@@ -528,12 +523,13 @@ if (isset($_SESSION['success_message'])) {
         </button>
       </div>
       <div class="modal-body">
-        <label for="grade">Select Grade:</label>
+        <label for="grade">Select Rating:</label>
         <select id="grade" class="form-control">
-          <option value="25">25%</option>
-          <option value="50">50%</option>
-          <option value="75">75%</option>
-          <option value="100">100%</option>
+          <option value="1">1 Star (Needs Improvement)</option>
+          <option value="2">2 Stars (Developing)</option>
+          <option value="3">3 Stars (Proficient)</option>
+          <option value="4">4 Stars (Advanced)</option>
+          <option value="5">5 Stars (Expert)</option>
         </select>
       </div>
       <div class="modal-footer">

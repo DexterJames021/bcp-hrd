@@ -1,61 +1,29 @@
 <?php
 session_start();
-require "../../../config/db_talent.php"; // Include the database connection
+require "../../../config/db_talent.php"; // Adjust the path as needed
 
-// Check if the training session ID is provided via GET request
-if (isset($_GET['id']) && !empty($_GET['id'])) {
-    $trainingId = $_GET['id'];
+// Check if the ID is provided and is a valid number
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $training_id = $_GET['id'];
 
-    // Step 1: Check if the training session is assigned to any employees
-    // This prevents deletion if the training session is still assigned to employees in training_assignments table.
-    $checkAssignmentSQL = "SELECT COUNT(*) AS assignmentCount FROM training_assignments WHERE training_id = ?";
-    if ($stmt = $conn->prepare($checkAssignmentSQL)) {
-        $stmt->bind_param("i", $trainingId);
+    // Prepare the DELETE SQL query
+    $delete_query = "DELETE FROM training_sessions WHERE training_id = ?";
+    $delete_stmt = $conn->prepare($delete_query);
+    $delete_stmt->bind_param("i", $training_id);
 
-        if ($stmt->execute()) {
-            $result = $stmt->get_result();
-            $row = $result->fetch_assoc();
-
-            // Check if there are any training assignments linked to the session
-            if ($row['assignmentCount'] > 0) {
-                $_SESSION['error_message'] = "Cannot delete this training session because it is assigned to employees.";
-                header("Location: ../succession.php"); // Redirect to the training sessions page
-                exit;
-            } else {
-                // Step 2: If no assignments exist, proceed with deletion
-                $deleteTrainingSQL = "DELETE FROM training_sessions  WHERE training_id = ?";
-                if ($stmtDelete = $conn->prepare($deleteTrainingSQL)) {
-                    $stmtDelete->bind_param("i", $trainingId);
-
-                    // Execute the deletion of the training session
-                    if ($stmtDelete->execute()) {
-                        $_SESSION['success_message'] = "Training session deleted successfully!";
-                        header("Location: ../succession.php"); // Redirect to the page where you want after deletion
-                        exit;
-                    } else {
-                        $_SESSION['error_message'] = "Error deleting training session: " . $conn->error;
-                        header("Location: ../succession.php");
-                        exit;
-                    }
-                } else {
-                    $_SESSION['error_message'] = "Error preparing statement to delete training session: " . $conn->error;
-                    header("Location: ../succession.php");
-                    exit;
-                }
-            }
-        } else {
-            $_SESSION['error_message'] = "Error checking training session assignment: " . $conn->error;
-            header("Location: ../succession.php");
-            exit;
-        }
+    // Execute the query and check for success
+    if ($delete_stmt->execute()) {
+        // Redirect with a success message after deletion
+        header("Location: ../succession.php?message=Training deleted successfully");
+        exit();
     } else {
-        $_SESSION['error_message'] = "Error preparing statement to check training session assignment: " . $conn->error;
-        header("Location: ../succession.php");
-        exit;
+        // Redirect with an error message if deletion fails
+        header("Location: ../succession.php?message=Error deleting training");
+        exit();
     }
 } else {
-    $_SESSION['error_message'] = "No training session ID specified.";
-    header("Location: ../succession.php");
-    exit;
+    // Redirect to the list page with an error if no valid ID is provided
+    header("Location: ../succession.php?message=Invalid training ID");
+    exit();
 }
 ?>
