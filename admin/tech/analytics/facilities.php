@@ -223,7 +223,7 @@ access_log($userData);
                             <!-- utilization -->
                             <div class="card">
                                 <div class="card-header">
-                                    <h4>Over Utilized</h4>
+                                    <h4 style="cursor:pointer;" title="calculates much a facility is being used compared to its total available capacity">Over Utilized</h4>
                                 </div>
                                 <!-- utilize -->
                                 <div class="card-body" width="100%" height="100%">
@@ -234,7 +234,7 @@ access_log($userData);
                             <!-- category -->
                             <div class="card">
                                 <div class="card-header">
-                                    <h4>Categorization </h4>
+                                    <h4>List Facility </h4>
                                 </div>
                                 <div class="card-body">
                                     <table id="facilityTable">

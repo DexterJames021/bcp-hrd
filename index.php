@@ -1,6 +1,6 @@
 <?php
 session_start();
-require "config/db_talent.php"; // Adjust path if needed
+require __DIR__ . "/config/db_talent.php"; // Adjust path if needed
 
 // Helper function to truncate text
 function truncateText($text, $maxChars = 100)
@@ -50,13 +50,14 @@ $result = mysqli_query($conn, $query);
     <link rel="shortcut icon" href="./assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
     <link rel="stylesheet" href="styledashboard.css">
     <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#">Employee Management System</a>
+            <a class="navbar-brand" href="index.php">BCP <span class="text-warning">HRD</span></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -84,8 +85,7 @@ $result = mysqli_query($conn, $query);
             <img src="assets/images/bcp4.jpg">
         </div>
         <div class="container position-relative z-index-2">
-            <h1 class="display-4 fw-bold">Welcome to the Employee Management System of Bestlink College of the
-                Philippines</h1>
+            <h1 class="display-4 fw-bold">Welcome to the Human Resources of Bestlink College of the Philippines</h1>
             <p class="lead">Find job opportunities and manage employees efficiently.</p>
         </div>
     </header>

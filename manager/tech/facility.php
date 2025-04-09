@@ -334,7 +334,7 @@ access_log($userData);
                                         <table id="approvedTable" style="width:100%" class="table table-hover">
                                             <thead class="thead-light">
                                                 <tr>
-                                                    <th>#</th>
+                                                    <!-- <th>#</th> -->
                                                     <th>By</th>
                                                     <th>Facility Name</th>
                                                     <th>Location</th>

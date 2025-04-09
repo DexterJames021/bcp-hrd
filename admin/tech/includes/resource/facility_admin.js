@@ -357,7 +357,6 @@ $(function () {
                     data-bs-placement="top" 
                     tooltip="tooltip" 
                     title="Time remaining: ${remainingHours ?? '0'}h ${remainingMinutes ?? ''}m">
-                        <td>BookID: ${room.id}</td>
                         <td>${room.employee_name}</td>
                         <td title="Purpose: ${room.purpose}" >${room.name}</td>
                         <td>${room.location ?? '-'}</td>
