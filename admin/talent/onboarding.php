@@ -814,11 +814,10 @@ $(document).ready(function () {
         
         <!-- If admin is logged in, only show New Hire option -->
         <?php if ($usertype === 'admin'): ?>
-            <option value="New Hire">New Account</option>
+            <option value="New Hire">Employee</option>
         
         <!-- If superadmin is logged in, show options for admin, employee, superadmin, and New Hire -->
         <?php elseif ($usertype === 'superadmin'): ?>
-            <option value="New Hire">New Account</option>
             <option value="admin">Admin</option>
             <option value="employee">Employee</option>
             <option value="superadmin">Superadmin</option>
