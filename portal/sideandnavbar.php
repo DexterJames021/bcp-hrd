@@ -20,8 +20,10 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                 </li>
                 <li class="nav-item dropdown notification">
                     <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span
-                            class="indicator"></span></a>
+                        aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> 
+                        <!-- <span
+                            class="indicator"></span> -->
+                        </a>
                     <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                         <li>
                             <div class="notification-title"> Notification</div>
@@ -49,8 +51,10 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                 </li>
                 <li class="nav-item dropdown nav-user">
                     <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false"><img src="#" alt=""
-                            class="user-avatar-md rounded-circle"></a>
+                        aria-haspopup="true" aria-expanded="false">
+                        <img id="user-avatar" src="<?php echo (basename($_SERVER['PHP_SELF']) == 'index.php') ? '../assets/images/noprofile2.jpg' : '../../assets/images/noprofile2.jpg' ?>" 
+                        alt="" class="user-avatar-md rounded-circle">   
+                        </a>
                     <div class="dropdown-menu dropdown-menu-right nav-user-dropdown"
                         aria-labelledby="navbarDropdownMenuLink2">
                         <div class="nav-user-info">

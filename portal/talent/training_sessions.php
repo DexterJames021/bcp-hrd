@@ -96,7 +96,7 @@ if ($employee_id) {
     <!-- Slimscroll JS -->
     <script src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 
-    <title>Admin Dashboard</title>
+    <title>Employee Dashboard</title>
 </head>
 
 <body>

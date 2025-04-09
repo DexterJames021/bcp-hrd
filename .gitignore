@@ -4,3 +4,4 @@
 *.drawio
 bcp-hrd.code-workspace
 pullpush.sh
+build.sh

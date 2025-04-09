@@ -43,7 +43,7 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
             $base_url_logo = 'http://localhost/bcp-hrd'; // Change to your actual base URL
             ?>
 
-             <a class="navbar-brand" href="index.php">
+            <a class="navbar-brand" href="index.php">
                 <img src="<?php echo $base_url_logo; ?>/assets/images/bcp-hrd-logo.jpg" alt=""
                     style="height: 3rem;width: auto;">
             </a>
@@ -61,8 +61,10 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                     </li>
                     <li class="nav-item dropdown notification">
                         <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span
-                                class="indicator"></span></a>
+                            aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i>
+                            <!-- <span
+                                class="indicator"></span> -->
+                        </a>
                         <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                             <li>
                                 <div class="notification-title"> Notification</div>
@@ -148,8 +150,18 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                         </li> -->
                     <li class="nav-item dropdown nav-user">
                         <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false"><img src="#" alt=""
-                                class="user-avatar-md rounded-circle"></a>
+                            aria-haspopup="true" aria-expanded="false">
+                            <img id="user-avatar" src="<?php
+                            $currentPage = basename($_SERVER['PHP_SELF']);
+                            if ($currentPage == 'facilities.php' || $currentPage == 'resources.php') {
+                                echo '../../../assets/images/noprofile2.jpg';
+                            } elseif ($currentPage == 'index.php') {
+                                echo '../assets/images/noprofile2.jpg';
+                            } else {
+                                echo '../../assets/images/noprofile2.jpg';
+                            }
+                            ?>" alt="" class="user-avatar-md rounded-circle">   
+                        </a>
                         <div class="dropdown-menu dropdown-menu-right nav-user-dropdown"
                             aria-labelledby="navbarDropdownMenuLink2">
                             <div class="nav-user-info">
@@ -286,8 +298,8 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                                                 Succession Planning
                                             </a>
                                         </li>
-                                        
-                                
+
+
                                     </ul>
                                 </div>
                             </li>
@@ -544,7 +556,7 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                                                 Succession Planning
                                             </a>
                                         </li>
-                                
+
                                     </ul>
                                 </div>
                             </li>
@@ -599,7 +611,7 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                                                 <!-- <i class="bi bi-person-fill-gear"></i> -->
                                                 User Control</a>
                                         </li>
-                                            <!-- <li class="nav-item">
+                                        <!-- <li class="nav-item">
                                             <a class="nav-link < ?php echo (basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : ''; ?>"
                                                 href="< ?php echo $base_url; ?>/admin/tech/reports.php">Administrative
                                                 Report</a>
