@@ -288,7 +288,9 @@ switch ($action) {
     case 'booking_trends':
         echo json_encode($room->BookingTrends());
         break;
-
+    case 'events_all_approved':
+        echo json_encode($room->ApproveEvents());
+        break;
 
 
     default:

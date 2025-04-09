@@ -59,6 +59,8 @@ access_log($userData);
     <!-- main js -->
     <script src="../assets/libs/js/main-js.js"></script>
 
+    <script src="main.js"></script>
+
     <!-- slimscroll js -->
     <script src="../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 
@@ -139,7 +141,7 @@ access_log($userData);
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h2 class="pageheader-title">Announcement </h2>
+                                <h2 class="pageheader-title">Announcement & Events </h2>
                             </div>
                             <div class="card-body">
                                 <div id="employeeCalendar"></div>
@@ -179,57 +181,9 @@ access_log($userData);
     <!-- ============================================================== -->
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var loadingOverlay = document.getElementById('loading-overlay');
+<script>
 
-            window.addEventListener('load', function () {
-                setTimeout(function () {
-                    loadingOverlay.style.opacity = '0';
-                    setTimeout(function () {
-                        loadingOverlay.style.display = 'none';
-                    }, 300); 
-                }, 500);
-            });
-
-            setTimeout(function () {
-                loadingOverlay.style.opacity = '0';
-                setTimeout(function () {
-                    loadingOverlay.style.display = 'none';
-                }, 300);
-            }, 3000); 
-        });
-    </script>
-    <script>
-        console.log('EMPLOYEE PORTAL');
-        $(document).ready(function () {
-            var calendarEl = document.getElementById('employeeCalendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                events: function (fetchInfo, successCallback, failureCallback) {
-                    $.ajax({
-                        url: 'https://date.nager.at/api/v3/PublicHolidays/2024/PH',
-                        method: 'GET',
-                        success: function (response) {
-                            var events = response.map(function (holiday) {
-                                return {
-                                    title: holiday.localName,
-                                    start: holiday.date,
-                                    textColor: 'white'
-                                };
-                            });
-                            successCallback(events);
-                        },
-                        error: function () {
-                            failureCallback();
-                        }
-                    });
-                }
-            });
-            calendar.render();
-        });
-    </script>
-    </script>
+</script>
 </body>
 
 </html>
