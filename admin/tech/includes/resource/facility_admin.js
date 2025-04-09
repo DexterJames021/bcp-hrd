@@ -149,6 +149,7 @@ $(function () {
             $.post(BaseURL + 'delete_room', { id }, function (response) {
                 if (response.success) {
                     $("#delete").toast("show")
+                    AllRoomTable.ajax.reload();
                     bookingTable.ajax.reload();
                 } else {
                     $("#error").toast("show")

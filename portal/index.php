@@ -1,6 +1,6 @@
 <?php
-require "../config/db_talent.php";
-require '../auth/mysqli_accesscontrol.php';
+require __DIR__ . "/../config/db_talent.php";
+require __DIR__ . '/../auth/mysqli_accesscontrol.php';
 
 
 

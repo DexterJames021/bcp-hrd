@@ -148,7 +148,7 @@ $employeesJSON = json_encode($employeesData);
         </div>
 
         <!-- Rest of your body content -->
-        <div class="dashboard-main-wrapper">
+        <div class="dashboard-main-wrapper" style="padding:0px;">
             <!-- ... -->
             <!-- ============================================================== -->
             <!-- main wrapper -->
