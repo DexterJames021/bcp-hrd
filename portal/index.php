@@ -14,8 +14,8 @@ access_log($userData);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <!-- icon -->
-        <link rel="shortcut icon" href="../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
+    <!-- icon -->
+    <link rel="shortcut icon" href="../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -28,11 +28,11 @@ access_log($userData);
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 
     <!-- main js -->
-     
+
     <link rel="stylesheet" href="../assets/libs/css/style.css">
-   
-<!-- assts csss -->
-<link rel="stylesheet" href="../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+
+    <!-- assts csss -->
+    <link rel="stylesheet" href="../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
     <link rel="stylesheet" href="../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
     <link rel="stylesheet" href="../assets/vendor/fonts/circular-std/style1.css" rel="stylesheet">
 
@@ -63,9 +63,56 @@ access_log($userData);
     <script src="../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 
     <title>Employee Dashboard</title>
+    <style>
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0e0c28;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.3s ease;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            font-size: 18px;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Loading Dashboard...</div>
+    </div>
     <!-- ============================================================== -->
     <!-- main wrapper -->
     <!-- ============================================================== -->
@@ -92,7 +139,7 @@ access_log($userData);
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h2 class="pageheader-title">Welcome, <?= $_SESSION["username"] ?>! </h2>
+                                <h2 class="pageheader-title">Announcement </h2>
                             </div>
                             <div class="card-body">
                                 <div id="employeeCalendar"></div>
@@ -133,6 +180,27 @@ access_log($userData);
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var loadingOverlay = document.getElementById('loading-overlay');
+
+            window.addEventListener('load', function () {
+                setTimeout(function () {
+                    loadingOverlay.style.opacity = '0';
+                    setTimeout(function () {
+                        loadingOverlay.style.display = 'none';
+                    }, 300); 
+                }, 500);
+            });
+
+            setTimeout(function () {
+                loadingOverlay.style.opacity = '0';
+                setTimeout(function () {
+                    loadingOverlay.style.display = 'none';
+                }, 300);
+            }, 3000); 
+        });
+    </script>
+    <script>
         console.log('EMPLOYEE PORTAL');
         $(document).ready(function () {
             var calendarEl = document.getElementById('employeeCalendar');
@@ -140,7 +208,7 @@ access_log($userData);
                 initialView: 'dayGridMonth',
                 events: function (fetchInfo, successCallback, failureCallback) {
                     $.ajax({
-                        url: 'https://date.nager.at/api/v3/PublicHolidays/2024/PH', // Replace with your country's API
+                        url: 'https://date.nager.at/api/v3/PublicHolidays/2024/PH',
                         method: 'GET',
                         success: function (response) {
                             var events = response.map(function (holiday) {

@@ -1,11 +1,11 @@
 <?php
 require __DIR__ . "../../config/db_talent.php";
-require __DIR__ .'../../auth/mysqli_accesscontrol.php';
+require __DIR__ . '../../auth/mysqli_accesscontrol.php';
 
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);
 
-echo "console.log(ROOT +++++++++++ ".$_SERVER['DOCUMENT_ROOT'].")";
+echo "console.log(ROOT +++++++++++ " . $_SERVER['DOCUMENT_ROOT'] . ")";
 
 
 // Fetch total employees
@@ -94,158 +94,231 @@ $employeesJSON = json_encode($employeesData);
     <script defer type="module" src="../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 
     <title>Admin Dashboard</title>
+
+    <style>
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0e0c28;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.3s ease;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            font-size: 18px;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- ============================================================== -->
-    <!-- main wrapper -->
-    <!-- ============================================================== -->
-    <div class="dashboard-main-wrapper">
-        <!-- ============================================================== -->
-        <!-- navbar -->
-        <!-- ============================================================== -->
-        <?php include 'sideandnavbar.php'; ?>
-        <!-- ============================================================== -->
-        <!-- end navbar -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- left sidebar -->
 
-        <!-- ============================================================== -->
-        <!-- end left sidebar -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- wrapper  -->
-        <!-- ============================================================== -->
-        <div class="dashboard-wrapper">
-            <!-- <div class="dashboard-ecommerce"> -->
-            <div class="container-fluid dashboard-content ">
-                <!-- ============================================================== -->
-                <!-- pageheader  -->
-                <!-- ============================================================== -->
-
-                <!-- ============================================================== -->
-                <!-- end pageheader  -->
-                <!-- ============================================================== -->
-                <!-- <div class="ecommerce-widget"> -->
-
-                <?php if ($userData && in_array("VIEW", $userData['permissions'])): ?>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h1>DASHBOARD</h1>
-
-                                <!-- Summary Cards -->
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="card bg-light text-white">
-                                            <div class="card-body">
-                                                <h5>Total Employees</h5>
-                                                <h3><?php echo $totalEmployees; ?></h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="card bg-light text-white">
-                                            <div class="card-body">
-                                                <h5>Total Applicants</h5>
-                                                <h3><?php echo $totalApplicants; ?></h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="card bg-light text-dark">
-                                            <div class="card-body">
-                                                <h5>Total Job Postings</h5>
-                                                <h3><?php echo $totalJobPostings; ?></h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="card bg-light text-white">
-                                            <div class="card-body">
-                                                <h5>Total Hired</h5>
-                                                <h3><?php echo $totalHired; ?></h3>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div> <!-- End of Card Body -->
-                        </div> <!-- End of Card -->
-
-                        <!-- Charts -->
-                        <div class="row mt-4">
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5>Applicants Per Job</h5>
-                                        <canvas id="applicantsChart" height="100" width="100"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5>Employees Per Department</h5>
-                                        <canvas id="departmentChart" height="100" width="100"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> <!-- End of Col-12 -->
-                </div> <!-- End of Row -->
-
-                <?php else: ?>
-                <?php include_once "./403.php"; ?>
-            <?php endif; ?>
-
-                <!-- Chart.js Library -->
-                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                <script>
-                    // Convert PHP JSON to JavaScript Object
-                    var applicantsData = <?php echo $applicantsJSON; ?>;
-                    var employeesData = <?php echo $employeesJSON; ?>;
-
-                    // Generate labels and data for charts
-                    var applicantLabels = Object.keys(applicantsData);
-                    var applicantCounts = Object.values(applicantsData);
-
-                    var employeeLabels = Object.keys(employeesData);
-                    var employeeCounts = Object.values(employeesData);
-
-                    // Applicants per Department Chart
-                    var ctx1 = document.getElementById('applicantsChart').getContext('2d');
-                    var applicantsChart = new Chart(ctx1, {
-                        type: 'bar',
-                        data: {
-                            labels: applicantLabels,
-                            datasets: [{
-                                label: 'Applicants',
-                                data: applicantCounts,
-                                backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8']
-                            }]
-                        }
-                    });
-
-                    // Employees per Department Chart
-                    var ctx2 = document.getElementById('departmentChart').getContext('2d');
-                    var departmentChart = new Chart(ctx2, {
-                        type: 'pie',
-                        data: {
-                            labels: employeeLabels,
-                            datasets: [{
-                                data: employeeCounts,
-                                backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8']
-                            }]
-                        }
-                    });
-                </script>
-
-            </div>
+    <body>
+        <div id="loading-overlay">
+            <div class="spinner"></div>
+            <div class="loading-text">Loading Dashboard...</div>
         </div>
 
-</body>
+        <!-- Rest of your body content -->
+        <div class="dashboard-main-wrapper">
+            <!-- ... -->
+            <!-- ============================================================== -->
+            <!-- main wrapper -->
+            <!-- ============================================================== -->
+            <div class="dashboard-main-wrapper">
+                <!-- ============================================================== -->
+                <!-- navbar -->
+                <!-- ============================================================== -->
+                <?php include 'sideandnavbar.php'; ?>
+                <!-- ============================================================== -->
+                <!-- end navbar -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- left sidebar -->
+
+                <!-- ============================================================== -->
+                <!-- end left sidebar -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- wrapper  -->
+                <!-- ============================================================== -->
+                <div class="dashboard-wrapper">
+                    <!-- <div class="dashboard-ecommerce"> -->
+                    <div class="container-fluid dashboard-content ">
+                        <!-- ============================================================== -->
+                        <!-- pageheader  -->
+                        <!-- ============================================================== -->
+
+                        <!-- ============================================================== -->
+                        <!-- end pageheader  -->
+                        <!-- ============================================================== -->
+                        <!-- <div class="ecommerce-widget"> -->
+
+                        <?php if ($userData && in_array("VIEW", $userData['permissions'])): ?>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h1>DASHBOARD</h1>
+
+                                            <!-- Summary Cards -->
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="card bg-light text-white">
+                                                        <div class="card-body">
+                                                            <h5>Total Employees</h5>
+                                                            <h3><?php echo $totalEmployees; ?></h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="card bg-light text-white">
+                                                        <div class="card-body">
+                                                            <h5>Total Applicants</h5>
+                                                            <h3><?php echo $totalApplicants; ?></h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="card bg-light text-dark">
+                                                        <div class="card-body">
+                                                            <h5>Total Job Postings</h5>
+                                                            <h3><?php echo $totalJobPostings; ?></h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="card bg-light text-white">
+                                                        <div class="card-body">
+                                                            <h5>Total Hired</h5>
+                                                            <h3><?php echo $totalHired; ?></h3>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div> <!-- End of Card Body -->
+                                    </div> <!-- End of Card -->
+
+                                    <!-- Charts -->
+                                    <div class="row mt-4">
+                                        <div class="col-md-6">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h5>Applicants Per Job</h5>
+                                                    <canvas id="applicantsChart" height="100" width="100"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h5>Employees Per Department</h5>
+                                                    <canvas id="departmentChart" height="100" width="100"></canvas>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> <!-- End of Col-12 -->
+                            </div> <!-- End of Row -->
+
+                        <?php else: ?>
+                            <?php include_once "./403.php"; ?>
+                        <?php endif; ?>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                var loadingOverlay = document.getElementById('loading-overlay');
+
+                                window.addEventListener('load', function () {
+                                    setTimeout(function () {
+                                        loadingOverlay.style.opacity = '0';
+                                        setTimeout(function () {
+                                            loadingOverlay.style.display = 'none';
+                                        }, 300);
+                                    }, 500);
+                                });
+
+                                setTimeout(function () {
+                                    loadingOverlay.style.opacity = '0';
+                                    setTimeout(function () {
+                                        loadingOverlay.style.display = 'none';
+                                    }, 300);
+                                }, 3000); 
+                            });
+                        </script>
+                        <!-- Chart.js Library -->
+                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                        <script>
+                            // Convert PHP JSON to JavaScript Object
+                            var applicantsData = <?php echo $applicantsJSON; ?>;
+                            var employeesData = <?php echo $employeesJSON; ?>;
+
+                            // Generate labels and data for charts
+                            var applicantLabels = Object.keys(applicantsData);
+                            var applicantCounts = Object.values(applicantsData);
+
+                            var employeeLabels = Object.keys(employeesData);
+                            var employeeCounts = Object.values(employeesData);
+
+                            // Applicants per Department Chart
+                            var ctx1 = document.getElementById('applicantsChart').getContext('2d');
+                            var applicantsChart = new Chart(ctx1, {
+                                type: 'bar',
+                                data: {
+                                    labels: applicantLabels,
+                                    datasets: [{
+                                        label: 'Applicants',
+                                        data: applicantCounts,
+                                        backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8']
+                                    }]
+                                }
+                            });
+
+                            // Employees per Department Chart
+                            var ctx2 = document.getElementById('departmentChart').getContext('2d');
+                            var departmentChart = new Chart(ctx2, {
+                                type: 'pie',
+                                data: {
+                                    labels: employeeLabels,
+                                    datasets: [{
+                                        data: employeeCounts,
+                                        backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8']
+                                    }]
+                                }
+                            });
+                        </script>
+
+                    </div>
+                </div>
+
+    </body>
 
 </html>
