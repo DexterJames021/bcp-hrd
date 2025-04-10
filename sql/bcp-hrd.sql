@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 05, 2025 at 10:33 AM
+-- Generation Time: Apr 08, 2025 at 05:59 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -231,6 +231,62 @@ CREATE TABLE `employees` (
   `Status` enum('Active','Inactive','Terminated') DEFAULT 'Active',
   `UserID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `holiday`
+--
+
+CREATE TABLE `holiday` (
+  `id` int(11) NOT NULL,
+  `holiday` varchar(100) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `holiday`
+--
+
+INSERT INTO `holiday` (`id`, `holiday`, `type`, `date`) VALUES
+(2, 'Maundy Thursday', 'Regular', '2025-04-17'),
+(3, 'Good Friday', 'Regular', '2025-04-18'),
+(4, 'Araw ng Kagitingan', 'Regular', '2025-04-09'),
+(5, 'Labor Day', 'Regular', '2025-05-01'),
+(6, 'Independence Day', 'Regular', '2025-06-12'),
+(7, 'National Heroes Day', 'Regular', '2025-08-25'),
+(8, 'Bonifacio Day', 'Regular', '2025-11-30'),
+(9, 'Christmas Day', 'Regular', '2025-12-25'),
+(10, 'Rizal Day', 'Regular', '2025-12-30'),
+(11, 'Chinese New Year', 'Non-working', '2025-01-29'),
+(12, 'EDSA People Power Revolution Anniversary', 'Non-working', '2025-02-25'),
+(13, 'Black Saturday', 'Non-working', '2025-04-19'),
+(14, 'Ninoy Aquino Day', 'Non-working', '2025-08-21'),
+(15, 'All Saints\' Day', 'Non-working', '2025-11-01'),
+(16, 'Feast of the Immaculate Conception of Mary', 'Non-working', '2025-12-08'),
+(17, 'Christmas Eve', 'Non-working', '2025-12-24'),
+(18, 'New Year\'s Eve', 'Non-working', '2025-12-31'),
+(19, 'New Year', 'Regular', '2025-01-01');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `incentives`
+--
+
+CREATE TABLE `incentives` (
+  `id` int(50) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `amount` int(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `incentives`
+--
+
+INSERT INTO `incentives` (`id`, `type`, `amount`) VALUES
+(1, 'Bonus', 2000);
 
 -- --------------------------------------------------------
 
@@ -547,6 +603,12 @@ ALTER TABLE `employees`
   ADD UNIQUE KEY `UserID` (`UserID`) USING BTREE;
 
 --
+-- Indexes for table `incentives`
+--
+ALTER TABLE `incentives`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `jobroles`
 --
 ALTER TABLE `jobroles`
@@ -630,6 +692,12 @@ ALTER TABLE `analyticsreports`
 --
 ALTER TABLE `average_rates`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `incentives`
+--
+ALTER TABLE `incentives`
+  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `leaveapplication`

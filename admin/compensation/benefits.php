@@ -328,12 +328,7 @@ if (isset($_GET['deleteId'])) {
                                 </div>
                                 <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Account</a>
                                 <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
-                                <a class="dropdown-item" href="../../auth/logout.php">
-                                    <button class="btn btn-danger">
-                                        <i class="fas fa-power-off mr-2"></i>
-                                        Logout
-                                    </button>
-                                </a>
+                                <a class="dropdown-item" href="../../auth/logout.php"><i class="fas fa-power-off mr-2"></i>Logout</a>
                             </div>
                         </li>
                     </ul>
@@ -565,21 +560,24 @@ if (isset($_GET['deleteId'])) {
                                         class="fas fa-f fa-folder"></i>Compensation & benefits</a>
                                 <div id="submenu-7" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
-                                        <li class="nav-item">
+                                        <!-- <li class="nav-item">
                                             <a class="nav-link" href="index.php">Attendance <span
                                                     class="badge badge-secondary">New</span></a>
-                                        </li>
+                                        </li> -->
                                         <li class="nav-item">
-                                            <a class="nav-link" href="schedule.php">Rates</a>
+                                            <a class="nav-link" href="dashboard.php">Rates</a>
                                         </li>
-                                        <li class="nav-item">
+                                        <!-- <li class="nav-item">
                                             <a class="nav-link" href="payroll.php">Payroll</a>
-                                        </li>
+                                        </li> -->
                                         <li class="nav-item">
                                             <a class="nav-link" href="leave.php">Leave</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="benefits.php">Benefits</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="index.php">Holidays</a>
                                         </li>
 
                                     </ul>
@@ -668,8 +666,7 @@ if (isset($_GET['deleteId'])) {
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="page-header">
-                            <h2 class="pageheader-title">Dashboard</h2>
-
+                           
                             <p class="pageheader-text">Nulla euismod urna eros, sit amet scelerisque torton lectus vel
                                 mauris facilisis faucibus at enim quis massa lobortis rutrum.</p>
                             <div class="page-breadcrumb">
@@ -698,7 +695,7 @@ if (isset($_GET['deleteId'])) {
 
 
                                 <!-- Table to Display Benefits -->
-                                <table style="width: 100%; max-width: 1500px; border-collapse: collapse;">
+                                <table class="table table-hover">
                                     <thead>
                                         <tr>
                                             <th
@@ -720,11 +717,11 @@ if (isset($_GET['deleteId'])) {
                                             foreach ($benefitData as $row) {
                                                 echo "<tr>
                     <td>" . htmlspecialchars($row['type']) . "</td>
-                    <td>" . htmlspecialchars($row['amount']) . "</td>
+                    <td>" . htmlspecialchars($row['amount']) ."%". "</td>
                     <td>
-                        <button onclick='openEditModal(" . $row['id'] . ", \"" . htmlspecialchars($row['type']) . "\", \"" . htmlspecialchars($row['amount']) . "\")' style='background-color: #3d405c; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;'>Edit</button>
+                        <button onclick='openEditModal(" . $row['id'] . ", \"" . htmlspecialchars($row['type']) . "\", \"" . htmlspecialchars($row['amount']) . "\")' style='background-color: #ffc107; color: black; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;'>Edit</button>
                         <a href='benefits.php?deleteId=" . $row['id'] . "' onclick='return confirm(\"Are you sure you want to delete this record?\");'>
-                            <button style='background-color: #d9534f; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;'>Delete</button>
+                            <button style='background-color: #dc3545; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;'>Delete</button>
                         </a>
                     </td>
                 </tr>";
@@ -783,8 +780,7 @@ if (isset($_GET['deleteId'])) {
                                 </div>
 
                                 <!-- Button to open Add Modal -->
-                                <button onclick="openAddModal()"
-                                    style="background-color: #3d405c; color: white; padding: 10px 20px; border: none; cursor: pointer;">Add
+                                <button onclick="openAddModal()" class="btn btn-primary">Add
                                     Benefit</button>
 
                                 <script>
@@ -814,126 +810,141 @@ if (isset($_GET['deleteId'])) {
                         </div>
 
                         <div class="card">
-    <div class="card-body">
-        <h5 class="text-muted">Incentives</h5>
+                            <div class="card-body">
+                                <h5 class="text-muted">Incentives</h5>
 
-        <!-- Table to Display Incentives -->
-        <table style="width: 100%; max-width: 1500px; border-collapse: collapse;">
-            <thead>
-                <tr>
-                    <th style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">Incentive Type</th>
-                    <th style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">Amount</th>
-                    <th style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                if (!empty($incentiveData)) {
-                    foreach ($incentiveData as $row) {
-                        echo "<tr>
+                                <!-- Table to Display Incentives -->
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th style="background-color: #3d405c; color: white; font-weight: bold;">
+                                                Incentive Type</th>
+                                            <th style="background-color: #3d405c; color: white;  font-weight: bold;">
+                                                Amount</th>
+                                            <th style="background-color: #3d405c; color: white;  font-weight: bold;">
+                                                Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        if (!empty($incentiveData)) {
+                                            foreach ($incentiveData as $row) {
+                                                echo "<tr>
                             <td>" . htmlspecialchars($row['type']) . "</td>
                             <td>" . htmlspecialchars($row['amount']) . "</td>
                             <td>
-                                <button onclick='openEditModal(" . $row['id'] . ", \"" . htmlspecialchars($row['type']) . "\", \"" . htmlspecialchars($row['amount']) . "\")' style='background-color: #3d405c; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;'>Edit</button>
+                                <button onclick='openEditModal(" . $row['id'] . ", \"" . htmlspecialchars($row['type']) . "\", \"" . htmlspecialchars($row['amount']) . "\")' style='background-color: #ffc107; color: black; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;'>Edit</button>
                                 <a href='benefits.php?deleteId=" . $row['id'] . "' onclick='return confirm(\"Are you sure you want to delete this record?\");'>
-                                    <button style='background-color: #d9534f; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;'>Delete</button>
+                                    <button style='background-color: #dc3545; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;'>Delete</button>
                                 </a>
-                                 <a href='=" . $row['id'] . "' onclick='return confirm(\"Grant Bonus?\");'>
-                                    <button style='background-color: #A8CD89; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;'>Grant</button>
-                                </a>
+
                             </td>
                         </tr>";
-                    }
-                } else {
-                    echo "<tr><td colspan='3'>No records found</td></tr>";
-                }
-                ?>
-            </tbody>
-        </table>
+                                            }
+                                        } else {
+                                            echo "<tr><td colspan='3'>No records found</td></tr>";
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
 
-        <!-- Add Incentive Modal -->
-        <div id="addIncentiveModal" style="display:none; background-color: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; justify-content: center; align-items: center;">
-            <div style="background-color: white; padding: 20px; border-radius: 5px; max-width: 400px; width: 100%;">
-                <h3>Add New Incentive</h3>
-                <form method="POST" action="benefits.php">
-                    <label for="incentiveType">Incentive Type:</label>
-                    <input type="text" name="incentiveType" id="incentiveType" required><br><br>
+                                <!-- Add Incentive Modal -->
+                                <div id="addIncentiveModal"
+                                    style="display:none; background-color: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; justify-content: center; align-items: center;">
+                                    <div
+                                        style="background-color: white; padding: 20px; border-radius: 5px; max-width: 400px; width: 100%;">
+                                        <h3>Add New Incentive</h3>
+                                        <form method="POST" action="benefits.php">
+                                            <label for="incentiveType">Incentive Type:</label>
+                                            <input type="text" name="incentiveType" id="incentiveType" required><br><br>
 
-                    <label for="amount">Amount:</label>
-                    <input type="number" name="amount" id="amount" step="0.01" required><br><br>
+                                            <label for="amount">Amount:</label>
+                                            <input type="number" name="amount" id="amount" step="0.01" required><br><br>
 
-                    <button type="submit" name="addIncentive" style="background-color: #3d405c; color: white; padding: 10px 20px; border: none; cursor: pointer;">Add Incentive</button>
-                    <button type="button" onclick="closeAddModal()" style="background-color: #d9534f; color: white; padding: 10px 20px; border: none; cursor: pointer;">Cancel</button>
-                </form>
-            </div>
-        </div>
+                                            <button type="submit" name="addIncentive"
+                                                style="background-color: #3d405c; color: white; padding: 10px 20px; border: none; cursor: pointer;">Add
+                                                Incentive</button>
+                                            <button type="button" onclick="closeAddModal()"
+                                                style="background-color: #d9534f; color: white; padding: 10px 20px; border: none; cursor: pointer;">Cancel</button>
+                                        </form>
+                                    </div>
+                                </div>
 
-        <!-- Edit Incentive Modal -->
-        <div id="editIncentiveModal" style="display:none; background-color: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; justify-content: center; align-items: center;">
-            <div style="background-color: white; padding: 20px; border-radius: 5px; max-width: 400px; width: 100%;">
-                <h3>Edit Incentive</h3>
-                <form method="POST" action="benefits.php">
-                    <input type="hidden" name="incentiveId" id="editIncentiveId">
-                    <label for="editIncentiveType">Incentive Type:</label>
-                    <input type="text" name="incentiveType" id="editIncentiveType" required><br><br>
+                                <!-- Edit Incentive Modal -->
+                                <div id="editIncentiveModal"
+                                    style="display:none; background-color: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; justify-content: center; align-items: center;">
+                                    <div
+                                        style="background-color: white; padding: 20px; border-radius: 5px; max-width: 400px; width: 100%;">
+                                        <h3>Edit Incentive</h3>
+                                        <form method="POST" action="benefits.php">
+                                            <input type="hidden" name="incentiveId" id="editIncentiveId">
+                                            <label for="editIncentiveType">Incentive Type:</label>
+                                            <input type="text" name="incentiveType" id="editIncentiveType"
+                                                required><br><br>
 
-                    <label for="editAmount">Amount:</label>
-                    <input type="number" name="amount" id="editAmount" step="0.01" required><br><br>
+                                            <label for="editAmount">Amount:</label>
+                                            <input type="number" name="amount" id="editAmount" step="0.01"
+                                                required><br><br>
 
-                    <button type="submit" name="editIncentive" style="background-color: #3d405c; color: white; padding: 10px 20px; border: none; cursor: pointer;">Update Incentive</button>
-                    <button type="button" onclick="closeEditModal()" style="background-color: #d9534f; color: white; padding: 10px 20px; border: none; cursor: pointer;">Cancel</button>
-                </form>
-            </div>
-        </div>
+                                            <button type="submit" name="editIncentive"
+                                                style="background-color: #3d405c; color: white; padding: 10px 20px; border: none; cursor: pointer;">Update
+                                                Incentive</button>
+                                            <button type="button" onclick="closeEditModal()"
+                                                style="background-color: #d9534f; color: white; padding: 10px 20px; border: none; cursor: pointer;">Cancel</button>
+                                        </form>
+                                    </div>
+                                </div>
 
-        <!-- Button to open Add Modal -->
-        <button onclick="openAddModal()" style="background-color: #3d405c; color: white; padding: 10px 20px; border: none; cursor: pointer;">Add Incentive</button>
+                                <!-- Button to open Add Modal -->
+                                <button onclick="openAddModal()"
+                                   class="btn btn-primary">Add
+                                    Incentive</button>
 
-        <script>
-            // Open and Close Modals
-            function openAddModal() {
-                document.getElementById('addIncentiveModal').style.display = 'flex';
-            }
+                                <script>
+                                    // Open and Close Modals
+                                    function openAddModal() {
+                                        document.getElementById('addIncentiveModal').style.display = 'flex';
+                                    }
 
-            function closeAddModal() {
-                document.getElementById('addIncentiveModal').style.display = 'none';
-            }
+                                    function closeAddModal() {
+                                        document.getElementById('addIncentiveModal').style.display = 'none';
+                                    }
 
-            function openEditModal(id, type, amount) {
-                document.getElementById('editIncentiveId').value = id;
-                document.getElementById('editIncentiveType').value = type;
-                document.getElementById('editAmount').value = amount;
-                document.getElementById('editIncentiveModal').style.display = 'flex';
-            }
+                                    function openEditModal(id, type, amount) {
+                                        document.getElementById('editIncentiveId').value = id;
+                                        document.getElementById('editIncentiveType').value = type;
+                                        document.getElementById('editAmount').value = amount;
+                                        document.getElementById('editIncentiveModal').style.display = 'flex';
+                                    }
 
-            function closeEditModal() {
-                document.getElementById('editIncentiveModal').style.display = 'none';
-            }
-        </script>
-    </div>
-</div>
-
-
-
-
+                                    function closeEditModal() {
+                                        document.getElementById('editIncentiveModal').style.display = 'none';
+                                    }
+                                </script>
+                            </div>
+                        </div>
 
 
 
-
-                        <div id="sparkline-revenue"></div>
                     </div>
+
+
+
+
+                    <div id="sparkline-revenue"></div>
                 </div>
             </div>
-
-
-
-            <!-- </div> -->
         </div>
+
+
+
         <!-- </div> -->
-        <!-- ============================================================== -->
-        <!-- footer -->
-        <!-- ============================================================== -->
-        <!-- <div class="footer mx-2">
+    </div>
+    <!-- </div> -->
+    <!-- ============================================================== -->
+    <!-- footer -->
+    <!-- ============================================================== -->
+    <!-- <div class="footer mx-2">
                 <div class="container-fluid mx-2">
                     <div class="row">
                         <div class="col-xl-7 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -946,9 +957,9 @@ if (isset($_GET['deleteId'])) {
                     </div>
                 </div>
             </div> -->
-        <!-- ============================================================== -->
-        <!-- end footer -->
-        <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- end footer -->
+    <!-- ============================================================== -->
     </div>
     <!-- ============================================================== -->
     <!-- end wrapper  -->

@@ -267,7 +267,7 @@ if(isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'admin'){
                                             <a class="nav-link" href="leave.php">Leave</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="holiday.php">Pay Check Details</a>
+                                            <a class="nav-link" href="holiday.php">Holidays</a>
                                         </li>
                                     </ul>
                                 </div>

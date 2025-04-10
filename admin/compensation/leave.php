@@ -1,5 +1,4 @@
-<!-- training main dashboard -->
-<!-- <?php
+<?php
 session_start();
 
 require('../../config/Database.php');
@@ -7,7 +6,7 @@ require('../../config/Database.php');
 $recordsPerPage = 10;
 
 // Get the current page number from URL parameter, default is 1
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 
 // Calculate the starting record for the SQL query
 $startFrom = ($page - 1) * $recordsPerPage;
@@ -19,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $newStatus = $_POST['update_status'];
 
         // Prepare the SQL query to update the status
-        $stmt = $conn->prepare("UPDATE leaveapplication SET status = :status WHERE id = :id");
+        $stmt = $conn->prepare("UPDATE leave_requests SET status = :status WHERE id = :id");
         $stmt->bindParam(':status', $newStatus);
         $stmt->bindParam(':id', $leaveId);
 
@@ -34,14 +33,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // Fetch data from the database (pagination and sorting already applied)
 try {
-    $stmt = $conn->prepare("SELECT id, employeeId, name, leave_type, date, message, status FROM leaveapplication ORDER BY FIELD(status, 'pending') DESC, id ASC LIMIT :startFrom, :recordsPerPage");
+    $stmt = $conn->prepare("SELECT id, employeeId, name, leave_type, date, department, message, head, status FROM leave_requests ORDER BY FIELD(status, 'pending') DESC, id ASC LIMIT :startFrom, :recordsPerPage");
     $stmt->bindParam(':startFrom', $startFrom, PDO::PARAM_INT);
     $stmt->bindParam(':recordsPerPage', $recordsPerPage, PDO::PARAM_INT);
     $stmt->execute();
     $benefitData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Get the total number of records to calculate the number of pages
-    $totalStmt = $conn->prepare("SELECT COUNT(*) FROM leaveapplication");
+    $totalStmt = $conn->prepare("SELECT COUNT(*) FROM leave_requests");
     $totalStmt->execute();
     $totalRecords = $totalStmt->fetchColumn();
     $totalPages = ceil($totalRecords / $recordsPerPage);
@@ -50,14 +49,13 @@ try {
     die("Connection failed: " . $e->getMessage());
 }
 
-//delete button
-// Check if the delete request is made
+// Delete functionality
 if (isset($_POST['delete_leave'])) {
     $leaveId = $_POST['leave_id'];  // Get the leave ID to be deleted
 
     try {
         // Prepare and execute the DELETE query
-        $deleteStmt = $conn->prepare("DELETE FROM leaveapplication WHERE id = :leaveId");
+        $deleteStmt = $conn->prepare("DELETE FROM leave_requests WHERE id = :leaveId");
         $deleteStmt->bindParam(':leaveId', $leaveId, PDO::PARAM_INT);
         $deleteStmt->execute();
 
@@ -70,10 +68,8 @@ if (isset($_POST['delete_leave'])) {
         die("Error deleting record: " . $e->getMessage());
     }
 }
+?>
 
-
-
-?> -->
 <!doctype html>
 <html lang="en">
 
@@ -235,16 +231,13 @@ if (isset($_POST['delete_leave'])) {
                             <div class="dropdown-menu dropdown-menu-right nav-user-dropdown"
                                 aria-labelledby="navbarDropdownMenuLink2">
                                 <div class="nav-user-info">
-                                    <h5 class="mb-0 text-white nav-user-name"> <?= $_SESSION['username'] ?> </h5>
+                                    <h5 class="mb-0 text-white nav-user-name"> <?= $_SESSION['name'] ?> </h5>
                                     <span class="status"></span><span class="ml-2">Available</span>
                                 </div>
                                 <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Account</a>
                                 <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
-                                <a class="dropdown-item" href="../../auth/logout.php">">
-                                    <button class="btn btn-danger">
-                                        <i class="fas fa-power-off mr-2"></i>
-                                        Logout
-                                    </button>
+                              
+                                <a class="dropdown-item" href="../../auth/logout.php"><i class="fas fa-power-off mr-2"></i>Logout</a>
                                 </a>
                             </div>
                         </li>
@@ -477,21 +470,24 @@ if (isset($_POST['delete_leave'])) {
                                         class="fas fa-f fa-folder"></i>Compensation & benefits</a>
                                 <div id="submenu-7" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
-                                        <li class="nav-item">
+                                        <!-- <li class="nav-item">
                                             <a class="nav-link" href="index.php">Attendance <span
                                                     class="badge badge-secondary">New</span></a>
-                                        </li>
+                                        </li> -->
                                         <li class="nav-item">
-                                            <a class="nav-link" href="schedule.php">Rates</a>
+                                            <a class="nav-link" href="dashboard.php">Rates</a>
                                         </li>
-                                        <li class="nav-item">
+                                        <!-- <li class="nav-item">
                                             <a class="nav-link" href="payroll.php">Payroll</a>
-                                        </li>
+                                        </li> -->
                                         <li class="nav-item">
                                             <a class="nav-link" href="leave.php">Leave</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="benefits.php">Benefits</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="index.php">Holidays</a>
                                         </li>
 
                                     </ul>
@@ -580,7 +576,7 @@ if (isset($_POST['delete_leave'])) {
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="page-header">
-                            <h2 class="pageheader-title">Dashboard</h2>
+                            <!-- <h2 class="pageheader-title">Dashboard</h2> -->
 
                             <p class="pageheader-text">Nulla euismod urna eros, sit amet scelerisque torton lectus vel
                                 mauris facilisis faucibus at enim quis massa lobortis rutrum.</p>
@@ -605,22 +601,22 @@ if (isset($_POST['delete_leave'])) {
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="text-muted">Contents</h5>
-
                                 <h1>Leave Applications</h1>
-
-                               <!-- Start of Table -->
-                               <table style="width: 100%; max-width: 1500px; border-collapse: collapse;">
+                                <div class="table-responsive">
+                                    <!-- Start of Table -->
+                                    <table class="table table-hover" style="width: 100%; max-width: 1500px; border-collapse: collapse;">
     <thead>
         <tr>
-            <th style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">ID</th>
-            <th style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">Employee ID</th>
-            <th style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">Name</th>
-            <th style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">Leave</th>
-            <th style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">Date</th>
-            <th style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">Message</th>
-            <th style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">Status</th>
-            <th style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">Action</th>
+            <th style="color:black;">ID</th>
+            <th style="color:black;">Employee ID</th>
+            <th style="color:black;">Name</th>
+            <th style="color:black;">Leave</th>
+            <th style="color:black;">Date</th>
+            <th style="color:black;">Department</th>
+            <th style="color:black;">Message</th>
+            <th style="color:black;">Head</th>
+            <th style="color:black;">Status</th>
+            <th style="color:black;">Action</th>
         </tr>
     </thead>
     <tbody>
@@ -633,41 +629,45 @@ if (isset($_POST['delete_leave'])) {
                 $statusClass = '';
                 if ($row['status'] == 'pending') {
                     $statusClass = 'status-pending';
-                } elseif ($row['status'] == 'accepted') {
+                } elseif ($row['status'] == 'approved') {
                     $statusClass = 'status-accepted';
                 } elseif ($row['status'] == 'denied') {
                     $statusClass = 'status-denied';
                 }
-            
+
                 echo "<tr>
-                        <td>" . htmlspecialchars($row['id']) . "</td>
-                        <td>" . htmlspecialchars($row['employeeId']) . "</td>
-                        <td>" . htmlspecialchars($row['name']) . "</td>
-                        <td>" . htmlspecialchars($row['leave_type']) . "</td>
-                        <td>" . htmlspecialchars($row['date']) . "</td>
-                        <td>" . htmlspecialchars($row['message']) . "</td>
-                        <td><span class='status-text $statusClass'>" . htmlspecialchars($row['status']) . "</span></td>
-                        <td>";
-            
+                    <td>" . htmlspecialchars($row['id']) . "</td>
+                    <td>" . htmlspecialchars($row['employeeId']) . "</td>
+                    <td>" . htmlspecialchars($row['name']) . "</td>
+                    <td>" . htmlspecialchars($row['leave_type']) . "</td>
+                    <td>" . htmlspecialchars($row['date']) . "</td>
+                    <td>" . htmlspecialchars($row['department']) . "</td>
+                    <td>" . htmlspecialchars($row['message']) . "</td>
+                    <td>" . htmlspecialchars($row['head']) . "</td>
+                    <td><span class='status-text $statusClass'>" . htmlspecialchars($row['status']) . "</span></td>
+                    <td>";
+
                 // Only show buttons if the status is 'pending'
                 if ($row['status'] == 'pending') {
-                    echo "<form method='POST' action=''>
-                            <input type='hidden' name='leave_id' value='" . htmlspecialchars($row['id']) . "' />
-                            <button type='submit' name='update_status' value='accepted' style='background-color: #3d405c; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;'>Accept</button>
-                          </form>
-                          <form method='POST' action=''>
-                            <input type='hidden' name='leave_id' value='" . htmlspecialchars($row['id']) . "' />
-                            <button type='submit' name='update_status' value='denied' style='background-color: #d9534f; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;'>Decline</button>
-                          </form>";
+                    // Show accept and deny buttons
+                    echo "<form method='POST' action='' style='display:inline-block;'>
+                        <input type='hidden' name='leave_id' value='" . htmlspecialchars($row['id']) . "' />
+                        <button type='submit' name='update_status' value='accepted' class='btn btn-secondary btn-sm' style='background-color:#169976;'>Accept</button>
+                      </form>
+                      <form method='POST' action='' style='display:inline-block;'>
+                        <input type='hidden' name='leave_id' value='" . htmlspecialchars($row['id']) . "' />
+                        <button type='submit' name='update_status' value='denied' class='btn btn-danger btn-sm'>Decline</button>
+                      </form>";
                 } else {
                     // Show delete button for accepted or denied statuses
                     echo "<form method='POST' action=''>
-                            <input type='hidden' name='leave_id' value='" . htmlspecialchars($row['id']) . "' />
-                            <a href='benefits.php?deleteId=" . $row['id'] . "' onclick='return confirm(\"Are you sure you want to delete this record?\");'>
-                            <button type='submit' name='delete_leave' value='delete' style='background-color:rgb(167, 78, 75); color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;'>Delete</button>
-                          </form>";
+                        <input type='hidden' name='leave_id' value='" . htmlspecialchars($row['id']) . "' />
+                        <a href='benefits.php?deleteId=" . $row['id'] . "' onclick='return confirm(\"Are you sure you want to delete this record?\");'>
+                            <button type='submit' name='delete_leave' value='delete' style='background-color:#dc3545; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;'>Delete</button>
+                        </a>
+                      </form>";
                 }
-                
+
                 echo "</td></tr>";
             }
         } else {
@@ -676,49 +676,55 @@ if (isset($_POST['delete_leave'])) {
         ?>
     </tbody>
 </table>
+                                    
+                                </div>
 
-<!-- End of Table -->
-        
+                                <!-- End of Table -->
 
 
-<!-- Pagination Links -->
-<div style="text-align: center; margin-top: 20px;">
-    <ul style="list-style-type: none; padding: 0;">
-        <?php if ($page > 1): ?>
-            <li style="display: inline; margin-right: 10px;">
-                <a href="?page=<?= $page - 1 ?>" style="text-decoration: none; background-color: #3d405c; color: white; padding: 8px 16px; border-radius: 4px;">Previous</a>
-            </li>
-        <?php endif; ?>
-        
-        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-            <li style="display: inline; margin-right: 5px;">
-                <a href="?page=<?= $i ?>" style="text-decoration: none; background-color: <?= $i == $page ? '#3d405c' : '#f4f4f4'; ?>; color: <?= $i == $page ? 'white' : '#333'; ?>; padding: 8px 16px; border-radius: 4px;"><?= $i ?></a>
-            </li>
-        <?php endfor; ?>
 
-        <?php if ($page < $totalPages): ?>
-            <li style="display: inline; margin-left: 10px;">
-                <a href="?page=<?= $page + 1 ?>" style="text-decoration: none; background-color: #3d405c; color: white; padding: 8px 16px; border-radius: 4px;">Next</a>
-            </li>
-        <?php endif; ?>
-    </ul>
-</div>
-<!-- End of Pagination -->
+                                <!-- Pagination Links -->
+                                <div style="text-align: center; margin-top: 20px;">
+                                    <ul style="list-style-type: none; padding: 0;">
+                                        <?php if ($page > 1): ?>
+                                            <li style="display: inline; margin-right: 10px;">
+                                                <a href="?page=<?= $page - 1 ?>"
+                                                    style="text-decoration: none; background-color: #3d405c; color: white; padding: 8px 16px; border-radius: 4px;">Previous</a>
+                                            </li>
+                                        <?php endif; ?>
+
+                                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                            <li style="display: inline; margin-right: 5px;">
+                                                <a href="?page=<?= $i ?>"
+                                                    style="text-decoration: none; background-color: <?= $i == $page ? '#3d405c' : '#f4f4f4'; ?>; color: <?= $i == $page ? 'white' : '#333'; ?>; padding: 8px 16px; border-radius: 4px;"><?= $i ?></a>
+                                            </li>
+                                        <?php endfor; ?>
+
+                                        <?php if ($page < $totalPages): ?>
+                                            <li style="display: inline; margin-left: 10px;">
+                                                <a href="?page=<?= $page + 1 ?>"
+                                                    style="text-decoration: none; background-color: #3d405c; color: white; padding: 8px 16px; border-radius: 4px;">Next</a>
+                                            </li>
+                                        <?php endif; ?>
+                                    </ul>
+                                </div>
+                                <!-- End of Pagination -->
                             </div>
-                            <div id="sparkline-revenue"></div>
                         </div>
                     </div>
                 </div>
-
-
-
-                <!-- </div> -->
             </div>
-            <!-- </div> -->
-            <!-- ============================================================== -->
-            <!-- footer -->
-            <!-- ============================================================== -->
-            <!-- <div class="footer mx-2">
+        </div>
+
+
+
+        <!-- </div> -->
+    </div>
+    <!-- </div> -->
+    <!-- ============================================================== -->
+    <!-- footer -->
+    <!-- ============================================================== -->
+    <!-- <div class="footer mx-2">
                 <div class="container-fluid mx-2">
                     <div class="row">
                         <div class="col-xl-7 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -731,28 +737,28 @@ if (isset($_POST['delete_leave'])) {
                     </div>
                 </div>
             </div> -->
-            <!-- ============================================================== -->
-            <!-- end footer -->
-            <!-- ============================================================== -->
-        </div>
-        <!-- ============================================================== -->
-        <!-- end wrapper  -->
-        <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- end footer -->
+    <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- end wrapper  -->
+    <!-- ============================================================== -->
     </div>
     <!-- ============================================================== -->
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
 
     <script>
-    // Function to open the modal and set the leave ID to be deleted
-    function openModal(leaveId) {
-        // Set the value of the hidden input in the form to the leave ID
-        document.getElementById('leave_id_to_delete').value = leaveId;
-        
-        // Open the modal
-        $('#confirmationModal').modal('show');
-    }
-</script>
+        // Function to open the modal and set the leave ID to be deleted
+        function openModal(leaveId) {
+            // Set the value of the hidden input in the form to the leave ID
+            document.getElementById('leave_id_to_delete').value = leaveId;
+
+            // Open the modal
+            $('#confirmationModal').modal('show');
+        }
+    </script>
 </body>
 
 </html>

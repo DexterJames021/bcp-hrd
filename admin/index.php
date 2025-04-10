@@ -154,7 +154,7 @@ if(isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'employee'){
                             <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="#" alt="" class="user-avatar-md rounded-circle"></a>
                             <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
                                 <div class="nav-user-info">
-                                    <h5 class="mb-0 text-white nav-user-name"> <?= $_SESSION['username'] ?> </h5>
+                                    <h5 class="mb-0 text-white nav-user-name"> <?= $_SESSION['name'] ?> </h5>
                                     <span class="status"></span><span class="ml-2">Available</span>
                                 </div>
                                 <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Account</a>
@@ -323,20 +323,23 @@ if(isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'employee'){
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-7" aria-controls="submenu-7"><i class="fas fa-f fa-folder"></i>Compensation & benefits</a>
                                 <div id="submenu-7" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
-                                        <li class="nav-item">
+                                        <!-- <li class="nav-item">
                                             <a class="nav-link" href="compensation/index.php">Attendance</a>
-                                        </li>
+                                        </li> -->
                                         <li class="nav-item">
-                                            <a class="nav-link" href="compensation/schedule.php">Schedule</a>
+                                            <a class="nav-link" href="compensation/dashboard.php">Rates</a>
                                         </li>
-                                        <li class="nav-item">
+                                        <!-- <li class="nav-item">
                                             <a class="nav-link" href="compensation/payroll.php">Payroll</a>
-                                        </li>
+                                        </li> -->
                                         <li class="nav-item">
                                             <a class="nav-link" href="compensation/leave.php">Leave</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="compensation/benefits.php">Benefits</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="compensation/index.php">Holidays</a>
                                         </li>
                                     </ul>
                                 </div>

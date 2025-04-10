@@ -1,146 +1,190 @@
 <?php
 session_start();
 
-//  if(isset($_SESSION['usertype']) && $_SESSION['usertype'] !='admin' ){ 
-//     echo "<script> alert('welcome') </script>" ;  }else{  header("Location: ../auth/index.php");  } 
-
+if (isset($_SESSION['usertype']) && $_SESSION['usertype'] == 'manager') {
+    // You can add a message for the logged-in manager here
+ 
+} else {
+    // Redirect to login page if the user is not a manager
+    header("Location: ../auth/index.php");
+    exit; // Always call exit to stop further code execution
+}
 require('../config/Database.php');
 
-try {
-    // Query the leave types from the database
-    $stmt = $conn->prepare("SELECT leave_type FROM leavetype");
-    $stmt->execute();
+$recordsPerPage = 10;
 
-    // Fetch all leave types
-    $leaveTypes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Get the current page number from URL parameter, default is 1
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+// Calculate the starting record for the SQL query
+$startFrom = ($page - 1) * $recordsPerPage;
+
+// Handle form submission to update status
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['update_status']) && isset($_POST['leave_id'])) {
+        $leaveId = $_POST['leave_id'];
+        $newStatus = $_POST['update_status'];
+
+        try {
+            // Ensure session is valid
+            if (!isset($_SESSION['user_id'])) {
+                throw new Exception("Session expired or user not logged in.");
+            }
+
+            $sessionUserId = $_SESSION['user_id'];
+
+            // Get the session user's applicant_name to use as 'head'
+            $headStmt = $conn->prepare("
+                SELECT a.applicant_name
+                FROM users u
+                LEFT JOIN applicants a ON u.applicant_id = a.id
+                WHERE u.id = :sessionUserId
+            ");
+            $headStmt->bindParam(':sessionUserId', $sessionUserId, PDO::PARAM_INT);
+            $headStmt->execute();
+            $headData = $headStmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$headData || empty($headData['applicant_name'])) {
+                throw new Exception("Could not fetch session user name to use as head.");
+            }
+
+            $head = $headData['applicant_name']; // ✅ this will go into the head column
+
+            if ($newStatus === 'accepted') {
+                // Fetch the leave application data
+                $selectStmt = $conn->prepare("
+                    SELECT 
+                        l.*, 
+                        d.DepartmentName
+                    FROM leaveapplication l
+                    LEFT JOIN users u ON l.employeeId = u.id
+                    LEFT JOIN applicants a ON u.applicant_id = a.id
+                    LEFT JOIN departments d ON a.DepartmentID = d.DepartmentID
+                    WHERE l.id = :id
+                ");
+                $selectStmt->bindParam(':id', $leaveId, PDO::PARAM_INT);
+                $selectStmt->execute();
+                $leaveData = $selectStmt->fetch(PDO::FETCH_ASSOC);
+
+                if ($leaveData) {
+                    // Insert into leave_requests table using session user's name as head
+                    $insertStmt = $conn->prepare("
+                        INSERT INTO leave_requests (employeeId, name, leave_type, date, department, message, head) 
+                        VALUES (:employeeId, :name, :leaveType, :date, :department, :message, :head)
+                    ");
+                    $insertStmt->bindParam(':employeeId', $leaveData['employeeId']);
+                    $insertStmt->bindParam(':name', $leaveData['name']);
+                    $insertStmt->bindParam(':leaveType', $leaveData['leave_type']);
+                    $insertStmt->bindParam(':date', $leaveData['date']);
+                    $insertStmt->bindParam(':department', $leaveData['DepartmentName']);
+                    $insertStmt->bindParam(':message', $leaveData['message']);
+                    $insertStmt->bindParam(':head', $head); // ✅ session user's applicant_name
+                    $insertStmt->execute();
+
+                    // Delete from leaveapplication
+                    $deleteStmt = $conn->prepare("DELETE FROM leaveapplication WHERE id = :id");
+                    $deleteStmt->bindParam(':id', $leaveId, PDO::PARAM_INT);
+                    $deleteStmt->execute();
+
+                    echo "<script>alert('Leave accepted and moved to leave_requests table');</script>";
+                } else {
+                    echo "<script>alert('Leave request not found.');</script>";
+                }
+
+            } elseif ($newStatus === 'denied') {
+                // Update status to denied
+                $updateStmt = $conn->prepare("UPDATE leaveapplication SET status = 'denied' WHERE id = :id");
+                $updateStmt->bindParam(':id', $leaveId, PDO::PARAM_INT);
+                $updateStmt->execute();
+
+                echo "<script>alert('Leave request denied');</script>";
+            }
+
+        } catch (PDOException $e) {
+            echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
+        } catch (Exception $e) {
+            echo "<script>alert('Error: " . $e->getMessage() . "');</script>";
+        }
+    }
+}
+// Fetch data from the database (pagination and sorting already applied)
+try {
+    $userId = $_SESSION['user_id'];
+
+    // Step 1: Get the department name of the logged-in user
+    $stmtDept = $conn->prepare("
+        SELECT d.DepartmentName 
+        FROM users u
+        LEFT JOIN applicants a ON u.applicant_id = a.id
+        LEFT JOIN departments d ON a.DepartmentID = d.DepartmentID
+        WHERE u.id = :userId
+    ");
+    $stmtDept->bindParam(':userId', $userId, PDO::PARAM_INT);
+    $stmtDept->execute();
+    $result = $stmtDept->fetch(PDO::FETCH_ASSOC);
+
+    if (!$result || empty($result['DepartmentName'])) {
+        throw new Exception("Unable to find department for this user.");
+    }
+
+    $department = $result['DepartmentName'];
+
+    // Step 2: Fetch leave applications for users in the same department
+    $stmt = $conn->prepare("
+        SELECT 
+            l.id, 
+            l.employeeId, 
+            l.name, 
+            l.leave_type, 
+            l.date, 
+            l.department, 
+            l.message, 
+            l.status 
+        FROM leaveapplication l
+        WHERE l.department = :department
+        ORDER BY FIELD(l.status, 'pending') DESC, l.id ASC
+        LIMIT :startFrom, :recordsPerPage
+    ");
+
+
+$stmt->bindParam(':department', $department, PDO::PARAM_STR);
+    $stmt->bindParam(':startFrom', $startFrom, PDO::PARAM_INT);
+    $stmt->bindParam(':recordsPerPage', $recordsPerPage, PDO::PARAM_INT);
+    $stmt->execute();
+    $benefitData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Get the total number of records to calculate the number of pages
+    $totalStmt = $conn->prepare("SELECT COUNT(*) FROM leaveapplication");
+    $totalStmt->execute();
+    $totalRecords = $totalStmt->fetchColumn();
+    $totalPages = ceil($totalRecords / $recordsPerPage);
 
 } catch (PDOException $e) {
     die("Connection failed: " . $e->getMessage());
 }
-$messageFeedback = '';
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+//delete button
+// Check if the delete request is made
+if (isset($_POST['delete_leave'])) {
+    $leaveId = $_POST['leave_id'];  // Get the leave ID to be deleted
+
     try {
-        // Check required session data
-        if (!isset($_SESSION['user_id'])) {
-            throw new Exception("User session data is incomplete.");
-        }
+        // Prepare and execute the DELETE query
+        $deleteStmt = $conn->prepare("DELETE FROM leaveapplication WHERE id = :leaveId");
+        $deleteStmt->bindParam(':leaveId', $leaveId, PDO::PARAM_INT);
+        $deleteStmt->execute();
 
-        $userId = $_SESSION['user_id'];
+        // Redirect back to the same page (or show a success message)
+        header("Location: leave.php");  // Replace 'your_page.php' with the actual page URL
+        exit();
 
-        // Sanitize form input
-        $leaveType = htmlspecialchars(trim($_POST['leaveType']));
-        $leaveDate = htmlspecialchars(trim($_POST['dateInput']));
-        $message = htmlspecialchars(trim($_POST['message']));
-
-        // Validate inputs
-        if (empty($leaveType) || empty($leaveDate) || empty($message)) {
-            throw new Exception("All fields are required.");
-        }
-
-        // Fetch applicant_name and department from database using JOIN
-        $stmtInfo = $conn->prepare("
-            SELECT a.applicant_name, d.DepartmentName
-            FROM users u
-            LEFT JOIN applicants a ON u.applicant_id = a.id
-            LEFT JOIN departments d ON a.DepartmentID = d.DepartmentID
-            WHERE u.id = :userId
-        ");
-        $stmtInfo->bindParam(':userId', $userId, PDO::PARAM_INT);
-        $stmtInfo->execute();
-        $result = $stmtInfo->fetch(PDO::FETCH_ASSOC);
-
-        if (!$result || empty($result['applicant_name']) || empty($result['DepartmentName'])) {
-            throw new Exception("Applicant or department information not found.");
-        }
-
-        $applicantName = $result['applicant_name'];
-        $department = $result['DepartmentName'];
-
-        // Insert leave application into database
-        $stmt = $conn->prepare("
-            INSERT INTO leaveapplication (employeeId, name, leave_type, date, department, message) 
-            VALUES (:employeeId, :name, :leaveType, :leaveDate, :department, :message)
-        ");
-
-        $stmt->bindParam(':employeeId', $userId, PDO::PARAM_INT);
-        $stmt->bindParam(':name', $applicantName);
-        $stmt->bindParam(':leaveType', $leaveType);
-        $stmt->bindParam(':leaveDate', $leaveDate);
-        $stmt->bindParam(':department', $department);
-        $stmt->bindParam(':message', $message);
-
-        if ($stmt->execute()) {
-            $messageFeedback = "<p style='color:green;'>Leave request submitted successfully!</p>";
-        } else {
-            throw new Exception("Failed to submit the request.");
-        }
-    } catch (Exception $e) {
-        $messageFeedback = "<p style='color:red;'>Error: " . $e->getMessage() . "</p>";
+    } catch (PDOException $e) {
+        // Handle any errors
+        die("Error deleting record: " . $e->getMessage());
     }
 }
 
 
-// try {
-//     // Query to get all records from the leaveapplication table for the specific user
-//     $stmt = $conn->prepare("SELECT * FROM leaveapplication WHERE employeeId = :user_id");
-//     $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
-//     $stmt->execute();
-
-//     // Fetch all results
-//     $leaveApplications = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// } catch (PDOException $e) {
-//     die("Connection failed: " . $e->getMessage());
-// }
-$recordsPerPage = 5;  // Number of records per page
-
-// Get the current page from the URL, if not set default to 1
-$currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-
-// Calculate offset for pagination
-$offset = ($currentPage - 1) * $recordsPerPage;
-
-try {
-    // Get the logged-in user's ID
-    $userId = $_SESSION['user_id'];
-
-    // Fetch leave data from leaveapplication table
-    $stmt1 = $conn->prepare("
-        SELECT id, employeeId, name, leave_type, date, department, message, status
-        FROM leaveapplication
-        WHERE employeeId = :user_id
-    ");
-    $stmt1->bindParam(':user_id', $userId, PDO::PARAM_INT);
-    $stmt1->execute();
-    $leaveApplications = $stmt1->fetchAll(PDO::FETCH_ASSOC);
-
-    // Fetch leave data from leave_requests table
-    $stmt2 = $conn->prepare("
-        SELECT id, employeeId, name, leave_type, date, department, message, status
-        FROM leave_requests
-        WHERE employeeId = :user_id
-    ");
-    $stmt2->bindParam(':user_id', $userId, PDO::PARAM_INT);
-    $stmt2->execute();
-    $leaveRequests = $stmt2->fetchAll(PDO::FETCH_ASSOC);
-
-    // Combine both datasets
-    $allLeaveData = array_merge($leaveApplications, $leaveRequests);
-    
-    // Sort data by date in descending order
-    usort($allLeaveData, function ($a, $b) {
-        return strtotime($b['date']) <=> strtotime($a['date']);
-    });
-
-    // Pagination logic
-    $totalRecords = count($allLeaveData);
-    $totalPages = ceil($totalRecords / $recordsPerPage);
-    $paginatedData = array_slice($allLeaveData, $offset, $recordsPerPage);
-
-} catch (PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
-}
 ?>
 <!doctype html>
 <html lang="en">
@@ -164,13 +208,18 @@ try {
     <!-- main js -->
     <script defer type="module" src="../assets/libs/js/main-js.js"></script>
     <link rel="stylesheet" href="../assets/libs/css/style.css">
-    <link rel="stylesheet" href="css/leave2.css">
+    <!-- <link rel="stylesheet" href="css/leave2.css"> -->
 
     <!-- assts csss -->
     <link rel="stylesheet" href="../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
     <link rel="stylesheet" href="../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
     <link rel="stylesheet" href="../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <title>Bootstrap Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- slimscroll js -->
     <script defer type="module" src="../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
@@ -432,12 +481,14 @@ try {
                                 <div id="submenu-9" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="leave.php">Leave</a>
+                                            <a class="nav-link" href="leave.php">My Leave</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="request.php">Leave Requests</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="holiday.php">Holidays</a>
                                         </li>
-
                                     </ul>
                                 </div>
                             </li>
@@ -489,148 +540,125 @@ try {
                 <!-- ============================================================== -->
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="card">
-                            <div class="card-body">
                         <div class="page-header">
+                            <h2 class="pageheader-title">Leave </h2>
                         </div>
-
-                        <div class="page">
-                            <div class="apply">
-                                <h3>Apply for Leave</h3>
-
-                                <?= $messageFeedback ?? '' ?>
-
-                                <form method="POST" action="">
-                                    <label for="leaveType">Leave Type</label><br>
-                                    <select id="leaveType" name="leaveType" required>
-                                        <option value="">Select Leave Type</option>
-                                        <?php foreach ($leaveTypes as $leaveType): ?>
-                                            <option value="<?= htmlspecialchars($leaveType['leave_type']) ?>">
-                                                <?= htmlspecialchars($leaveType['leave_type']) ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select><br><br>
-
-                                    <label for="dateInput">Leave Date</label><br>
-                                    <input type="date" id="dateInput" name="dateInput" required><br><br>
-
-                                    <label for="message">Leave Message</label><br>
-                                    <input type="text" id="message" name="message" required><br><br>
-
-                                    <button type="submit" id="applyLeaveBtn" class="apply-btn">Apply for Leave</button>
-                                </form>
-                            </div>
-                        </div>
-</div>
-</div>
-
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="leaves">
-                                    <h3>My Leaves</h3>
-                                    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-    <thead>
-        <tr>
-            <?php if (!empty($allLeaveData)): ?>
-                <?php foreach (array_keys($allLeaveData[0]) as $column): ?>
-                    <th style="background-color: #3d405c; color: white; padding: 10px; text-align: left;">
-                        <?= htmlspecialchars($column) ?>
-                    </th>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <th colspan="8" style="padding: 10px; text-align: center;">No data available</th>
-            <?php endif; ?>
-        </tr>
-    </thead>
-    <tbody>
-        <?php if (!empty($allLeaveData)): ?>
-            <?php foreach ($paginatedData as $application): ?>
-                <tr>
-                    <?php foreach ($application as $key => $value): ?>
-                        <?php if ($key === 'status'): ?>
-                            <td style="padding: 8px; border: 1px solid #ddd;">
-                                <span style="
-                                    display: inline-block;
-                                    padding: 5px 10px;
-                                    border-radius: 4px;
-                                    font-weight: bold;
-                                    border: 1px solid;
-                                    color: <?php
-                                        if ($value === 'pending')
-                                            echo '#8a6d3b';
-                                        elseif ($value === 'approved')
-                                            echo 'white';
-                                        elseif ($value === 'denied')
-                                            echo 'white';
-                                        else
-                                            echo 'black';
-                                    ?>;
-                                    background-color: <?php
-                                        if ($value === 'pending')
-                                            echo '#f0ad4e';
-                                        elseif ($value === 'approved')
-                                            echo '#5cb85c';
-                                        elseif ($value === 'denied')
-                                            echo '#d9534f';
-                                        else
-                                            echo 'transparent';
-                                    ?>;
-                                    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-                                ">
-                                    <?= htmlspecialchars($value) ?>
-                                </span>
-                            </td>
-                        <?php else: ?>
-                            <td style="padding: 8px; border: 1px solid #ddd;">
-                                <?= htmlspecialchars($value) ?>
-                            </td>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </tr>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <tr>
-                <td colspan="8" style="padding: 10px; text-align: center;">
-                    No records found.
-                </td>
-            </tr>
-        <?php endif; ?>
-    </tbody>
+                   <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                        <div class="page">
+                            <div class="apply">
+                            <h1>Leave Applications</h1>
+
+<!-- Start of Table -->
+<table style="width: 100%; max-width: 1500px; border-collapse: collapse;">
+<thead>
+<tr>
+<th style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">ID</th>
+<th style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">Employee ID</th>
+<th style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">Name</th>
+<th style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">Leave</th>
+<th style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">Date</th>
+<th style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">Department</th>
+<th style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">Message</th>
+<th style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">Status</th>
+<th style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">Action</th>
+</tr>
+</thead>
+<tbody>
+<?php
+// Check if we have any records
+if (!empty($benefitData)) {
+// Loop through the data and display each row
+foreach ($benefitData as $row) {
+// Determine the status and its corresponding CSS class
+$statusClass = '';
+if ($row['status'] == 'pending') {
+$statusClass = 'status-pending';
+} elseif ($row['status'] == 'accepted') {
+$statusClass = 'status-accepted';
+} elseif ($row['status'] == 'denied') {
+$statusClass = 'status-denied';
+}
+
+echo "<tr>
+<td>" . htmlspecialchars($row['id']) . "</td>
+<td>" . htmlspecialchars($row['employeeId']) . "</td>
+<td>" . htmlspecialchars($row['name']) . "</td>
+<td>" . htmlspecialchars($row['leave_type']) . "</td>
+<td>" . htmlspecialchars($row['date']) . "</td>
+<td>" . htmlspecialchars($row['department']) . "</td>
+<td>" . htmlspecialchars($row['message']) . "</td>
+<td><span class='status-text $statusClass'>" . htmlspecialchars($row['status']) . "</span></td>
+<td>";
+
+// Only show buttons if the status is 'pending'
+if ($row['status'] == 'pending') {
+echo "<form method='POST' action=''>
+<input type='hidden' name='leave_id' value='" . htmlspecialchars($row['id']) . "' />
+<button type='submit' name='update_status' value='accepted' style='background-color: #3d405c; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px;'>Accept</button>
+</form>
+<form method='POST' action=''>
+<input type='hidden' name='leave_id' value='" . htmlspecialchars($row['id']) . "' />
+<button type='submit' name='update_status' value='denied' style='background-color: #d9534f; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;'>Decline</button>
+</form>";
+} else {
+// Show delete button for accepted or denied statuses
+echo "<form method='POST' action=''>
+<input type='hidden' name='leave_id' value='" . htmlspecialchars($row['id']) . "' />
+<a href='benefits.php?deleteId=" . $row['id'] . "' onclick='return confirm(\"Are you sure you want to delete this record?\");'>
+<button type='submit' name='delete_leave' value='delete' style='background-color:rgb(167, 78, 75); color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;'>Delete</button>
+</form>";
+}
+
+echo "</td></tr>";
+}
+} else {
+echo "<tr><td colspan='8'>No records found</td></tr>";
+}
+?>
+</tbody>
 </table>
 
-<!-- Pagination Controls -->
-<div style="margin-top: 20px; text-align: center;">
-    <?php if ($totalPages > 1): ?>
-        <!-- Previous Button -->
-        <?php if ($currentPage > 1): ?>
-            <a href="?page=<?= $currentPage - 1 ?>"
-                style="padding: 8px 12px; border: 1px solid #3d405c; margin: 0 4px; text-decoration: none; color: #3d405c;">
-                Previous
-            </a>
-        <?php endif; ?>
+<!-- End of Table -->
 
-        <!-- Page Number Links -->
-        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-            <a href="?page=<?= $i ?>"
-                style="padding: 8px 12px; border: 1px solid #3d405c; margin: 0 4px; text-decoration: none; color: <?= $currentPage === $i ? 'white' : '#3d405c'; ?>; background-color: <?= $currentPage === $i ? '#3d405c' : 'transparent'; ?>;">
-                <?= $i ?>
-            </a>
-        <?php endfor; ?>
 
-        <!-- Next Button -->
-        <?php if ($currentPage < $totalPages): ?>
-            <a href="?page=<?= $currentPage + 1 ?>"
-                style="padding: 8px 12px; border: 1px solid #3d405c; margin: 0 4px; text-decoration: none; color: #3d405c;">
-                Next
-            </a>
-        <?php endif; ?>
-    <?php endif; ?>
+
+<!-- Pagination Links -->
+<div style="text-align: center; margin-top: 20px;">
+<ul style="list-style-type: none; padding: 0;">
+<?php if ($page > 1): ?>
+<li style="display: inline; margin-right: 10px;">
+<a href="?page=<?= $page - 1 ?>" style="text-decoration: none; background-color: #3d405c; color: white; padding: 8px 16px; border-radius: 4px;">Previous</a>
+</li>
+<?php endif; ?>
+
+<?php for ($i = 1; $i <= $totalPages; $i++): ?>
+<li style="display: inline; margin-right: 5px;">
+<a href="?page=<?= $i ?>" style="text-decoration: none; background-color: <?= $i == $page ? '#3d405c' : '#f4f4f4'; ?>; color: <?= $i == $page ? 'white' : '#333'; ?>; padding: 8px 16px; border-radius: 4px;"><?= $i ?></a>
+</li>
+<?php endfor; ?>
+
+<?php if ($page < $totalPages): ?>
+<li style="display: inline; margin-left: 10px;">
+<a href="?page=<?= $page + 1 ?>" style="text-decoration: none; background-color: #3d405c; color: white; padding: 8px 16px; border-radius: 4px;">Next</a>
+</li>
+<?php endif; ?>
+</ul>
 </div>
-                                </div>
+                               
+                            </div>
+                        </div>
+                        
+                        </div>
+                                        </div>
+                    </div>
+                </div>
+
+                
                             </div>
                         </div>
                     </div>

@@ -9,33 +9,76 @@ session_start();
 // Include the database configuration
 require('../../config/Database.php');
 
-$resultsPerPage = 10;
+//insert holiday
+if (isset($_POST['add'])) {
+    $holiday = $_POST['holiday'];
+    $type = $_POST['type'];
+    $date = $_POST['date'];
 
-// Get the current page from URL, defaulting to 1 if not set
-$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-$page = max(1, $page); // Ensure page is at least 1
+    // Insert the new holiday into the database
+    $stmt = $conn->prepare("INSERT INTO holiday (holiday, type, date) VALUES (:holiday, :type, :date)");
+    $stmt->bindParam(':holiday', $holiday, PDO::PARAM_STR);
+    $stmt->bindParam(':type', $type, PDO::PARAM_STR);
+    $stmt->bindParam(':date', $date, PDO::PARAM_STR);
 
-// Calculate the starting index for the query
-$startIndex = ($page - 1) * $resultsPerPage;
+    if ($stmt->execute()) {
+        echo "<div class='alert alert-success'>Holiday added successfully!</div>";
+    } else {
+        echo "<div class='alert alert-danger'>Failed to add holiday. Please try again.</div>";
+    }
+}
 
 try {
-    // Prepare SQL with LIMIT and OFFSET for pagination
-    $stmt = $conn->prepare("SELECT id, employeeId, name, department, date, day, timeIn, timeOut FROM attendance LIMIT :limit OFFSET :offset");
-    $stmt->bindValue(':limit', $resultsPerPage, PDO::PARAM_INT);
-    $stmt->bindValue(':offset', $startIndex, PDO::PARAM_INT);
+    // Pagination settings
+    $recordsPerPage = 5;
+    $currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+    $offset = ($currentPage - 1) * $recordsPerPage;
+
+    // Get total number of records
+    $totalStmt = $conn->query("SELECT COUNT(*) FROM holiday");
+    $totalRecords = $totalStmt->fetchColumn();
+    $totalPages = ceil($totalRecords / $recordsPerPage);
+
+    // Fetch paginated holidays
+    $stmt = $conn->prepare("SELECT * FROM holiday ORDER BY date ASC LIMIT :limit OFFSET :offset");
+    $stmt->bindValue(':limit', $recordsPerPage, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
-
-    // Fetch all records for the current page
-    $attendanceData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // Fetch total number of records for pagination calculation
-    $totalRecordsStmt = $conn->query("SELECT COUNT(*) FROM attendance");
-    $totalRecords = $totalRecordsStmt->fetchColumn();
-    $totalPages = ceil($totalRecords / $resultsPerPage);
-
+    $holidays = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die("Connection failed: " . $e->getMessage());
 }
+
+// Handle delete action
+if (isset($_GET['delete_id'])) {
+    $id = $_GET['delete_id'];
+    $stmt = $conn->prepare("DELETE FROM holiday WHERE id = :id");
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    if ($stmt->execute()) {
+        header("Location: index.php?deleted=1");
+        exit();
+    }
+}
+
+// Handle update action
+if (isset($_POST['update'])) {
+    $id = $_POST['id'];
+    $holiday = $_POST['holiday'];
+    $type = $_POST['type'];
+    $date = $_POST['date'];
+
+    $stmt = $conn->prepare("UPDATE holiday SET holiday = :holiday, type = :type, date = :date WHERE id = :id");
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':holiday', $holiday, PDO::PARAM_STR);
+    $stmt->bindParam(':type', $type, PDO::PARAM_STR);
+    $stmt->bindParam(':date', $date, PDO::PARAM_STR);
+
+    if ($stmt->execute()) {
+        header("Location: index.php?updated=1");
+        exit();
+    }
+}
+
 ?> -->
 <!doctype html>
 <html lang="en">
@@ -61,6 +104,8 @@ try {
     <!-- main js -->
     <script defer type="module" src="../../assets/libs/js/main-js.js"></script>
     <link rel="stylesheet" href="../../assets/libs/css/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- assts csss -->
     <link rel="stylesheet" href="../../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
@@ -202,12 +247,7 @@ try {
                                 </div>
                                 <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Account</a>
                                 <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
-                                <a class="dropdown-item" href="../../auth/logout.php">
-                                    <button class="btn btn-danger">
-                                        <i class="fas fa-power-off mr-2"></i>
-                                        Logout
-                                    </button>
-                                </a>
+                                <a class="dropdown-item" href="../../auth/logout.php"><i class="fas fa-power-off mr-2"></i>Logout</a>
                             </div>
                         </li>
                     </ul>
@@ -439,21 +479,24 @@ try {
                                         class="fas fa-f fa-folder"></i>Compensation & benefits</a>
                                 <div id="submenu-7" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
-                                        <li class="nav-item">
+                                        <!-- <li class="nav-item">
                                             <a class="nav-link" href="index.php">Attendance <span
                                                     class="badge badge-secondary">New</span></a>
-                                        </li>
+                                        </li> -->
                                         <li class="nav-item">
-                                            <a class="nav-link" href="schedule.php">Rates</a>
+                                            <a class="nav-link" href="dashboard.php">Rates</a>
                                         </li>
-                                        <li class="nav-item">
+                                        <!-- <li class="nav-item">
                                             <a class="nav-link" href="payroll.php">Payroll</a>
-                                        </li>
+                                        </li> -->
                                         <li class="nav-item">
                                             <a class="nav-link" href="leave.php">Leave</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="benefits.php">Benefits</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="index.php">Holidays</a>
                                         </li>
 
                                     </ul>
@@ -542,8 +585,7 @@ try {
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="page-header">
-                            <h2 class="pageheader-title">Dashboard</h2>
-
+ 
                             <p class="pageheader-text">Nulla euismod urna eros, sit amet scelerisque torton lectus vel
                                 mauris facilisis faucibus at enim quis massa lobortis rutrum.</p>
                             <div class="page-breadcrumb">
@@ -567,106 +609,168 @@ try {
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="text-muted">Attendance</h5>
 
-                                <div class="metric-value d-inline-block">
-                                    <label for="dateInput">Choose a date:</label>
-                                    <input type="date" id="dateInput" name="dateInput">
-                                </div>
+                                <h2 class="text-center">📅 Philippine Holidays 2025</h2>
 
-                                <div class="metric-value d-inline-block">
-                                    <button id="submitButton"
-                                        style="background-color: #3d405c; color: white; border: none; border-radius: 4px; padding: 8px 12px; font-size: 13px; cursor: pointer;">
-                                        Filter
-                                    </button>
-                                </div>
-
-                                <table style="width: 100%; border-collapse: collapse;">
+                                <!-- Success/Error Messages -->
+                                <?php if (isset($_GET['deleted'])): ?>
+                                    <div class="alert alert-success">Holiday deleted successfully!</div>
+                                <?php elseif (isset($_GET['updated'])): ?>
+                                    <div class="alert alert-success">Holiday updated successfully!</div>
+                                <?php endif; ?>
+<div class="table-responsive">
+                                <!-- Table to display holidays -->
+                                <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th
-                                                style="width: 5%; background-color: #3d405c; color: white; padding: 10px; text-align: left;">
-                                                ID</th>
-                                            <th
-                                                style="width: 10%; background-color: #3d405c; color: white; padding: 10px; text-align: left;">
-                                                Employee Id</th>
-                                            <th
-                                                style="width: 15%; background-color: #3d405c; color: white; padding: 10px; text-align: left;">
-                                                Name</th>
-                                            <th
-                                                style="width: 10%; background-color: #3d405c; color: white; padding: 10px; text-align: left;">
-                                                Department</th>
-                                            <th
-                                                style="width: 15%; background-color: #3d405c; color: white; padding: 10px; text-align: left;">
-                                                Date</th>
-                                            <th
-                                                style="width: 15%; background-color: #3d405c; color: white; padding: 10px; text-align: left;">
-                                                Day</th>
-                                            <th
-                                                style="width: 5%; background-color: #3d405c; color: white; padding: 10px; text-align: left;">
-                                                Time In</th>
-                                            <th
-                                                style="width: 10%; background-color: #3d405c; color: white; padding: 10px; text-align: left;">
-                                                Time Out</th>
+                                            <th style="color: black;">ID</th>
+                                            <th style="color: black;">Holiday</th>
+                                            <th style="color: black;">Type</th>
+                                            <th style="color: black;">Date</th>
+                                            <th style="color: black;">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php if (!empty($attendanceData)): ?>
-                                            <?php foreach ($attendanceData as $row): ?>
-                                                <tr>
-                                                    <td><?= htmlspecialchars($row['id']) ?></td>
-                                                    <td><?= htmlspecialchars($row['employeeId']) ?></td>
-                                                    <td><?= htmlspecialchars($row['name']) ?></td>
-                                                    <td><?= htmlspecialchars($row['department']) ?></td>
-                                                    <td><?= htmlspecialchars($row['date']) ?></td>
-                                                    <td><?= htmlspecialchars($row['day']) ?></td>
-                                                    <td><?= htmlspecialchars($row['timeIn']) ?></td>
-                                                    <td><?= htmlspecialchars($row['timeOut']) ?></td>
-                                                </tr>
-                                            <?php endforeach; ?>
-                                        <?php else: ?>
+                                        <?php if (empty($holidays)): ?>
                                             <tr>
-                                                <td colspan="8">No records found</td>
+                                                <td colspan="5">No holidays found.</td>
                                             </tr>
+                                        <?php else: ?>
+                                            <?php foreach ($holidays as $holiday): ?>
+                                                <tr>
+                                                    <td><?= htmlspecialchars($holiday['id']) ?></td>
+                                                    <td><?= htmlspecialchars($holiday['holiday']) ?></td>
+                                                    <td><?= htmlspecialchars($holiday['type']) ?></td>
+                                                    <td><?= htmlspecialchars($holiday['date']) ?></td>
+                                                    <td>
+                                                        <!-- Edit button -->
+                                                        <button type="button" class="btn btn-sm btn-warning"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#editModal<?= $holiday['id'] ?>">Edit</button>
+
+                                                        <!-- Delete button -->
+                                                        <a href="index.php?delete_id=<?= $holiday['id'] ?>"
+                                                            class="btn btn-sm btn-danger"
+                                                            onclick="return confirm('Are you sure you want to delete this holiday?');">Delete</a>
+                                                    </td>
+                                                </tr>
+
+                                                <!-- Modal for editing holiday -->
+                                                <div class="modal fade" id="editModal<?= $holiday['id'] ?>" tabindex="-1"
+                                                    aria-labelledby="editModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="editModalLabel">Edit Holiday</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                    aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form method="post">
+                                                                    <input type="hidden" name="id"
+                                                                        value="<?= $holiday['id'] ?>">
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label">Holiday Name</label>
+                                                                        <input type="text" name="holiday" class="form-control"
+                                                                            value="<?= htmlspecialchars($holiday['holiday']) ?>"
+                                                                            required>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label">Type</label>
+                                                                        <select name="type" class="form-control" required>
+                                                                            <option value="Regular"
+                                                                                <?= $holiday['type'] === 'Regular' ? 'selected' : '' ?>>Regular</option>
+                                                                            <option value="Non-Working"
+                                                                                <?= $holiday['type'] === 'Non-Working' ? 'selected' : '' ?>>Non-Working</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label class="form-label">Date</label>
+                                                                        <input type="date" name="date" class="form-control"
+                                                                            value="<?= $holiday['date'] ?>" required>
+                                                                    </div>
+                                                                    <button type="submit" name="update"
+                                                                        class="btn btn-primary">Update Holiday</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
                                         <?php endif; ?>
                                     </tbody>
                                 </table>
-
-                                <!-- Pagination Links with Inline CSS -->
-                                <div class="pagination" style="text-align: center; margin-top: 20px;">
-                                    <?php if ($page > 1): ?>
-                                        <a href="?page=<?= $page - 1 ?>"
-                                            style="color: #3d405c; padding: 8px 16px; text-decoration: none; margin: 0 2px; border: 1px solid #3d405c; border-radius: 4px;">Previous</a>
-                                    <?php endif; ?>
-
-                                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                                        <a href="?page=<?= $i ?>" class="<?= $i == $page ? 'active' : '' ?>"
-                                            style="color: <?= $i == $page ? 'white' : '#3d405c' ?>; padding: 8px 16px; text-decoration: none; margin: 0 2px; border: <?= $i == $page ? 'none' : '1px solid #3d405c' ?>; background-color: <?= $i == $page ? '#3d405c' : 'transparent' ?>; border-radius: 4px;">
-                                            <?= $i ?>
-                                        </a>
-                                    <?php endfor; ?>
-
-                                    <?php if ($page < $totalPages): ?>
-                                        <a href="?page=<?= $page + 1 ?>"
-                                            style="color: #3d405c; padding: 8px 16px; text-decoration: none; margin: 0 2px; border: 1px solid #3d405c; border-radius: 4px;">Next</a>
-                                    <?php endif; ?>
                                 </div>
-                            </div>
 
-                            <div id="sparkline-revenue"></div>
+                                <!-- Pagination Links -->
+                                <?php if ($totalPages > 1): ?>
+                                    <div class="pagination-container mt-4">
+                                        <ul class="pagination justify-content-center">
+
+                                            <!-- Previous Button -->
+                                            <li class="page-item <?= $currentPage <= 1 ? 'disabled' : '' ?>">
+                                                <a class="page-link"
+                                                    href="?page=<?= max(1, $currentPage - 1) ?>">Previous</a>
+                                            </li>
+
+                                            <!-- Page Number Links -->
+                                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                                <li class="page-item <?= $currentPage == $i ? 'active' : '' ?>">
+                                                    <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                                                </li>
+                                            <?php endfor; ?>
+
+                                            <!-- Next Button -->
+                                            <li class="page-item <?= $currentPage >= $totalPages ? 'disabled' : '' ?>">
+                                                <a class="page-link"
+                                                    href="?page=<?= min($totalPages, $currentPage + 1) ?>">Next</a>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <form method="POST" action="index.php">
+                                    <div class="mb-3">
+                                        <label class="form-label">Holiday Name</label>
+                                        <input type="text" name="holiday" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Type</label>
+                                        <select name="type" class="form-control" required>
+                                            <option value="Regular">Regular</option>
+                                            <option value="Non-Working">Non-Working</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Date</label>
+                                        <input type="date" name="date" class="form-control" required>
+                                    </div>
+                                    <button type="submit" name="add" class="btn btn-primary">Add Holiday</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
 
 
-
-                <!-- </div> -->
             </div>
-            <!-- </div> -->
-            <!-- ============================================================== -->
-            <!-- footer -->
-            <!-- ============================================================== -->
-            <!-- <div class="footer mx-2">
+        </div>
+
+
+
+        <!-- </div> -->
+    </div>
+    <!-- </div> -->
+    <!-- ============================================================== -->
+    <!-- footer -->
+    <!-- ============================================================== -->
+    <!-- <div class="footer mx-2">
                 <div class="container-fluid mx-2">
                     <div class="row">
                         <div class="col-xl-7 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -679,14 +783,14 @@ try {
                     </div>
                 </div>
             </div> -->
-            <!-- ============================================================== -->
-            <!-- end footer -->
-            <!-- ============================================================== -->
-        </div>
-        <!-- ============================================================== -->
-        <!-- end wrapper  -->
-        <!-- ============================================================== -->
-    </div>
+    <!-- ============================================================== -->
+    <!-- end footer -->
+    <!-- ============================================================== -->
+    
+    <!-- ============================================================== -->
+    <!-- end wrapper  -->
+    <!-- ============================================================== -->
+    
     <!-- ============================================================== -->
     <!-- end main wrapper  -->
     <!-- ============================================================== -->

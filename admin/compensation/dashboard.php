@@ -2,77 +2,91 @@
 <!-- <?php
 session_start();
 
-require_once('../../config/Database.php');
+require('../../config/Database.php');
 
-// Initialize arrays to hold data
-$dates = [];
-$facultyRates = [];
-$adminRates = [];
+// Initialize variables for displaying messages
+$message = '';
+$success = false;
 
 try {
-    // Query to get data from the `average_rates` table
-    $sql = "SELECT date, rate, position FROM average_rates ORDER BY date ASC";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
+    // Handle form submission for adding new entry (Create)
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (isset($_POST['create'])) {
+            $date = $_POST['date'];
+            $min_salary = $_POST['min_salary'];
+            $max_salary = $_POST['max_salary'];
+            $position = $_POST['position'];
 
-    // Fetch results
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        // Store the date
+            // Insert new data into the database
+            $stmt = $conn->prepare("INSERT INTO `average_rates` (`date`, `min_salary`, `max_salary`, `position`) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$date, $min_salary, $max_salary, $position]);
+
+            $message = "Data added successfully!";
+            $success = true;
+        }
+
+        // Handle form submission for updating entry (Update)
+        if (isset($_POST['update'])) {
+            $id = $_POST['id'];
+            $date = $_POST['date'];
+            $min_salary = $_POST['min_salary'];
+            $max_salary = $_POST['max_salary'];
+            $position = $_POST['position'];
+
+            // Update data in the database
+            $stmt = $conn->prepare("UPDATE `average_rates` SET `date` = ?, `min_salary` = ?, `max_salary` = ?, `position` = ? WHERE `id` = ?");
+            $stmt->execute([$date, $min_salary, $max_salary, $position, $id]);
+
+            $message = "Data updated successfully!";
+            $success = true;
+        }
+
+        // Handle form submission for deleting entry (Delete)
+        if (isset($_POST['delete'])) {
+            $id = $_POST['id'];
+
+            // Delete data from the database
+            $stmt = $conn->prepare("DELETE FROM `average_rates` WHERE `id` = ?");
+            $stmt->execute([$id]);
+
+            $message = "Data deleted successfully!";
+            $success = true;
+        }
+    }
+
+    // Fetch all records for display (Read)
+    $stmt = $conn->query("SELECT `id`, `date`, `min_salary`, `max_salary`, `position` FROM `average_rates`");
+    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Connection failed: " . $e->getMessage());
+}
+
+
+
+//salary data chart
+try {
+    // Database query to fetch data
+    $stmt = $conn->query("SELECT `id`, `date`, `min_salary`, `max_salary`, `position` FROM `average_rates` WHERE 1");
+    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Prepare data for chart
+    $dates = [];
+    $min_salaries = [];
+    $max_salaries = [];
+    $positions = [];
+
+    foreach ($data as $row) {
         $dates[] = $row['date'];
-
-        // Parse rate into min and max values
-        list($minRate, $maxRate) = explode(" - ", $row['rate']);
-        $minRate = floatval($minRate);
-        $maxRate = floatval($maxRate);
-
-        // Check the position and push the appropriate values into the corresponding array
-        if ($row['position'] == 'Faculty') {
-            $facultyRates[] = ($minRate + $maxRate) / 2; // Using average for line chart
-        } elseif ($row['position'] == 'Admin') {
-            $adminRates[] = ($minRate + $maxRate) / 2; // Using average for line chart
-        }
+        $min_salaries[] = $row['min_salary'];
+        $max_salaries[] = $row['max_salary'];
+        $positions[] = $row['position']; // Store the position in the array
     }
 
+    // Get unique positions for the dropdown
+    $unique_positions = array_unique($positions);
 } catch (PDOException $e) {
-    die("Error fetching data: " . $e->getMessage());
+    die("Connection failed: " . $e->getMessage());
 }
-
-// Database query to fetch data from the `average_rates` table
-try {
-    // Modify SQL to get columns: date, rate, position, and type
-    $stmt = $conn->prepare("SELECT date, rate, position, type FROM average_rates");
-    $stmt->execute();
-    $averageRatesData = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    $error = "Database error: " . $e->getMessage();
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addRate'])) {
-    try {
-        // Get data from form
-        $date = $_POST['date'];
-        $rate = $_POST['rate'];
-        $position = $_POST['position'];
-        $type = $_POST['type'];
-
-        // Prepare SQL query to insert data into average_rates table
-        $stmt = $conn->prepare("INSERT INTO average_rates (date, rate, position, type) VALUES (:date, :rate, :position, :type)");
-        $stmt->bindParam(':date', $date, PDO::PARAM_STR);
-        $stmt->bindParam(':rate', $rate, PDO::PARAM_STR);
-        $stmt->bindParam(':position', $position, PDO::PARAM_STR);
-        $stmt->bindParam(':type', $type, PDO::PARAM_STR);
-
-        if ($stmt->execute()) {
-            echo "<script>alert('Rate added successfully!'); window.location.href = 'benefits.php';</script>";
-        } else {
-            echo "<script>alert('Error adding rate');</script>";
-        }
-    } catch (PDOException $e) {
-        echo "<script>alert('Database error: " . $e->getMessage() . "');</script>";
-    }
-}
-
-
 ?> -->
 <!doctype html>
 <html lang="en">
@@ -86,8 +100,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addRate'])) {
     <script defer src="../../node_modules/jquery/dist/jquery.min.js"></script>
 
     <!-- bs -->
-    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <script defer src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+     <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css"> 
+     <script defer src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <!-- jquery -->
     <script defer src="../../node_modules/jquery/dist/jquery.js"></script>
@@ -107,8 +121,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addRate'])) {
     <!-- slimscroll js -->
     <script defer type="module" src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="css/schedule.css">
+
+    
+    <link rel="stylesheet" href="css/dashboard.css">
     <title>Admin Dashboard</title>
 </head>
 
@@ -231,23 +250,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addRate'])) {
                             </ul>
                         </li> -->
                         <li class="nav-item dropdown nav-user">
-                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="#" alt=""
-                                    class="user-avatar-md rounded-circle"></a>
-                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown"
-                                aria-labelledby="navbarDropdownMenuLink2">
+                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="#" alt="" class="user-avatar-md rounded-circle"></a>
+                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
                                 <div class="nav-user-info">
-                                    <h5 class="mb-0 text-white nav-user-name"> <?= $_SESSION['username'] ?> </h5>
+                                    <h5 class="mb-0 text-white nav-user-name"> <?= $_SESSION['name'] ?> </h5>
                                     <span class="status"></span><span class="ml-2">Available</span>
                                 </div>
                                 <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Account</a>
                                 <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
-                                <a class="dropdown-item" href="../../auth/logout.php">
-                                    <button class="btn btn-danger">
-                                        <i class="fas fa-power-off mr-2"></i>
-                                        Logout
-                                    </button>
-                                </a>
+                                <a class="dropdown-item" href="../../auth/logout.php"><i class="fas fa-power-off mr-2"></i>Logout</a>
                             </div>
                         </li>
                     </ul>
@@ -479,21 +490,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addRate'])) {
                                         class="fas fa-f fa-folder"></i>Compensation & benefits</a>
                                 <div id="submenu-7" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
-                                        <li class="nav-item">
+                                        <!-- <li class="nav-item">
                                             <a class="nav-link" href="index.php">Attendance <span
                                                     class="badge badge-secondary">New</span></a>
-                                        </li>
+                                        </li> -->
                                         <li class="nav-item">
-                                            <a class="nav-link" href="schedule.php">Rates</a>
+                                            <a class="nav-link" href="dashboard.php">Rates</a>
                                         </li>
-                                        <li class="nav-item">
+                                        <!-- <li class="nav-item">
                                             <a class="nav-link" href="payroll.php">Payroll</a>
-                                        </li>
+                                        </li> -->
                                         <li class="nav-item">
                                             <a class="nav-link" href="leave.php">Leave</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="benefits.php">Benefits</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="index.php">Holidays</a>
                                         </li>
 
                                     </ul>
@@ -607,197 +621,286 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['addRate'])) {
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="text-muted">Contents</h5>
-                                <div class="metric-value d-inline-block">
-                                    <!-- <h1 class="mb-1">Schedule</h1> -->
+                                <!-- <h5 class="text-muted">Salary Data</h5> -->
 
-                                    <h2>Salary and Wage Comparison</h2>
+                                <!-- <h1 class="mb-1">Schedule</h1> -->
 
-                                    <div class="chart-container">
-                                        <!-- Chart container for Faculty -->
-                                        <div class="chart-box">
-                                            <h3>Faculty Wage (₱)</h3>
-                                            <canvas id="facultyChart" width="800" height="400"></canvas>
-                                        </div>
+                                <h2>Salary Overview - Min & Max Salary Trends</h2>
 
-                                        <!-- Chart container for Admin -->
-                                        <div class="chart-box">
-                                            <h3>Admin Salary (₱)</h3>
-                                            <canvas id="adminChart" width="800" height="400"></canvas>
-                                        </div>
-                                    </div>
-
-
-
-
-                                    <script>
-                                        // Prepare data for Faculty Chart
-                                        var facultyCtx = document.getElementById('facultyChart').getContext('2d');
-                                        var facultyChart = new Chart(facultyCtx, {
-                                            type: 'line',
-                                            data: {
-                                                labels: <?php echo json_encode($dates); ?>, // X-axis labels (dates)
-                                                datasets: [{
-                                                    label: 'Faculty Wage (₱)',
-                                                    data: <?php echo json_encode($facultyRates); ?>, // Y-axis data for Faculty
-                                                    borderColor: 'rgba(75, 192, 192, 1)',
-                                                    borderWidth: 2,
-                                                    fill: false
-                                                }]
-                                            },
-                                            options: {
-                                                scales: {
-                                                    x: {
-                                                        title: {
-                                                            display: true,
-                                                            text: 'Date'
-                                                        }
-                                                    },
-                                                    y: {
-                                                        title: {
-                                                            display: true,
-                                                            text: 'Amount (₱)'
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        });
-
-                                        // Prepare data for Admin Chart
-                                        var adminCtx = document.getElementById('adminChart').getContext('2d');
-                                        var adminChart = new Chart(adminCtx, {
-                                            type: 'line',
-                                            data: {
-                                                labels: <?php echo json_encode($dates); ?>, // X-axis labels (dates)
-                                                datasets: [{
-                                                    label: 'Admin Salary (₱)',
-                                                    data: <?php echo json_encode($adminRates); ?>, // Y-axis data for Admin
-                                                    borderColor: 'rgba(255, 99, 132, 1)',
-                                                    borderWidth: 2,
-                                                    fill: false
-                                                }]
-                                            },
-                                            options: {
-                                                scales: {
-                                                    x: {
-                                                        title: {
-                                                            display: true,
-                                                            text: 'Date'
-                                                        }
-                                                    },
-                                                    y: {
-                                                        title: {
-                                                            display: true,
-                                                            text: 'Amount (₱)'
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        });
-
-
-                                    </script>
-
-
+                                <div class="form-group">
+                                    <label for="positionSelect">Select Position:</label>
+                                    <select id="positionSelect" class="form-control">
+                                        <option value="">All Positions</option>
+                                        <?php foreach ($unique_positions as $position): ?>
+                                            <option value="<?= htmlspecialchars($position) ?>">
+                                                <?= htmlspecialchars($position) ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
+
+                                <!-- Chart Container -->
+                                <div class="chart-container">
+                                    <canvas id="salaryChart"></canvas>
+                                </div>
+
+                                <div class="footer">
+                                    <p>&copy; 2025 Your Company. All rights reserved.</p>
+                                </div>
+
+
+                                <script>
+                                    // Initial Data for the chart
+                                    var allData = <?php echo json_encode($data); ?>;
+
+                                    // Function to filter data based on selected position
+                                    function filterData(position) {
+                                        if (position === '') {
+                                            return allData; // If no position is selected, return all data
+                                        }
+                                        return allData.filter(function (item) {
+                                            return item.position === position;
+                                        });
+                                    }
+
+                                    // Function to update the chart with filtered data
+                                    function updateChart(position) {
+                                        var filteredData = filterData(position);
+                                        var dates = filteredData.map(function (item) { return item.date; });
+                                        var minSalaries = filteredData.map(function (item) { return item.min_salary; });
+                                        var maxSalaries = filteredData.map(function (item) { return item.max_salary; });
+
+                                        salaryChart.data.labels = dates;
+                                        salaryChart.data.datasets[0].data = minSalaries;
+                                        salaryChart.data.datasets[1].data = maxSalaries;
+                                        salaryChart.update();
+                                    }
+
+                                    // Initial chart setup
+                                    var ctx = document.getElementById('salaryChart').getContext('2d');
+                                    var salaryChart = new Chart(ctx, {
+                                        type: 'line',
+                                        data: {
+                                            labels: <?php echo json_encode($dates); ?>, // Dates
+                                            datasets: [{
+                                                label: 'Min Salary',
+                                                data: <?php echo json_encode($min_salaries); ?>, // Min Salary Data
+                                                borderColor: '#4caf50', // Green for min salary
+                                                backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                                                fill: true,
+                                                tension: 0.4
+                                            }, {
+                                                label: 'Max Salary',
+                                                data: <?php echo json_encode($max_salaries); ?>, // Max Salary Data
+                                                borderColor: '#f44336', // Red for max salary
+                                                backgroundColor: 'rgba(244, 67, 54, 0.2)',
+                                                fill: true,
+                                                tension: 0.4
+                                            }]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            maintainAspectRatio: false,
+                                            interaction: {
+                                                mode: 'index',
+                                                intersect: false
+                                            },
+                                            scales: {
+                                                x: {
+                                                    title: {
+                                                        display: true,
+                                                        text: 'Date'
+                                                    },
+                                                    grid: {
+                                                        display: false
+                                                    }
+                                                },
+                                                y: {
+                                                    title: {
+                                                        display: true,
+                                                        text: 'Salary (in USD)'
+                                                    },
+                                                    grid: {
+                                                        color: '#ddd'
+                                                    }
+                                                }
+                                            },
+                                            plugins: {
+                                                tooltip: {
+                                                    backgroundColor: '#333',
+                                                    titleColor: '#fff',
+                                                    bodyColor: '#fff',
+                                                    borderColor: '#4caf50',
+                                                    borderWidth: 1,
+                                                    padding: 10
+                                                }
+                                            }
+                                        }
+                                    });
+
+                                    // Event listener to update chart when position is selected
+                                    document.getElementById('positionSelect').addEventListener('change', function () {
+                                        var selectedPosition = this.value;
+                                        updateChart(selectedPosition);
+                                    });
+                                </script>
+
+                                <!-- Bootstrap JS and dependencies -->
+                                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                                <script
+                                    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+                                <script
+                                    src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+
+
+
                             </div>
                             <div id="sparkline-revenue"></div>
                         </div>
 
                         <div class="card">
                             <div class="card-body">
-                                <h2>Salary and Wage table</h2>
+                   
+                                    
+                                   
+        <h2>Manage Average Rates</h2>
 
+        <!-- Display messages (Success/Error) -->
+        <?php if ($message): ?>
+            <div class="alert alert-<?= $success ? 'success' : 'danger' ?>"><?= $message ?></div>
+        <?php endif; ?>
 
-                                <!-- HTML Table to Display the Data -->
-                                <table style="width: 100%; max-width: 1500px; border-collapse: collapse;">
-                                    <thead>
-                                        <tr>
-                                            <th
-                                                style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">
-                                                Date</th>
-                                            <th
-                                                style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">
-                                                Rate</th>
-                                            <th
-                                                style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">
-                                                Position</th>
-                                            <th
-                                                style="background-color: #3d405c; color: white; padding: 15px; text-align: left; font-weight: bold;">
-                                                Type</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        // Check if there is any data to display
-                                        if (!empty($averageRatesData)) {
-                                            foreach ($averageRatesData as $row) {
-                                                // Display each row's date, rate, position, and type
-                                                echo "<tr>
-                    <td>" . htmlspecialchars($row['date']) . "</td>
-                    <td>" . htmlspecialchars($row['rate']) . "</td>
-                    <td>" . htmlspecialchars($row['position']) . "</td>
-                    <td>" . htmlspecialchars($row['type']) . "</td>
-                </tr>";
-                                            }
-                                        } else {
-                                            // Message when no data is found
-                                            echo "<tr><td colspan='4'>No records found</td></tr>";
-                                        }
-                                        ?>
-                                    </tbody>
-                                </table>
+        <!-- Form to Create or Update -->
+        <form method="POST">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" name="date" class="form-control" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="min_salary">Min Salary</label>
+                    <input type="number" id="min_salary" name="min_salary" class="form-control" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="max_salary">Max Salary</label>
+                    <input type="number" id="max_salary" name="max_salary" class="form-control" required>
+                </div>
+            </div>
 
-                                <div id="addRateModal"
-                                    style="display:none; background-color: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; justify-content: center; align-items: center;">
-                                    <div
-                                        style="background-color: white; padding: 20px; border-radius: 5px; max-width: 400px; width: 100%;">
-                                        <h3>Add New Rate</h3>
-                                        <form method="POST" action="benefits.php">
-                                            <label for="date">Date:</label>
-                                            <input type="date" name="date" id="date" required><br><br>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="position">Position</label>
+                    <input type="text" id="position" name="position" class="form-control" required>
+                </div>
+            </div>
 
-                                            <label for="rate">Rate:</label>
-                                            <input type="number" name="rate" id="rate" step="0.01" required><br><br>
+            <!-- Buttons for Create/Update -->
+            <button type="submit" name="create" class="btn btn-primary">Add New Entry</button>
+        </form>
 
-                                            <label for="position">Position:</label>
-                                            <input type="text" name="position" id="position" required><br><br>
+        <hr>
 
-                                            <label for="type">Type:</label>
-                                            <select name="type" id="type" required>
-                                                <option value="wage">Wage</option>
-                                                <option value="salary">Salary</option>
-                                            </select><br><br>
+        <!-- Table to display all records -->
+        <h3>Existing Entries</h3>
+        <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th style="color:black">Date</th>
+                    <th style="color:black">Min Salary</th>
+                    <th style="color:black">Max Salary</th>
+                    <th style="color:black">Position</th>
+                    <th style="color:black">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($data as $row): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($row['date']) ?></td>
+                        <td><?= htmlspecialchars($row['min_salary']) ?></td>
+                        <td><?= htmlspecialchars($row['max_salary']) ?></td>
+                        <td><?= htmlspecialchars($row['position']) ?></td>
+                        <td>
+                            <!-- Update Button (Triggers Modal) -->
+                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#updateModal" 
+                                    data-id="<?= $row['id'] ?>" data-date="<?= $row['date'] ?>" 
+                                    data-min_salary="<?= $row['min_salary'] ?>" data-max_salary="<?= $row['max_salary'] ?>" 
+                                    data-position="<?= $row['position'] ?>">Edit</button>
+                            
+                            <!-- Delete Form -->
+                            <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this?');">
+                                <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                                <button type="submit" name="delete" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        </div>
+    </div>
 
-                                            <button type="submit" name="addRate"
-                                                style="background-color: #3d405c; color: white; padding: 10px 20px; border: none; cursor: pointer;">Add
-                                                Rate</button>
-                                            <button type="button" onclick="closeAddModal()"
-                                                style="background-color: #d9534f; color: white; padding: 10px 20px; border: none; cursor: pointer;">Cancel</button>
-                                        </form>
-                                    </div>
-                                </div>
-
-                                <button onclick="openAddModal()"
-                                    style="background-color: #3d405c; color: white; padding: 10px 20px; border: none; cursor: pointer;">Add
-                                    Rate</button>
-
-
-                                <script>
-                                    // Open and Close Modals
-                                    function openAddModal() {
-                                        document.getElementById('addRateModal').style.display = 'flex';
-                                    }
-
-                                    function closeAddModal() {
-                                        document.getElementById('addRateModal').style.display = 'none';
-                                    }
-                                </script>
-
-                            </div>
+    <!-- Update Modal -->
+    <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateModalLabel">Update Entry</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="POST">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="updateId">
+                        <div class="form-group">
+                            <label for="updateDate">Date</label>
+                            <input type="date" id="updateDate" name="date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateMinSalary">Min Salary</label>
+                            <input type="number" id="updateMinSalary" name="min_salary" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateMaxSalary">Max Salary</label>
+                            <input type="number" id="updateMaxSalary" name="max_salary" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="updatePosition">Position</label>
+                            <input type="text" id="updatePosition" name="position" class="form-control" required>
                         </div>
                     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" name="update" class="btn btn-primary">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fill in modal fields when editing an entry
+        $('#updateModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('id');
+            var date = button.data('date');
+            var min_salary = button.data('min_salary');
+            var max_salary = button.data('max_salary');
+            var position = button.data('position');
+
+            $('#updateId').val(id);
+            $('#updateDate').val(date);
+            $('#updateMinSalary').val(min_salary);
+            $('#updateMaxSalary').val(max_salary);
+            $('#updatePosition').val(position);
+        });
+    </script>
+                                </div>
+                            </div>
+                    
+                    </div>
                 </div>
+
 
 
 

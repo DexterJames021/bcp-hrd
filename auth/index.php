@@ -4,49 +4,47 @@ require "../config/Database.php";
 
 $err = "";
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
     
-        if($err == ""){
+    if ($err == "") {
 
-            $query = "SELECT * FROM users WHERE username = :username && password = :password LIMIT 1";
-            $stmt = $conn->prepare($query);
-            $check = $stmt->execute(['username'=> $username,'password'=>$password]);
+        $query = "SELECT * FROM users WHERE username = :username && password = :password LIMIT 1";
+        $stmt = $conn->prepare($query);
+        $check = $stmt->execute(['username' => $username, 'password' => $password]);
 
-            if ($check) {
-                $user = $stmt->fetch(PDO::FETCH_OBJ);
-                if($user){
-                    
-                    if($user->usertype == 'admin'){
-                        $_SESSION['user_id'] = $user->id;
-                        $_SESSION['username'] = $user->username;
-                        $_SESSION['usertype'] = $user->usertype;
+        if ($check) {
+            $user = $stmt->fetch(PDO::FETCH_OBJ);
+            if ($user) {
+                
+                // Assign session variables
+                $_SESSION['user_id'] = $user->id;
+                $_SESSION['username'] = $user->username;
+                $_SESSION['usertype'] = $user->usertype;
+                $_SESSION['applicant_id'] = $user->usertype;
+                
+                // Redirect based on user type
+                if ($user->usertype == 'admin') {
+                    header("Location: ../admin/index.php");
+                    exit;
 
-                        header("Location:../admin/index.php");
+                } elseif ($user->usertype == 'employee') {
+                    header("Location: ../portal/index.php");
+                    exit;
 
-                    }elseif($user->usertype == 'employee'){
-                        $_SESSION['user_id'] = $user->id;
-                        $_SESSION['username'] = $user->username;
-                        $_SESSION['usertype'] = $user->usertype;
-
-                        header("Location:../portal/index.php");
-
-                    }
-                    echo "<script>confirm('405 no permisiion ')</script>";
-
-                }else{
-                    echo "<script>confirm('Something Wrong in email or password')</script>";
-                    // header("Location: index.php");
+                } elseif ($user->usertype == 'manager') {
+                    header("Location: ../manager/index.php");
+                    exit;
 
                 }
                 
+            } else {
+                echo "<script>alert('Invalid username or password');</script>";
             }
         }
-
     }
-
-    // $err = "<script>alert('Something Wrong in email or password')</script>";
+}
 ?>
 <!doctype html>
 <html lang="en">
