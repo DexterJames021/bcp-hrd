@@ -1,6 +1,6 @@
 $(function () {
   
-  const BaseUrl = "../../../admin/tech/includes/encode/resources_api.php?action="
+  const BaseUrl = "../admin/tech/includes/encode/resources_api.php?action="
 
       $("#chartBTN").on("click", function () {
         if ($("#facChart").is(":visible")) {

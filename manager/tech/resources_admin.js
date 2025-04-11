@@ -6,9 +6,9 @@ $(function () {
 
   const resourcesTable = $("#ResourcesTable").DataTable({
     processing: true,
-     autoWidth: true,
-     scrollX: true,
-    scrollY: 200,
+    autoWidth: true,
+    // scrollX: true,
+    // scrollY: 200,
     width: "100%",
     dom: "Bfrtip",
     ajax: {
@@ -105,9 +105,9 @@ $(function () {
 
   const requestsTable = $("#requestsTable").DataTable({
     width: "100%",
-      autoWidth: true,
-     scrollX: true,
-    scrollY: 200,
+    autoWidth: true,
+    // scrollX: true,
+    // scrollY: 200,
     processing: true,
     ajax: {
       url: BaseURL + "get_pending_request",
@@ -208,9 +208,9 @@ $(function () {
 
   const allocationTable = $("#allocationTable").DataTable({
     processing: true,
-      autoWidth: true,
-     scrollX: true,
-    scrollY: 200,
+    autoWidth: true,
+    // scrollX: true,
+    // scrollY: 200,
     width: "100%",
     ajax: {
       url: BaseURL + "get_allocated_resources",

@@ -1,6 +1,6 @@
 $(function () {
   
-  const BaseUrl ="https://bcp-hrd.site/admin/tech/includes/encode/resources_api.php?action="
+  const BaseUrl = "../includes/encode/resources_api.php?action="
 
   $("#logsView").on("click", function () {
     // console.log("true")
@@ -9,6 +9,8 @@ $(function () {
   });
 
   $("#LogRequestTable").DataTable({
+    width: '100%',
+    responsive: true,
     processing: true,
     dom: "Bfrtip",
     ajax: {

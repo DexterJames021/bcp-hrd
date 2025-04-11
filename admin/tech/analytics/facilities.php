@@ -313,7 +313,7 @@ access_log($userData);
                                         -->
                                     </div>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body table-responsive">
                                     <table id="LogbookingTable" class="table table-hover" width="100%">
                                         <thead class="thead-light">
                                             <tr>

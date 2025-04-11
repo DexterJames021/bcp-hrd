@@ -4,7 +4,7 @@ $(function () {
     // const bookingTable = $('#bookingTable').DataTable();
 
 
-    const baseURL = "https://bcp-hrd.site/admin/tech/includes/encode/facility_api.php?action="
+    const baseURL = "../../admin/tech/includes/encode/facility_api.php?action="
 
 
     function loadRooms() {

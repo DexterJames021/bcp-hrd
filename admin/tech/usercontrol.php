@@ -266,7 +266,7 @@ access_log($userData);
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="usercontrolTable" class="table table-hover" style="width:100%">
+                                    <table id="usercontrolTable" class="table table-hover">
                                         <thead class="thead-light">
                                             <tr>
                                                 <th>ID</th>

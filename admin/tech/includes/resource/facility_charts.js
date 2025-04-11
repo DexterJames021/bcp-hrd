@@ -1,7 +1,7 @@
 $(function () {
   console.log("asdasd");
 
-  const BaseURL = "https://bcp-hrd.site/admin/tech/includes/encode/facility_api.php?action="
+  const BaseURL = "../includes/encode/facility_api.php?action="
 
   $("#logsView").on("click", function () {
     // console.log("true")
@@ -158,10 +158,12 @@ $(function () {
   });
 
   const bookingTable = $("#LogbookingTable").DataTable({
+    width: '100%',
+    responsive: true,
     processing: true,
-        scrollX: true,
-    scrollY: 200,
-    width: "100%",
+    // scrollY:        "",
+    // scrollCollapse: false,
+    // scrollX: true,
     ordering: true,
     dom: "Bfrtip",
     ajax: {

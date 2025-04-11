@@ -344,7 +344,7 @@ access_log($userData);
                                     <button id="backButton" class="btn btn-outline-light d-inline">Back to List</button>
                                 </div> -->
                             </div>
-                            <div class="card-body">
+                            <div class="card-body table-responsive">
                                 <table class="table">
                                     <thead class="thead-light">
                                         <tr>

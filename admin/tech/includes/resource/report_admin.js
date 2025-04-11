@@ -1,10 +1,10 @@
 $(function () {
 
-    const BaseURLREs = "https://bcp-hrd.site/admin/tech/includes/encode/resources_api.php?action="
+    const BaseURLREs = "../includes/encode/resources_api.php?action="
 
-    const BaseURLFac = "https://bcp-hrd.site/admin/tech/includes/encode/facility_api.php?action="
+    const BaseURLFac = "../includes/encode/facility_api.php?action="
 
-    const GenURL = "https://bcp-hrd.site/admin/tech/includes/encode/report_api.php?action="
+    const GenURL = "../includes/encode/report_api.php?action="
 
     let generatedReport = "";
 

@@ -2,6 +2,7 @@
 *.txt
 *.vuerd
 *.drawio
-bcp-hrd.code-workspace
+capstone.code-workspace
 pullpush.sh
 build.sh
+.vscode

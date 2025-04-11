@@ -2,7 +2,7 @@ console.log("connect");
 
 $(function () {
 
-  const baseURL ="https://bcp-hrd.site/admin/tech/includes/encode/resources_api.php?action="
+  const baseURL ="../../admin/tech/includes/encode/resources_api.php?action="
 
   const ResourcesTable = $("#ResourcesTable").DataTable({
     processing: true,

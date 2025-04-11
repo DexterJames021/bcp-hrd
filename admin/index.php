@@ -79,7 +79,7 @@ $employeesJSON = json_encode($employeesData);
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
 
     <!-- global JavaScript -->
-    <script defer type="module" src="../assets/libs/js/global-script.js"></script>
+    <!-- <!-- <script defer type="module" src="../assets/libs/js/global-script.js"></script> --> -->
 
     <!-- main js -->
     <script defer type="module" src="../assets/libs/js/main-js.js"></script>

@@ -1,7 +1,7 @@
 $(function () {
   console.log("asdasd");
 
-  const BaseURL ="../../../admin/tech/includes/encode/facility_api.php?action="
+  const BaseURL ="../admin/tech/includes/encode/facility_api.php?action="
 
 
   // $("#analyticView").on("click", function () {

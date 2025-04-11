@@ -10,8 +10,8 @@ $(function () {
     // facility table
     const AllRoomTable = $('#roomTable').DataTable({
         autoWidth: true,
-        scrollX: true,
-        scrollY: 200,
+        // scrollX: true,
+        // scrollY: 200,
         processing: true,
         dom: 'Bfrtip',
         ajax: {
@@ -176,8 +176,8 @@ $(function () {
     //approve booking and reject booking
     const bookingTable = $('#bookingTable').DataTable({
         processing: true,
-        scrollX: true,
-        scrollY: 200,
+        // scrollX: true,
+        // scrollY: 200,
          autoWidth: true,
         ajax: {
             url: BaseURL + 'fetch_avail_book',

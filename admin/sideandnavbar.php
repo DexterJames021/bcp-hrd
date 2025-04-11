@@ -2,6 +2,12 @@
 
 $base_url = 'http://localhost/bcp-hrd';
 
+##################3###################
+#   DASHBOARD
+#       admin
+#       superadmin
+#####################################
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -18,8 +24,6 @@ $base_url = 'http://localhost/bcp-hrd';
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <script defer src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
-    <!-- global JavaScript -->
-    <script defer type="module" src="../assets/libs/js/global-script.js"></script>
 
     <!-- main js -->
     <script defer type="module" src="../assets/libs/js/main-js.js"></script>
@@ -348,11 +352,11 @@ $base_url = 'http://localhost/bcp-hrd';
                                                 href="<?php echo $base_url; ?>/admin/tech/records.php">Employee Personnel
                                                 Records</a>
                                         </li>
-                                        <!-- <li class="nav-item">
-                                        <a class="nav-link < ?php echo (basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : ''; ?>"
-                                            href="< ?php echo $base_url; ?>/admin/tech/reports.php">Administrative
+                                        <li class="nav-item">
+                                        <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : ''; ?>"
+                                            href="<?php echo $base_url; ?>/admin/tech/reports.php">Administrative
                                             Report</a>
-                                    </li> -->
+                                    </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
                                                 data-target="#submenu-3-2" aria-controls="submenu-3-2">Analytics</a>

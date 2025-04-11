@@ -1,6 +1,6 @@
 $(function () {
 
-    const BaseURL = "https://bcp-hrd.site/admin/tech/includes/encode/analytic_api.php?action="
+    const BaseURL = "./includes/encode/analytic_api.php?action="
 
     $("#LogbookingTable").DataTable()
 

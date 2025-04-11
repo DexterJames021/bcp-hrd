@@ -3,8 +3,12 @@ $(function () {
     const BaseURI = "./includes/encode/useraccess_api.php?action=";
 
     const rolesPermissionTable = $('#usercontrolTable').DataTable({
-        processing: true,
         width: '100%',
+        responsive: true,
+        processing: true,
+        // scrollY:        "",
+        // scrollCollapse: false,
+        // scrollX: true,
         ajax: {
             url: BaseURI + "get_all_roles_permission",
             type: "POST",

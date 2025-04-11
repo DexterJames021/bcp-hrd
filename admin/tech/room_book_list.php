@@ -308,7 +308,7 @@ access_log($userData);
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <table id="bookingTable" style="width:100%" class="table table-hover">
+                                            <table id="bookingTable" class="table table-hover ">
                                                 <thead class="thead-light">
                                                     <tr>
                                                         <th>Employee</th>
@@ -329,7 +329,7 @@ access_log($userData);
                         </div>
 
                         <!-- pending Tab -->
-                        <div class="tab-pane fade" id="facility-pending" role="tabpanel"
+                        <div class="tab-pane fade " id="facility-pending" role="tabpanel" style="width:100%;"
                             aria-labelledby="facility-pending-tab">
                             <div class="row">
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
@@ -337,14 +337,14 @@ access_log($userData);
                                         <div class="card-header d-flex justify-content-between">
                                             <h2>Pending</h2>
                                         </div>
-                                        <div class="card-body">
-                                            <table id="approvedTable"  class="table table-hover table-responsive">
+                                        <div class="card-body table-responsive">
+                                            <table id="approvedTable"  class="table table-hover ">
                                                 <thead class="thead-light">
                                                     <tr>
                                                          <th>#</th> 
                                                         <!--<th>By</th>-->
                                                         <th>Facility Name</th>
-                                                        <th>Location</th>
+                                                        <th col="2">Location</th>
                                                         <!-- <th>Capacity</th> -->
                                                         <th>Status</th>
                                                         <th>Booking Date</th>

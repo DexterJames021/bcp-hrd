@@ -333,7 +333,7 @@ access_log($userData);
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <table id="LogbookingTable" class="table table-hover" width="100%">
+                                    <table id="LogbookingTable" class="table table-hover">
                                         <thead class="thead-light">
                                             <tr>
                                                 <th>Employee</th>

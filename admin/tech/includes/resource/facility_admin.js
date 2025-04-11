@@ -2,7 +2,8 @@ $(function () {
     console.log('connect');
     console.log("JS ROLE PASS:  ", userPermissions);
 
-    const BaseURL = "https://bcp-hrd.site/admin/tech/includes/encode/facility_api.php?action="
+    const BaseURL = "./includes/encode/facility_api.php?action="
+
 
     $("#openModalBtn").on("click", function () {
         $("#reportModal").modal("show");
@@ -11,9 +12,11 @@ $(function () {
     // facility table
     const AllRoomTable = $('#roomTable').DataTable({
         width: '100%',
-         scrollX: true,
-        scrollY: 200,
+        responsive: true,
         processing: true,
+        // scrollY:        "",
+        // scrollCollapse: false,
+        // scrollX: true,
         dom: 'Bfrtip',
         ajax: {
             url: BaseURL + 'get_all_room',
@@ -161,15 +164,6 @@ $(function () {
     });
 
 
-    // console.log($('#roomTable').Tabledit())
-    // // const pendingTable = $('#approvedTable').DataTable({
-    //     ordering: false,
-    //     processing: true,
-    //     searching: false,
-    //     autoWidth: true,
-    //     // ajax: {}
-    //     // columns: [{
-    // });
 
 
     //? todo: send email if done
@@ -177,9 +171,11 @@ $(function () {
     //approve booking and reject booking
     const bookingTable = $('#bookingTable').DataTable({
         width: '100%',
-         scrollX: true,
-        scrollY: 200,
+        // responsive: true,
         processing: true,
+        // scrollY:        "",
+        // scrollCollapse: false,
+        // scrollX: true,
         ajax: {
             url: BaseURL + 'fetch_avail_book',
             dataType: 'json',
