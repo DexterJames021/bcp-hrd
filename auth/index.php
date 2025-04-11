@@ -1,6 +1,6 @@
 <?php
 session_start();
-require "../config/Database.php";
+require __DIR__ . "/../config/Database.php";
 
 $err = "";
 

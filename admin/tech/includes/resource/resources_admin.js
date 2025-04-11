@@ -3,14 +3,13 @@ $(function () {
   console.log("RESOURCES ADMIN");
   console.log("JS ROLE PASS:  ", userPermissions);
   
-  const BaseURL =
-    window.location.hostname === "localhost"
-      ? "http://localhost/bcp-hrd/admin/tech/includes/encode/resources_api.php?action="
-      : "https://yourdomain.com/bcp-hrd/admin/tech/encode/resources_api.php?action=";
+  const BaseURL = "https://bcp-hrd.site/admin/tech/includes/encode/resources_api.php?action="
 
   const resourcesTable = $("#ResourcesTable").DataTable({
     processing: true,
-    width: "100%",
+     scrollX: true,
+    scrollY: 200,
+    // width: "100%",
     dom: "Bfrtip",
     ajax: {
       url: BaseURL + "fetch_all",
@@ -109,6 +108,8 @@ $(function () {
 
   const requestsTable = $("#requestsTable").DataTable({
     width: "100%",
+     scrollX: true,
+    scrollY: 200,
     processing: true,
     ajax: {
       url: BaseURL + "get_pending_request",
@@ -221,6 +222,9 @@ $(function () {
 
   const allocationTable = $("#allocationTable").DataTable({
     processing: true,
+     scrollX: true,
+    scrollY: 200,
+    width: '100%',
     ajax: {
       url: BaseURL + "get_allocated_resources",
       method: "POST",

@@ -1,13 +1,14 @@
 <?php
-$base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
+$base_url = 'http://localhost/bcp-hrd';
+
 ?>
 
 <div class="dashboard-header ">
-    <nav class="navbar navbar-expand-lg bg-white fixed-top">
-        <a class="navbar-brand" href="<?php echo $base_url; ?>/index.php">
+    <nav class="navbar navbar-expand-lg bg-light fixed-top">
+        <a class="navbar-brand" href="index.php">
             <img src="<?php echo $base_url; ?>/assets/images/bcp-hrd-logo.jpg" alt="" style="height: 3rem;width: auto;">
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        <button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -31,13 +32,7 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                                 <div class="list-group">
                                     <a href="#" class="list-group-item list-group-item-action active">
                                         <div class="notification-info">
-                                            <div class="notification-list-user-img"><img src="#" alt=""
-                                                    class="user-avatar-md rounded-circle"></div>
-                                            <div class="notification-list-user-block"><span
-                                                    class="notification-list-user-name">Jeremy Rakestraw</span>accepted
-                                                your invitation to join the team.
-                                                <div class="notification-date">2 min ago</div>
-                                            </div>
+                                            No notification
                                         </div>
                                     </a>
                                     <!-- More notification items here -->
@@ -76,7 +71,7 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
     <div class="menu-list">
         <nav class="navbar navbar-expand-lg">
             <a class="d-xl-none d-lg-none" href="#"><?= strtoupper($_SESSION['usertype']) ?> PANEL</a>
-            <button class="navbar-toggler btn-light" type="button" data-toggle="collapse" data-target="#navbarNav"
+            <button class="navbar-toggler navbar-light btn-light" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>

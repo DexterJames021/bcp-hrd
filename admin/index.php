@@ -5,7 +5,7 @@ require __DIR__ . '../../auth/mysqli_accesscontrol.php';
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);
 
-echo "console.log(ROOT +++++++++++ " . $_SERVER['DOCUMENT_ROOT'] . ")";
+// echo "console.log(ROOT +++++++++++ " . $_SERVER['DOCUMENT_ROOT'] . ")";
 
 
 // Fetch total employees

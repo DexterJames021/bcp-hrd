@@ -4,10 +4,7 @@ $(function () {
     // const bookingTable = $('#bookingTable').DataTable();
 
 
-    const baseURL =
-    window.location.hostname === "localhost"
-      ? "http://localhost/bcp-hrd/admin/tech/includes/encode/facility_api.php?action="
-      : "https://yourdomain.com/bcp-hrd/admin/tech/encode/facility_api.php?action=";
+    const baseURL = "https://bcp-hrd.site/admin/tech/includes/encode/facility_api.php?action="
 
 
     function loadRooms() {

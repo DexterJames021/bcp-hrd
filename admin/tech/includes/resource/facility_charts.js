@@ -1,10 +1,7 @@
 $(function () {
   console.log("asdasd");
 
-  const BaseURL = 
-  window.location.hostname === "localhost"
-  ? "http://localhost/bcp-hrd/admin/tech/includes/encode/facility_api.php?action="
-  : "https://yourdomain.com/bcp-hrd/admin/tech/encode/facility_api.php?action=";
+  const BaseURL = "https://bcp-hrd.site/admin/tech/includes/encode/facility_api.php?action="
 
   $("#logsView").on("click", function () {
     // console.log("true")
@@ -135,6 +132,9 @@ $(function () {
   // categorize
   $("#facilityTable").DataTable({
     processing: true,
+        scrollX: true,
+    scrollY: 200,
+    searching: false,
     ajax: {
       url: BaseURL + "facility_categorization", // Replace with your API URL
       type: "POST",
@@ -159,6 +159,8 @@ $(function () {
 
   const bookingTable = $("#LogbookingTable").DataTable({
     processing: true,
+        scrollX: true,
+    scrollY: 200,
     width: "100%",
     ordering: true,
     dom: "Bfrtip",

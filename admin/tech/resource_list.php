@@ -324,7 +324,7 @@ access_log($userData);
                                         </div> -->
                                         </div>
                                         <div class="card-body">
-                                            <table class="table table-hover" style="width:100%" id="requestsTable">
+                                            <table class="table table-hover" id="requestsTable">
                                                 <thead class="thead-light">
                                                     <tr>
                                                         <th>ID</th>

@@ -1,6 +1,6 @@
 console.log('HEsfseofselfnlsif');
 
-const baseURL = "http://localhost/bcp-hrd/admin/tech/includes/encode/facility_api.php?action=";
+const baseURL = "https://bcp-hrd.site/admin/tech/includes/encode/facility_api.php?action=";
 
 document.addEventListener('DOMContentLoaded', function () {
     console.log('DOM fully loaded');

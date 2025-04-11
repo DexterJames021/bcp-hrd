@@ -1,9 +1,6 @@
 $(function () {
   
-  const BaseUrl =
-    window.location.hostname === "localhost"
-      ? "http://localhost/bcp-hrd/admin/tech/includes/encode/resources_api.php?action="
-      : "https://yourdomain.com/bcp-hrd/admin/tech/encode/resources_api.php?action=";
+  const BaseUrl = "../../../admin/tech/includes/encode/resources_api.php?action="
 
       $("#chartBTN").on("click", function () {
         if ($("#facChart").is(":visible")) {

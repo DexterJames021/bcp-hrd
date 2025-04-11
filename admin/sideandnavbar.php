@@ -1,6 +1,6 @@
 <?php
 
-$base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
+$base_url = 'http://localhost/bcp-hrd';
 
 ?>
 <!doctype html>
@@ -40,7 +40,7 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
     <div class="dashboard-header ">
         <nav class="navbar navbar-expand-lg bg-white fixed-top  ">
             <?php
-            $base_url_logo = 'http://localhost/bcp-hrd'; // Change to your actual base URL
+            $base_url_logo = 'https://bcp-hrd.site'; // Change to your actual base URL
             ?>
 
             <a class="navbar-brand" href="index.php">
@@ -48,7 +48,7 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                     style="height: 3rem;width: auto;">
             </a>
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            <button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>

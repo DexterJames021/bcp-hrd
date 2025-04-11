@@ -1,9 +1,6 @@
 $(function () {
 
-    const baseURL =
-        window.location.hostname === "localhost"
-            ? "http://localhost/bcp-hrd/admin/tech/includes/encode/users_api.php?action="
-            : "https://yourdomain.com/bcp-hrd/admin/tech/encode/users_api.php?action=";
+    const baseURL ="https://bcp-hrd.site/admin/tech/includes/encode/users_api.php?action="
 
 
     let performanceChartInstance = null;
@@ -25,7 +22,7 @@ $(function () {
                 render: function (a, b, c, d) {
                     return d.row + 1;
                 },
-                title: "No."
+                // title: "No."
             },
             {
                 title: 'Name',

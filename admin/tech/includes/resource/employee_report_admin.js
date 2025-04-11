@@ -1,9 +1,6 @@
 $(function () {
 
-    const BaseURL =
-        window.location.hostname === "localhost"
-            ? "http://localhost/bcp-hrd/admin/tech/includes/encode/analytic_api.php?action="
-            : "https://yourdomain.com/bcp-hrd/admin/tech/encode/resources_api.php?action=";
+    const BaseURL = "https://bcp-hrd.site/admin/tech/includes/encode/analytic_api.php?action="
 
     $("#LogbookingTable").DataTable()
 

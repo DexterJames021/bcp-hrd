@@ -2,10 +2,7 @@ console.log("connect");
 
 $(function () {
 
-  const baseURL =
-    window.location.hostname === "localhost"
-      ? "http://localhost/bcp-hrd/admin/tech/includes/encode/resources_api.php?action="
-      : "https://yourdomain.com/bcp-hrd/admin/tech/encode/resources_api.php?action=";
+  const baseURL ="https://bcp-hrd.site/admin/tech/includes/encode/resources_api.php?action="
 
   const ResourcesTable = $("#ResourcesTable").DataTable({
     processing: true,

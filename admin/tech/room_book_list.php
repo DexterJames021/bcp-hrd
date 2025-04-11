@@ -338,11 +338,11 @@ access_log($userData);
                                             <h2>Pending</h2>
                                         </div>
                                         <div class="card-body">
-                                            <table id="approvedTable" style="width:100%" class="table table-hover">
+                                            <table id="approvedTable"  class="table table-hover table-responsive">
                                                 <thead class="thead-light">
                                                     <tr>
-                                                        <!-- <th>#</th> -->
-                                                        <th>By</th>
+                                                         <th>#</th> 
+                                                        <!--<th>By</th>-->
                                                         <th>Facility Name</th>
                                                         <th>Location</th>
                                                         <!-- <th>Capacity</th> -->

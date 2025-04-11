@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-header("Content-Type: application/json");
+// header("Content-Type: application/json");
 
 $apiKey = "AIzaSyDzeOhS2fVFzHHBxGbZCZO60XcNthL9GGc";
 $endpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
