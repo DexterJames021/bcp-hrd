@@ -324,7 +324,7 @@ access_log($userData);
                                         </div> -->
                                         </div>
                                         <div class="card-body">
-                                            <table class="table table-hover" style="width:100%" id="requestsTable">
+                                            <table class="table table-hover"  style="width:100%;" id="requestsTable">
                                                 <thead class="thead-light">
                                                     <tr>
                                                         <th>ID</th>
@@ -339,7 +339,7 @@ access_log($userData);
                                                 </thead>
                                                 <tbody></tbody>
                                             </table>
-                                        </div>
+                                        </div>  
                                     </div>
                                 </div>
                             </div>
@@ -372,7 +372,7 @@ access_log($userData);
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <table class="table table-hover" style="width:100%" id="allocationTable">
+                                            <table class="table table-hover" style="width:100%;" id="allocationTable">
                                                 <thead class="thead-light">
                                                     <tr>
                                                         <th>Resource</th>
@@ -415,7 +415,7 @@ access_log($userData);
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <div class="table-responsive">
+                                            <div class="">
                                                 <table id="ResourcesTable" style="width: 100%;" class="table table-hover">
                                                     <thead class="thead-light">
                                                         <tr>

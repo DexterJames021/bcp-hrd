@@ -1,7 +1,11 @@
 <?php
 
 
+require __DIR__ . "../../config/db_talent.php";
+require __DIR__ . '../../auth/mysqli_accesscontrol.php';
 
+$userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
+access_log($userData);
 
 ?>
 <!doctype html>
@@ -79,9 +83,55 @@
 
 
     <title>Admin Dashboard</title>
+    <style>
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0e0c28;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.3s ease;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            font-size: 18px;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Loading Dashboard...</div>
+    </div>
     <!-- ============================================================== -->
     <!-- main wrapper -->
     <!-- ============================================================== -->
@@ -108,14 +158,16 @@
                         </li>
                         <li class="nav-item dropdown notification">
                             <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span
-                                    class="indicator"></span></a>
+                                aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i>
+                                <!-- <span
+                                    class="indicator"></span> -->
+                            </a>
                             <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                                 <li>
                                     <div class="notification-title"> Notification</div>
                                     <div class="notification-list">
                                         <div class="list-group">
-                                            <a href="#" class="list-group-item list-group-item-action active">
+                                            <!-- <a href="#" class="list-group-item list-group-item-action active">
                                                 <div class="notification-info">
                                                     <div class="notification-list-user-img"><img src="#" alt=""
                                                             class="user-avatar-md rounded-circle"></div>
@@ -147,16 +199,10 @@
                                                         <div class="notification-date">2 min ago</div>
                                                     </div>
                                                 </div>
-                                            </a>
+                                            </a> -->
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt=""
-                                                            class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span
-                                                            class="notification-list-user-name">Jessica
-                                                            Caruso</span>accepted your invitation to join the team.
-                                                        <div class="notification-date">2 min ago</div>
-                                                    </div>
+                                                    No notification
                                                 </div>
                                             </a>
                                         </div>
@@ -201,7 +247,8 @@
                         </li> -->
                         <li class="nav-item dropdown nav-user">
                             <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="#" alt=""
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
+                                    src="../assets/images/noprofile2.jpg" alt=""
                                     class="user-avatar-md rounded-circle"></a>
                             <div class="dropdown-menu dropdown-menu-right nav-user-dropdown"
                                 aria-labelledby="navbarDropdownMenuLink2">
@@ -293,7 +340,8 @@
                         <div class="page-header d-flex justify-content-between">
                             <h2 class="pageheader-title">Dashboard</h2>
                             <div>
-                                <button id="chartBTN" class="btn btn-outline-primary">Facility <i class="bi bi-bar-chart-fill"></i></button>
+                                <button id="chartBTN" class="btn btn-outline-primary">Facility <i
+                                        class="bi bi-bar-chart-fill"></i></button>
                             </div>
 
                             <!-- <p class="pageheader-text">Nulla euismod urna eros, sit amet scelerisque torton lectus vel mauris facilisis faucibus at enim quis massa lobortis rutrum.</p> -->
@@ -307,11 +355,11 @@
                     <div class="row d-flex" style="display:none;">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
 
-                        <div class="card">
-                            <div class="card-header">
-                                <h3>Facility Charts</h3>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>Facility Charts</h3>
+                                </div>
                             </div>
-                        </div>
                             <!-- utilization -->
                             <div class="card">
                                 <div class="card-header">
@@ -375,11 +423,11 @@
                 <div id="resChart" class="container-fluid dashboard-content" style="display:none;">
                     <div class="row d-flex">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3>Resources Charts</h3>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>Resources Charts</h3>
+                                </div>
                             </div>
-                        </div>
                             <!-- donat -->
                             <div class="card">
                                 <div class="card-header">
@@ -454,6 +502,27 @@
     <!-- ============================================================== -->
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var loadingOverlay = document.getElementById('loading-overlay');
+
+            window.addEventListener('load', function () {
+                setTimeout(function () {
+                    loadingOverlay.style.opacity = '0';
+                    setTimeout(function () {
+                        loadingOverlay.style.display = 'none';
+                    }, 300);
+                }, 500);
+            });
+
+            setTimeout(function () {
+                loadingOverlay.style.opacity = '0';
+                setTimeout(function () {
+                    loadingOverlay.style.display = 'none';
+                }, 300);
+            }, 3000);
+        });
+    </script>
 </body>
 
 </html>

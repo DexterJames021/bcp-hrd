@@ -176,7 +176,7 @@ access_log($userData);
                                 <a class="dropdown-item" href="./settings/emp-info.php"><i
                                         class="fas fa-user mr-2"></i>Account</a>
                                 <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
-                                <a class="dropdown-item" href="../../auth/logout.php"><i
+                                <a class="dropdown-item" href="../../../auth/logout.php"><i
                                         class="fas fa-power-off mr-2"></i>Logout</a>
                             </div>
                         </li>
@@ -223,7 +223,7 @@ access_log($userData);
                             <!-- utilization -->
                             <div class="card">
                                 <div class="card-header">
-                                    <h4>Over Utilized</h4>
+                                    <h4 style="cursor:pointer;" title="calculates much a facility is being used compared to its total available capacity">Over Utilized</h4>
                                 </div>
                                 <!-- utilize -->
                                 <div class="card-body" width="100%" height="100%">
@@ -234,7 +234,7 @@ access_log($userData);
                             <!-- category -->
                             <div class="card">
                                 <div class="card-header">
-                                    <h4>Categorization </h4>
+                                    <h4>List Facility </h4>
                                 </div>
                                 <div class="card-body">
                                     <table id="facilityTable">
@@ -313,7 +313,7 @@ access_log($userData);
                                         -->
                                     </div>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body table-responsive">
                                     <table id="LogbookingTable" class="table table-hover" width="100%">
                                         <thead class="thead-light">
                                             <tr>

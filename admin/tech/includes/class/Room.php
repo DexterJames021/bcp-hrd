@@ -134,6 +134,19 @@ class Room
         }
     }
 
+    public function ApproveEvents()
+    {
+        try {
+            $q = "SELECT * FROM `fm_bookings` WHERE status = 'Approved'; ";
+            $stmt = $this->conn->prepare($q);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
     public function BookingStatusDistribution()
     {
         try {

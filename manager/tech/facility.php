@@ -104,14 +104,16 @@ access_log($userData);
                         </li>
                         <li class="nav-item dropdown notification">
                             <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span
-                                    class="indicator"></span></a>
+                                aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i>
+                                 <!-- <span
+                                    class="indicator"></span> -->
+                                </a>
                             <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                                 <li>
                                     <div class="notification-title"> Notification</div>
                                     <div class="notification-list">
                                         <div class="list-group">
-                                            <a href="#" class="list-group-item list-group-item-action active">
+                                            <!-- <a href="#" class="list-group-item list-group-item-action active">
                                                 <div class="notification-info">
                                                     <div class="notification-list-user-img"><img src="#" alt=""
                                                             class="user-avatar-md rounded-circle"></div>
@@ -143,15 +145,11 @@ access_log($userData);
                                                         <div class="notification-date">2 min ago</div>
                                                     </div>
                                                 </div>
-                                            </a>
+                                            </a> -->
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt=""
-                                                            class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span
-                                                            class="notification-list-user-name">Jessica
-                                                            Caruso</span>accepted your invitation to join the team.
-                                                        <div class="notification-date">2 min ago</div>
+                                                    <div class="notification-list-user-img">
+                                                        No notification
                                                     </div>
                                                 </div>
                                             </a>
@@ -197,7 +195,7 @@ access_log($userData);
                         </li> -->
                         <li class="nav-item dropdown nav-user">
                             <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="#" alt=""
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="../../assets/images/noprofile2.jpg" alt=""
                                     class="user-avatar-md rounded-circle"></a>
                             <div class="dropdown-menu dropdown-menu-right nav-user-dropdown"
                                 aria-labelledby="navbarDropdownMenuLink2">
@@ -336,7 +334,7 @@ access_log($userData);
                                         <table id="approvedTable" style="width:100%" class="table table-hover">
                                             <thead class="thead-light">
                                                 <tr>
-                                                    <th>#</th>
+                                                    <!-- <th>#</th> -->
                                                     <th>By</th>
                                                     <th>Facility Name</th>
                                                     <th>Location</th>

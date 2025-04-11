@@ -221,9 +221,7 @@ $department_result = $conn->query($department_sql);
     <li class="nav-item">
         <a class="nav-link" id="departments-tab" data-toggle="tab" href="#departments" role="tab">Departments</a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" id="open-positions-tab" data-toggle="tab" href="#open-positions" role="tab">Open Positions</a>
-    </li>
+
     
 </ul>
 
@@ -380,35 +378,7 @@ if ($result->num_rows > 0) {
         </div>
     </div>
 
-    <!-- Open Positions Tab -->
-    <div class="tab-pane fade" id="open-positions" role="tabpanel" aria-labelledby="open-positions-tab">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between">
-                <h1 class="card-title">Open Positions</h1>
-            </div>
-            <div class="card-body">
-                <table class="table table-hover" id="myOpen" style="100%">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>Position</th>
-                            <th>Department</th>
-                            <th>Vacancies</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Software Engineer</td>
-                            <td>IT</td>
-                            <td>2</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="text-center">No open positions available.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+  
 
     <!-- Applicants Tab -->
     <div class="tab-pane fade show active" id="applicants" role="tabpanel" aria-labelledby="applicants-tab">

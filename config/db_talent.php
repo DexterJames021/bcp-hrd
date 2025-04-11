@@ -9,6 +9,11 @@ $username = "root"; // Your database username
 $password = ""; // Your database password
 $dbname = "bcp-hrd"; // Your database name
 
+// $servername = "localhost";
+// $username = "u114085275_admin";
+// $password = "7ooiO?kJ"; 
+// $dbname = "u114085275_bcphrd"; 
+
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 

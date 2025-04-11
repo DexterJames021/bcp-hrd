@@ -2,16 +2,17 @@
 
 session_start();
 
-if (!isset($_SESSION['user_id'])) {
-    echo json_encode(['error' => 'Unauthorized access']);
-    http_response_code(403);
-    exit;
-}
+// if (!isset($_SESSION['user_id'])) {
+//     echo json_encode(['error' => 'Unauthorized access']);
+//     http_response_code(403);
+//     exit;
+// }
 
 header("Access-Control-Allow-Origin: *");
+// header("Access-Control-Allow-Origin: https://bcp-hrd.site");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
-header("Content-Type: application/json");
+// header("Access-Control-Allow-Headers: Content-Type, Authorization");
+// header("Content-Type: application/json");
 
 
 require '../class/Resources.php';

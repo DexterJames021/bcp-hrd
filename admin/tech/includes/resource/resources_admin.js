@@ -2,15 +2,16 @@ $(function () {
   // ASSETS
   console.log("RESOURCES ADMIN");
   console.log("JS ROLE PASS:  ", userPermissions);
-  
-  const BaseURL =
-    window.location.hostname === "localhost"
-      ? "http://localhost/bcp-hrd/admin/tech/includes/encode/resources_api.php?action="
-      : "https://yourdomain.com/bcp-hrd/admin/tech/encode/resources_api.php?action=";
+
+  const BaseURL = "./includes/encode/resources_api.php?action="
 
   const resourcesTable = $("#ResourcesTable").DataTable({
+    width: '100%',
+    responsive: true,
     processing: true,
-    width: "100%",
+    // scrollY:        "",
+    // scrollCollapse: false,
+    // scrollX: true,
     dom: "Bfrtip",
     ajax: {
       url: BaseURL + "fetch_all",
@@ -108,8 +109,12 @@ $(function () {
   }
 
   const requestsTable = $("#requestsTable").DataTable({
-    width: "100%",
+    width: '100%',
+    responsive: true,
     processing: true,
+    // scrollY:        false,
+    // scrollCollapse: false,
+    // scrollX: true,
     ajax: {
       url: BaseURL + "get_pending_request",
       type: "POST",
@@ -131,7 +136,7 @@ $(function () {
       },
       {
         title: "Purpose",
-        data: "purpose"	
+        data: "purpose"
       },
       {
         title: "Requested at",
@@ -161,11 +166,11 @@ $(function () {
               <i class="bi bi-x-circle text-danger" style="font-size:x-large;"></i>
               </button>`;
             }
-//DELETE
+            //DELETE
             // if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) { 
-              // buttons += `<button type="button" class="btn-reject btn my-1" data-id="${data.id}" title="REJECT">
-              // <i class="bi bi-x-circle text-danger" style="font-size:x-large;"></i>
-              // </button>`;
+            // buttons += `<button type="button" class="btn-reject btn my-1" data-id="${data.id}" title="REJECT">
+            // <i class="bi bi-x-circle text-danger" style="font-size:x-large;"></i>
+            // </button>`;
             // }
           }
 
@@ -220,7 +225,12 @@ $(function () {
 
 
   const allocationTable = $("#allocationTable").DataTable({
+    width: '100%',
+    responsive: true,
     processing: true,
+    // scrollY:        "",
+    // scrollCollapse: false,
+    // scrollX: true,
     ajax: {
       url: BaseURL + "get_allocated_resources",
       method: "POST",
@@ -434,23 +444,23 @@ $(function () {
     const id = $(this).data("id");
 
     if (confirm('Are you sure you want to delete this asset?')) {
-    $.post(BaseURL + "delete_resource",
-      {
-        id,
-      },
-      function (response) {
-        if (response.success) {
-          resourcesTable.ajax.reload();
-          loadRoomsSelectTag();
-          $("#deleted").toast("show");
-        }else {
-          $("#error").toast("show");
-        }
-      },
-      "json"
-    );
+      $.post(BaseURL + "delete_resource",
+        {
+          id,
+        },
+        function (response) {
+          if (response.success) {
+            resourcesTable.ajax.reload();
+            loadRoomsSelectTag();
+            $("#deleted").toast("show");
+          } else {
+            $("#error").toast("show");
+          }
+        },
+        "json"
+      );
 
-  }
+    }
   });
 
   $(document).on("click", ".update", function () {

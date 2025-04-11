@@ -3,10 +3,7 @@ $(function () {
   console.log("RESOURCES ADMIN");
   console.log("JS ROLE PASS:  ", userPermissions);
   
-  const BaseURL =
-    window.location.hostname === "localhost"
-      ? "http://localhost/bcp-hrd/admin/tech/includes/encode/resources_api.php?action="
-      : "https://yourdomain.com/bcp-hrd/admin/tech/encode/resources_api.php?action=";
+  const BaseURL = "https://bcp-hrd.site/admin/tech/includes/encode/resources_api.php?action="
 
   const resourcesTable = $("#ResourcesTable").DataTable({
     processing: true,

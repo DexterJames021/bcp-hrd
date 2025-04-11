@@ -1,6 +1,12 @@
 <?php
 
-$base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
+$base_url = 'http://localhost/bcp-hrd';
+
+##################3###################
+#   DASHBOARD
+#       admin
+#       superadmin
+#####################################
 
 ?>
 <!doctype html>
@@ -18,8 +24,6 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <script defer src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
-    <!-- global JavaScript -->
-    <script defer type="module" src="../assets/libs/js/global-script.js"></script>
 
     <!-- main js -->
     <script defer type="module" src="../assets/libs/js/main-js.js"></script>
@@ -40,15 +44,15 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
     <div class="dashboard-header ">
         <nav class="navbar navbar-expand-lg bg-white fixed-top  ">
             <?php
-            $base_url_logo = 'http://localhost/bcp-hrd'; // Change to your actual base URL
+            $base_url_logo = 'https://bcp-hrd.site'; // Change to your actual base URL
             ?>
 
-             <a class="navbar-brand" href="index.php">
+            <a class="navbar-brand" href="index.php">
                 <img src="<?php echo $base_url_logo; ?>/assets/images/bcp-hrd-logo.jpg" alt=""
                     style="height: 3rem;width: auto;">
             </a>
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            <button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -61,8 +65,10 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                     </li>
                     <li class="nav-item dropdown notification">
                         <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span
-                                class="indicator"></span></a>
+                            aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i>
+                            <!-- <span
+                                class="indicator"></span> -->
+                        </a>
                         <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                             <li>
                                 <div class="notification-title"> Notification</div>
@@ -148,8 +154,18 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                         </li> -->
                     <li class="nav-item dropdown nav-user">
                         <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false"><img src="#" alt=""
-                                class="user-avatar-md rounded-circle"></a>
+                            aria-haspopup="true" aria-expanded="false">
+                            <img id="user-avatar" src="<?php
+                            $currentPage = basename($_SERVER['PHP_SELF']);
+                            if ($currentPage == 'facilities.php' || $currentPage == 'resources.php') {
+                                echo '../../../assets/images/noprofile2.jpg';
+                            } elseif ($currentPage == 'index.php') {
+                                echo '../assets/images/noprofile2.jpg';
+                            } else {
+                                echo '../../assets/images/noprofile2.jpg';
+                            }
+                            ?>" alt="" class="user-avatar-md rounded-circle">   
+                        </a>
                         <div class="dropdown-menu dropdown-menu-right nav-user-dropdown"
                             aria-labelledby="navbarDropdownMenuLink2">
                             <div class="nav-user-info">
@@ -286,8 +302,8 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                                                 Succession Planning
                                             </a>
                                         </li>
-                                        
-                                
+
+
                                     </ul>
                                 </div>
                             </li>
@@ -336,11 +352,11 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                                                 href="<?php echo $base_url; ?>/admin/tech/records.php">Employee Personnel
                                                 Records</a>
                                         </li>
-                                        <!-- <li class="nav-item">
-                                        <a class="nav-link < ?php echo (basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : ''; ?>"
-                                            href="< ?php echo $base_url; ?>/admin/tech/reports.php">Administrative
+                                        <li class="nav-item">
+                                        <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : ''; ?>"
+                                            href="<?php echo $base_url; ?>/admin/tech/reports.php">Administrative
                                             Report</a>
-                                    </li> -->
+                                    </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
                                                 data-target="#submenu-3-2" aria-controls="submenu-3-2">Analytics</a>
@@ -544,15 +560,7 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                                                 Succession Planning
                                             </a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'career.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/admin/talent/career.php">
-                                                Career Development
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/tabs.html">Tabs</a>
-                                        </li>
+
                                     </ul>
                                 </div>
                             </li>
@@ -607,7 +615,7 @@ $base_url = 'http://localhost/bcp-hrd'; // Your project's base URL
                                                 <!-- <i class="bi bi-person-fill-gear"></i> -->
                                                 User Control</a>
                                         </li>
-                                            <!-- <li class="nav-item">
+                                        <!-- <li class="nav-item">
                                             <a class="nav-link < ?php echo (basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : ''; ?>"
                                                 href="< ?php echo $base_url; ?>/admin/tech/reports.php">Administrative
                                                 Report</a>

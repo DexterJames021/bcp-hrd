@@ -1,19 +1,10 @@
 $(function () {
 
-    const BaseURLREs =
-        window.location.hostname === "localhost"
-            ? "http://localhost/bcp-hrd/admin/tech/includes/encode/resources_api.php?action="
-            : "https://yourdomain.com/bcp-hrd/admin/tech/encode/resources_api.php?action=";
+    const BaseURLREs = "../includes/encode/resources_api.php?action="
 
-    const BaseURLFac =
-        window.location.hostname === "localhost"
-            ? "http://localhost/bcp-hrd/admin/tech/includes/encode/facility_api.php?action="
-            : "https://yourdomain.com/bcp-hrd/admin/tech/encode/facility_api.php?action=";
+    const BaseURLFac = "../includes/encode/facility_api.php?action="
 
-    const GenURL =
-        window.location.hostname === "localhost"
-            ? "http://localhost/bcp-hrd/admin/tech/includes/encode/report_api.php?action="
-            : "https://yourdomain.com/bcp-hrd/admin/tech/encode/report_api.php?action=";
+    const GenURL = "../includes/encode/report_api.php?action="
 
     let generatedReport = "";
 

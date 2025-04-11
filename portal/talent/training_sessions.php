@@ -96,7 +96,7 @@ if ($employee_id) {
     <!-- Slimscroll JS -->
     <script src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 
-    <title>Admin Dashboard</title>
+    <title>Employee Dashboard</title>
 </head>
 
 <body>
@@ -147,7 +147,7 @@ if (isset($_SESSION['message'])) {
         <th>Materials</th>
         <th>Status</th>
         <th>Completion Date</th>
-        <th>Action</th> <!-- Added Action column -->
+        <th>Rating 1-5</th> <!-- Added Action column -->
     </tr>
 </thead>
 <tbody>
@@ -199,7 +199,7 @@ if ($result && $result->num_rows > 0) {
                 $gradeResult = $gradeStmt->get_result();
                 if ($gradeResult->num_rows > 0) {
                     $gradeRow = $gradeResult->fetch_assoc();
-                    echo '<span class="badge badge-success">Grade: ' . htmlspecialchars($gradeRow['grade']) . '%</span>';
+                    echo '<span class="badge badge-success">Rating: ' . htmlspecialchars($gradeRow['grade']) . 'Stars</span>';
                 } else {
                     echo 'No grade assigned yet';
                 }

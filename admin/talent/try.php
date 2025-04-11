@@ -14,7 +14,7 @@
     <script defer src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <!-- global JavaScript -->
-    <script defer type="module" src="../assets/libs/js/global-script.js"></script> 
+    <!-- <script defer type="module" src="../assets/libs/js/global-script.js"></script> --> 
 
     <!-- main js -->
     <script defer type="module" src="../assets/libs/js/main-js.js"></script>

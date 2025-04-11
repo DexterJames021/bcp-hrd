@@ -2,10 +2,7 @@ $(function () {
     console.log('connect');
     console.log("JS ROLE PASS:  ", userPermissions);
 
-    const BaseURL =
-        window.location.hostname === "localhost"
-            ? "http://localhost/bcp-hrd/admin/tech/includes/encode/facility_api.php?action="
-            : "https://yourdomain.com/bcp-hrd/admin/tech/encode/facility_api.php?action=";
+    const BaseURL = "https://bcp-hrd.site/admin/tech/includes/encode/facility_api.php?action="
 
     $("#openModalBtn").on("click", function () {
         $("#reportModal").modal("show");

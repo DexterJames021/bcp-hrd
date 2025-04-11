@@ -1,10 +1,7 @@
 $(function () {
   console.log("asdasd");
 
-  const BaseURL =
-  window.location.hostname === "localhost"
-      ? "http://localhost/bcp-hrd/admin/tech/includes/encode/facility_api.php?action="
-      : "https://yourdomain.com/bcp-hrd/admin/tech/encode/facility_api.php?action=";
+  const BaseURL ="../admin/tech/includes/encode/facility_api.php?action="
 
 
   // $("#analyticView").on("click", function () {

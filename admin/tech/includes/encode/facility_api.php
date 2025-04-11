@@ -1,20 +1,23 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['user_id'])) {
-    echo json_encode(['error' => 'Unauthorized access']);
-    http_response_code(403);
-    exit;
-}
+// if (!isset($_SESSION['user_id'])) {
+//     echo json_encode(['error' => 'Unauthorized access']);
+//     http_response_code(403);
+//     exit;
+// }
 
 
-header("Access-Control-Allow-Origin: *"); //  domain
+header("Access-Control-Allow-Origin: *"); 
+// header("Access-Control-Allow-Origin: https://bcp-hrd.site"); 
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
+// header("Access-Control-Allow-Headers: Content-Type, Authorization");
+// header("Access-Control-Allow-Credentials: true");
 // header("Content-Type: application/json"); employee b 
 
 require '../class/Room.php';
 require '../class/Booking.php';
+// require '../class/Email.php';
 require '../../../../config/Database.php';
 
 use Admin\Tech\Includes\Class\Room;
@@ -252,11 +255,11 @@ switch ($action) {
             $body = "Dear Employee,<br><br>Your booking request has been <b>{$status}</b>.<br>Thank you for using our booking system.<br><br>Best regards,<br>Booking Team";
 
             // Send email notification
-            if ($email->sendNotificationEmail($employeeEmail, $subject, $body)) {
-                echo json_encode(['success' => true, 'message' => 'Status updated and notification email sent.']);
-            } else {
-                echo json_encode(['success' => true, 'message' => 'Status updated but email notification failed.']);
-            }
+            // if ($email->sendNotificationEmail($employeeEmail, $subject, $body)) {
+            //     echo json_encode(['success' => true, 'message' => 'Status updated and notification email sent.']);
+            // } else {
+            //     echo json_encode(['success' => true, 'message' => 'Status updated but email notification failed.']);
+            // }
         } else {
             echo json_encode(['success' => false, 'message' => 'Failed to update booking status.']);
         }
@@ -288,7 +291,9 @@ switch ($action) {
     case 'booking_trends':
         echo json_encode($room->BookingTrends());
         break;
-
+    case 'events_all_approved':
+        echo json_encode($room->ApproveEvents());
+        break;
 
 
     default:

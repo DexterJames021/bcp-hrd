@@ -60,7 +60,7 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Hired</title>
+    <title>Onboarding</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -262,111 +262,7 @@ $(document).ready(function(){
                 </div>
             </nav>
         </div>
-        <div class="nav-left-sidebar sidebar-white ">
-            <div class="menu-list">
-                <nav class="navbar navbar-expand-lg cc">
-                    <a class="d-xl-none d-lg-none" href="#"><?= strtoupper($_SESSION['usertype']) ?> PANEL</a>
-                    <button class="navbar-toggler btn-light" type="button" data-toggle="collapse"
-                        data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-                        aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav  flex-column">
-                            <li class="nav-divider">
-                                <?= strtoupper($_SESSION['usertype']) ?> PANEL
-                            </li>
-                            <li class="nav-item ">
-                                <a class="nav-link active" href="index.php">
-                                    <i class="fas fa-fw fa-home"></i> Dashboard
-                                </a>
-                            </li>
-                            <!-- temp -->
-                            <li class="nav-item ">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                                    data-target="#submenu-1" aria-controls="submenu-1"><i
-                                        class="fa fa-fw fa-user-circle"></i>employee <span
-                                        class="badge badge-success">6</span></a>
-                                <div id="submenu-1" class="collapse submenu bg-light">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                                                data-target="#submenu-1-2" aria-controls="submenu-1-2">Lorem, ipsum.</a>
-                                            <div id="submenu-1-2" class="collapse submenu bg-light">
-                                                <ul class="nav flex-column">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="index.html">Lorem.</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">lorem1</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">Lorem.</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">Lorem.</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="./records-management/Records.php">Lorem, ipsum
-                                                dolor.</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="dashboard-sales.html">Lorem, ipsum dolor.</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                                                data-target="#submenu-1-1" aria-controls="submenu-1-1">Lorem, ipsum
-                                                dolor.</a>
-                                            <div id="submenu-1-1" class="collapse submenu">
-                                                <ul class="nav flex-column">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">Lorem, ipsum dolor.</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">Lorem, ipsum dolor.</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">Lorem, ipsum dolor.</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <!-- facilities -->
-                            <li class="nav-item ">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                                    data-target="#submenu-2" aria-controls="submenu-2">
-                                    <i class="fa fa-fw fa-user-circle"></i>Facilites and Resources
-                                    <!-- <span class="badge badge-success">6</span> -->
-                                </a>
-                                <div id="submenu-2" class="collapse submenu bg-light">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="./tech/facilities/book_facility.php">Book
-                                                Facility</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="./tech/facilities/request_resources.php">Request
-                                                Resources</a>
-                                        </li>
-                                        <!-- <li class="nav-item">
-                                            <a class="nav-link" href="./tech/facilities/survey.php">Survey</a>
-                                        </li> -->
-                                    </ul>
-                                </div>
-                            </li>
-
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-        </div>
-        <div class="dashboard-wrapper">
+        <!--<div class="dashboard-wrapper">-->
             <!-- <div class="dashboard-ecommerce"> -->
             <div class="container-fluid dashboard-content ">
                 <!-- ============================================================== -->
@@ -376,7 +272,7 @@ $(document).ready(function(){
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h2 class="pageheader-title">Welcome, <?= $_SESSION["username"] ?>! You are assigned as a <br><?php echo $job_title; ?> in the <?php echo $department_name; ?></h2>
+                                <h2 class="pageheader-title">Welcome, <?= $_SESSION["username"] ?>! You are assigned as a <?php echo $job_title; ?> in the <?php echo $department_name; ?></h2>
                             </div>
                             <div class="card-body">
                             <ul class="nav nav-tabs" id="onboardingTabs">
@@ -595,39 +491,9 @@ document.getElementById('changePasswordForm').addEventListener('submit', functio
     </form>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function(){
-        // Enable the Finish button when the checkbox is checked
-        $("#agree").change(function() {
-            if ($(this).is(":checked")) {
-                $("#finishBtn").prop("disabled", false);
-            } else {
-                $("#finishBtn").prop("disabled", true);
-            }
-        });
 
-        // Handle form submission
-        $("#policyAgreementForm").submit(function(event) {
-            event.preventDefault(); // Prevent default form submission
 
-            $.ajax({
-                url: "finalize_onboarding.php", // PHP script to finalize onboarding
-                type: "POST",
-                data: $(this).serialize(),
-                success: function(response) {
-                    if (response.trim() === "success") {
-                        alert("You have successfully completed your onboarding! You are now an employee.");
-                        // Redirect user or load the employee portal
-                        window.location.href = "../../../../portal/index.php"; // Redirect to employee portal
-                    } else {
-                        alert("Error: " + response);
-                    }
-                }
-            });
-        });
-    });
-</script>
+
 
                                 
                             </div>
@@ -636,7 +502,7 @@ document.getElementById('changePasswordForm').addEventListener('submit', functio
                     </div>
                 </div>
 
-</div>
+<!--</div>-->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function(){
@@ -724,7 +590,53 @@ $(document).ready(function(){
 </script>
 
 
+<script>
+    $(document).ready(function(){
+        // Enable the Finish button when the checkbox is checked
+        $("#agree").change(function() {
+            if ($(this).is(":checked")) {
+                $("#finishBtn").prop("disabled", false);
+            } else {
+                $("#finishBtn").prop("disabled", true);
+            }
+        });
 
+        // Handle form submission
+        $("#policyAgreementForm").submit(function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            $.ajax({
+                url: "finalize_onboarding.php", // PHP script to finalize onboarding
+                type: "POST",
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.trim() === "employee") {
+                        alert("You have successfully completed your onboarding! You are now an employee.");
+                        // Redirect user to employee portal
+                        window.location.href = "../../../../portal/index.php"; // Redirect to employee portal
+                    } else if (response.trim() === "admin") {
+                        alert("You are an admin. Redirecting to admin portal.");
+                        // Redirect user to admin portal
+                        window.location.href = "../../../../admin/index.php"; // Redirect to admin portal
+                    } else if (response.trim() === "manager") {
+                        alert("You are a manager. Redirecting to manager portal.");
+                        // Redirect user to manager portal
+                        window.location.href = "../../../../manager/index.php"; // Redirect to manager portal
+                    } else if (response.trim() === "superadmin") {
+                        alert("You are a superadmin. Redirecting to superadmin portal.");
+                        // Redirect user to superadmin portal
+                        window.location.href = "../../../../admin/index.php"; // Redirect to superadmin portal
+                    } else {
+                        alert("Error: " + response); // Show error message
+                    }
+                },
+                error: function() {
+                    alert("There was an error processing your request. Please try again.");
+                }
+            });
+        });
+    });
+</script>
 
 </body>
 </html>

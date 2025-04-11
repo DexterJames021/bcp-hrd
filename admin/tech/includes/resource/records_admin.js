@@ -1,18 +1,17 @@
 $(function () {
 
-    const baseURL =
-        window.location.hostname === "localhost"
-            ? "http://localhost/bcp-hrd/admin/tech/includes/encode/users_api.php?action="
-            : "https://yourdomain.com/bcp-hrd/admin/tech/encode/users_api.php?action=";
+    const baseURL ="./includes/encode/users_api.php?action="
 
 
     let performanceChartInstance = null;
 
     let recordsTable = $('#RecordsTable').DataTable({
-        processing: true,
-        // stateSave: true, //? para san to
-        // "bDestroy": true,
         width: '100%',
+        responsive: true,
+        processing: true,
+        // scrollY:        "",
+        // scrollCollapse: false,
+        // scrollX: true,
         ajax: {
             url: baseURL + 'get_all_employee_details',
             dataType: 'json',
@@ -25,7 +24,7 @@ $(function () {
                 render: function (a, b, c, d) {
                     return d.row + 1;
                 },
-                title: "No."
+                // title: "No."
             },
             {
                 title: 'Name',

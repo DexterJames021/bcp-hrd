@@ -1,10 +1,7 @@
 $(function () {
     console.log('connect');
 
-    const BaseURL =
-        window.location.hostname === "localhost"
-            ? "http://localhost/bcp-hrd/admin/tech/includes/encode/facility_api.php?action="
-            : "https://yourdomain.com/bcp-hrd/admin/tech/encode/facility_api.php?action=";
+    const BaseURL = "../../admin/tech/includes/encode/facility_api.php?action="
 
     $("#openModalBtn").on("click", function () {
         $("#reportModal").modal("show");
@@ -13,6 +10,8 @@ $(function () {
     // facility table
     const AllRoomTable = $('#roomTable').DataTable({
         autoWidth: true,
+        // scrollX: true,
+        // scrollY: 200,
         processing: true,
         dom: 'Bfrtip',
         ajax: {
@@ -27,7 +26,7 @@ $(function () {
             render: function (a, b, c, d) {
                 return d.row + 1;
             },
-            title: "No."
+            // title: "No."
 
         },
         {
@@ -82,7 +81,7 @@ $(function () {
         $.ajax({
             url: BaseURL + "get_all_room",
             method: "POST",
-            dataType: "JSON",
+            dataType: "json",
             success: function (data) {
                 let total = 0;
                 let book = 0;
@@ -177,6 +176,9 @@ $(function () {
     //approve booking and reject booking
     const bookingTable = $('#bookingTable').DataTable({
         processing: true,
+        // scrollX: true,
+        // scrollY: 200,
+         autoWidth: true,
         ajax: {
             url: BaseURL + 'fetch_avail_book',
             dataType: 'json',
@@ -353,7 +355,6 @@ $(function () {
                     data-bs-placement="top" 
                     tooltip="tooltip" 
                     title="Time remaining: ${remainingHours ?? '0'}h ${remainingMinutes ?? ''}m">
-                        <td>BookID: ${room.id}</td>
                         <td>${room.employee_name}</td>
                         <td title="Purpose: ${room.purpose}" >${room.name}</td>
                         <td>${room.location ?? '-'}</td>

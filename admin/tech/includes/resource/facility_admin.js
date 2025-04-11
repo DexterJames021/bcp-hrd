@@ -2,10 +2,8 @@ $(function () {
     console.log('connect');
     console.log("JS ROLE PASS:  ", userPermissions);
 
-    const BaseURL =
-        window.location.hostname === "localhost"
-            ? "http://localhost/bcp-hrd/admin/tech/includes/encode/facility_api.php?action="
-            : "https://yourdomain.com/bcp-hrd/admin/tech/encode/facility_api.php?action=";
+    const BaseURL = "./includes/encode/facility_api.php?action="
+
 
     $("#openModalBtn").on("click", function () {
         $("#reportModal").modal("show");
@@ -13,8 +11,12 @@ $(function () {
 
     // facility table
     const AllRoomTable = $('#roomTable').DataTable({
-        autoWidth: true,
+        width: '100%',
+        responsive: true,
         processing: true,
+        // scrollY:        "",
+        // scrollCollapse: false,
+        // scrollX: true,
         dom: 'Bfrtip',
         ajax: {
             url: BaseURL + 'get_all_room',
@@ -28,7 +30,7 @@ $(function () {
             render: function (a, b, c, d) {
                 return d.row + 1;
             },
-            title: "No."
+            // title: "No."
 
         },
         {
@@ -149,6 +151,7 @@ $(function () {
             $.post(BaseURL + 'delete_room', { id }, function (response) {
                 if (response.success) {
                     $("#delete").toast("show")
+                    AllRoomTable.ajax.reload();
                     bookingTable.ajax.reload();
                 } else {
                     $("#error").toast("show")
@@ -161,22 +164,18 @@ $(function () {
     });
 
 
-    // console.log($('#roomTable').Tabledit())
-    // // const pendingTable = $('#approvedTable').DataTable({
-    //     ordering: false,
-    //     processing: true,
-    //     searching: false,
-    //     autoWidth: true,
-    //     // ajax: {}
-    //     // columns: [{
-    // });
 
 
     //? todo: send email if done
 
     //approve booking and reject booking
     const bookingTable = $('#bookingTable').DataTable({
+        width: '100%',
+        // responsive: true,
         processing: true,
+        // scrollY:        "",
+        // scrollCollapse: false,
+        // scrollX: true,
         ajax: {
             url: BaseURL + 'fetch_avail_book',
             dataType: 'json',
@@ -357,7 +356,6 @@ $(function () {
                     data-bs-placement="top" 
                     tooltip="tooltip" 
                     title="Time remaining: ${remainingHours ?? '0'}h ${remainingMinutes ?? ''}m">
-                        <td>BookID: ${room.id}</td>
                         <td>${room.employee_name}</td>
                         <td title="Purpose: ${room.purpose}" >${room.name}</td>
                         <td>${room.location ?? '-'}</td>

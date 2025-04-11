@@ -10,7 +10,7 @@ use Admin\Tech\Includes\Class\Email;
 use Admin\Tech\Includes\Class\TechException; //? not used
 
 
-class Booking extends Email
+class Booking 
 {
     private $conn;
     private $table = 'fm_bookings';
