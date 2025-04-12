@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 12, 2025 at 02:20 AM
+-- Generation Time: Apr 13, 2025 at 01:57 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -87,6 +87,60 @@ INSERT INTO `applicants` (`id`, `job_id`, `applicant_name`, `email`, `resume_pat
 (72, 66, 'Penpen ', 'apundarjeremy@gmail.com', 'uploads/resume/Aljhon Resume.docx', 'Hired', '2025-04-05 08:43:42', '2025-04-06', '13:00:00', 9),
 (73, 73, 'PENPEN', 'apundarjeremy@gmail.com', 'uploads/resume/Aljhon Resume.docx', 'Hired', '2025-04-05 09:08:32', '2025-04-06', '13:10:00', 15),
 (74, 74, 'PENPEN', 'apundarjeremy@gmail.com', 'uploads/resume/Aljhon Resume.docx', 'Hired', '2025-04-05 09:14:53', '2025-04-06', '13:15:00', 15);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `attendance`
+--
+
+DROP TABLE IF EXISTS `attendance`;
+CREATE TABLE `attendance` (
+  `id` int(50) NOT NULL,
+  `employeeId` varchar(50) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `department` varchar(50) NOT NULL,
+  `date` date NOT NULL,
+  `day` varchar(50) NOT NULL,
+  `timeIn` time(3) NOT NULL,
+  `timeOut` time(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `attendance`
+--
+
+INSERT INTO `attendance` (`id`, `employeeId`, `name`, `department`, `date`, `day`, `timeIn`, `timeOut`) VALUES
+(1, '1', 'John Doe', 'Faculty', '2024-10-01', 'Tuesday', '08:00:00.000', '17:00:00.000'),
+(2, '2', 'Jane Smith', 'Faculty', '2024-10-02', 'Wednesday', '08:15:00.000', '17:15:00.000'),
+(3, '3', 'Michael Johnson', 'Faculty', '2024-10-03', 'Thursday', '09:00:00.000', '18:00:00.000'),
+(4, '4', 'Emily Davis', 'Faculty', '2024-10-04', 'Friday', '08:30:00.000', '17:30:00.000'),
+(5, '5', 'Chris Lee', 'Faculty', '2024-10-05', 'Saturday', '08:45:00.000', '17:45:00.000'),
+(6, '6', 'Sara Wilson', 'Faculty', '2024-10-06', 'Sunday', '08:50:00.000', '17:50:00.000'),
+(7, '7', 'James Brown', 'Faculty', '2024-10-07', 'Monday', '09:10:00.000', '18:10:00.000'),
+(8, '8', 'Laura White', 'Faculty', '2024-10-08', 'Tuesday', '08:20:00.000', '17:20:00.000'),
+(9, '9', 'Kevin Harris', 'Faculty', '2024-10-09', 'Wednesday', '08:05:00.000', '17:05:00.000'),
+(10, '10', 'Olivia Moore', 'Faculty', '2024-10-10', 'Thursday', '08:40:00.000', '17:40:00.000'),
+(11, '1', 'John Doe', 'Faculty', '2024-10-11', 'Friday', '08:05:00.000', '17:05:00.000'),
+(12, '2', 'Jane Smith', 'Faculty', '2024-10-12', 'Saturday', '08:20:00.000', '17:20:00.000'),
+(13, '3', 'Michael Johnson', 'Faculty', '2024-10-13', 'Sunday', '09:10:00.000', '18:10:00.000'),
+(14, '4', 'Emily Davis', 'Faculty', '2024-10-14', 'Monday', '08:35:00.000', '17:35:00.000'),
+(15, '5', 'Chris Lee', 'Faculty', '2024-10-15', 'Tuesday', '08:50:00.000', '17:50:00.000'),
+(16, '6', 'Sara Wilson', 'Faculty', '2024-10-16', 'Wednesday', '09:00:00.000', '18:00:00.000'),
+(17, '7', 'James Brown', 'Faculty', '2024-10-17', 'Thursday', '08:45:00.000', '17:45:00.000'),
+(18, '8', 'Laura White', 'Faculty', '2024-10-18', 'Friday', '08:30:00.000', '17:30:00.000'),
+(19, '9', 'Kevin Harris', 'Faculty', '2024-10-19', 'Saturday', '08:15:00.000', '17:15:00.000'),
+(20, '10', 'Olivia Moore', 'Faculty', '2024-10-20', 'Sunday', '08:40:00.000', '17:40:00.000'),
+(21, '1', 'John Doe', 'Faculty', '2024-10-21', 'Monday', '08:10:00.000', '17:10:00.000'),
+(22, '2', 'Jane Smith', 'Faculty', '2024-10-22', 'Tuesday', '08:25:00.000', '17:25:00.000'),
+(23, '3', 'Michael Johnson', 'Faculty', '2024-10-23', 'Wednesday', '09:05:00.000', '18:05:00.000'),
+(24, '4', 'Emily Davis', 'Faculty', '2024-10-24', 'Thursday', '08:40:00.000', '17:40:00.000'),
+(25, '5', 'Chris Lee', 'Faculty', '2024-10-25', 'Friday', '08:55:00.000', '17:55:00.000'),
+(26, '6', 'Sara Wilson', 'Faculty', '2024-10-26', 'Saturday', '09:05:00.000', '18:05:00.000'),
+(27, '7', 'James Brown', 'Faculty', '2024-10-27', 'Sunday', '08:35:00.000', '17:35:00.000'),
+(28, '8', 'Laura White', 'Faculty', '2024-10-28', 'Monday', '08:15:00.000', '17:15:00.000'),
+(29, '9', 'Kevin Harris', 'Faculty', '2024-10-29', 'Tuesday', '08:50:00.000', '17:50:00.000'),
+(30, '10', 'Olivia Moore', 'Faculty', '2024-10-30', 'Wednesday', '08:25:00.000', '17:25:00.000');
 
 -- --------------------------------------------------------
 
@@ -188,6 +242,43 @@ INSERT INTO `attendanceleave` (`AttendanceID`, `EmployeeID`, `Date`, `Status`, `
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `average_rates`
+--
+
+DROP TABLE IF EXISTS `average_rates`;
+CREATE TABLE `average_rates` (
+  `id` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `min_salary` decimal(10,2) NOT NULL,
+  `max_salary` decimal(10,2) NOT NULL,
+  `position` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `average_rates`
+--
+
+INSERT INTO `average_rates` (`id`, `date`, `min_salary`, `max_salary`, `position`) VALUES
+(1, '2024-01-01', 50000.00, 70000.00, 'ASD'),
+(2, '2024-01-01', 60000.00, 85000.00, 'Associate Professor'),
+(3, '2024-01-01', 80000.00, 120000.00, 'Professor'),
+(4, '2024-01-01', 45000.00, 65000.00, 'Lecturer'),
+(5, '2024-01-01', 55000.00, 75000.00, 'Senior Lecturer'),
+(6, '2024-01-01', 50000.00, 72000.00, 'Research Fellow'),
+(7, '2024-01-01', 62000.00, 88000.00, 'Assistant Dean'),
+(8, '2024-01-01', 70000.00, 100000.00, 'Dean'),
+(9, '2024-01-01', 52000.00, 77000.00, 'Postdoctoral Researcher'),
+(10, '2024-01-01', 40000.00, 60000.00, 'Teaching Assistant'),
+(11, '2025-04-05', 50000.00, 80000.00, 'Professor'),
+(12, '2025-04-04', 52000.00, 85000.00, 'Professor'),
+(13, '2025-04-03', 48000.00, 78000.00, 'Professor'),
+(14, '2025-04-02', 51000.00, 82000.00, 'Professor'),
+(15, '2025-04-01', 49500.00, 80500.00, 'Professor'),
+(16, '2025-04-04', 8000.00, 11000.00, 'Professor');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `compensationbenefits`
 --
 
@@ -218,6 +309,28 @@ INSERT INTO `compensationbenefits` (`CompensationID`, `EmployeeID`, `BaseSalary`
 (9, 52, 48000.00, 2000.00, 'Health', 1000.00, '2023-01-01'),
 (10, 53, 48000.00, 2000.00, 'Retirement', 1500.00, '2023-01-01'),
 (11, 54, 47000.00, 2000.00, 'Retirement', 1500.00, '2023-01-01');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `deduction`
+--
+
+DROP TABLE IF EXISTS `deduction`;
+CREATE TABLE `deduction` (
+  `id` int(50) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `amount` decimal(50,0) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `deduction`
+--
+
+INSERT INTO `deduction` (`id`, `type`, `amount`) VALUES
+(1, 'SSS', 4),
+(2, 'Pag-ibig', 2),
+(3, 'Philhealth', 5);
 
 -- --------------------------------------------------------
 
@@ -385,8 +498,8 @@ INSERT INTO `fm_bookings` (`id`, `employee_id`, `room_id`, `booking_date`, `star
 (28, 4, 17, '2024-12-24', '17:18:00', '06:07:00', 'TESTTTTTTTTTT', 'Approved', '2024-12-24 09:17:36', '2024-12-24 09:46:14', 0),
 (29, 36, 11, '2024-12-31', '23:33:00', '03:34:00', 'New YEars Party', 'Cancelled', '2024-12-25 03:30:49', '2025-01-26 16:36:15', 1),
 (30, 4, 1, '2024-12-26', '23:03:00', '04:05:00', 'sdfsdf', 'Rejected', '2024-12-25 14:14:57', '2024-12-27 05:41:53', 1),
-(31, 4, 2, '2024-12-27', '23:03:00', '04:55:00', 'sdfsdf', 'Approved', '2024-12-26 13:33:19', '2025-04-09 15:43:17', 0),
-(32, 4, 4, '0006-01-06', '03:44:00', '04:05:00', 'dfgdfg', 'Approved', '2024-12-26 13:47:48', '2025-04-09 15:43:17', 0),
+(31, 4, 2, '2024-12-27', '23:03:00', '04:55:00', 'sdfsdf', 'Approved', '2024-12-26 13:33:19', '2024-12-27 06:10:51', 1),
+(32, 4, 4, '0006-01-06', '03:44:00', '04:05:00', 'dfgdfg', 'Approved', '2024-12-26 13:47:48', '2025-03-27 12:49:26', 1),
 (33, 4, 5, '2025-01-30', '23:03:00', '04:05:00', 'dfgdfg', 'Approved', '2024-12-26 13:49:06', '2025-03-29 09:42:30', 0),
 (34, 4, 6, '2025-02-18', '23:03:00', '04:05:00', 'sdff', 'Approved', '2024-12-26 13:51:40', '2025-02-20 13:08:55', 0),
 (35, 4, 7, '2025-01-04', '23:03:00', '03:44:00', 'fsdsdf', 'Cancelled', '2024-12-26 13:58:55', '2024-12-26 16:26:06', 1),
@@ -406,27 +519,9 @@ INSERT INTO `fm_bookings` (`id`, `employee_id`, `room_id`, `booking_date`, `star
 (49, 4, 23, '2025-02-21', '12:02:00', '03:44:00', 'testing feb 20', 'Cancelled', '2025-02-20 13:12:25', '2025-02-20 13:12:52', 0),
 (50, 4, 23, '2025-02-21', '12:22:00', '12:02:00', 'testing feb 20', 'Approved', '2025-02-20 13:13:14', '2025-03-16 14:54:31', 0),
 (51, 4, 6, '2025-03-26', '12:22:00', '12:22:00', 'sSSsdf', 'Cancelled', '2025-03-26 14:26:30', '2025-03-26 14:26:40', 0),
-(52, 4, 20, '2025-03-26', '23:33:00', '04:55:00', 'sfsdfsdf', 'Approved', '2025-03-26 14:27:24', '2025-04-09 16:41:37', 0),
+(52, 4, 20, '2025-03-26', '23:33:00', '04:55:00', 'sfsdfsdf', 'Approved', '2025-03-26 14:27:24', '2025-04-12 13:10:09', 1),
 (53, 4, 23, '2025-03-26', '12:22:00', '03:44:00', 'rwar', 'Approved', '2025-03-26 14:29:14', '2025-03-28 13:21:52', 0),
-(54, 4, 6, '2025-03-06', '12:22:00', '04:44:00', 'sdfsdf', 'Pending', '2025-03-28 13:17:11', '2025-03-28 13:17:11', 1),
-(55, 4, 5, '2025-04-10', '23:33:00', '04:05:00', 'sdfdsf', 'Cancelled', '2025-04-09 12:55:56', '2025-04-09 13:05:26', 0),
-(56, 4, 5, '2025-04-10', '12:02:00', '03:44:00', 'dasdasd', 'Pending', '2025-04-09 13:05:45', '2025-04-09 13:05:45', 1),
-(57, 4, 13, '2025-04-11', '03:44:00', '05:06:00', 'HElo \r\nsdfsdfsd\r\nsdfsdf', 'Approved', '2025-04-09 16:43:23', '2025-04-09 16:43:47', 1),
-(58, 4, 11, '2025-04-14', '23:33:00', '12:44:00', 'dads', 'Cancelled', '2025-04-09 16:54:39', '2025-04-09 16:54:44', 0),
-(59, 4, 16, '2025-04-23', '05:06:00', '04:55:00', 'sdfsdf', 'Cancelled', '2025-04-09 16:54:56', '2025-04-09 16:55:01', 0),
-(60, 4, 23, '2025-04-10', '04:55:00', '07:08:00', 'fsefsefe', 'Cancelled', '2025-04-09 16:55:19', '2025-04-09 16:55:42', 0),
-(61, 4, 15, '2025-04-10', '03:44:00', '21:02:00', 'sdfsdfdsf', 'Cancelled', '2025-04-09 16:55:32', '2025-04-09 16:55:37', 0),
-(62, 4, 15, '2025-04-18', '23:03:00', '05:04:00', 'sdf', 'Approved', '2025-04-09 16:56:02', '2025-04-09 17:20:38', 1),
-(63, 4, 12, '2025-04-06', '12:22:00', '12:55:00', 'testing\r\n', 'Approved', '2025-04-05 22:17:54', '2025-04-05 22:46:48', 1),
-(64, 4, 16, '2025-04-06', '12:02:00', '12:45:00', 'sfsdfsd', 'Cancelled', '2025-04-05 22:18:31', '2025-04-05 22:45:50', 0),
-(65, 4, 9, '2025-04-06', '12:02:00', '12:44:00', 'fsdfsdfsdf', 'Approved', '2025-04-05 22:45:42', '2025-04-06 16:11:01', 0),
-(66, 4, 6, '2025-04-07', '12:02:00', '03:04:00', 'Hello', 'Approved', '2025-04-06 16:45:46', '2025-04-06 16:46:06', 1),
-(67, 4, 9, '2025-04-07', '04:55:00', '03:04:00', 'testets', 'Approved', '2025-04-06 16:57:44', '2025-04-07 06:56:43', 0),
-(68, 4, 13, '2025-03-31', '23:03:00', '04:03:00', 'dfsdf', 'Cancelled', '2025-04-06 19:16:35', '2025-04-06 19:16:41', 0),
-(69, 4, 13, '2025-03-31', '23:33:00', '23:33:00', 'fsdf', 'Cancelled', '2025-04-06 19:17:24', '2025-04-06 19:17:28', 0),
-(70, 4, 13, '2025-04-05', '03:33:00', '03:44:00', 'sdfsdf', 'Cancelled', '2025-04-06 19:21:57', '2025-04-06 19:23:41', 0),
-(71, 4, 13, '2025-04-07', '23:03:00', '23:56:00', 'test', 'Approved', '2025-04-06 19:27:27', '2025-04-06 19:27:41', 1),
-(72, 4, 14, '2025-04-08', '23:33:00', '23:03:00', 'dfsdfdf', 'Approved', '2025-04-07 06:54:47', '2025-04-07 06:56:41', 1);
+(54, 4, 6, '2025-03-06', '12:22:00', '04:44:00', 'sdfsdf', 'Pending', '2025-03-28 13:17:11', '2025-03-28 13:17:11', 1);
 
 -- --------------------------------------------------------
 
@@ -453,15 +548,15 @@ CREATE TABLE `fm_resources` (
 
 INSERT INTO `fm_resources` (`id`, `name`, `category`, `quantity`, `location`, `status`, `last_maintenance`, `next_maintenance`, `created_at`) VALUES
 (81, 'Impact Tool', 'Hardware', 112, 'Storage room', 'Available', '2025-01-01', '2024-12-26', '2024-12-09 08:44:08'),
-(82, 'RJ45', 'Hardware', 100, '2nd Floor', 'Available', '2025-01-01', '2025-01-03', '2024-12-09 08:44:37'),
+(82, 'RJ45', 'Hardware', 102, '2nd Floor', 'Available', '2025-01-01', '2025-01-03', '2024-12-09 08:44:37'),
 (87, 'System Unit', 'Hardware', 12, '2nd Floor', 'Available', '2024-12-17', '2024-12-25', '2024-12-10 12:16:42'),
 (88, 'Cable', 'Hardware', 1000, 'IT Department', 'Available', '3232-02-12', '0222-12-21', '2024-12-11 01:59:19'),
-(90, 'Computer Monitor', 'Hardware', 119, 'IT Department', 'Available', '2121-02-12', '2222-02-12', '2024-12-15 02:40:44'),
+(90, 'Computer Monitor', 'Hardware', 125, 'IT Department', 'Available', '2121-02-12', '2222-02-12', '2024-12-15 02:40:44'),
 (97, 'Volleyball', 'Sports', 112, 'PEH Depertment', 'Available', '2025-01-26', '2025-01-26', '2025-01-26 03:46:08'),
 (98, 'Basketball', 'Sports', 96, 'PEH Depertment', 'Available', '2025-01-26', '2025-01-26', '2025-01-26 03:46:54'),
 (99, 'Chalk', 'Utilities', 600, 'Dean', 'Available', '2025-01-26', '2025-01-26', '2025-01-26 10:10:58'),
-(100, 'Pentel Pen', 'Utilities', 12, 'Room 12', 'Available', '2025-02-20', '2025-02-21', '2025-02-20 12:52:34'),
-(102, 'Projector', 'Utilities', 20, 'IT Department', 'Available', '2025-03-28', '2025-03-28', '2025-03-27 12:47:51');
+(100, 'Pentel Pen', 'Utilities', 12, 'test', 'Available', '2025-02-20', '2025-02-21', '2025-02-20 12:52:34'),
+(102, 'test', 'Utilities', 122, 'test', 'Available', '2025-03-28', '2025-03-28', '2025-03-27 12:47:51');
 
 -- --------------------------------------------------------
 
@@ -487,12 +582,12 @@ CREATE TABLE `fm_resource_allocations` (
 --
 
 INSERT INTO `fm_resource_allocations` (`id`, `resource_id`, `employee_id`, `quantity`, `allocation_start`, `allocation_end`, `status`, `notes`, `created_at`) VALUES
-(1, 81, 36, 23, '2024-12-31 03:33:00', '2025-01-01 23:03:00', 'Returned', 'fsdsdf', '2024-12-30 23:35:09'),
+(1, 81, 36, 23, '2024-12-31 03:33:00', '2025-01-01 23:03:00', 'Allocated', 'fsdsdf', '2024-12-30 23:35:09'),
 (2, 87, 36, 5, '2025-01-26 05:55:00', '2032-01-27 05:55:00', 'Allocated', 'new commers', '2025-01-26 17:04:36'),
-(3, 90, 36, 5, '2025-01-26 12:02:00', '2038-01-26 12:02:00', 'Returned', 'new commers', '2025-01-26 17:06:27'),
+(3, 90, 36, 5, '2025-01-26 12:02:00', '2038-01-26 12:02:00', 'Allocated', 'new commers', '2025-01-26 17:06:27'),
 (4, 90, 36, 5, '2025-01-14 05:55:00', '2045-01-26 11:01:00', 'Allocated', 'new commers', '2025-01-26 17:14:04'),
 (5, 87, 36, 2, '2025-02-20 12:22:00', '2025-05-29 12:02:00', 'Allocated', 'test', '2025-02-20 20:51:36'),
-(6, 81, 36, 12, '2025-03-28 23:33:00', '2025-03-28 23:33:00', 'Returned', 'qweqw', '2025-03-27 20:49:16'),
+(6, 81, 36, 12, '2025-03-28 23:33:00', '2025-03-28 23:33:00', 'Allocated', 'qweqw', '2025-03-27 20:49:16'),
 (7, 87, 36, 1, '2025-03-30 11:49:00', '2025-03-30 11:49:00', 'Allocated', 'hey', '2025-03-30 11:49:40'),
 (8, 98, 36, 5, '2025-03-30 11:50:00', '2025-04-02 11:50:00', 'Allocated', 'hey', '2025-03-30 11:50:48');
 
@@ -510,51 +605,48 @@ CREATE TABLE `fm_resource_requests` (
   `quantity` int(11) NOT NULL,
   `purpose` text NOT NULL,
   `status` enum('Pending','Approved','Rejected','Returned') DEFAULT 'Pending',
-  `return_date` date DEFAULT NULL,
   `requested_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `approved_by` int(11) DEFAULT NULL,
-  `approved_at` timestamp NULL DEFAULT NULL
+  `approved_at` timestamp NULL DEFAULT NULL,
+  `return_date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `fm_resource_requests`
 --
 
-INSERT INTO `fm_resource_requests` (`id`, `resource_id`, `employee_id`, `quantity`, `purpose`, `status`, `return_date`, `requested_at`, `approved_by`, `approved_at`) VALUES
-(1, 81, 36, 2, 'wer', 'Returned', '2025-04-09', '2024-12-29 01:08:00', NULL, NULL),
-(2, 81, 36, 34, 'qweqwe', 'Returned', '2025-04-09', '2024-12-29 01:33:56', NULL, NULL),
-(3, 90, 36, 2, 'Pupose Testing', 'Returned', '2025-04-09', '2024-12-29 04:38:04', NULL, NULL),
-(4, 81, 4, 3, 'e', 'Returned', '2025-04-09', '2025-01-26 02:38:38', NULL, NULL),
-(5, 82, 4, 5, 'HIRAM', 'Returned', '2025-04-09', '2025-01-26 02:48:32', NULL, NULL),
-(6, 82, 4, 33, '33', 'Rejected', NULL, '2025-01-26 02:49:06', NULL, NULL),
-(7, 82, 4, 1, 'Client Meeting', 'Returned', '2025-04-09', '2024-12-29 00:45:00', NULL, NULL),
-(8, 97, 36, 4, 'Training Session', 'Returned', '2025-04-09', '2024-12-29 01:00:00', 2, '2024-12-30 02:00:00'),
-(9, 98, 36, 2, 'Equipment Maintenance', 'Returned', '2025-04-09', '2024-12-29 02:15:00', NULL, NULL),
-(10, 90, 4, 6, 'Research Materials', 'Returned', '2025-04-09', '2024-12-29 03:30:00', 3, '2024-12-30 04:00:00'),
-(11, 90, 39, 8, 'Conference Attendance', 'Rejected', NULL, '2024-12-29 04:45:00', NULL, NULL),
-(12, 97, 4, 7, 'Software License', 'Returned', '2025-04-09', '2024-12-29 05:00:00', NULL, NULL),
-(13, 98, 39, 9, 'Hardware Upgrade', 'Approved', NULL, '2024-12-29 06:15:00', 4, '2024-12-30 07:00:00'),
-(14, 81, 36, 5, 'Office Supplies', 'Returned', '2025-04-09', '2024-12-28 21:00:00', NULL, NULL),
-(15, 81, 39, 10, 'Project A Materials', 'Returned', '2025-04-09', '2024-12-28 22:15:00', 1, '2024-12-29 23:00:00'),
-(16, 82, 36, 3, 'Team Building Event', 'Rejected', NULL, '2024-12-28 23:30:00', NULL, NULL),
-(17, 81, 36, 4, 'Office Renovation', 'Returned', '2025-04-09', '2024-11-01 02:00:00', NULL, NULL),
-(18, 82, 39, 2, 'New Software Installation', 'Approved', NULL, '2024-11-01 03:15:00', 1, '2024-11-06 04:00:00'),
-(19, 97, 36, 3, 'Team Outing', 'Rejected', NULL, '2024-11-10 01:30:00', NULL, NULL),
-(20, 98, 4, 1, 'Client Presentation', 'Returned', '2025-04-09', '2024-11-01 06:45:00', NULL, NULL),
-(21, 90, 36, 5, 'Training Materials', 'Returned', '2025-04-09', '2024-11-26 00:00:00', 2, '2024-11-21 01:00:00'),
-(22, 90, 39, 6, 'Equipment Purchase', 'Approved', NULL, '2024-11-25 05:15:00', NULL, NULL),
-(23, 97, 36, 8, 'Conference Registration', 'Returned', '2025-04-09', '2024-11-26 07:30:00', 3, '2024-11-27 08:00:00'),
-(24, 90, 4, 7, 'Research Project', 'Returned', '2025-04-09', '2024-11-26 09:45:00', NULL, NULL),
-(25, 90, 36, 9, 'Marketing Materials', 'Returned', '2025-04-09', '2024-11-29 10:00:00', NULL, NULL),
-(26, 81, 36, 10, 'IT Support', 'Returned', '2025-04-09', '2024-11-30 11:15:00', 4, '2024-12-01 12:00:00'),
-(27, 99, 36, 10, 'test', 'Returned', '2025-04-09', '2025-02-20 12:50:15', NULL, NULL),
-(28, 82, 4, 90, 'testing feb 20', 'Rejected', NULL, '2025-02-20 13:17:03', NULL, NULL),
-(29, 81, 4, 23, 'asdasdasd', 'Returned', '2025-04-09', '2025-03-26 14:27:34', NULL, NULL),
-(30, 100, 4, 1, 'adasdasd', 'Returned', '2025-04-09', '2025-03-26 14:29:27', NULL, NULL),
-(31, 81, 4, 5, 'wrwere', 'Returned', '2025-04-09', '2025-03-28 13:18:59', NULL, NULL),
-(32, 82, 4, 1, 'asdasd', 'Returned', '2025-04-09', '2025-04-09 12:55:26', NULL, '2025-04-09 13:01:44'),
-(33, 102, 4, 122, 'lahat lahat\r\n', 'Returned', '2025-04-09', '2025-04-09 13:06:05', NULL, '2025-04-09 13:07:12'),
-(34, 81, 4, 12, 'ewqewqe', 'Pending', NULL, '2025-04-09 14:24:33', NULL, NULL);
+INSERT INTO `fm_resource_requests` (`id`, `resource_id`, `employee_id`, `quantity`, `purpose`, `status`, `requested_at`, `approved_by`, `approved_at`, `return_date`) VALUES
+(1, 81, 36, 2, 'wer', 'Returned', '2024-12-29 01:08:00', NULL, NULL, '2025-04-12'),
+(2, 81, 36, 34, 'qweqwe', 'Returned', '2024-12-29 01:33:56', NULL, NULL, '2025-04-12'),
+(3, 90, 36, 2, 'Pupose Testing', 'Returned', '2024-12-29 04:38:04', NULL, NULL, '2025-04-12'),
+(4, 81, 4, 3, 'e', 'Returned', '2025-01-26 02:38:38', NULL, NULL, '2025-04-12'),
+(5, 82, 4, 5, 'HIRAM', 'Returned', '2025-01-26 02:48:32', NULL, NULL, '2025-04-12'),
+(6, 82, 4, 33, '33', 'Rejected', '2025-01-26 02:49:06', NULL, NULL, NULL),
+(7, 82, 4, 1, 'Client Meeting', 'Returned', '2024-12-29 00:45:00', NULL, NULL, '2025-04-12'),
+(8, 97, 36, 4, 'Training Session', 'Returned', '2024-12-29 01:00:00', 2, '2024-12-30 02:00:00', '2025-04-12'),
+(9, 98, 36, 2, 'Equipment Maintenance', 'Returned', '2024-12-29 02:15:00', NULL, NULL, '2025-04-12'),
+(10, 90, 4, 6, 'Research Materials', 'Returned', '2024-12-29 03:30:00', 3, '2024-12-30 04:00:00', '2025-04-12'),
+(11, 90, 39, 8, 'Conference Attendance', 'Rejected', '2024-12-29 04:45:00', NULL, NULL, NULL),
+(12, 97, 4, 7, 'Software License', 'Returned', '2024-12-29 05:00:00', NULL, NULL, '2025-04-12'),
+(13, 98, 39, 9, 'Hardware Upgrade', 'Approved', '2024-12-29 06:15:00', 4, '2024-12-30 07:00:00', NULL),
+(14, 81, 36, 5, 'Office Supplies', 'Returned', '2024-12-28 21:00:00', NULL, NULL, '2025-04-12'),
+(15, 81, 39, 10, 'Project A Materials', 'Returned', '2024-12-28 22:15:00', 1, '2024-12-29 23:00:00', '2025-04-12'),
+(16, 82, 36, 3, 'Team Building Event', 'Rejected', '2024-12-28 23:30:00', NULL, NULL, NULL),
+(17, 81, 36, 4, 'Office Renovation', 'Returned', '2024-11-01 02:00:00', NULL, NULL, '2025-04-12'),
+(18, 82, 39, 2, 'New Software Installation', 'Returned', '2024-11-01 03:15:00', 1, '2024-11-06 04:00:00', '2025-04-12'),
+(19, 97, 36, 3, 'Team Outing', 'Rejected', '2024-11-10 01:30:00', NULL, NULL, NULL),
+(20, 98, 4, 1, 'Client Presentation', 'Returned', '2024-11-01 06:45:00', NULL, NULL, '2025-04-12'),
+(21, 90, 36, 5, 'Training Materials', 'Returned', '2024-11-26 00:00:00', 2, '2024-11-21 01:00:00', '2025-04-12'),
+(22, 90, 39, 6, 'Equipment Purchase', 'Returned', '2024-11-25 05:15:00', NULL, NULL, '2025-04-12'),
+(23, 97, 36, 8, 'Conference Registration', 'Returned', '2024-11-26 07:30:00', 3, '2024-11-27 08:00:00', '2025-04-12'),
+(24, 90, 4, 7, 'Research Project', 'Returned', '2024-11-26 09:45:00', NULL, NULL, '2025-04-12'),
+(25, 90, 36, 9, 'Marketing Materials', 'Returned', '2024-11-29 10:00:00', NULL, NULL, '2025-04-12'),
+(26, 81, 36, 10, 'IT Support', 'Returned', '2024-11-30 11:15:00', 4, '2024-12-01 12:00:00', '2025-04-12'),
+(27, 99, 36, 10, 'test', 'Returned', '2025-02-20 12:50:15', NULL, NULL, '2025-04-12'),
+(28, 82, 4, 90, 'testing feb 20', 'Rejected', '2025-02-20 13:17:03', NULL, NULL, NULL),
+(29, 81, 4, 23, 'asdasdasd', 'Returned', '2025-03-26 14:27:34', NULL, NULL, '2025-04-12'),
+(30, 100, 4, 1, 'adasdasd', 'Returned', '2025-03-26 14:29:27', NULL, NULL, '2025-04-12'),
+(31, 81, 4, 5, 'wrwere', 'Returned', '2025-03-28 13:18:59', NULL, NULL, '2025-04-12');
 
 -- --------------------------------------------------------
 
@@ -576,20 +668,81 @@ CREATE TABLE `fm_rooms` (
 --
 
 INSERT INTO `fm_rooms` (`id`, `name`, `location`, `capacity`, `status`) VALUES
-(10, 'Computer Laborary 2', '2rd floor main building', 50, 'Available'),
-(11, 'Computer Laborary', '2nd Floor', 50, 'Available'),
-(12, 'Covered Court', 'Ground floor', 1500, 'Available'),
-(13, 'GYM', 'Ground floor', 1000, 'Booked'),
-(14, 'Science Laboratory 2', 'Main Building Science Laboratory', 60, 'Available'),
-(15, 'Science Laboratory', 'Ground floor Science Laboratory', 40, 'Booked'),
-(16, 'Lecture Room 6', 'asasdasd', 21, 'Available'),
-(17, 'Lecture Room 7', '3rd floor main building', 50, 'Available'),
-(18, 'Lecture Room 5', 'Ground floor', 50, 'Available'),
-(20, 'Lecture Room 4', 'Second Floor', 50, 'Available'),
-(21, 'Lecture Room 3', 'test-book moto', 50, 'Available'),
-(22, 'Lecture Room 2', 'Room 2', 50, 'Available'),
-(23, 'Lecture Room 1', 'Location 1', 50, 'Available'),
-(24, 'Lecture Room 19', 'Lectiure Science Laboratory', 50, 'Available');
+(2, 'Room 2', 'Ground floor', 50, 'Booked'),
+(3, 'IT Room', 'BCP 2nd floor', 50, 'Booked'),
+(4, 'Room 1', 'Ground floor', 50, 'Booked'),
+(5, 'Room 3', '1st floor main building', 50, 'Booked'),
+(6, 'Room 5', '1st floor main building', 50, 'Booked'),
+(7, 'Room 6', '1st floor main building', 50, 'Booked'),
+(8, 'Room 5', '3rd floor main building', 30, 'Booked'),
+(9, 'Room 13', '3rd floor main building', 4, 'Available'),
+(10, 'AVR ', '2rd floor main building', 233, 'Booked'),
+(11, 'Computer Laborary', '2nd Floor', 200, 'Booked'),
+(12, 'Computer Laborary 3', '4th floor main building', 50, 'Booked'),
+(13, 'Computer Laborary 2', '3rd floor main building', 50, 'Booked'),
+(14, 'Auditory Room ', '2rd floor main building', 100, 'Booked'),
+(16, 'Covered Court', 'Ground floor', 500, 'Available'),
+(17, 'GYM', 'Ground floor', 100, 'Available'),
+(18, 'Room 6', '4th floor main building', 30, 'Available'),
+(20, 'Room 4', 'Ground floor', 30, 'Available');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `holiday`
+--
+
+DROP TABLE IF EXISTS `holiday`;
+CREATE TABLE `holiday` (
+  `id` int(11) NOT NULL,
+  `holiday` varchar(100) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `holiday`
+--
+
+INSERT INTO `holiday` (`id`, `holiday`, `type`, `date`) VALUES
+(2, 'Maundy Thursday', 'Regular', '2025-04-17'),
+(3, 'Good Friday', 'Regular', '2025-04-18'),
+(4, 'Araw ng Kagitingan', 'Regular', '2025-04-09'),
+(5, 'Labor Day', 'Regular', '2025-05-01'),
+(6, 'Independence Day', 'Regular', '2025-06-12'),
+(7, 'National Heroes Day', 'Regular', '2025-08-25'),
+(8, 'Bonifacio Day', 'Regular', '2025-11-30'),
+(9, 'Christmas Day', 'Regular', '2025-12-25'),
+(10, 'Rizal Day', 'Regular', '2025-12-30'),
+(11, 'Chinese New Year', 'Non-working', '2025-01-29'),
+(12, 'EDSA People Power Revolution Anniversary', 'Non-working', '2025-02-25'),
+(13, 'Black Saturday', 'Non-working', '2025-04-19'),
+(14, 'Ninoy Aquino Day', 'Non-working', '2025-08-21'),
+(15, 'All Saints\' Day', 'Non-working', '2025-11-01'),
+(16, 'Feast of the Immaculate Conception of Mary', 'Non-working', '2025-12-08'),
+(17, 'Christmas Eve', 'Non-working', '2025-12-24'),
+(18, 'New Year\'s Eve', 'Non-working', '2025-12-31'),
+(19, 'New Year', 'Regular', '2025-01-01');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `incentives`
+--
+
+DROP TABLE IF EXISTS `incentives`;
+CREATE TABLE `incentives` (
+  `id` int(50) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `amount` int(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `incentives`
+--
+
+INSERT INTO `incentives` (`id`, `type`, `amount`) VALUES
+(1, 'Bonus', 2000);
 
 -- --------------------------------------------------------
 
@@ -665,6 +818,121 @@ INSERT INTO `job_postings` (`id`, `job_title`, `job_description`, `requirements`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `leaveapplication`
+--
+
+DROP TABLE IF EXISTS `leaveapplication`;
+CREATE TABLE `leaveapplication` (
+  `id` int(50) NOT NULL,
+  `employeeId` int(50) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `leave_type` varchar(50) NOT NULL,
+  `date` date NOT NULL,
+  `department` varchar(50) NOT NULL,
+  `message` varchar(250) NOT NULL,
+  `status` varchar(255) DEFAULT 'pending'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `leaveapplication`
+--
+
+INSERT INTO `leaveapplication` (`id`, `employeeId`, `name`, `leave_type`, `date`, `department`, `message`, `status`) VALUES
+(1, 4, 'employee', 'Maternity Leave', '2025-04-16', '', 'asdas', 'pending'),
+(2, 4, 'employee', 'Casual Leave', '2025-04-29', '', 'asdasdas', 'pending'),
+(3, 4, 'employee', 'Casual Leave', '2025-04-18', '', 'dasd', 'pending'),
+(4, 2, 'jsmith', 'Paternity Leave', '2025-04-26', 'Computer Studies', 'asdasdas', 'accepted'),
+(5, 4, 'employee', 'Maternity Leave', '2025-04-18', '', 'poiuy', 'pending'),
+(9, 2, 'jsmith', 'Unpaid Leave', '2025-05-01', 'Computer Studies', 'tydfhjshg', 'pending'),
+(16, 4, 'SAWADA', 'Study Leave', '2025-04-23', 'IT Department', '3', 'pending'),
+(17, 4, 'SAWADA', 'Bereavement Leave', '2025-04-26', 'IT Department', '4', 'pending'),
+(18, 4, 'SAWADA', 'Medical Leave', '2025-04-13', 'IT Department', '5', 'pending');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leavetype`
+--
+
+DROP TABLE IF EXISTS `leavetype`;
+CREATE TABLE `leavetype` (
+  `id` int(50) NOT NULL,
+  `leave_type` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `leavetype`
+--
+
+INSERT INTO `leavetype` (`id`, `leave_type`) VALUES
+(1, 'Sick Leave'),
+(2, 'Casual Leave'),
+(3, 'Annual Leave'),
+(4, 'Maternity Leave'),
+(5, 'Paternity Leave'),
+(6, 'Unpaid Leave'),
+(7, 'Bereavement Leave'),
+(8, 'Study Leave'),
+(9, 'Compensatory Leave'),
+(10, 'Medical Leave');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `leave_requests`
+--
+
+DROP TABLE IF EXISTS `leave_requests`;
+CREATE TABLE `leave_requests` (
+  `id` int(11) NOT NULL,
+  `employeeId` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `leave_type` varchar(50) NOT NULL,
+  `date` date NOT NULL,
+  `department` varchar(100) NOT NULL,
+  `message` text NOT NULL,
+  `head` varchar(100) NOT NULL,
+  `status` enum('pending','approved','rejected') DEFAULT 'pending'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `leave_requests`
+--
+
+INSERT INTO `leave_requests` (`id`, `employeeId`, `name`, `leave_type`, `date`, `department`, `message`, `head`, `status`) VALUES
+(1, 7, 'Lebron James', 'Annual Leave', '2025-04-11', '', 'asd', 'Lebron James', 'pending'),
+(2, 7, 'Lebron James', 'Annual Leave', '2025-04-11', '', 'asd', 'Lebron James', 'pending'),
+(3, 7, 'Lebron James', 'Maternity Leave', '2025-04-25', 'Computer Studies', 'dsasd', 'Lebron James', 'pending'),
+(4, 7, 'Lebron James', 'Bereavement Leave', '2025-04-25', 'Computer Studies', 'das', 'Lebron James', 'pending'),
+(5, 2, 'jsmith', 'Medical Leave', '2025-04-12', 'Computer Studies', 'dasads', 'jsmith', 'pending'),
+(6, 2, 'jsmith', 'Annual Leave', '2025-04-23', 'Computer Studies', '1234556', 'jsmith', 'pending'),
+(7, 2, 'jsmith', 'Study Leave', '2025-04-11', 'Computer Studies', 'lkjklhkjgj', 'Lebron James', 'pending'),
+(8, 4, 'SAWADA', 'Casual Leave', '2025-04-04', 'IT Department', '123333', 'SAWADA', 'approved'),
+(9, 4, 'SAWADA', 'Bereavement Leave', '2025-04-05', 'IT Department', '09090909', 'SAWADA', ''),
+(10, 4, 'SAWADA', 'Annual Leave', '2025-04-24', 'IT Department', '\\]\\]\\\\]\\]\\', 'SAWADA', ''),
+(11, 4, 'SAWADA', 'Unpaid Leave', '2025-04-30', 'IT Department', 'LEAVE', 'SAWADA', 'pending'),
+(12, 44, 'QWERTY', 'Annual Leave', '2025-04-04', 'IT Department', 'leave123', 'QWERTY', 'pending'),
+(13, 4, 'SAWADA', 'Annual Leave', '2025-04-18', 'IT Department', '1', 'manager', 'pending'),
+(14, 4, 'SAWADA', 'Bereavement Leave', '2025-04-25', 'IT Department', '2', 'QWERTY', 'pending');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+DROP TABLE IF EXISTS `notifications`;
+CREATE TABLE `notifications` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `message` text NOT NULL,
+  `status` enum('unread','read') DEFAULT 'unread',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `performanceevaluations`
 --
 
@@ -718,6 +986,37 @@ INSERT INTO `permissions` (`id`, `name`, `description`) VALUES
 (2, 'EDIT', NULL),
 (3, 'DELETE', NULL),
 (4, 'VIEW', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rate`
+--
+
+DROP TABLE IF EXISTS `rate`;
+CREATE TABLE `rate` (
+  `id` int(50) NOT NULL,
+  `employeeId` int(50) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `department` varchar(50) NOT NULL,
+  `rate` int(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `rate`
+--
+
+INSERT INTO `rate` (`id`, `employeeId`, `name`, `department`, `rate`) VALUES
+(1, 1, 'John Doe', 'Faculty', 150),
+(2, 2, 'Jane Smith', 'Faculty', 130),
+(3, 3, 'Michael Johnson', 'Faculty', 180),
+(4, 4, 'Emily Davis', 'Faculty', 140),
+(5, 5, 'Chris Lee', 'Faculty', 160),
+(6, 6, 'Sara Wilson', 'Faculty', 170),
+(7, 7, 'James Brown', 'Faculty', 120),
+(8, 8, 'Laura White', 'Faculty', 175),
+(9, 9, 'Kevin Harris', 'Faculty', 145),
+(10, 10, 'Olivia Moore', 'Faculty', 180);
 
 -- --------------------------------------------------------
 
@@ -997,6 +1296,12 @@ ALTER TABLE `applicants`
   ADD KEY `FK_Applicants_DepartmentID` (`DepartmentID`);
 
 --
+-- Indexes for table `attendance`
+--
+ALTER TABLE `attendance`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `attendanceleave`
 --
 ALTER TABLE `attendanceleave`
@@ -1004,11 +1309,23 @@ ALTER TABLE `attendanceleave`
   ADD KEY `FK_AttendanceLeave_EmployeeID` (`EmployeeID`);
 
 --
+-- Indexes for table `average_rates`
+--
+ALTER TABLE `average_rates`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `compensationbenefits`
 --
 ALTER TABLE `compensationbenefits`
   ADD PRIMARY KEY (`CompensationID`),
   ADD KEY `FK_CompensationBenefits_EmployeeID` (`EmployeeID`);
+
+--
+-- Indexes for table `deduction`
+--
+ALTER TABLE `deduction`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `departments`
@@ -1067,6 +1384,12 @@ ALTER TABLE `fm_rooms`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `incentives`
+--
+ALTER TABLE `incentives`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `jobroles`
 --
 ALTER TABLE `jobroles`
@@ -1082,6 +1405,25 @@ ALTER TABLE `job_postings`
   ADD KEY `fk_employee` (`EmployeeID`);
 
 --
+-- Indexes for table `leaveapplication`
+--
+ALTER TABLE `leaveapplication`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `leave_requests`
+--
+ALTER TABLE `leave_requests`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- Indexes for table `performanceevaluations`
 --
 ALTER TABLE `performanceevaluations`
@@ -1095,6 +1437,12 @@ ALTER TABLE `performanceevaluations`
 ALTER TABLE `permissions`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`);
+
+--
+-- Indexes for table `rate`
+--
+ALTER TABLE `rate`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `recruitment`
@@ -1193,6 +1541,12 @@ ALTER TABLE `attendanceleave`
   MODIFY `AttendanceID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
+-- AUTO_INCREMENT for table `average_rates`
+--
+ALTER TABLE `average_rates`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
 -- AUTO_INCREMENT for table `compensationbenefits`
 --
 ALTER TABLE `compensationbenefits`
@@ -1220,7 +1574,7 @@ ALTER TABLE `employees`
 -- AUTO_INCREMENT for table `fm_bookings`
 --
 ALTER TABLE `fm_bookings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `fm_resources`
@@ -1238,13 +1592,19 @@ ALTER TABLE `fm_resource_allocations`
 -- AUTO_INCREMENT for table `fm_resource_requests`
 --
 ALTER TABLE `fm_resource_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `fm_rooms`
 --
 ALTER TABLE `fm_rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
+-- AUTO_INCREMENT for table `incentives`
+--
+ALTER TABLE `incentives`
+  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `jobroles`
@@ -1257,6 +1617,24 @@ ALTER TABLE `jobroles`
 --
 ALTER TABLE `job_postings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+
+--
+-- AUTO_INCREMENT for table `leaveapplication`
+--
+ALTER TABLE `leaveapplication`
+  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- AUTO_INCREMENT for table `leave_requests`
+--
+ALTER TABLE `leave_requests`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `performanceevaluations`
@@ -1385,6 +1763,12 @@ ALTER TABLE `jobroles`
 ALTER TABLE `job_postings`
   ADD CONSTRAINT `FK_JobPostings_DepartmentID` FOREIGN KEY (`DepartmentID`) REFERENCES `departments` (`DepartmentID`),
   ADD CONSTRAINT `fk_employee` FOREIGN KEY (`EmployeeID`) REFERENCES `employees` (`EmployeeID`);
+
+--
+-- Constraints for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `performanceevaluations`
