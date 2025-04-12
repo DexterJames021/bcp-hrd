@@ -190,7 +190,11 @@ session_start();
                                 <div id="submenu-1" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
+<<<<<<< HEAD
                                             <a class="nav-link" href="">module <span class="badge badge-secondary">New</span></a>
+=======
+                                            <a class="nav-link" href="#">module <span class="badge badge-secondary">New</span></a>
+>>>>>>> compBen
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="#">module</a>

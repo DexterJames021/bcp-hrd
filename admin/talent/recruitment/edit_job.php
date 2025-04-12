@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 // Include database connection
 require "../../../config/db_talent.php";
@@ -68,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 </body>
 </html>
+<<<<<<< HEAD
 =======
 <?php
 // Include database connection
@@ -138,4 +138,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 </body>
 </html>
->>>>>>> tech-analytics
+

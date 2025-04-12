@@ -1,11 +1,13 @@
 <?php
+session_start();
 
+if (isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'admin') {
+    echo "<script> alert('welcome') </script>";
+} else {
+    header("Location: ../auth/index.php");
 
-require __DIR__ . "../../config/db_talent.php";
-require __DIR__ . '../../auth/mysqli_accesscontrol.php';
+}
 
-$userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
-access_log($userData);
 
 ?>
 <!doctype html>
@@ -18,120 +20,32 @@ access_log($userData);
     <!-- icon -->
     <link rel="shortcut icon" href="../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- check if bato-->
+    <!-- ajax -->
+    <script defer src="../node_modules/jquery/dist/jquery.min.js"></script>
+
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <script defer src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
-    <!-- datatable:  cs -->
-    <link rel="stylesheet" href="../node_modules/datatables.net-dt/css/dataTables.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <!-- global JavaScript -->
+    <script defer type="module" src="../assets/libs/js/global-script.js"></script>
 
     <!-- main js -->
+    <script defer type="module" src="../assets/libs/js/main-js.js"></script>
     <link rel="stylesheet" href="../assets/libs/css/style.css">
-
-    <!-- toastify cs -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
     <!-- assts csss -->
     <link rel="stylesheet" href="../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
     <link rel="stylesheet" href="../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
     <link rel="stylesheet" href="../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
-
-    <!-- icon -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
-
-    <link rel="stylesheet" href="./includes/error.css">
-
-    <!-- jQuery -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
-    <!-- <script  src="../node_modules/jquery/dist/jquery.min.js"></script> -->
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- core DataTable JS -->
-    <!-- <script src="../node_modules/datatables.net/js/dataTables.min.js"></script> -->
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-
-    <!-- DataTables Buttons -->
-    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
-
-    <!-- JSZip and pdfmake -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-
-    <!-- main js -->
-    <script src="../assets/libs/js/main-js.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
 
     <!-- slimscroll js -->
     <script defer type="module" src="../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 
-    <script src="./tech/resources_charts.js"></script>
-    <script src="./tech/facility_charts.js"></script>
-
-
-    <!-- charts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
     <title>Admin Dashboard</title>
-    <style>
-        #loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #0e0c28;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            transition: opacity 0.3s ease;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .loading-text {
-            font-size: 18px;
-            color: white;
-            font-weight: bold;
-        }
-    </style>
 </head>
 
 <body>
-    <div id="loading-overlay">
-        <div class="spinner"></div>
-        <div class="loading-text">Loading Dashboard...</div>
-    </div>
     <!-- ============================================================== -->
     <!-- main wrapper -->
     <!-- ============================================================== -->
@@ -158,16 +72,14 @@ access_log($userData);
                         </li>
                         <li class="nav-item dropdown notification">
                             <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i>
-                                <!-- <span
-                                    class="indicator"></span> -->
-                            </a>
+                                aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span
+                                    class="indicator"></span></a>
                             <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                                 <li>
                                     <div class="notification-title"> Notification</div>
                                     <div class="notification-list">
                                         <div class="list-group">
-                                            <!-- <a href="#" class="list-group-item list-group-item-action active">
+                                            <a href="#" class="list-group-item list-group-item-action active">
                                                 <div class="notification-info">
                                                     <div class="notification-list-user-img"><img src="#" alt=""
                                                             class="user-avatar-md rounded-circle"></div>
@@ -199,10 +111,16 @@ access_log($userData);
                                                         <div class="notification-date">2 min ago</div>
                                                     </div>
                                                 </div>
-                                            </a> -->
+                                            </a>
                                             <a href="#" class="list-group-item list-group-item-action">
                                                 <div class="notification-info">
-                                                    No notification
+                                                    <div class="notification-list-user-img"><img src="#" alt=""
+                                                            class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span
+                                                            class="notification-list-user-name">Jessica
+                                                            Caruso</span>accepted your invitation to join the team.
+                                                        <div class="notification-date">2 min ago</div>
+                                                    </div>
                                                 </div>
                                             </a>
                                         </div>
@@ -247,14 +165,13 @@ access_log($userData);
                         </li> -->
                         <li class="nav-item dropdown nav-user">
                             <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
-                                    src="../assets/images/noprofile2.jpg" alt=""
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="#" alt=""
                                     class="user-avatar-md rounded-circle"></a>
                             <div class="dropdown-menu dropdown-menu-right nav-user-dropdown"
                                 aria-labelledby="navbarDropdownMenuLink2">
                                 <div class="nav-user-info">
                                     <h5 class="mb-0 text-white nav-user-name"> <?= $_SESSION['username'] ?> </h5>
-                                    <span class="status"></span><span class="ml-2"><?= $_SESSION['usertype'] ?></span>
+                                    <span class="status"></span><span class="ml-2">Available</span>
                                 </div>
                                 <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Account</a>
                                 <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
@@ -272,11 +189,11 @@ access_log($userData);
         <!-- ============================================================== -->
         <!-- left sidebar -->
         <!-- ============================================================== -->
-        <div class="nav-left-sidebar sidebar-primary ">
-            <div class="menu-list ">
+        <div class="nav-left-sidebar sidebar-white ">
+            <div class="menu-list">
                 <nav class="navbar navbar-expand-lg navbar-light">
-                    <a class="d-xl-none d-lg-none" href="index.php">Human Resource Dept.</a>
-                    <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNav"
+                    <a class="d-xl-none d-lg-none" href="#">Dashboard</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -290,34 +207,136 @@ access_log($userData);
                                     <i class="fas fa-fw fa-home"></i> Dashboard
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link " href="./tech/resources.php">Resources Management</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link " href="./tech/facility.php">Facility
-                                    Management</a>
-                            </li>
-                            <!-- <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-7" aria-controls="submenu-7">
-                                    <i class="fas fa-fw fa-inbox"></i>Facility and Resources Request <span class="badge badge-secondary">New</span>
-                                </a>
-                                <div id="submenu-7" class="collapse submenu">
+                            <li class="nav-item ">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-1" aria-controls="submenu-1"><i
+                                        class="fa fa-fw fa-user-circle"></i>employee <span
+                                        class="badge badge-success">6</span></a>
+                                <div id="submenu-1" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/inbox.html">Inbox</a>
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                                data-target="#submenu-1-2" aria-controls="submenu-1-2">Lorem, ipsum.</a>
+                                            <div id="submenu-1-2" class="collapse submenu">
+                                                <ul class="nav flex-column">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="index.html">Lorem.</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="#">lorem1</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="#">Lorem.</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="#">Lorem.</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/email-details.html">Email Detail</a>
+                                            <a class="nav-link" href="./records-management/Records.php">Lorem, ipsum
+                                                dolor.</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/email-compose.html">Email Compose</a>
+                                            <a class="nav-link" href="dashboard-sales.html">Lorem, ipsum dolor.</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/message-chat.html">Message Chat</a>
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                                data-target="#submenu-1-1" aria-controls="submenu-1-1">Lorem, ipsum
+                                                dolor.</a>
+                                            <div id="submenu-1-1" class="collapse submenu">
+                                                <ul class="nav flex-column">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="#">Lorem, ipsum dolor.</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="#">Lorem, ipsum dolor.</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="#">Lorem, ipsum dolor.</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </li>
                                     </ul>
                                 </div>
-                            </li> -->
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-8" aria-controls="submenu-8"><i
+                                        class="fas fa-fw fa-columns"></i>Icons</a>
+                                <div id="submenu-8" class="collapse submenu" style="">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/icon-fontawesome.html">FontAwesome Icons</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/icon-material.html">Material Icons</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/icon-simple-lineicon.html">Simpleline
+                                                Icon</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/icon-themify.html">Themify Icon</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/icon-flag.html">Flag Icons</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/icon-weather.html">Weather Icon</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-9" aria-controls="submenu-9"><i
+                                        class="fas fa-fw fa-money-check-alt"></i>Compensation and Benefits</a>
+                                <div id="submenu-9" class="collapse submenu" style="">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="leave.php">My Leave</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="requests.php">Leave Requests</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="holiday.php">Holidays</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-10" aria-controls="submenu-10"><i
+                                        class="fas fa-f fa-folder"></i>Menu Level</a>
+                                <div id="submenu-10" class="collapse submenu" style="">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">Level 1</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                                data-target="#submenu-11" aria-controls="submenu-11">Level 2</a>
+                                            <div id="submenu-11" class="collapse submenu" style="">
+                                                <ul class="nav flex-column">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="leave.php">Leave</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="holiday.php">Holidays</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">Level 3</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </nav>
@@ -337,192 +356,48 @@ access_log($userData);
                 <!-- ============================================================== -->
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="page-header d-flex justify-content-between">
-                            <h2 class="pageheader-title">Dashboard</h2>
-                            <div>
-                                <button id="chartBTN" class="btn btn-outline-primary">Facility <i
-                                        class="bi bi-bar-chart-fill"></i></button>
-                            </div>
+                        <div class="page-header">
+                            <h2 class="pageheader-title">Portal </h2>
 
-                            <!-- <p class="pageheader-text">Nulla euismod urna eros, sit amet scelerisque torton lectus vel mauris facilisis faucibus at enim quis massa lobortis rutrum.</p> -->
+
+                            <p class="pageheader-text">Nulla euismod urna eros, sit amet scelerisque torton lectus vel
+                                mauris facilisis faucibus at enim quis massa lobortis rutrum.</p>
 
                         </div>
                     </div>
                 </div>
 
-                <!-- facility page -->
-                <div id="facChart" class="container-fluid dashboard-content">
-                    <div class="row d-flex" style="display:none;">
-                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
 
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3>Facility Charts</h3>
-                                </div>
-                            </div>
-                            <!-- utilization -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Over Utilized</h4>
-                                </div>
-                                <!-- utilize -->
-                                <div class="card-body" width="100%" height="100%">
-                                    <canvas id="facilityUtilization"></canvas>
-                                </div>
-                            </div>
-
-                            <!-- category -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Categorization </h4>
-                                </div>
-                                <div class="card-body">
-                                    <table id="facilityTable">
-                                        <thead>
-                                            <tr>
-                                                <td>Facility Name</td>
-                                                <td>Location</td>
-                                                <td>Capacity</td>
-                                                <td>Status</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
-
-                            <!-- distribution -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Status Distribution</h4>
-                                </div>
-                                <div class="card-body" width="100%" height="100%">
-                                    <canvas id="bookingStatusDistribution"></canvas>
-                                </div>
-                            </div>
-
-                            <!-- Bookings trend -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Booking Trends</h4>
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="bookingTrends"></canvas>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <!-- resources page -->
-                <div id="resChart" class="container-fluid dashboard-content" style="display:none;">
-                    <div class="row d-flex">
-                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3>Resources Charts</h3>
-                                </div>
-                            </div>
-                            <!-- donat -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Categorization Resources</h4>
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="categoryChart"></canvas>
-                                </div>
-                            </div>
-
-                            <!-- utilization -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Under Utilized</h4>
-                                </div>
-                                <!-- utilize -->
-                                <div class="card-body" width="100%" height="100%">
-                                    <canvas id="unusedResourcesChart"></canvas>
-                                </div>
-                            </div>
-
-
-                        </div>
-
-                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
-
-                            <!-- trends -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Request Trends</h4>
-                                </div>
-                                <div class="card-header">
-
-                                    <!-- <div class="row">
-                                    <div class="col">
-                                        <label for="end_date" class="form-label">Year:</label>
-                                        <input type="date" id="end_date" class="form-control">
-                                    </div>
-                                    <div class="col">
-                                        <button id="filterBtn" class="btn btn-primary">Filter</button>
-                                    </div>
-                                </div> -->
-                                    <canvas id="requestTrends"></canvas>
-                                </div>
-                            </div>
-
-                            <!-- usage -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Ranking Usage</h4>
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="usagePatterns"></canvas>
-                                </div>
-                            </div>
-
-
-                        </div>
-                    </div>
-
-
-                </div>
-
+                <!-- </div> -->
             </div>
-
+            <!-- </div> -->
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <!-- <div class="footer mx-2">
+                <div class="container-fluid mx-2">
+                    <div class="row">
+                        <div class="col-xl-7 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="text-md-right footer-links d-none d-sm-block">
+                                <a href="javascript: void(0);">About</a>
+                                <a href="javascript: void(0);">Support</a>
+                                <a href="javascript: void(0);">Contact Us</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <!-- ============================================================== -->
+            <!-- end footer -->
+            <!-- ============================================================== -->
         </div>
-    </div>
-    <!-- ============================================================== -->
-    <!-- end wrapper  -->
-    <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- end wrapper  -->
+        <!-- ============================================================== -->
     </div>
     <!-- ============================================================== -->
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var loadingOverlay = document.getElementById('loading-overlay');
-
-            window.addEventListener('load', function () {
-                setTimeout(function () {
-                    loadingOverlay.style.opacity = '0';
-                    setTimeout(function () {
-                        loadingOverlay.style.display = 'none';
-                    }, 300);
-                }, 500);
-            });
-
-            setTimeout(function () {
-                loadingOverlay.style.opacity = '0';
-                setTimeout(function () {
-                    loadingOverlay.style.display = 'none';
-                }, 300);
-            }, 3000);
-        });
-    </script>
 </body>
 
 </html>

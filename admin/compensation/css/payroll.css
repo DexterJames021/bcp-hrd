@@ -1,0 +1,158 @@
+table {
+    width: 100%; /* Adjusts the table to fit the container */
+    border-collapse: collapse; /* Removes extra spacing between table cells */
+    margin: 20px auto; /* Centers the table */
+    font-family: 'Arial', sans-serif; /* Clean font */
+}
+
+thead th {
+    background-color: #3d405c; /* Header background color */
+    color: white; /* Header text color */
+    padding: 10px; /* Adds space inside the header cells */
+    text-align: left; /* Aligns text to the left */
+    font-weight: bold; /* Emphasizes header text */
+}
+
+tbody td {
+    padding: 10px; /* Adds space inside the body cells */
+    border-bottom: 1px solid #ddd; /* Adds a subtle divider between rows */
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #f8f9fa; /* Light gray background for alternate rows */
+}
+
+tbody tr:hover {
+    background-color: #e9ecef; /* Highlight row on hover */
+}
+
+button {
+    background-color: #3d405c; /* Button background color */
+    color: white; /* Button text color */
+    border: none; /* Removes default border */
+    padding: 5px 10px; /* Adjusts padding inside the button */
+    cursor: pointer; /* Adds a pointer cursor on hover */
+    border-radius: 4px; /* Rounds the edges of the button */
+    font-size: 0.9em; /* Adjusts the font size */
+}
+
+button:hover {
+    background-color: #525572; /* Darker shade for hover effect */
+}
+
+/* Modal Overlay */
+#generateModal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000; /* Ensure it appears above other content */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent dark overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Modal Content */
+#generateModal > div {
+    background-color: #fff; /* White background */
+    padding: 25px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    position: relative;
+    text-align: center;
+    animation: scaleUp 0.3s ease-in-out;
+}
+
+/* Modal Title */
+#generateModal h3 {
+    margin: 0 0 20px;
+    font-size: 1.8em;
+    color: #333;
+    font-weight: 600;
+}
+
+/* Employee Name */
+#generateModal #employeeName {
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #555;
+}
+
+/* Dropdowns */
+#generateModal select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-size: 1em;
+    color: #333;
+    transition: border-color 0.3s;
+}
+
+#generateModal select:focus {
+    border-color: #3d405c;
+    outline: none;
+    box-shadow: 0 0 5px rgba(61, 64, 92, 0.5);
+}
+
+/* Buttons */
+#generateModal button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    margin: 15px 5px 0 5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+/* Generate Button */
+#generateModal .generate-btn {
+    background-color: #3d405c;
+    color: white;
+}
+
+#generateModal .generate-btn:hover {
+    background-color: #292b40;
+    transform: translateY(-2px); /* Subtle lift on hover */
+}
+
+/* Cancel Button */
+#generateModal .cancel-btn {
+    background-color: #d9534f;
+    color: white;
+}
+
+#generateModal .cancel-btn:hover {
+    background-color: #c9302c;
+    transform: translateY(-2px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleUp {
+    from {
+        transform: scale(0.9);
+    }
+    to {
+        transform: scale(1);
+    }
+}

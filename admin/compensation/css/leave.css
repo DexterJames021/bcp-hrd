@@ -1,0 +1,24 @@
+.status-text {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: bold;
+    text-transform: capitalize;
+    width: auto;
+    min-width: 100px;
+    font-size: 14px;
+    margin: 0 auto;
+}
+
+.status-pending {
+    background-color: #F6F7C4;
+}
+
+.status-accepted {
+    background-color: #A1EEBD;
+}
+
+.status-denied {
+    background-color: #FA812F;
+}
