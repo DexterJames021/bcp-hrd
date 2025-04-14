@@ -1,6 +1,7 @@
 $(function () {
     console.log('connect');
     console.log("JS ROLE PASS:  ", userPermissions);
+    console.log("uSERID:  ", userID);
 
     const BaseURL = "./includes/encode/facility_api.php?action="
 
@@ -197,10 +198,19 @@ $(function () {
             },
         },
         {
-            data: 'purpose'
-        },
+            title: "Purpose",
+            data: "purpose", 
+            render: function (data, type, row) {
+              return `<button class="btn text-primary see-purpose-btn" data-purpose="${encodeURIComponent(row.purpose)}">
+                        <i class="bi bi-file-earmark-richtext-fill" style="font-size:x-large;"></i>
+                      </button>`;
+            }
+          },
         {
-            data: 'status'
+            data: null,
+            render: function(data){
+                return `${data.status == "Approved" ? `<span class='badge badge-primary'>${data.status}</span>` : `<span class='badge badge-secondary'>${data.status}</span>`} `;
+            }
         },
         {
             title: 'Approve or Reject',
@@ -253,13 +263,32 @@ $(function () {
         bookingTable.ajax.reload();
     });
 
+    $(document).on('click', '.see-purpose-btn', function () {
+        var purpose = decodeURIComponent($(this).data('purpose'));
+      
+        $('#purposeText').text(purpose);
+      
+        $('#downloadPurpose').off('click').on('click', function () {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF();
+      
+          doc.text(purpose, 10, 10);
+          doc.save('purpose.pdf'); // triggers the download
+        });
+      
+        // Show modal
+        $('#purposeModal').modal('show');
+      });
+
     function updateRoomStatus(id, status) {
+
         $.ajax({
             url: BaseURL + 'update_book_status',
             type: 'POST',
             data: {
                 id: id,
-                status: status
+                status: status,
+                userID: userID
             },
             dataType: 'json',
             success: (response) => {
@@ -274,7 +303,7 @@ $(function () {
             },
             error: (res) => {
                 $('#error').toast('show');
-                console.error(res.failed)
+                console.error(res)
 
             }
         })

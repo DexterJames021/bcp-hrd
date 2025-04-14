@@ -79,6 +79,8 @@ if (!empty($employeeData['profile_picture_path'])) {
     <link rel="stylesheet" href="../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
     <link rel="stylesheet" href="../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
 
+    <script src="./main.js"></script>
+
     <!-- slimscroll js -->
     <script defer type="module" src="../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 
@@ -86,6 +88,7 @@ if (!empty($employeeData['profile_picture_path'])) {
 </head>
 
 <body>
+
     <div class="dashboard-header ">
         <nav class="navbar navbar-expand-lg bg-white fixed-top  ">
             <?php
@@ -97,8 +100,9 @@ if (!empty($employeeData['profile_picture_path'])) {
                     style="height: 3rem;width: auto;">
             </a>
 
-            <button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler navbar-light" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse " id="navbarSupportedContent">
@@ -111,58 +115,20 @@ if (!empty($employeeData['profile_picture_path'])) {
                     <li class="nav-item dropdown notification">
                         <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i>
-                            <!-- <span
-                                class="indicator"></span> -->
+                            <span class="indicator d-none"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                             <li>
                                 <div class="notification-title"> Notification</div>
                                 <div class="notification-list">
-                                    <div class="list-group">
-                                        <!--  <a href="#" class="list-group-item list-group-item-action active">
-                                            <div class="notification-info">
-                                                <div class="notification-list-user-img"><img src="#" alt=""
-                                                        class="user-avatar-md rounded-circle"></div>
-                                                <div class="notification-list-user-block"><span
-                                                        class="notification-list-user-name">Jeremy
-                                                        Rakestraw</span>accepted your invitation to join the team.
-                                                    <div class="notification-date">2 min ago</div>
-                                                </div>
-                                            </div>
-                                             </a>
-                                        <a href="#" class="list-group-item list-group-item-action">
-                                            <div class="notification-info">
-                                                <div class="notification-list-user-img"><img src="#" alt=""
-                                                        class="user-avatar-md rounded-circle"></div>
-                                                <div class="notification-list-user-block"><span
-                                                        class="notification-list-user-name">John Abraham </span>is now
-                                                    following you
-                                                    <div class="notification-date">2 days ago</div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="list-group-item list-group-item-action">
-                                            <div class="notification-info">
-                                                <div class="notification-list-user-img"><img src="#" alt=""
-                                                        class="user-avatar-md rounded-circle"></div>
-                                                <div class="notification-list-user-block"><span
-                                                        class="notification-list-user-name">Monaan Pechi</span> is
-                                                    watching your main repository
-                                                    <div class="notification-date">2 min ago</div>
-                                                </div>
-                                            </div>
-                                        </a> -->
-                                        <a href="#" class="list-group-item list-group-item-action">
-                                            <div class="notification-list-user-block"><span
-                                                    class="notification-list-user-name">No notification</span>
-                                            </div>
-                                        </a>
+                                    <div class="list-group" id="notification">
+                                        No notification
                                     </div>
                                 </div>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <div class="list-footer"> <a href="#">View all notifications</a></div>
-                            </li>
+                            </li> -->
                         </ul>
                     </li>
                     <!-- <li class="nav-item dropdown connection">
@@ -474,10 +440,10 @@ function previewProfile(event) {
                                                 Records</a>
                                         </li>
                                         <li class="nav-item">
-                                        <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : ''; ?>"
-                                            href="<?php echo $base_url; ?>/admin/tech/reports.php">Administrative
-                                            Report</a>
-                                    </li>
+                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : ''; ?>"
+                                                href="<?php echo $base_url; ?>/admin/tech/reports.php">Administrative
+                                                Report</a>
+                                        </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
                                                 data-target="#submenu-3-2" aria-controls="submenu-3-2">Analytics</a>
@@ -861,6 +827,12 @@ function previewProfile(event) {
             </nav>
         </div>
     </div>
+    <!-- <script>
+        $(document).ready(function () {
+
+        });
+
+    </script> -->
 </body>
 
 </html>

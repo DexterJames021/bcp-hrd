@@ -59,7 +59,9 @@ $(function () {
                 data: null,
                 orderable: false,
                 render: (data) => {
-                    return `<button type="button" class="view btn btn-outline-light" data-id="${data.EmployeeID}"> View Info </button>`;
+                    return `<button type="button" class="view btn btn-outline-primary" data-id="${data.EmployeeID}"> Details </button>
+                            <button type="button" class=" btn btn-outline-secondary" data-id="${data.EmployeeID}"> Promotion </button>
+                            `;
                 }
             }
         ],

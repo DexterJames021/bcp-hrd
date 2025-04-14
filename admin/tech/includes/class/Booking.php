@@ -20,6 +20,17 @@ class Booking
         $this->conn = $db;
     }
 
+    public function getBookingByUserID($user_id){
+        try {
+            $query = "SELECT employee_id FROM fm_bookings WHERE id = :id";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute([':id' => $user_id]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return $e->getMessage();
+        }
+    }
+
     /**
      * @param array[] $data Booking Creation 
      */

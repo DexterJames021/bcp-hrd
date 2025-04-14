@@ -59,6 +59,21 @@ if (!empty($employeeData['profile_picture_path'])) {
 
 
 
+
+##################3###################
+#   DASHBOARD
+#       employee
+#       nonteaching
+#       teaching
+#       staff
+#####################################
+?>
+<head>
+    <script src="./notif.js"></script>
+</head>
+<script>
+        var userID = <?= json_encode($_SESSION['user_id']); ?>;
+</script>
 <div class="dashboard-header ">
     <nav class="navbar navbar-expand-lg bg-light fixed-top">
         <a class="navbar-brand" href="index.php">
@@ -79,26 +94,20 @@ if (!empty($employeeData['profile_picture_path'])) {
                 <li class="nav-item dropdown notification">
                     <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i>
-                        <!-- <span
-                            class="indicator"></span> -->
+                        <span class="indicator d-none"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                         <li>
                             <div class="notification-title"> Notification</div>
                             <div class="notification-list">
-                                <div class="list-group">
-                                    <a href="#" class="list-group-item list-group-item-action active">
-                                        <div class="notification-info">
-                                            No notification
-                                        </div>
-                                    </a>
-                                    <!-- More notification items here -->
+                                <div class="list-group" id="notification">
+                                    No notification
                                 </div>
                             </div>
                         </li>
-                        <li>
-                            <div class="list-footer"> <a href="#">View all notifications</a></div>
-                        </li>
+                        <!-- <li>
+                                <div class="list-footer"> <a href="#">View all notifications</a></div>
+                            </li> -->
                     </ul>
                 </li>
                 <li class="nav-item dropdown nav-user">

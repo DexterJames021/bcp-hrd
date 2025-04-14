@@ -2,15 +2,18 @@
 jQuery(document).ready(function ($) {
     'use strict';
 
+    console.log('USERID', userID);
+
     console.log('notif', $("#navbarDropdownMenuLink1"));
 
-    const BaseUrl = 'http://localhost/bcp-hrd/admin/tech/includes/encode/general_api.php?action=get_general_notification'
-    // BaseUrl = 'http://bcp-hrd.site/admin/tech/includes/encode/general_api.php?action=get_general_notification'
+    const BaseUrl = 'http://localhost/bcp-hrd/admin/tech/includes/encode/general_api.php?action=get_status_notification'
+    //const BaseUrl = 'http://bcp-hrd.site/admin/tech/includes/encode/general_api.php?action=get_general_notification'
 
-    function loadAdminNotifications() {
+    function loadAdminNotifications(userID) {
 
         $.ajax({
             url: BaseUrl,
+            data: { user_id: userID },
             type: 'POST',
             dataType: 'json',
             success: function (response) {
@@ -18,7 +21,7 @@ jQuery(document).ready(function ($) {
                 console.table(response)
 
                 var notificationList = $('.notification-list .list-group');
-                notificationList.empty(); // Clear existing
+                notificationList.empty();
 
                 if (response.length === 0) {
                     notificationList.append(`
@@ -36,7 +39,7 @@ jQuery(document).ready(function ($) {
                         <a href="#" class="list-group-item list-group-item-action">
                             <div class="notification-info">
                                 <div class="notification-list-user-block">
-                                    <span class="notification-list-user-name">${notif.username}</span><br>
+                                    <span class="notification-list-user-name">${notif.id}</span><br>
                                     ${notif.message}
                                     <div class="notification-date">${notif.created_at}</div>
                                 </div>
@@ -53,7 +56,7 @@ jQuery(document).ready(function ($) {
     }
 
 
-    loadAdminNotifications();
+    loadAdminNotifications(userID);
 
     // ============================================================== 
     // Notification list

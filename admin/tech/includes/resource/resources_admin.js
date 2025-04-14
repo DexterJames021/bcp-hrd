@@ -2,6 +2,7 @@ $(function () {
   // ASSETS
   console.log("RESOURCES ADMIN");
   console.log("JS ROLE PASS:  ", userPermissions);
+  console.log("USERID:  ", userID);
 
   const BaseURL = "./includes/encode/resources_api.php?action="
 
@@ -127,7 +128,7 @@ $(function () {
         data: "username",
       },
       {
-        title: "Resource",
+        title: "Asset",
         data: "name",
       },
       {
@@ -135,16 +136,24 @@ $(function () {
         data: "quantity",
       },
       {
-        title: "Purpose",
-        data: "purpose"
-      },
-      {
-        title: "Requested at",
+        title: "Requested",
         data: "requested_at",
       },
       {
+        title: "Purpose",
+        data: "purpose",
+        render: function (data, type, row) {
+          return `<button class="btn text-primary see-purpose-btn" data-purpose="${encodeURIComponent(row.purpose)}">
+                    <i class="bi bi-file-earmark-richtext-fill" style="font-size:x-large;"></i>
+                  </button>`;
+        }
+      },
+      {
         title: "Status",
-        data: "status",
+        data: null,
+        render: function (data) {
+          return `${data.status == "Approved" ? `<span class='badge badge-primary'>${data.status}</span>` : `<span class='badge badge-secondary'>${data.status}</span>`} `;
+        }
       },
       {
         title: "Approval",
@@ -196,6 +205,24 @@ $(function () {
       }
     ],
   });
+
+  $(document).on('click', '.see-purpose-btn', function () {
+    var purpose = decodeURIComponent($(this).data('purpose'));
+
+    $('#purposeText').text(purpose);
+
+    $('#downloadPurpose').off('click').on('click', function () {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.text(purpose, 10, 10);
+      doc.save('purpose.pdf');
+    });
+
+    $('#purposeModal').modal('show');
+  });
+
+
 
   $(document).on("click", "#returnBtnItem", function () {
     let request_id = $(this).data("request-id");

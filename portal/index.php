@@ -57,8 +57,8 @@ access_log($userData);
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
 
     <!-- main js -->
-    <script src="../assets/libs/js/main-js.js"></script>
-
+    <!-- <script src="../assets/libs/js/main-js.js"></script> -->
+    <script src="./notif.js"></script>
     <script src="main.js"></script>
 
     <!-- slimscroll js -->
@@ -181,9 +181,9 @@ access_log($userData);
     <!-- ============================================================== -->
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
-<script>
+    <script>
 
-</script>
+    </script>
 </body>
 
 </html>

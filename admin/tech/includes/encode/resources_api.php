@@ -16,12 +16,14 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
 
 require '../class/Resources.php';
+require '../class/Notification.php';
 require '../../../../config/Database.php';
 
 use Admin\Tech\Includes\Class\Resources;
+use Admin\Tech\Includes\Class\Notification;
 
 $resource = new Resources($conn);
-
+$nofication = new Notification($conn);
 $action = $_GET['action'] ?? null;
 
 switch ($action) {
@@ -123,7 +125,14 @@ switch ($action) {
             'purpose' => $_POST['purpose'],
         ];
 
+        $message = "New Resource/s request for asset. ID:" . $_POST['resource_id'];
+
         $result = $resource->requestResource($data);
+
+        if($result){
+            $nofication->InsertNotification($_POST['employee_id'], $message, 'resource');
+        }
+
         echo json_encode(['success' => $result]);
         break;
 
@@ -139,13 +148,24 @@ switch ($action) {
 
         $requestId = $_POST['request_id'];
         $status = $_POST['status'];
+        $userID = $_POST['user_id'];
 
         if (!in_array($status, ['Approved', 'Rejected'])) {
             echo json_encode(['success' => false, 'message' => 'Invalid status.']);
             exit;
         }
 
+        $message = ($status === 'Approved') 
+        ? "Your request #{$requestId} has been approved. Thank you for using our service!" 
+        : "Your request #{$requestId} has been rejected. Please contact support for more information.";
+
+
         $result = $resource->updateRequestStatus($requestId, $status);
+        
+        if($result){
+            $nofication->InsertNotification($userID, $message, 'booking');
+        }
+
         echo json_encode($result);
         break;
 

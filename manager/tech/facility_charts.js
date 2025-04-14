@@ -104,7 +104,7 @@ $(function () {
   $("#facilityTable").DataTable({
     processing: true,
     ajax: {
-      url: BaseURL + "facility_categorization", // Replace with your API URL
+      url: BaseURL + "facility_categorization", 
       type: "POST",
       dataType: "json",
       dataSrc: "",

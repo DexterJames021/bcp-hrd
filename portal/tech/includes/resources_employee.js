@@ -28,6 +28,24 @@ $(function () {
     ],
   });
 
+  $("#purpose").summernote({
+    tabsize: 2,
+    height: 120,
+    toolbar: [
+        ['style', ['bold', 'italic', 'underline', 'clear']],
+        ['font', ['strikethrough', 'superscript', 'subscript']],
+        ['fontsize', ['fontsize']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['height', ['height']]
+      ],
+      callbacks: {
+        onInit: function() {
+            $(this).summernote('code', '');
+        }
+    }
+  });
+
   function loadResourcesSelectTag() {
     $.get(
       baseURL + "get_resources_available",
@@ -80,6 +98,10 @@ $(function () {
             //   alert("Request submitted successfully!");
             $('#added').toast('show');
             $("#resourceRequestForm")[0].reset();
+
+            $('#purpose').summernote('reset'); 
+            $('#purpose').summernote('code', ''); 
+
             ResourcesTable.ajax.reload();
           } else {
             $('#error').toast('show');

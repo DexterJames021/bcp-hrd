@@ -1350,7 +1350,7 @@ Top Header
 }
 
 .notification-list-user-block {
-    padding-left: 50px;
+    /* padding-left: 0; */
     font-size: 14px;
     line-height: 21px;
 }

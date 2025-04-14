@@ -35,12 +35,6 @@ $base_url = 'http://localhost/bcp-hrd';
                             <div class="notification-title"> Notification</div>
                             <div class="notification-list">
                                 <div class="list-group">
-                                    <a href="#" class="list-group-item list-group-item-action active">
-                                        <div class="notification-info">
-                                            No notification
-                                        </div>
-                                    </a>
-                                    <!-- More notification items here -->
                                 </div>
                             </div>
                         </li>

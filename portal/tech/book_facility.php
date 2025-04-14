@@ -12,6 +12,7 @@ access_log($userData);
 <head>
     <script>
         var userPermissions = <?= json_encode($userData['permissions']); ?>;
+        var user_id = <?= json_encode($_SESSION['user_id']); ?>;
     </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -51,10 +52,14 @@ access_log($userData);
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
 
     <!-- main js -->
-    <script src="../../assets/libs/js/main-js.js"></script>
-
+    <script src="../notif.js"></script>
+    
     <!-- custom js -->
     <script src="./includes/facility_employee.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
+
 
 
     <!-- slimscroll js -->
@@ -161,7 +166,7 @@ access_log($userData);
                                         </div>
                                         <div class="mb-3">
                                             <label for="bookingReason" class="form-label">Reason for Booking</label>
-                                            <textarea id="bookingReason" name="purpose" class="form-control" rows="3"
+                                            <textarea id="bookingReason2" name="purpose" class="form-control" rows="3"
                                                 required></textarea>
                                         </div>
                                     </div>
@@ -215,7 +220,8 @@ access_log($userData);
                                             </div>
                                             <div class="mb-2">
                                                 <label for="bookingReason" class="form-label">Booking Date</label>
-                                                <input type="date" id="bookDateForm" name="booking_date" class="form-control" required>
+                                                <input type="date" id="bookDateForm" name="booking_date"
+                                                    class="form-control" required>
                                             </div>
                                             <div class="mb-2">
                                                 <label for="bookingReason" class="form-label">Start Time</label>

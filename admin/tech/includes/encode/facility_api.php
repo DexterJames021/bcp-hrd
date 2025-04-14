@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 // if (!isset($_SESSION['user_id'])) {
@@ -8,7 +9,7 @@ session_start();
 // }
 
 
-header("Access-Control-Allow-Origin: *"); 
+header("Access-Control-Allow-Origin: *");
 // header("Access-Control-Allow-Origin: https://bcp-hrd.site"); 
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 // header("Access-Control-Allow-Headers: Content-Type, Authorization");
@@ -17,17 +18,22 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
 require '../class/Room.php';
 require '../class/Booking.php';
+require '../class/Notification.php';
 // require '../class/Email.php';
 require '../../../../config/Database.php';
 
 use Admin\Tech\Includes\Class\Room;
 use Admin\Tech\Includes\Class\Booking;
-use Admin\Tech\Includes\Class\Email;
+use Admin\Tech\Includes\Class\Notification;
+
+// use Admin\Tech\Includes\Class\Email;
 
 $room = new Room($conn);
 $booking = new Booking($conn);
-$mail = new Email();
+// $mail = new Email();
+$nofication = new Notification($conn);
 $action = $_GET['action'] ?? null;
+$employee_id = $_POST['employee_id'] ?? null;
 
 //todo: filter($_POST['id'], FILTER_SANITIZE_NUMBER_INT) implement this
 
@@ -64,6 +70,54 @@ switch ($action) {
     case 'fetch_all_book_adm':
         echo json_encode($booking->getAll());
         break;
+
+    //approval 
+    case 'update_book_status':
+        $id = $_POST['id'];
+        $status = $_POST['status'];
+
+        $message = ($status === 'Approved') 
+            ? "Your booking #{$id} has been approved. Thank you for using our service!" 
+            : "Your booking #{$id} has been rejected. Please contact support for more information.";
+
+        $userid = $booking->getBookingByUserID($userID);
+
+        if ($booking->updateStatus($id, $status)) {
+            $nofication->InsertNotification($userid, $message, 'booking_status');
+            echo json_encode(['success' => 'true update ' . $message]);
+        } else {
+            echo json_encode(['failed' => 'false update']);
+        }
+
+        break;
+
+    case 'create_booking':
+        if (empty($_POST['employee_id'])) {
+            echo json_encode(['error' => 'Room id is required']);
+            exit;
+        }
+
+        $message = "New booking request for Room. ID:" . $_POST['room_id'];
+
+        $data = [
+            ':employee_id' => $_POST['employee_id'],
+            ':room_id' => $_POST['room_id'],
+            ':booking_date' => $_POST['booking_date'],
+            ':start_time' => $_POST['start_time'],
+            ':end_time' => $_POST['end_time'],
+            ':purpose' => $_POST['purpose'],
+        ];
+
+        //room status bookd when booking is created
+        if ($booking->createBooking($data)) {
+            $room->updateStatus($_POST['room_id'], 'Booked');
+            $nofication->InsertNotification($_POST['employee_id'], $message, 'booking');
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['failed' => false]);
+        }
+        break;
+
 
     //approval with mail
     // case 'update_book_status':
@@ -106,42 +160,6 @@ switch ($action) {
     //         echo json_encode(['failed' => 'Status update failed']);
     //     }
     //     break;
-    //approval without mail
-    case 'update_book_status':
-        $id = $_POST['id'];
-        $status = $_POST['status'];
-
-        if ($booking->updateStatus($id, $status)) {
-            echo json_encode(['success' => 'true update']);
-        } else {
-            echo json_encode(['failed' => 'false update']);
-        }
-
-        break;
-
-    case 'create_booking':
-        if (empty($_POST['employee_id'])) {
-            echo json_encode(['error' => 'Room id is required']);
-            exit;
-        }
-
-        $data = [
-            ':employee_id' => $_POST['employee_id'],
-            ':room_id' => $_POST['room_id'],
-            ':booking_date' => $_POST['booking_date'],
-            ':start_time' => $_POST['start_time'],
-            ':end_time' => $_POST['end_time'],
-            ':purpose' => $_POST['purpose'],
-        ];
-
-        //room status bookd when booking is created
-        if ($booking->createBooking($data)) {
-            $room->updateStatus($_POST['room_id'], 'Booked');
-            echo json_encode(['success' => true]);
-        } else {
-            echo json_encode(['failed' => false]);
-        }
-        break;
 
     case 'get_all_approved_bookings':
         echo json_encode($booking->getActiveBookings());

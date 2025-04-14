@@ -50,11 +50,17 @@ access_log($userData);
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
     <!-- main js -->
-    <script src="../../assets/libs/js/main-js.js"></script>
+    <script src="../notif.js"></script>
 
     <!-- slimscroll js -->
     <script src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
     <script src="./includes/resources_employee.js"></script>
+
+
+    
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
+
 
 
     <title>Employee Dashboard</title>
@@ -93,9 +99,8 @@ access_log($userData);
                         </div>
                     </div> -->
 
-                        <div class="row">
-
-                            <div class="col-6">
+                        <div class="col-md-6">
+                            <div class="col-lg-6 col-md-12">
                                 <div class="card">
                                     <div class="card-header">
                                         <h2 class="pageheader-title">Available Items</h2>
@@ -116,7 +121,7 @@ access_log($userData);
                                 </div>
                             </div>
 
-                            <div class="col-6">
+                            <div class="col-lg-6 col-md-12">
                                 <div class="card">
                                     <div class="card-header">
                                         <h2 class="pageheader-title">Item Request Form

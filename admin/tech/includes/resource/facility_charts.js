@@ -132,8 +132,8 @@ $(function () {
   // categorize
   $("#facilityTable").DataTable({
     processing: true,
-        scrollX: true,
-    scrollY: 200,
+    //     scrollX: true,
+    // scrollY: 200,
     searching: false,
     ajax: {
       url: BaseURL + "facility_categorization", // Replace with your API URL
