@@ -152,7 +152,7 @@ $(function () {
         title: "Status",
         data: null,
         render: function (data) {
-          return `${data.status == "Approved" ? `<span class='badge badge-primary'>${data.status}</span>` : `<span class='badge badge-secondary'>${data.status}</span>`} `;
+          return `${data.status == "Approved" ? `<span class='badge badge-success'>${data.status}</span>` : `<span class='badge badge-secondary'>${data.status}</span>`} `;
         }
       },
       {
@@ -209,7 +209,7 @@ $(function () {
   $(document).on('click', '.see-purpose-btn', function () {
     var purpose = decodeURIComponent($(this).data('purpose'));
 
-    $('#purposeText').text(purpose);
+    $('#purposeText').html(purpose);
 
     $('#downloadPurpose').off('click').on('click', function () {
       const { jsPDF } = window.jspdf;

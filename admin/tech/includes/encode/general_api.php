@@ -29,6 +29,11 @@ $booking = new Booking($conn);
 $action = $_GET['action'] ?? null;
 
 switch ($action) {
+
+    ###################
+    # TODO:
+    #   the user id or employee must be pass on creation insteed of admin id 
+    ###################
     case 'get_notification_by_id':
         $user_id = $_POST['user_id'];
 
@@ -43,6 +48,7 @@ switch ($action) {
         echo json_encode($notification->GetGeneralNotification());
         break;
 
+    # employee notif all
     case 'get_status_notification':
         echo json_encode($notification->GetStatusNotifications());
         break;

@@ -99,7 +99,7 @@ access_log($userData);
                         </div>
                     </div> -->
 
-                        <div class="col-md-6">
+                        <div class="col-md-sm col-lg-12 d-lg-flex">
                             <div class="col-lg-6 col-md-12">
                                 <div class="card">
                                     <div class="card-header">

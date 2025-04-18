@@ -6,7 +6,8 @@ $(function () {
 
   const ResourcesTable = $("#ResourcesTable").DataTable({
     processing: true,
-    // width: "100%",
+    width: "100%",
+    // searching: true,  
     ajax: {
       url: baseURL + "fetch_all",
       dataType: "json",

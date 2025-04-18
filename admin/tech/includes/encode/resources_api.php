@@ -148,7 +148,7 @@ switch ($action) {
 
         $requestId = $_POST['request_id'];
         $status = $_POST['status'];
-        $userID = $_POST['user_id'];
+        // $userID = $_POST['user_id'];
 
         if (!in_array($status, ['Approved', 'Rejected'])) {
             echo json_encode(['success' => false, 'message' => 'Invalid status.']);
@@ -163,7 +163,7 @@ switch ($action) {
         $result = $resource->updateRequestStatus($requestId, $status);
         
         if($result){
-            $nofication->InsertNotification($userID, $message, 'booking');
+            $nofication->InsertNotification($_SESSION['user_id'], $message, 'resource_status');
         }
 
         echo json_encode($result);

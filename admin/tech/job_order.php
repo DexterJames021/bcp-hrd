@@ -68,10 +68,10 @@ access_log($userData);
 
 
     <!-- charts -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
 
-
-    <title>Report and Analytics</title>
+    <title>Admin Dashboard</title>
     <style>
         @media print {
             body {
@@ -80,7 +80,8 @@ access_log($userData);
             }
 
             /* Hide elements you don't want in the print version */
-            button, a {
+            button,
+            a {
                 display: none !important;
             }
 
@@ -91,7 +92,7 @@ access_log($userData);
                 page-break-before: always;
             }
         }
-        </style>
+    </style>
 </head>
 
 <body>
@@ -120,46 +121,86 @@ access_log($userData);
                     <!-- ============================================================== -->
                     <!-- pageheader  -->
                     <!-- ============================================================== -->
+
                     <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="page-header d-flex justify-content-between">
-                                <h2 class="pageheader-title">Reports and Analytics</h2>
+                                <h2 class="pageheader-title">Job Analysis</h2>
                                 <div class="btn-group m-1">
-                                    <button type="button" onclick="printReport()"
+                                    <button type="button" onclick="window.print()"
                                         class="btn btn-outline-primary">Print</button>
-                                    <button type="button" id="logsView" class="btn btn-outline-primary">Logs</button>
+                                    <button type="button" id="logsView" class="btn btn-outline-primary">Report</button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- analytics -->
+                    <div class="row">
+                        <div class="col-xl-2 col-lg-2 col-md-5 col-sm-12 col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="text-lead">Job Open</h5>
+                                    <div class="metric-value d-inline-block">
+                                        <h1 id="open_job" class="mb-1 display-5">0</h1>
+                                    </div>
+                                    <div title="Close"
+                                        class="metric-label d-inline-block float-right text-danger font-weight-bold">
+                                        <span id="closed_job" style="font-size:20px;">N/A</span>
+                                    </div>
+                                </div>
+                                <div id="sparkline-revenue3"></div>
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="text-lead"> Total Applicants</h5>
+                                    <div class="metric-value d-inline-block">
+                                        <h1 id="totaljob" class="mb-1 display-5">0</h1>
+                                    </div>
+                                </div>
+                                <div id="sparkline-revenue3"></div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-5 col-sm-12 col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <!-- <h5 class="text-muted">Departments</h5> -->
+                                    <div id="employee_per_dept" style="width:100%; height:300px;"></div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <!-- <h5 class="text-muted">Applicants</h5> -->
+                                    <div id="applicant_per_dept" style="width:100%; height:300px;"></div>
+                                </div>
+                                <div id="sparkline-revenue2"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
                     <div class="row d-flex report-container">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
 
-                            <!-- utilization -->
                             <div class="card">
-                                <div class="card-header">
-                                    <h4>Over Utilized</h4>
-                                </div>
-                                <!-- utilize -->
-                                <div class="card-body" width="100%" height="100%">
-                                    <canvas id="facilityUtilization"></canvas>
-                                </div>
-                            </div>
-
-                            <!-- category -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Categorization </h4>
+                                <div class="card-header d-flex justify-content-between ">
+                                    <div class="d-flex ">
+                                        <h3 class="">
+                                            JOB TREND ANALYSIS
+                                        </h3>
+                                    </div>
                                 </div>
                                 <div class="card-body">
-                                    <table id="facilityTable">
-                                        <thead>
+                                    <table id="trendTable" class="table table-hover">
+                                        <thead class="thead-light">
                                             <tr>
-                                                <td>Name</td>
-                                                <td>Location</td>
-                                                <td>Capacity</td>
-                                                <td>Status</td>
+                                                <th>Number of Application</th>
+                                                <th>Job Title</th>
+                                                <th>Department</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -167,29 +208,32 @@ access_log($userData);
                                 </div>
                             </div>
 
-                        </div>
 
+                        </div>
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
 
-                            <!-- distribution -->
                             <div class="card">
-                                <div class="card-header">
-                                    <h4>Status Distribution</h4>
+                                <div class="card-header d-flex justify-content-between ">
+                                    <div class="d-flex ">
+                                        <h3 class="">
+                                        Manage Job Postings
+                                        </h3>
+                                    </div>
                                 </div>
-                                <div class="card-body" width="100%" height="100%">
-                                    <canvas id="bookingStatusDistribution"></canvas>
+                                <div class="card-body">
+                                    <table id="jobPosting" class="table table-hover">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th></th>
+                                                <th>Job Title</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
                                 </div>
                             </div>
 
-                            <!-- Bookings trend -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Booking Trends</h4>
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="bookingTrends"></canvas>
-                                </div>
-                            </div>
 
                         </div>
                     </div>
@@ -205,7 +249,7 @@ access_log($userData);
                     <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="page-header d-flex justify-content-between">
-                                <h2 class="pageheader-title">Reports </h2>
+                                <h2 class="pageheader-title">Job Order/Reports </h2>
                                 <div class="btn-group m-1">
                                     <button id="analyticView" type="button" class="btn btn-outline-primary">Back</button>
                                 </div>
@@ -230,7 +274,7 @@ access_log($userData);
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <table id="LogbookingTable" class="table table-hover">
+                                    <table id="LogbookingTable" style="width: 100%;" class="table table-hover">
                                         <thead class="thead-light">
                                             <tr>
                                                 <th>Employee</th>
@@ -256,14 +300,14 @@ access_log($userData);
 
         <!-- bs notification -->
         <div class="toast-container position-fixed bottom-0 end-0 p-3">
-            <div id="room_added" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+            <div id="added" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-body bg-success text-light">
                     Added, Successfully.
                 </div>
             </div>
             <div id="status" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-body bg-success text-light">
-                    Status updated and email sent!
+                    Status updated
                 </div>
             </div>
             <div id="done" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">

@@ -14,6 +14,7 @@ $(function () {
     const AllRoomTable = $('#roomTable').DataTable({
         width: '100%',
         responsive: true,
+        // lengthMenu: [10, 25, 50, 100], 
         processing: true,
         // scrollY:        "",
         // scrollCollapse: false,

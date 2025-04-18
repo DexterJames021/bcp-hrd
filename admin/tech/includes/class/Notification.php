@@ -16,7 +16,7 @@ class Notification
 
     //for testing only 
     public function GetStatusNotifications(){
-        $q = "SELECT * FROM notifications WHERE type = 'booking_status' ORDER BY created_at DESC; ";
+        $q = "SELECT * FROM notifications WHERE type = 'booking_status' OR type = 'resource_status' ORDER BY created_at DESC; ";
         $stmt = $this->conn->prepare($q);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_OBJ);
