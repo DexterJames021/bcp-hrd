@@ -87,8 +87,7 @@ class Functions
                 LEFT JOIN applicants a ON jp.id = a.job_id 
                 LEFT JOIN departments d ON jp.DepartmentID = d.DepartmentID 
                 GROUP BY jp.id, jp.job_title, jp.DepartmentID, d.DepartmentName 
-                ORDER BY application_count 
-                DESC LIMIT 10; ";
+                ORDER BY application_count DESC  ";
             $stmt = $this->conn->prepare($q);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_BOTH);
@@ -154,12 +153,17 @@ class Functions
             $stmt = $this->conn->prepare($q);
             $success = $stmt->execute(['id' => $job_id, 'status' => $job_status]);
             
-            // Return proper success response
             return $success ? ['success' => true, 'message' => 'Status updated'] 
                            : ['success' => false, 'message' => 'Update failed'];
         } catch (PDOException $e) {
-            // Return error information
             return ['success' => false, 'message' => $e->getMessage()];
         }
+    }
+
+    public function AddJobPosting($data){
+        $q = "INSERT INTO `job_postings` ( `job_title`, `job_description`, `requirements`, `location`, `salary_range` ) 
+             VALUES ( :job_title, :job_description, :requirements, :location, :salary_range); ";
+                $stmt = $this->conn->prepare($q);
+                return $stmt->execute($data);
     }
 }

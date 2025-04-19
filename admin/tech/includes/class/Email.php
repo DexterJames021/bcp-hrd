@@ -25,12 +25,12 @@ class Email
             $this->mail->isSMTP();
             $this->mail->Host = 'smtp.gmail.com';
             $this->mail->SMTPAuth = true;
-            $this->mail->Username = 'dexteradobeshop@gmail.com'; // Replace with your Gmail address
-            $this->mail->Password = 'Computerdexter21'; // Replace with your Gmail password or app-specific password if using 2FA
+            $this->mail->Username = 'dexdasdasdteradobeshop@gmail.com'; // Replace with your Gmail address
+            $this->mail->Password = 'dy54gfh4d89'; // Replace with your Gmail password or app-specific password if using 2FA
             $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $this->mail->Port = 587;
 
-            $this->mail->setFrom('papadexterjames@gmail.com', 'HR Admin');
+            $this->mail->setFrom('sdfsdfeawadawdvxv@gmail.com', 'HR Admin');
             $this->mail->addAddress($toEmail);
             $this->mail->Subject = $subject;
             $this->mail->Body = $message;

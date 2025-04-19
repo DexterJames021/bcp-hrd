@@ -36,6 +36,9 @@ switch ($action) {
     case 'employee_per_dept':
         echo json_encode($employee->EmployeesPerDept());
         break;
+    case 'get_all_job_post':
+        echo json_encode($function->GetAllJobPost());
+        break;
     case 'job_trend':
         echo json_encode($function->JobTrend());
         break;
@@ -55,6 +58,23 @@ switch ($action) {
 
         $result = $function->UpdateJobStatus($job_id, $job_status);
         echo json_encode($result);
+        break;
+    case "add_new_job_post":
+
+        $data = [
+           ":job_title" => $_POST["job_title"],
+           ":job_description" => $_POST["job_description"],
+           ":requirements" => $_POST["requirements"],
+           ":location" => $_POST["location"],
+           ":salary_range" => $_POST["salary_range"]  
+        ];
+
+        if($function->AddJobPosting($data)){
+            echo json_encode(["message" => true]);
+        }else {
+            echo json_encode(["message" => false]);
+
+        }
         break;
 
     default:

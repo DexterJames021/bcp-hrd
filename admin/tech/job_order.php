@@ -65,6 +65,7 @@ access_log($userData);
 
     <!-- custom js -->
     <script type="module" src="./includes/resource/employee_report_admin.js"></script>
+    <script type="module" src="./includes/resource/report_admin.js"></script>
 
 
     <!-- charts -->
@@ -183,13 +184,13 @@ access_log($userData);
                     </div>
 
                     <div class="row d-flex report-container">
-                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-6">
 
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between ">
                                     <div class="d-flex ">
                                         <h3 class="">
-                                            JOB TREND ANALYSIS
+                                            Job Trend Analysis
                                         </h3>
                                     </div>
                                 </div>
@@ -200,7 +201,7 @@ access_log($userData);
                                                 <th>Number of Application</th>
                                                 <th>Job Title</th>
                                                 <th>Department</th>
-                                                <th></th>
+                                                <!-- <th></th> -->
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -210,34 +211,22 @@ access_log($userData);
 
 
                         </div>
-                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
-
-                            <div class="card">
+                        <!-- <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
+                        <div class="card">
                                 <div class="card-header d-flex justify-content-between ">
                                     <div class="d-flex ">
                                         <h3 class="">
-                                        Manage Job Postings
+                                            what chart?
                                         </h3>
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <table id="jobPosting" class="table table-hover">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th></th>
-                                                <th>Job Title</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
+                                    <div id="chart"></div>
                                 </div>
                             </div>
-
-
-                        </div>
+                         
+                        </div> -->
                     </div>
-
                 </div>
 
 
@@ -257,32 +246,57 @@ access_log($userData);
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 col-12">
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between ">
                                     <div class="d-flex ">
-
+                                        <h3>
+                                            Job Analysis Report
+                                        </h3>
                                     </div>
                                     <div>
                                         <button type="button" id="openModalBtn" class="btn btn-outline-primary float-right"
                                             data-toggle="modal" data-target="#reportModal">Generate Report</button>
-                                        <!--
-                                            logs number
-                                            suggestion not need 
-                                            what is trend
-                                        -->
                                     </div>
                                 </div>
                                 <div class="card-body">
                                     <table id="LogbookingTable" style="width: 100%;" class="table table-hover">
                                         <thead class="thead-light">
                                             <tr>
-                                                <th>Employee</th>
-                                                <th>Room</th>
-                                                <th>Date</th>
-                                                <th>Time</th>
+                                                <th>Job Title</th>
+                                                <th>Department</th>
+                                                <!-- <th></th> -->
+                                                <!-- <th>Time</th>
                                                 <th>Purpose</th>
+                                                <th>Status</th> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 col-12">
+                            <div class="card">
+                                <div class="card-header ">
+                                    <div class="d-flex justify-content-between">
+                                        <h3 class="">
+                                            Manage Job Postings
+                                        </h3>
+                                        <button type="button" data-toggle="modal" data-target="#AddJob" class="btn"> Post
+                                            New Job
+                                            <i class="fa-solid fa-circle-plus"></i>
+
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <table id="jobPosting" style="width: 100%;" class="table table-hover">
+                                        <thead class="thead-light">
+                                            <tr>
                                                 <th>Status</th>
+                                                <th>Job Title</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -291,6 +305,7 @@ access_log($userData);
                             </div>
                         </div>
                     </div>
+
                 </div>
 
             <?php else: ?>
@@ -298,26 +313,116 @@ access_log($userData);
             <?php endif; ?>
         </div>
 
+        <!-- add modal -->
+        <div id="add-modal" class="row">
+            <div class="modal fade" id="AddJob" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Job</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                        </div>
+                        <div class="modal-body">
+                            <form id="job_form">
+                                <div class="mb-3">
+                                    <label for="job_title" class="form-label">Title:</label>
+                                    <input type="text" class="form-control" required name="job_title" id="job_title"
+                                        placeholder="job title...">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="job_description" class="form-label">Description:</label>
+                                    <input type="text" class="form-control" name="job_description" id="job_description"
+                                        placeholder="description...">
+                                    <!-- <label for="task" class="task-valid d-none text-danger">This field is required!</label> -->
+                                </div>
+                                <div class="mb-3">
+                                    <label for="requirements" class="form-label">Requirements:</label>
+                                    <input type="text" class="form-control" name="requirements" id="requirements"
+                                        placeholder="requirements...">
+
+                                </div>
+                                <div class="mb-3">
+                                    <label for="location" class="form-label">Location:</label>
+                                    <input type="text" class="form-control" required name="location" id="location"
+                                        placeholder="Location">
+
+                                </div>
+                                <div class="mb-3">
+                                    <label for="salary_range" class="form-label">Salary Range:</label>
+                                    <input type="text" class="form-control" name="salary_range" id="salary_range">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" id="submit-btn" class="btn btn-primary">Submit</button>
+                                    <button type="button" id="close-btn" class="btn btn-default"
+                                        data-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- job_title
+job_description
+requirements
+location
+salary_range -->
+
+        <!-- Modal -->
+        <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reportModalLabel">Generate Facility Log Report</h5>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="filter" class="my-auto">Filter:</label>
+                        <select id="filter" class="form-control">
+                            <option value="all">All Logs</option>
+                            <option value="today">Today</option>
+                            <option value="weekly">This Week</option>
+                            <option value="monthly">This Month</option>
+                        </select>
+
+                        <div id="loading" class="mt-3 text-center" style="display: none;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Generating...</span>
+                            </div>
+                            <p>Generating report...</p>
+                        </div>
+
+                        <!-- <h5 class="mt-3">AI Report:</h5> -->
+                        <p id="aiResponse"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="AnalysisGenerateBtn" class="btn btn-outline-primary">Start Generating</button>
+                        <button id="downloadBtn" class="btn btn-outline-info" style="display: none;">Download
+                            Report</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- bs notification -->
         <div class="toast-container position-fixed bottom-0 end-0 p-3">
-            <div id="added" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-body bg-success text-light">
-                    Added, Successfully.
-                </div>
-            </div>
             <div id="status" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-body bg-success text-light">
-                    Status updated
-                </div>
-            </div>
-            <div id="done" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-body bg-success text-light">
-                    Booking marked as done.
+                    Updated Successfully!
                 </div>
             </div>
             <div id="error" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-body bg-danger text-light">
+                <div class="toast-body bg-success text-light">
                     Something went wrong.
+                </div>
+            </div>
+            <div id="added" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body bg-success text-light">
+                    Added Successfully!
                 </div>
             </div>
         </div>

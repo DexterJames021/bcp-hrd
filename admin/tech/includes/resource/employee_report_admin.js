@@ -2,9 +2,21 @@ $(function () {
 
     const BaseURL = "./includes/encode/analytic_api.php?action="
 
+/*
+gawa ng backend na magffetch ng job_posting data magrereturn analyze data 
+which is yung: 
+-job kailangan
+- least and most
+- raise button
+- generate report
+
+
+*/
+
+
     $("#LogbookingTable").DataTable({
         // width: '100%',
-        // responsive: true,
+        responsive: true,
         // lengthMenu: [50, 40, 10],
         processing: true,
         dom: 'Bfrtip',
@@ -15,17 +27,22 @@ $(function () {
         },
         columns: [
             {
-                data: "application_count"
-            }, {
-                data: "job_title",
+                title: "Job Title",
+                data: "job_title"
             },
+            // {
+            //     title: "Department",
+            //     data: "DepartmentID",
+            // },
             {
+                title: "Department Name",
                 data: "DepartmentName"
             },
         ]
     })
 
 
+    // id 	job_title Ascending 1 	job_description 	requirements 	location 	salary_range 	status 	created_at 	DepartmentID
 
     $("#logsView").on("click", function () {
         // console.log("true")
@@ -138,8 +155,9 @@ $(function () {
     $("#trendTable").DataTable({
         width: '100%',
         responsive: true,
-        lengthMenu: [50, 40, 10],
+        lengthMenu: [10, 10,10],
         processing: true,
+        searching: false,
         dom: 'Bfrtip',
         ordering: false,
         ajax: {
@@ -150,29 +168,33 @@ $(function () {
         columns: [
             {
                 data: null,
-                render: function(data){
+                render: function (data) {
                     return `<span class="badge badge-secondary">${data.application_count}</span>`;
                 }
-            }, {
+            }, 
+            {
                 data: "job_title",
             },
             {
                 data: "DepartmentName"
             },
-            {
-                title: "Job Order",
-                data: null,
-                render: function(){
-                    return `<button class="btn">    <i class="bi bi-person-plus-fill"></i></button>`;
-                }
+            // {
+            //     title: "Job Order",
+            //     data: null,
+            //     render: function(){
+            //         return `<button class="btn">    <i class="bi bi-person-plus-fill"></i></button>`;
+            //     }
 
-            }
+            // }
         ]
     })
 
     const jobTable = $("#jobPosting").DataTable({
-        width: '100%',
+        // width: '100%',
         responsive: true,
+        lengthChange: false,
+        info: true,
+        // autoWidth: false, // Let DataTables handle width
         lengthMenu: [5, 85, 10],
         processing: true,
         pageLength: 10,
@@ -181,9 +203,9 @@ $(function () {
             dataSrc: "",
             dataType: "json",
         },
+        ordering: false,
         columns: [
             {
-                orderable: false,
                 data: null,
                 render: function (data) {
                     return `<span class="badge-dot mr-1  badge 
@@ -193,7 +215,10 @@ $(function () {
                             </span>`;
                 }
             },
-            { data: "job_title" },
+            {
+                orderable: true,
+                data: "job_title"
+            },
             {
                 data: null,
                 render: function (data) {
@@ -219,7 +244,7 @@ $(function () {
             dataType: "json",
             success: function (response) {
                 if (response.success) {
-                    $('#status').toast('show');
+                    $('#status').toast("show");
                     jobTable.ajax.reload()
                 } else {
                     $(this).prop("checked", !isChecked);
@@ -249,6 +274,28 @@ $(function () {
             }
         })
     }
+
+    $("#job_form").on("submit", function(e){
+        e.preventDefault();
+        console.log('SUBMIT', $(this).serialize());
+
+        $.post(BaseURL + 'add_new_job_post',
+            $(this).serialize(),
+            function (response) {
+                if (response.message) {
+                    $('#added').toast("show");
+                    $('#job_form')[0].reset();
+                    jobTable.ajax.reload();
+                } else {
+                    $('#error').toast("show");
+                }
+            },
+            'json'
+        ).fail(function (xhr, status, error) {
+            $('#error').toast("show");
+        });
+
+    })
 
 
     ApplicantDepartment();
