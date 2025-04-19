@@ -31,9 +31,6 @@ access_log($userData);
     <!-- main js -->
     <link rel="stylesheet" href="../assets/libs/css/style.css">
 
-    <!-- toastify cs -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-
     <!-- assts csss -->
     <link rel="stylesheet" href="../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
     <link rel="stylesheet" href="../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
@@ -74,15 +71,15 @@ access_log($userData);
     <!-- slimscroll js -->
     <script defer type="module" src="../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 
-    <script src="./tech/resources_charts.js"></script>
-    <script src="./tech/facility_charts.js"></script>
+    <script src="./resources_charts.js"></script>
+    <script src="./facility_charts.js"></script>
 
 
     <!-- charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-    <title>Admin Dashboard</title>
+    <title>Manager Dashboard</title>
     <style>
         #loading-overlay {
             position: fixed;
@@ -297,6 +294,9 @@ access_log($userData);
                                 <a class="nav-link " href="./tech/facility.php">Facility
                                     Management</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link " href="./compen/index.php">Compen</a>
+                            </li>
                             <!-- <li class="nav-item">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-7" aria-controls="submenu-7">
                                     <i class="fas fa-fw fa-inbox"></i>Facility and Resources Request <span class="badge badge-secondary">New</span>
@@ -339,156 +339,8 @@ access_log($userData);
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="page-header d-flex justify-content-between">
                             <h2 class="pageheader-title">Dashboard</h2>
-                            <div>
-                                <button id="chartBTN" class="btn btn-outline-primary">Facility <i
-                                        class="bi bi-bar-chart-fill"></i></button>
-                            </div>
-
-                            <!-- <p class="pageheader-text">Nulla euismod urna eros, sit amet scelerisque torton lectus vel mauris facilisis faucibus at enim quis massa lobortis rutrum.</p> -->
-
                         </div>
                     </div>
-                </div>
-
-                <!-- facility page -->
-                <div id="facChart" class="container-fluid dashboard-content">
-                    <div class="row d-flex" style="display:none;">
-                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
-
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3>Facility Charts</h3>
-                                </div>
-                            </div>
-                            <!-- utilization -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Over Utilized</h4>
-                                </div>
-                                <!-- utilize -->
-                                <div class="card-body" width="100%" height="100%">
-                                    <canvas id="facilityUtilization"></canvas>
-                                </div>
-                            </div>
-
-                            <!-- category -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Categorization </h4>
-                                </div>
-                                <div class="card-body">
-                                    <table id="facilityTable">
-                                        <thead>
-                                            <tr>
-                                                <td>Facility Name</td>
-                                                <td>Location</td>
-                                                <td>Capacity</td>
-                                                <td>Status</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody></tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
-
-                            <!-- distribution -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Status Distribution</h4>
-                                </div>
-                                <div class="card-body" width="100%" height="100%">
-                                    <canvas id="bookingStatusDistribution"></canvas>
-                                </div>
-                            </div>
-
-                            <!-- Bookings trend -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Booking Trends</h4>
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="bookingTrends"></canvas>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <!-- resources page -->
-                <div id="resChart" class="container-fluid dashboard-content" style="display:none;">
-                    <div class="row d-flex">
-                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3>Resources Charts</h3>
-                                </div>
-                            </div>
-                            <!-- donat -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Categorization Resources</h4>
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="categoryChart"></canvas>
-                                </div>
-                            </div>
-
-                            <!-- utilization -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Under Utilized</h4>
-                                </div>
-                                <!-- utilize -->
-                                <div class="card-body" width="100%" height="100%">
-                                    <canvas id="unusedResourcesChart"></canvas>
-                                </div>
-                            </div>
-
-
-                        </div>
-
-                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
-
-                            <!-- trends -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Request Trends</h4>
-                                </div>
-                                <div class="card-header">
-
-                                    <!-- <div class="row">
-                                    <div class="col">
-                                        <label for="end_date" class="form-label">Year:</label>
-                                        <input type="date" id="end_date" class="form-control">
-                                    </div>
-                                    <div class="col">
-                                        <button id="filterBtn" class="btn btn-primary">Filter</button>
-                                    </div>
-                                </div> -->
-                                    <canvas id="requestTrends"></canvas>
-                                </div>
-                            </div>
-
-                            <!-- usage -->
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>Ranking Usage</h4>
-                                </div>
-                                <div class="card-body">
-                                    <canvas id="usagePatterns"></canvas>
-                                </div>
-                            </div>
-
-
-                        </div>
-                    </div>
-
-
                 </div>
 
             </div>

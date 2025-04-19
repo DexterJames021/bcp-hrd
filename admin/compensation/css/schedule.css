@@ -1,0 +1,27 @@
+.chart-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* Adds space between the charts */
+    flex-wrap: wrap; /* Allows the charts to wrap on smaller screens */
+    margin: 0 auto;
+}
+
+/* Each chart's container */
+.chart-box {
+    flex: 1;
+    min-width: 400px; /* Minimum width to ensure the chart doesn't get too small */
+    max-width: 45%; /* Maximum width for better fitting */
+    box-sizing: border-box;
+}
+
+canvas {
+    width: 100% !important;
+    height: 350px !important; /* Increased height to make the charts more visible */
+}
+
+/* Chart headers */
+h3 {
+    text-align: center;
+    font-size: 16px;
+    margin-top: 20px;
+}

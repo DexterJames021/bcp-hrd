@@ -445,10 +445,10 @@ $base_url = 'http://localhost/bcp-hrd';
                                 <div id="submenu-7" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/general-table.html">General Tables</a>
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/admin/compensation/index.php">compensation</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/data-tables.html">Data Tables</a>
+                                            <a class="nav-link" href="pages/data-tables.html">compensation</a>
                                         </li>
                                     </ul>
                                 </div>

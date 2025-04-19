@@ -1,0 +1,194 @@
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.apply {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.apply h3 {
+  color: #3d405c;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.apply label {
+  display: block;
+  margin-bottom: 5px;
+  color: #495057;
+  font-weight: 500;
+}
+
+.apply select,
+.apply input[type="date"],
+.apply input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.apply select:focus,
+.apply input[type="date"]:focus,
+.apply input[type="text"]:focus {
+  outline: none;
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.apply-btn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.apply-btn:hover {
+  background-color: #0056b3;
+}
+
+.apply-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+}
+
+.apply-btn:active {
+  background-color: #004085;
+}
+
+.leaves {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.leaves h3 {
+  color: #3d405c;
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+
+.leaves table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.leaves th,
+.leaves td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.leaves th {
+  background-color: #3d405c;
+  color: white;
+  font-weight: 600;
+}
+
+.leaves tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.leaves tr:hover {
+  background-color: #e9ecef;
+}
+
+.status {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  color: white;
+}
+
+.status-pending {
+  background-color: #f0ad4e;
+}
+
+.status-accepted {
+  background-color: #5cb85c;
+}
+
+.status-denied {
+  background-color: #d9534f;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 8px 12px;
+  border: 1px solid #3d405c;
+  background-color: white;
+  color: #3d405c;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination button:hover,
+.pagination button.active {
+  background-color: #3d405c;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 10px;
+  }
+
+  .apply,
+  .leaves {
+    padding: 15px;
+  }
+
+  .apply-btn {
+    padding: 10px;
+  }
+
+  .leaves th,
+  .leaves td {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .leaves table {
+    font-size: 14px;
+  }
+
+  .leaves th,
+  .leaves td {
+    padding: 6px;
+  }
+}
