@@ -368,6 +368,30 @@ insert  into `documents`(`id`,`user_id`,`document_name`,`file_path`,`uploaded_at
 (39,55,'GMAIL-ACC.txt','uploads/GMAIL-ACC.txt','2025-04-01 11:39:27'),
 (42,60,'1-INDORSEMENT-FOR-INTERNSHIP.docx','uploads/1-INDORSEMENT-FOR-INTERNSHIP.docx','2025-04-05 17:18:16');
 
+/*Table structure for table `employee_awards` */
+
+DROP TABLE IF EXISTS `employee_awards`;
+
+CREATE TABLE `employee_awards` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `employee_id` int(11) NOT NULL,
+  `program_id` int(11) NOT NULL,
+  `description` text DEFAULT NULL,
+  `award_date` date NOT NULL,
+  `status` enum('Pending','Awarded') DEFAULT 'Pending',
+  PRIMARY KEY (`id`),
+  KEY `employee_id` (`employee_id`),
+  KEY `program_id` (`program_id`),
+  CONSTRAINT `employee_awards_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`EmployeeID`),
+  CONSTRAINT `employee_awards_ibfk_2` FOREIGN KEY (`program_id`) REFERENCES `retention_programs` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `employee_awards` */
+
+insert  into `employee_awards`(`id`,`employee_id`,`program_id`,`description`,`award_date`,`status`) values 
+(1,78,4,'aweawda','2025-04-26','Awarded'),
+(2,78,4,'asdasdfa','2025-04-26','Awarded');
+
 /*Table structure for table `employees` */
 
 DROP TABLE IF EXISTS `employees`;
@@ -389,13 +413,13 @@ CREATE TABLE `employees` (
   UNIQUE KEY `Email` (`Email`),
   KEY `FK_Employees_UserID` (`UserID`),
   CONSTRAINT `FK_Employees_UserID` FOREIGN KEY (`UserID`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `employees` */
 
 insert  into `employees`(`EmployeeID`,`FirstName`,`LastName`,`Email`,`Phone`,`Address`,`DOB`,`HireDate`,`Salary`,`Status`,`UserID`,`PolicyAgreed`) values 
-(44,'Lukese','Francio','luefrancio@gmail.com','09485234501','Silicon Valley','2004-11-14','2024-11-13',30000.00,'Active',39,1),
-(45,'John','Doe','johndoe@example.com','09123456789','123 Main St','1990-01-01','2025-01-26',50000.00,'Active',40,1),
+(44,'Lukese','Francio','luefrancio@gmail.com','09485234501','Silicon Valley','2004-11-14','2020-11-13',30000.00,'Active',39,1),
+(45,'John','Doe','johndoe@example.com','09123456789','123 Main St','1990-01-01','2024-01-26',50000.00,'Active',40,1),
 (46,'Jane','Smith','janesmith@example.com','09123456780','124 Main St','1991-02-02','2025-01-26',60000.00,'Active',41,1),
 (47,'Alice','Johnson','alicejohnson@example.com','09123456781','125 Main St','1992-03-03','2025-01-26',55000.00,'Active',42,1),
 (48,'Bob','Brown','bobbrown@example.com','09123456782','126 Main St','1993-04-04','2025-01-26',52000.00,'Active',43,1),
@@ -414,7 +438,8 @@ insert  into `employees`(`EmployeeID`,`FirstName`,`LastName`,`Email`,`Phone`,`Ad
 (81,'test','applicant','apundar1jeremy@gmail.com','09485234501','Sapang Palay','2002-07-31','2025-04-01',10.00,'Active',55,1),
 (87,'Penpen','DelaFuente','penpen@gmail.com','09485234501','Citrus','2002-07-31','2025-04-05',0.00,'Active',60,1),
 (88,'Jeremy','apundar','jeremy12w32131@gmai.com','09222222222','los angeles','2002-07-31','2025-04-09',0.00,'Active',36,0),
-(89,'Super','a','superadmin@gmail.com','09093642460','los angeles','2002-07-31','2025-04-09',0.00,'Active',40,0);
+(89,'Super','a','superadmin@gmail.com','09093642460','los angeles','2002-07-31','2025-04-09',0.00,'Active',40,0),
+(90,'penpen1','delafuente','penpen1delafuente@gmail.com','09485234501','CITRUS','2002-03-07','2025-04-20',0.00,'Active',61,1);
 
 /*Table structure for table `fm_bookings` */
 
@@ -971,6 +996,29 @@ CREATE TABLE `recruitment` (
 
 /*Data for the table `recruitment` */
 
+/*Table structure for table `retention_programs` */
+
+DROP TABLE IF EXISTS `retention_programs`;
+
+CREATE TABLE `retention_programs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `program_name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `frequency` enum('Monthly','Yearly','Ongoing') NOT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date DEFAULT NULL,
+  `eligibility` varchar(255) DEFAULT NULL,
+  `reward` varchar(255) DEFAULT NULL,
+  `status` enum('Active','Inactive') DEFAULT 'Active',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `retention_programs` */
+
+insert  into `retention_programs`(`id`,`program_name`,`description`,`frequency`,`start_date`,`end_date`,`eligibility`,`reward`,`status`) values 
+(4,'Employee of the Month1','Employee of the Month','Monthly','2025-04-20','0000-00-00','All Employee','CERTIFICATE AND BONUS','Active'),
+(6,'awdawd','awdawd','Yearly','2025-04-20',NULL,'All Employee','CERTIFICATE AND BONUS','Active');
+
 /*Table structure for table `role_permissions` */
 
 DROP TABLE IF EXISTS `role_permissions`;
@@ -1035,7 +1083,7 @@ CREATE TABLE `succession_candidates` (
   `candidate_id` int(11) NOT NULL AUTO_INCREMENT,
   `employee_id` int(11) NOT NULL,
   `target_position` varchar(255) NOT NULL,
-  `status` enum('In Development','Ready for Promotion') DEFAULT 'In Development',
+  `status` enum('In Development','Ready for Promotion','Not Ready') DEFAULT 'In Development',
   `assigned_by` int(11) DEFAULT NULL,
   `assigned_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`candidate_id`),
@@ -1048,7 +1096,7 @@ CREATE TABLE `succession_candidates` (
 /*Data for the table `succession_candidates` */
 
 insert  into `succession_candidates`(`candidate_id`,`employee_id`,`target_position`,`status`,`assigned_by`,`assigned_at`) values 
-(2,87,'HR Manager','In Development',36,'2025-04-19 23:00:00'),
+(2,87,'HR Manager','Not Ready',36,'2025-04-19 23:00:00'),
 (3,78,'IT Support','In Development',36,'2025-04-19 23:04:11');
 
 /*Table structure for table `training_applications` */
@@ -1136,7 +1184,6 @@ CREATE TABLE `training_sessions` (
 
 insert  into `training_sessions`(`training_id`,`training_name`,`training_description`,`trainer`,`department`,`training_materials`,`created_at`) values 
 (3,'BASKETBALL','BRING YOUR OWN BALLPEN','LeBron James',12,'SAWADA','2024-11-14 01:18:30'),
-(4,'VOLLEYBALL','VOLLEYBALL','ALYSSA VALDEZ',11,'VOLLEYBALL','2024-11-14 01:41:38'),
 (16,'ASDFGH','ASDFGH','ASDFGH',9,'ASDFGH','2025-04-01 17:18:44'),
 (17,'TEST TRAINING','TEST TRAINING','TEST TRAINER',15,'TEST TRAINING','2025-04-05 17:19:31');
 
@@ -1204,7 +1251,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `Username` (`username`),
   KEY `fk_applicant` (`applicant_id`),
   CONSTRAINT `fk_applicant` FOREIGN KEY (`applicant_id`) REFERENCES `applicants` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `users` */
 
@@ -1229,7 +1276,8 @@ insert  into `users`(`id`,`username`,`password`,`usertype`,`createdAt`,`lastLogi
 (54,'test','$2y$10$f0fGjn9Dp5tPN/R4rTum8On18JYrqBxmcSGZQ7GIkFAvpMs/SMILW','employee','2025-03-31 10:55:17','2025-03-31 10:55:17',50,4),
 (55,'testapplicant','$2y$10$8IL60mGl5.Jg9/881xDX2.9VxvuoXBeEHXtQhHuef7mCXQiRX7mce','employee','2025-04-01 11:37:50','2025-04-01 11:37:50',69,4),
 (59,'test3','$2y$10$BPFqQOUSxltXeK7K.cqwh.gZd2XHtEFz3UUCOcRnyjxwzgQWrcZPu','employee','2025-04-05 16:55:40','2025-04-05 16:55:40',70,4),
-(60,'penpen','$2y$10$SClvv0Bd9VAcEktm9pNps.AsZvcnB1MtbBvypSGm0g5iv1cy5/r8q','employee','2025-04-05 17:16:57','2025-04-05 17:16:57',74,4);
+(60,'penpen','$2y$10$SClvv0Bd9VAcEktm9pNps.AsZvcnB1MtbBvypSGm0g5iv1cy5/r8q','employee','2025-04-05 17:16:57','2025-04-05 17:16:57',74,4),
+(61,'penpen1','$2y$10$pKkAdb3G3FikrnLrDbv4..klBuTkSwrTC4YahwOsHomAXQsJslp6O','employee','2025-04-20 11:21:00','2025-04-20 11:21:00',72,4);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

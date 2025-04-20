@@ -404,18 +404,7 @@ if (isset($_SESSION['success_message'])) {
                                                     
                                                     // Action Icons (Edit & Delete)
                                                     echo "<td>
-                                                            <a href='#' 
-                                                                data-toggle='modal' 
-                                                                data-target='#editTrainingModal' 
-                                                                data-id='" . $row['training_id'] . "' 
-                                                                data-training_name='" . htmlspecialchars($row['training_name']) . "' 
-                                                                data-trainer='" . htmlspecialchars($row['trainer']) . "' 
-                                                                data-department='" . htmlspecialchars($row['department']) . "' 
-                                                                data-training_description='" . htmlspecialchars($row['training_description']) . "' 
-                                                                data-training_materials='" . htmlspecialchars($row['training_materials']) . "' 
-                                                                class='text-warning mx-2'>
-                                                                <i class='fas fa-edit'></i> <!-- Edit Icon -->
-                                                            </a>
+                                                            
 
                                                             <a href='onboarding/delete_training.php?id=" . htmlspecialchars($row['training_id']) . "' 
                                                                 class='text-danger mx-2' 

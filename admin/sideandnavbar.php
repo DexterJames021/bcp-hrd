@@ -262,7 +262,7 @@ $base_url = 'http://localhost/bcp-hrd';
                             </li>
                             <!-- Talent Management -->
                             <li class="nav-item">
-                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'recruitment.php' || basename($_SERVER['PHP_SELF']) == 'employees.php' || basename($_SERVER['PHP_SELF']) == 'succession.php' || basename($_SERVER['PHP_SELF']) == 'onboarding.php' || basename($_SERVER['PHP_SELF']) == 'indextalent.php') ? 'active' : ''; ?>"
+                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'recruitment.php' || basename($_SERVER['PHP_SELF']) == 'employees.php' || basename($_SERVER['PHP_SELF']) == 'succession.php' ||basename($_SERVER['PHP_SELF']) == 'talent_retention.php' || basename($_SERVER['PHP_SELF']) == 'onboarding.php' || basename($_SERVER['PHP_SELF']) == 'indextalent.php') ? 'active' : ''; ?>"
                                     href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2"
                                     aria-controls="submenu-2">
                                     <i class="fa fa-fw fa-rocket"></i> Employee Management
@@ -300,6 +300,13 @@ $base_url = 'http://localhost/bcp-hrd';
                                             <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'succession.php') ? 'active' : ''; ?>"
                                                 href="<?php echo $base_url; ?>/admin/talent/succession.php">
                                                 Succession Planning
+                                            </a>
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'talent_retention.php') ? 'active' : ''; ?>"
+                                                href="<?php echo $base_url; ?>/admin/talent/talent_retention.php">
+                                                Talent Retention
                                             </a>
                                         </li>
 
