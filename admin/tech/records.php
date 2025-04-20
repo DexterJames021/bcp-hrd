@@ -230,9 +230,16 @@ access_log($userData);
                         <div class="card ">
                             <div class="card-title p-3 d-flex justify-content-between">
                                 <h3><span id="compensationName"></span> Compensation</h3>
-                                <!-- <div>
-                                    <button id="backButton" class="btn btn-outline-light d-inline">Back to List</button>
-                                </div> -->
+                                <div>
+                                    <button type="button" class="btn float-right" data-toggle="modal"
+                                        data-target="#salaryModal">
+                                        <i class="bi bi-plus-circle-fill text-primary" style="font-size:x-large;"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-primary float-right" data-toggle="modal"
+                                        data-target="#salaryModal">
+                                        Generate payslip
+                                    </button>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <table class="table">
@@ -312,6 +319,79 @@ access_log($userData);
                                             Compensation: salary payrolls <br>
                                             user acccounts (optional) <br>
                                             ATTACHMENTS:</div> -->
+                    </div>
+                </div>
+
+                <!-- promotion -->
+                <div id="add-modal" class="row">
+                    <div class="modal fade" id="promotionModal" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Assign job/Promotion</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                                </div>
+                                <div class="modal-body">
+                                    <form id="promotion_form">
+                                        <input type="hidden" class="form-control" required name="employee_id"
+                                            id="employee_id" placeholder="Asset Name">
+                                        <div class="mb-3">
+                                            <label for="status">Job Title:</label>
+                                            <select name="job_id" id="job_titles" class="form-control  required form-select"
+                                                aria-label="Default select example" required='required'>
+                                            </select>
+                                        </div>
+                                        <div class="job-details">
+                                            <!-- mga content ng job -->
+                                        </div>
+                                        <div class="">
+                                            <button type="submit" id="submit-btn" class="btn btn-primary">Save</button>
+                                            <button type="button" id="close" class="btn btn-default"
+                                                data-dismiss="modal">Close</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- salary -->
+                <div id="add-modal" class="row">
+                    <div class="modal fade" id="salaryModal" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Saraly</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                                </div>
+                                <div class="modal-body">
+                                    <form id="salary">
+                                        <input type="hidden" class="form-control" required name="employee_id"
+                                            id="employee_id" placeholder="Asset Name">
+                                        <div class="mb-3">
+                                            <label for="status">Salary:</label>
+                                            <input type="number" class="form-control" required name="salary"
+                                            id="salary" placeholder="">
+                                        </div>
+                                        <div class="job-details">
+                                            <!-- mga content ng job -->
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" id="submit-btn" class="btn btn-primary">Save</button>
+                                            <button type="button" id="close-btn" class="btn btn-default"
+                                                data-dismiss="modal">Close</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

@@ -440,10 +440,6 @@ function previewProfile(event) {
                                                 Records</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'job_order.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/admin/tech/job_order.php">Job Analysis</a>
-                                        </li>
-                                        <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
                                                 data-target="#submenu-3-2" aria-controls="submenu-3-2">Report and Analysis</a>
                                             <div id="submenu-3-2" class="collapse submenu  <?php echo (basename($_SERVER['PHP_SELF']) == 'resources.php' ||
@@ -670,7 +666,7 @@ function previewProfile(event) {
                                     basename($_SERVER['PHP_SELF']) == 'usercontrol.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'facilities.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'resources.php' ||
-                                    basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : ''; ?>" href="#"
+                                    basename($_SERVER['PHP_SELF']) == 'job_order.php') ? 'active' : ''; ?>" href="#"
                                     data-toggle="collapse" aria-expanded="false" data-target="#submenu-3"
                                     aria-controls="submenu-3"><i class="fas fa-fw fa-chart-pie"></i> Tech & Analytics</a>
                                 <div id="submenu-3" class="collapse submenu <?php echo (basename($_SERVER['PHP_SELF']) == 'resource_list.php' ||
@@ -679,7 +675,7 @@ function previewProfile(event) {
                                     basename($_SERVER['PHP_SELF']) == 'usercontrol.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'resources.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'facilities.php' ||
-                                    basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'show' : ''; ?>">
+                                    basename($_SERVER['PHP_SELF']) == 'job_order.php') ? 'show' : ''; ?>">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
@@ -718,6 +714,10 @@ function previewProfile(event) {
                                                 href="< ?php echo $base_url; ?>/admin/tech/reports.php">Administrative
                                                 Report</a>
                                         </li> -->
+                                        <li class="nav-item">
+                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'job_order.php') ? 'active' : ''; ?>"
+                                                href="<?php echo $base_url; ?>/admin/tech/job_order.php">Job Analysis</a>
+                                        </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
                                                 data-target="#submenu-3-2" aria-controls="submenu-3-2">Analytics</a>

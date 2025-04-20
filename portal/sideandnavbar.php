@@ -68,11 +68,12 @@ if (!empty($employeeData['profile_picture_path'])) {
 #       staff
 #####################################
 ?>
+
 <head>
     <script src="./notif.js"></script>
 </head>
 <script>
-        var userID = <?= json_encode($_SESSION['user_id']); ?>;
+    var userID = <?= json_encode($_SESSION['user_id']); ?>;
 </script>
 <div class="dashboard-header ">
     <nav class="navbar navbar-expand-lg bg-light fixed-top">
@@ -233,14 +234,19 @@ function previewEmployeeProfile(event) {
                             </li>
                             <!-- facilities -->
                             <li class="nav-item ">
-                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'request_resources.php' ||
-                                    basename($_SERVER['PHP_SELF']) == 'book_facility.php') ? 'active' : ''; ?>"
+                                <a class="nav-link <?php echo (
+                                    basename($_SERVER['PHP_SELF']) == 'request_resources.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'book_facility.php') || 
+                                    basename($_SERVER['PHP_SELF']) == 'survey.php' ? 'active' : ''; ?>"
                                     href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2"
                                     aria-controls="submenu-2">
                                     <i class="fa fa-fw fa-user-circle"></i>Facilites and Resources
                                 </a>
                                 <div id="submenu-2"
-                                    class="collapse submenu bg-light <?php echo (basename($_SERVER['PHP_SELF']) == 'book_facility.php' || basename($_SERVER['PHP_SELF']) == 'request_resources.php') ? 'show' : ''; ?>">
+                                    class="collapse submenu bg-light <?php echo (
+                                        basename($_SERVER['PHP_SELF']) == 'book_facility.php' || 
+                                        basename($_SERVER['PHP_SELF']) == 'request_resources.php') || 
+                                        basename($_SERVER['PHP_SELF']) == 'survey.php'? 'show' : ''; ?>">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link  <?php echo (basename($_SERVER['PHP_SELF']) == 'book_facility.php') ? 'active' : ''; ?>"
@@ -252,9 +258,10 @@ function previewEmployeeProfile(event) {
                                                 href="<?php echo $base_url; ?>/portal/tech/request_resources.php">Request
                                                 Resources</a>
                                         </li>
-                                        <!-- <li class="nav-item">
-                                                    <a class="nav-link" href="./tech/facilities/survey.php">Survey</a>
-                                                </li> -->
+                                        <li class="nav-item">
+                                            <a class="nav-link  <?php echo (basename($_SERVER['PHP_SELF']) == 'survey.php') ? 'active' : ''; ?>"
+                                                href="<?php echo $base_url; ?>/portal/tech/survey.php">Survey</a>
+                                        </li>
                                     </ul>
                                 </div>
                             </li>
@@ -328,9 +335,11 @@ function previewEmployeeProfile(event) {
                                                 href="<?php echo $base_url; ?>/portal/tech/request_resources.php">Request
                                                 Resources</a>
                                         </li>
-                                        <!-- <li class="nav-item">
-                                            <a class="nav-link" href="./tech/facilities/survey.php">Survey</a>
-                                        </li> -->
+                                        <li
+                                            class="nav-item">
+                                            <a class="nav-link  <?php echo (basename($_SERVER['PHP_SELF']) == 'survey.php') ? 'active' : ''; ?>" 
+                                                href="<?php echo $base_url; ?>/portal/tech/survey.php">Survey</a>
+                                        </li>
                                     </ul>
                                 </div>
                             </li>
@@ -402,9 +411,11 @@ function previewEmployeeProfile(event) {
                                                 href="<?php echo $base_url; ?>/portal/tech/request_resources.php">Request
                                                 Resources</a>
                                         </li>
-                                        <!-- <li class="nav-item">
-                                            <a class="nav-link" href="./tech/facilities/survey.php">Survey</a>
-                                        </li> -->
+                                        <li
+                                            class="nav-item">
+                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'survey.php') ? 'active' : ''; ?>" 
+                                            href="<?php echo $base_url; ?>/portal/tech/survey.php"">Survey</a>
+                                        </li>
                                     </ul>
                                 </div>
                             </li>
@@ -464,21 +475,23 @@ function previewEmployeeProfile(event) {
                                     <i class="fa fa-fw fa-user-circle"></i>Facilites and Resources
                                 </a>
                                 <div id="submenu-2"
-                                    class="collapse submenu bg-light <?php echo (basename($_SERVER['PHP_SELF']) == 'book_facility.php' || basename($_SERVER['PHP_SELF']) == 'request_resources.php') ? 'show' : ''; ?>">
+                                    class="collapse submenu bg-light < ?php echo (basename($_SERVER['PHP_SELF']) == 'book_facility.php' || basename($_SERVER['PHP_SELF']) == 'request_resources.php') ? 'show' : ''; ?>">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link  <?php echo (basename($_SERVER['PHP_SELF']) == 'book_facility.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/portal/tech/book_facility.php">Book
+                                            <a class="nav-link  < ?php echo (basename($_SERVER['PHP_SELF']) == 'book_facility.php') ? 'active' : ''; ?>"
+                                                href="< ?php echo $base_url; ?>/portal/tech/book_facility.php">Book
                                                 Facility</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'request_resources.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/portal/tech/request_resources.php">Request
+                                            <a class="nav-link < ?php echo (basename($_SERVER['PHP_SELF']) == 'request_resources.php') ? 'active' : ''; ?>"
+                                                href="< ?php echo $base_url; ?>/portal/tech/request_resources.php">Request
                                                 Resources</a>
                                         </li>
-                                        <!-- <li class="nav-item">
-                                            <a class="nav-link" href="./tech/facilities/survey.php">Survey</a>
-                                        </li> -->
+                                        <li class="nav-item">
+                                            <a class="nav-link < ?php echo (basename($_SERVER['PHP_SELF']) == 'survey.php') ? 'active' : ''; ?>"
+                                                href="< ?php echo $base_url; ?>/portal/tech/survey.php">Request
+                                                Resources</a>
+                                        </li>
                                     </ul>
                                 </div>
                             </li>

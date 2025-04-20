@@ -15,14 +15,17 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 require_once '../class/User.php';
 require_once '../class/Roles.php';
+require_once '../class/Functions.php';
 require_once '../class/Permission.php';
 require '../../../../config/Database.php';
 
 use Admin\Tech\Includes\Class\User;
+use Admin\Tech\Includes\Class\Functions;
 use Admin\Tech\Includes\Class\Roles;
 use Admin\Tech\Includes\Class\Permission;
 
 $user = new User($conn);
+$function = new Functions($conn);
 
 $action = $_GET['action'] ?? null;
 switch ($action) {
@@ -39,6 +42,9 @@ switch ($action) {
         } else {
             echo json_encode(['error' => 'Employee not found']);
         }
+        break;
+    case "available_job_title":
+        echo json_encode($function->GetAllJobPost());
         break;
 
     case 'employee_records_edit':
@@ -69,8 +75,21 @@ switch ($action) {
         if ($result) {
             echo json_encode($result);
         } else {
-            echo json_encode(['error' => 'Employee not found']);
+            echo json_encode(['error' => 'Something went wrong.']);
         }
+        break;
+
+    case "employee_promotion":
+        $id = $_POST["employee_id"];
+        $job_id = $_POST["job_id"]; 
+
+        $result = $user->promotion($id, $job_id);
+        if ($result) {
+            echo json_encode($result);
+        } else {
+            echo json_encode(['error' => 'Something went wrong.']);
+        }
+
         break;
 
     case 'get_by_id_training_list':
@@ -80,9 +99,10 @@ switch ($action) {
         if ($result) {
             echo json_encode($result);
         } else {
-            echo json_encode(['error' => 'Employee not found']);
+            echo json_encode(['error' => 'Something went wrong.']);
         }
         break;
+        
     case 'get_by_id_salary':
         $id = $_POST['id'] ?? null;
 

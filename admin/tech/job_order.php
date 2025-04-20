@@ -126,7 +126,7 @@ access_log($userData);
                     <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="page-header d-flex justify-content-between">
-                                <h2 class="pageheader-title">Job Analysis</h2>
+                                <h2 class="pageheader-title">Job Analytics</h2>
                                 <div class="btn-group m-1">
                                     <button type="button" onclick="window.print()"
                                         class="btn btn-outline-primary">Print</button>

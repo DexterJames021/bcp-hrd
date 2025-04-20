@@ -209,7 +209,7 @@ $(function () {
   $(document).on('click', '.see-purpose-btn', function () {
     var purpose = decodeURIComponent($(this).data('purpose'));
 
-    $('#purposeText').html(purpose);
+    $('#purposeText').text(purpose);
 
     $('#downloadPurpose').off('click').on('click', function () {
       const { jsPDF } = window.jspdf;
@@ -223,7 +223,6 @@ $(function () {
   });
 
 
-
   $(document).on("click", "#returnBtnItem", function () {
     let request_id = $(this).data("request-id");
     console.log('request id', request_id);
@@ -234,7 +233,7 @@ $(function () {
       data: { request_id: request_id },
       success: function (response) {
         console.log("Server Response:", response);
-        if (response.success) {
+        if (response) {
           $("#added").toast("show");
           requestsTable.ajax.reload();
         } else {

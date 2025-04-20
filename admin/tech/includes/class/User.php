@@ -31,6 +31,17 @@ class User
         }
     }
 
+    public function promotion($id, $job_id)
+    {
+        try {
+            $q = "UPDATE applicants SET job_id = :job_id WHERE id = :id; ";
+            $stmt = $this->conn->prepare($q);
+            return $stmt->execute(["id" => $id, "job_id" => $job_id]);
+        } catch (PDOException $e) {
+            return $e->getMessage();
+        }
+    }
+
     public function profile_select_one($id)
     {
         try {
@@ -59,6 +70,7 @@ class User
         }
     }
 
+
     public function get_all_roles_permission()
     {
         try {
@@ -77,13 +89,25 @@ class User
         }
     }
 
+
+    
+//     SELECT e.EmployeeID, e.FirstName, e.LastName, e.Email, e.Phone, e.Address, e.DOB, 
+//     e.HireDate, e.Salary, jp.job_title, d.DepartmentName, e.Status 
+//     FROM employees e
+//     JOIN users u ON e.UserID = u.id 
+//     JOIN applicants a ON u.applicant_id = a.id 
+//     JOIN job_postings jp ON a.job_id = jp.id  
+//     JOIN departments d ON a.DepartmentID = d.DepartmentID
+
     public function getAllEmployee()
     {
         $q = "SELECT e.*, CONCAT(e.FirstName, ' ', e.LastName) AS FullName, 
-                jp.job_title AS JobTitle 
+                jp.job_title AS JobTitle, a.id as applicant_id
                 FROM employees e 
-                LEFT JOIN applicants a ON e.EmployeeID = a.id 
-                LEFT JOIN job_postings jp ON a.job_id = jp.id; ";
+                JOIN users u ON e.UserID = u.id
+                JOIN applicants a ON u.applicant_id = a.id 
+                JOIN job_postings jp ON a.job_id = jp.id
+                 ";
         $stmt = $this->conn->prepare($q);
         $stmt->execute();
         return $stmt->fetchAll();
@@ -120,31 +144,55 @@ class User
         }
     }
 
+    //SELECT 
+//     e.*,
+//     CONCAT(e.FirstName, ' ', e.LastName) AS FullName,
+//     d.DepartmentName,
+//     cb.BaseSalary,
+//     cb.Bonus,
+//     (cb.BaseSalary + cb.Bonus) AS TotalCompensation,
+//     pe.Score AS PerformanceScore,
+//     pe.EvaluationDate,
+//     jp.job_title AS JobTitle,
+//     a.DepartmentID AS ApplicantDepartmentID
+// FROM 
+//     employees e
+// LEFT JOIN 
+//     applicants a ON e.EmployeeID = a.id
+// LEFT JOIN 
+//     departments d ON a.DepartmentID = d.DepartmentID
+// LEFT JOIN 
+//     compensationbenefits cb ON e.EmployeeID = cb.EmployeeID
+// LEFT JOIN 
+//     performanceevaluations pe ON e.EmployeeID = pe.EmployeeID
+// LEFT JOIN 
+//     job_postings jp ON a.job_id = jp.id"
+
+
+
+
     public function getEmployeeOverviewInfo($id)
     {
         $q = "SELECT 
-                e.*,
+                e.*, 
                 CONCAT(e.FirstName, ' ', e.LastName) AS FullName,
-                d.DepartmentName,
-                cb.BaseSalary,
-                cb.Bonus,
-                (cb.BaseSalary + cb.Bonus) AS TotalCompensation,
+                e.Email, 
+                e.Phone, 
+                e.Address, 
+                e.DOB, 
+                e.HireDate, 
+                e.Salary AS TotalCompensation, 
+                jp.job_title AS JobTitle, 
+                d.DepartmentName, 
+                e.Status,
                 pe.Score AS PerformanceScore,
-                pe.EvaluationDate,
-                jp.job_title AS JobTitle,
-                a.DepartmentID AS ApplicantDepartmentID
-            FROM 
-                employees e
-            LEFT JOIN 
-                applicants a ON e.EmployeeID = a.id
-            LEFT JOIN 
-                departments d ON a.DepartmentID = d.DepartmentID
-            LEFT JOIN 
-                compensationbenefits cb ON e.EmployeeID = cb.EmployeeID
-            LEFT JOIN 
-                performanceevaluations pe ON e.EmployeeID = pe.EmployeeID
-            LEFT JOIN 
-                job_postings jp ON a.job_id = jp.id
+                pe.EvaluationDate
+            FROM employees e
+            JOIN users u ON e.UserID = u.id 
+            JOIN applicants a ON u.applicant_id = a.id 
+            JOIN job_postings jp ON a.job_id = jp.id
+            JOIN performanceevaluations pe ON e.EmployeeID = pe.EmployeeID  
+            JOIN departments d ON a.DepartmentID = d.DepartmentID
             WHERE e.EmployeeID = :id; ";
 
         $stmt = $this->conn->prepare($q);
@@ -191,6 +239,6 @@ class User
         $stmt->execute([':id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-     
+
 
 }

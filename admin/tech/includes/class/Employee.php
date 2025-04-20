@@ -12,7 +12,7 @@ class Employee
     {
         $this->conn = $conn;
     }
-
+    
     public function select_all()
     {
         try {
