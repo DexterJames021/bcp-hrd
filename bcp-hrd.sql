@@ -392,6 +392,26 @@ insert  into `employee_awards`(`id`,`employee_id`,`program_id`,`description`,`aw
 (1,78,4,'aweawda','2025-04-26','Awarded'),
 (2,78,4,'asdasdfa','2025-04-26','Awarded');
 
+/*Table structure for table `employee_profile_pictures` */
+
+DROP TABLE IF EXISTS `employee_profile_pictures`;
+
+CREATE TABLE `employee_profile_pictures` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `EmployeeID` int(11) NOT NULL,
+  `profile_picture_path` varchar(255) DEFAULT NULL,
+  `uploaded_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `EmployeeID` (`EmployeeID`),
+  CONSTRAINT `employee_profile_pictures_ibfk_1` FOREIGN KEY (`EmployeeID`) REFERENCES `employees` (`EmployeeID`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `employee_profile_pictures` */
+
+insert  into `employee_profile_pictures`(`id`,`EmployeeID`,`profile_picture_path`,`uploaded_at`) values 
+(1,88,'uploads/profile_pictures/1745159252_student1.jpg','2025-04-20 20:08:32'),
+(2,91,'uploads/profile_pictures/1745161537_student1.jpg','2025-04-20 22:03:42');
+
 /*Table structure for table `employees` */
 
 DROP TABLE IF EXISTS `employees`;
@@ -413,7 +433,7 @@ CREATE TABLE `employees` (
   UNIQUE KEY `Email` (`Email`),
   KEY `FK_Employees_UserID` (`UserID`),
   CONSTRAINT `FK_Employees_UserID` FOREIGN KEY (`UserID`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `employees` */
 
@@ -434,12 +454,12 @@ insert  into `employees`(`EmployeeID`,`FirstName`,`LastName`,`Email`,`Phone`,`Ad
 (57,'qwe','qwe','qwe@gmail.com','12381249','ccsss','2025-03-30','2025-03-30',1.00,'Active',52,1),
 (76,'TEST','WATER','TESTWATER@GMAIL.COM','1234567890','SAPANG PALAY PROPER','2002-07-31','2025-04-01',10.00,'Active',54,1),
 (78,'Jeremy','Apundar','apundarjeremy@gmail.com','09485234501','SAPANG PALAY PROPER','2002-07-31','2025-04-01',10.00,'Active',53,1),
-(79,'qwerty','qwerty','qwertyaa@gmail.com','09485234501','SAPANG PALAY PROPER','2002-07-31','2025-04-01',10.00,'Active',54,1),
 (81,'test','applicant','apundar1jeremy@gmail.com','09485234501','Sapang Palay','2002-07-31','2025-04-01',10.00,'Active',55,1),
 (87,'Penpen','DelaFuente','penpen@gmail.com','09485234501','Citrus','2002-07-31','2025-04-05',0.00,'Active',60,1),
-(88,'Jeremy','apundar','jeremy12w32131@gmai.com','09222222222','los angeles','2002-07-31','2025-04-09',0.00,'Active',36,0),
+(88,'Jeremy','Apundar','jeremyapundar@gmail.com','09485234501','los angeles','2002-07-31','2025-04-09',0.00,'Active',36,0),
 (89,'Super','a','superadmin@gmail.com','09093642460','los angeles','2002-07-31','2025-04-09',0.00,'Active',40,0),
-(90,'penpen1','delafuente','penpen1delafuente@gmail.com','09485234501','CITRUS','2002-03-07','2025-04-20',0.00,'Active',61,1);
+(90,'penpen1','delafuente','penpen1delafuente@gmail.com','09485234501','CITRUS','2002-03-07','2025-04-20',0.00,'Active',61,1),
+(91,'Jeremy','Apundar','apundar666jeremy@gmail.com','09093642460','Sapang Palay Proper','2002-07-31','2025-04-20',0.00,'Active',4,0);
 
 /*Table structure for table `fm_bookings` */
 
