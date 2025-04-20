@@ -339,8 +339,11 @@ if (isset($_SESSION['success_message'])) {
                                         });
                                         </script>
                                         <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
+                                        <li class="nav-item">
+        <a class="nav-link active" id="succession-candidates-tab" data-toggle="tab" href="#succession-candidates" role="tab" aria-controls="succession-candidates" aria-selected="false">Succession Candidates</a>
+    </li>
     <li class="nav-item">
-        <a class="nav-link active" id="training-sessions-tab" data-toggle="tab" href="#training-sessions" role="tab" aria-controls="training-sessions" aria-selected="true">Training Sessions</a>
+        <a class="nav-link" id="training-sessions-tab" data-toggle="tab" href="#training-sessions" role="tab" aria-controls="training-sessions" aria-selected="true">Training Sessions</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" id="training-assignments-tab" data-toggle="tab" href="#training-assignments" role="tab" aria-controls="training-assignments" aria-selected="false">Training Assignments</a>
@@ -348,14 +351,12 @@ if (isset($_SESSION['success_message'])) {
     <li class="nav-item">
         <a class="nav-link" id="training-applicants-tab" data-toggle="tab" href="#training-applicants" role="tab" aria-controls="training-applicants" aria-selected="false">Training Applicants</a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" id="succession-candidates-tab" data-toggle="tab" href="#succession-candidates" role="tab" aria-controls="succession-candidates" aria-selected="false">Succession Candidates</a>
-    </li>
+    
 </ul>
 
                                         <div class="tab-content" id="dashboardTabContent">
                                             <!-- Training Sessions Tab -->
-                                            <div class="tab-pane fade show active" id="training-sessions" role="tabpanel" aria-labelledby="training-sessions-tab">
+                                            <div class="tab-pane fade" id="training-sessions" role="tabpanel" aria-labelledby="training-sessions-tab">
                                             <div class="row">
                                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                             <div class="card">
@@ -669,7 +670,7 @@ if ($result->num_rows > 0) {
         </div>
     </div>
 </div>
-<div class="tab-pane fade" id="succession-candidates" role="tabpanel" aria-labelledby="succession-candidates-tab">
+<div class="tab-pane fade show active" id="succession-candidates" role="tabpanel" aria-labelledby="succession-candidates-tab">
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="card">
@@ -724,19 +725,22 @@ if ($result->num_rows > 0) {
         echo "<td>";
 
         // Example: Edit or Remove Candidate
-        echo "<a href='#' class='btn btn-outline-success mx-1' 
-                data-toggle='modal' 
-                data-target='#updateCandidateModal' 
-                data-candidate-id='" . $row['candidate_id'] . "'
-                data-employee-name='" . htmlspecialchars($row['FirstName']) . " " . htmlspecialchars($row['LastName']) . "'
-                data-target-position='" . htmlspecialchars($row['target_position']) . "'
-                data-status='" . htmlspecialchars($row['status']) . "'>
-                Update
-              </a>";
+        echo "<a href='#' 
+        data-toggle='modal' 
+        data-target='#updateCandidateModal' 
+        data-candidate-id='" . $row['candidate_id'] . "'
+        data-employee-name='" . htmlspecialchars($row['FirstName']) . " " . htmlspecialchars($row['LastName']) . "'
+        data-target-position='" . htmlspecialchars($row['target_position']) . "'
+        data-status='" . htmlspecialchars($row['status']) . "'
+        class='text-warning mx-2'>
+        <i class='fas fa-edit'></i> <!-- Edit Icon -->
+      </a>";
 
-        echo "<a href='delete_candidate.php?id=" . $row['candidate_id'] . "' class='btn btn-outline-danger mx-1' onclick=\"return confirm('Are you sure you want to delete this candidate?');\">
-                Delete
-              </a>";
+echo "<a href='delete_candidate.php?id=" . $row['candidate_id'] . "' 
+        class='text-danger mx-2' 
+        onclick=\"return confirm('Are you sure you want to delete this candidate?');\">
+        <i class='fas fa-trash'></i> <!-- Trash Icon -->
+      </a>";
 
         echo "</td>";
         echo "</tr>";
@@ -752,6 +756,74 @@ if ($result->num_rows > 0) {
         </div>
     </div>
 </div>
+<!-- Update Candidate Modal -->
+<div class="modal fade" id="updateCandidateModal" tabindex="-1" role="dialog" aria-labelledby="updateCandidateModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form action="succession/update_candidate.php" method="POST"> <!-- Palitan mo yung action -->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="updateCandidateModalLabel">Update Candidate</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Hidden field for candidate_id -->
+          <input type="hidden" name="candidate_id" id="updateCandidateId">
+
+          <!-- Employee Name (readonly) -->
+          <div class="form-group">
+            <label for="updateEmployeeName">Employee Name</label>
+            <input type="text" class="form-control" id="updateEmployeeName" name="employee_name" readonly>
+          </div>
+
+          <!-- Target Position -->
+          <div class="form-group">
+            <label for="updateTargetPosition">Target Position</label>
+            <input type="text" class="form-control" id="updateTargetPosition" name="target_position" required>
+          </div>
+
+          <!-- Status -->
+          <div class="form-group">
+            <label for="updateStatus">Status</label>
+            <select class="form-control" id="updateStatus" name="status" required>
+              <option value="Ready for Promotion">Ready Now</option>
+              <option value="Not Ready">Not Ready</option>
+              <option value="In Development">Needs Development</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-success">Save Changes</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+$(document).ready(function(){
+    $('#updateCandidateModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button na nag-trigger ng modal
+
+        // Kunin yung data attributes
+        var candidateId = button.data('candidate-id');
+        var employeeName = button.data('employee-name');
+        var targetPosition = button.data('target-position');
+        var status = button.data('status');
+
+        // Set mo yung values sa modal inputs
+        var modal = $(this);
+        modal.find('#updateCandidateId').val(candidateId);
+        modal.find('#updateEmployeeName').val(employeeName);
+        modal.find('#updateTargetPosition').val(targetPosition);
+        modal.find('#updateStatus').val(status);
+    });
+});
+</script>
 
 <!-- Add Candidate Modal -->
 <div class="modal fade" id="addCandidateModal" tabindex="-1" role="dialog" aria-labelledby="addCandidateModalLabel" aria-hidden="true">
