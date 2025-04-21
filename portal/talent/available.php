@@ -4,6 +4,41 @@ require '../../auth/mysqli_accesscontrol.php';
 
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);
+// 1. Get total number of training_sessions (lahat ng trainings)
+$trainingSessionsQuery = "SELECT COUNT(*) AS total_sessions FROM training_sessions";
+$trainingSessionsResult = $conn->query($trainingSessionsQuery);
+$trainingSessionsCount = 0;
+
+if ($trainingSessionsResult && $row = $trainingSessionsResult->fetch_assoc()) {
+    $trainingSessionsCount = $row['total_sessions'];
+}
+
+// 2. Get total number of assigned training_assignments for the logged-in employee
+$userID = $_SESSION['user_id'];
+
+// Get EmployeeID linked to user
+$getEmployee = "SELECT EmployeeID FROM employees WHERE UserID = ?";
+$stmt = $conn->prepare($getEmployee);
+$stmt->bind_param("i", $userID);
+$stmt->execute();
+$employeeResult = $stmt->get_result();
+
+$trainingAssignmentsCount = 0;
+
+if ($employeeResult && $empRow = $employeeResult->fetch_assoc()) {
+    $employeeID = $empRow['EmployeeID'];
+
+    // Count assigned trainings
+    $assignedQuery = "SELECT COUNT(*) AS total_assignments FROM training_assignments WHERE employee_id = ?";
+    $stmt2 = $conn->prepare($assignedQuery);
+    $stmt2->bind_param("i", $employeeID);
+    $stmt2->execute();
+    $assignedResult = $stmt2->get_result();
+
+    if ($assignedResult && $assignedRow = $assignedResult->fetch_assoc()) {
+        $trainingAssignmentsCount = $assignedRow['total_assignments'];
+    }
+}
 
 ?>
 <!doctype html>
@@ -120,16 +155,52 @@ if (isset($_SESSION['error_message'])) {
     unset($_SESSION['error_message']);
 }
 ?>
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h2 class="pageheader-title">Available Training</h2>
-                            </div>
-
-                            <div class="card-body">
+               <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                    <div class="card-body"> 
+                                        <h1>My Succession</h1>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="card bg-light text-white">
+                                                    <div class="card-body">
+                                                        <h5>Available Training</h5> 
+                                                        <h3><?php echo $trainingSessionsCount ; ?></h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="card bg-light text-white">
+                                                    <div class="card-body">
+                                                        <h5>My Training</h5>
+                                                        <h3><?php echo $trainingAssignmentsCount ; ?></h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            
+                                        </div>
+                                        <hr>
+                                        <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="available-training-tab" data-toggle="tab" href="#available-training" role="tab" aria-controls="available-training" aria-selected="false">Available Training</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="myTraining-tab" data-toggle="tab" href="#myTraining" role="tab" aria-controls="myTraining" aria-selected="true">My Training</a>
+                                            </li>
+                                    
+                                            
+                                        </ul>
+                                        <div class="tab-content" id="dashboardTabsContent">
+                                            <div class="tab-pane fade show active" id="available-training" role="tabpanel" aria-labelledby="available-training-tab">
+                                                <!-- Content for Employee Retained goes here -->
+                                                <div class="card">
+                                                    <div class="card-header d-flex justify-content-between">
+                                                        <h1 class="card-title">Available Training</h1>
+                                                    </div>
+                                                    <div class="card-body">
     <!-- Table for Training Sessions -->
-    <table id="trainingTable" class="table table-hover" style="100%">
+    <table id="trainingTable" class="table table-hover" style="width: 100%;">
         <thead class="thead-light">
             <tr>
                 <th>Training Name</th>
@@ -168,7 +239,146 @@ if (isset($_SESSION['error_message'])) {
         </tbody>
     </table>
 </div>
+                                                </div>
+                                            </div>
 
+                                            <div class="tab-pane fade" id="myTraining" role="tabpanel" aria-labelledby="myTraining-tab">
+    <!-- Content for My Training goes here -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between">
+            <h1 class="card-title">My Training</h1>
+        </div>
+        <div class="card-body">
+            <!-- Table for Training Sessions -->
+            <table id="myTrainingTable" class="table table-hover" style="width: 100%;">
+                <thead class="thead-light">
+                <tr>
+                    <th>Training Name</th>
+                    <th>Description</th>
+                    <th>Trainer</th>
+                    <th>Department</th>
+                    <th>Materials</th>
+                    <th>Status</th>
+                    <th>Completion Date</th>
+                    <th>Rating 1-5</th> <!-- Corrected: Rating column -->
+                </tr>
+                </thead>
+                <tbody>
+<?php
+// 1. Get User ID from session
+$userID = $_SESSION['user_id']; 
+
+// 2. Get EmployeeID linked to the logged-in user
+$getEmployee = "SELECT EmployeeID FROM employees WHERE UserID = ?";
+$stmt = $conn->prepare($getEmployee);
+$stmt->bind_param("i", $userID);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result && $empRow = $result->fetch_assoc()) {
+    $employeeID = $empRow['EmployeeID'];
+
+    // 3. Query training assignments + session + department + grade
+    $query = "
+        SELECT 
+            ta.assignment_id, 
+            ta.status, 
+            ta.completion_date,
+            ts.training_name, 
+            ts.training_description, 
+            ts.trainer, 
+            d.DepartmentName, 
+            ts.training_materials,
+            tg.grade
+        FROM training_assignments ta
+        INNER JOIN training_sessions ts ON ta.training_id = ts.training_id
+        INNER JOIN departments d ON ts.department = d.DepartmentID
+        LEFT JOIN training_grades tg ON ta.assignment_id = tg.assignment_id
+        WHERE ta.employee_id = ?
+    ";
+    $stmt2 = $conn->prepare($query);
+    $stmt2->bind_param("i", $employeeID);
+    $stmt2->execute();
+    $trainings = $stmt2->get_result();
+
+    if ($trainings->num_rows > 0) {
+        while ($row = $trainings->fetch_assoc()) {
+            echo '<tr>';
+            echo '<td>' . htmlspecialchars($row['training_name']) . '</td>';
+            echo '<td>' . htmlspecialchars($row['training_description']) . '</td>';
+            echo '<td>' . htmlspecialchars($row['trainer']) . '</td>';
+            echo '<td>' . htmlspecialchars($row['DepartmentName']) . '</td>';
+            echo '<td>' . htmlspecialchars($row['training_materials']) . '</td>';
+            echo '<td>' . htmlspecialchars($row['status']) . '</td>';
+
+            // Completion Date
+            if (!empty($row['completion_date'])) {
+                echo '<td>' . date('F j, Y', strtotime($row['completion_date'])) . '</td>';
+            } else {
+                echo '<td>Not Completed</td>';
+            }
+
+            // Rating 1-5 / Start / In Progress column
+            echo '<td>';
+            if ($row['status'] === 'Not Started') {
+                $formId = 'startForm_' . htmlspecialchars($row['assignment_id']);
+                echo '<form method="POST" action="start_training.php" id="' . $formId . '">';
+                echo '<input type="hidden" name="assignment_id" value="' . htmlspecialchars($row['assignment_id']) . '">';
+                echo '<button type="button" class="btn btn-primary btn-sm" onclick="if(confirm(\'Start this training? This action cannot be undone.\')) document.getElementById(\'' . $formId . '\').submit();">Start</button>';
+                echo '</form>';
+            }
+            elseif ($row['status'] === 'In Progress') {
+                echo '<span class="badge badge-warning">In Progress</span>';
+            }
+            elseif ($row['status'] === 'Completed') {
+                if (!is_null($row['grade'])) {
+                    $grade = (int)$row['grade'];
+                    if ($grade <= 2) {
+                        $badgeClass = 'badge badge-danger';
+                    } elseif ($grade === 3) {
+                        $badgeClass = 'badge badge-warning';
+                    } else {
+                        $badgeClass = 'badge badge-success';
+                    }
+                    echo '<span class="' . $badgeClass . '">Rating: ' . htmlspecialchars($grade) . ' Stars</span>';
+                } else {
+                    echo '<span class="badge badge-secondary">No Rating Yet</span>';
+                }
+            }
+            else {
+                echo '-';
+            }
+            echo '</td>';
+
+            echo '</tr>';
+        }
+    } else {
+        // No training assigned
+        echo '<tr><td colspan="8" class="text-center">You have no assigned training sessions at the moment.</td></tr>';
+    }
+} else {
+    // No employee record
+    echo '<tr><td colspan="8" class="text-center">Employee record not found.</td></tr>';
+}
+?>
+</tbody>
+
+
+
+              
+            </table>
+        </div>
+    </div>
+</div>
+
+                                            </div>
+                                        </div>
+
+                                        
+                                            
+                                       
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -246,6 +456,19 @@ if (isset($_SESSION['error_message'])) {
         }
     });
 </script>
+<script>
+    $(document).ready(function() {
+        if ($("#myTrainingTable tbody tr").length > 1) { // Ensure at least one row exists
+            $('#myTrainingTable').DataTable({
+                "lengthMenu": [10, 25, 50, 100], 
+                "paging": true,
+                "searching": true,
+                "ordering": true
+            });
+        }
+    });
+</script>
+
 </body>
 
 </html>

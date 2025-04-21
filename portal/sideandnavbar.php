@@ -259,15 +259,17 @@ function previewEmployeeProfile(event) {
                                 <div id="submenu-3" class="collapse submenu bg-light">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'talent/training_sessions.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/portal/talent/training_sessions.php">
-                                                My Training Sessions
+                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'talent/available.php') ? 'active' : ''; ?>"
+                                                href="<?php echo $base_url; ?>/portal/talent/available.php">
+                                                My Succession
                                             </a>
                                         </li>
+                                    </ul>
+                                    <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'talent/training_sessions.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/portal/talent/available.php">
-                                                Available Trainings
+                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'talent/award.php') ? 'active' : ''; ?>"
+                                                href="<?php echo $base_url; ?>/portal/talent/award.php">
+                                                My Awards
                                             </a>
                                         </li>
                                     </ul>

@@ -617,7 +617,7 @@ while ($row = mysqli_fetch_assoc($result)) {
 
                     <!-- Description -->
                     <div class="form-group">
-                        <label for="description">Award Description</label>
+                        <label for="description">Message</label>
                         <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
                     </div>
 
