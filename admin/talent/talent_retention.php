@@ -30,7 +30,7 @@ $total_awards = $row['total_awards'];
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Succession Planning</title>
+    <title>Talent Retention</title>
     <link rel="shortcut icon" href="../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
 
     <!-- Bootstrap CSS (latest version) -->

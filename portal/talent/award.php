@@ -116,7 +116,7 @@ $stmt->close();
                         <div class="col-12">
                             <div class="card">
                                     <div class="card-body"> 
-                                    <h1>My Awards</h1>
+                                    
                                         <div class="row">
                                             <div class="col-md-3">
                                                 <div class="card bg-light text-white">
