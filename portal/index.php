@@ -134,11 +134,11 @@ access_log($userData);
         <div class="dashboard-wrapper">
 
             <!-- Floating Help Button  -->
-            <div class="position-fixed bottom-0 end-0 p-5" style="z-index: 2;">
+            <!-- <div class="position-fixed bottom-0 end-0 p-5" style="z-index: 2;">
                 <button id="surveyTrigger" class="btn btn-primary rounded-circle p-3 position-fixed bottom-0 end-0 m-4">
                     <i class="bi bi-chat-square-heart-fill" style="font-size: x-large;"></i>
                 </button>
-            </div>
+            </div> -->
 
             <!-- modal) -->
             <div class="modal fade" id="surveyModal" tabindex="-1">

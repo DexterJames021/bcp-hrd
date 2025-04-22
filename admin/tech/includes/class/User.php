@@ -90,8 +90,8 @@ class User
     }
 
 
-    
-//     SELECT e.EmployeeID, e.FirstName, e.LastName, e.Email, e.Phone, e.Address, e.DOB, 
+
+    //     SELECT e.EmployeeID, e.FirstName, e.LastName, e.Email, e.Phone, e.Address, e.DOB, 
 //     e.HireDate, e.Salary, jp.job_title, d.DepartmentName, e.Status 
 //     FROM employees e
 //     JOIN users u ON e.UserID = u.id 
@@ -238,6 +238,46 @@ class User
         $stmt = $this->conn->prepare($q);
         $stmt->execute([':id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+
+    public function SurveyResponse($data)
+    {
+        try {
+            $q = "INSERT INTO survey_responses ( user_id, survey_data) 
+                    VALUES (:user_id, :survey_data); ";
+            $stmt = $this->conn->prepare($q);
+            return $stmt->execute($data);
+        } catch (PDOException $e) {
+            return $e;
+        }
+    }
+
+    public function GetByIDSurveyResponse()
+    {
+        try {
+            $q = "SELECT u.username, sr.* 
+                    FROM survey_responses sr 
+                    JOIN users u ON user_id = u.id; ";
+            $stmt = $this->conn->prepare($q);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function GetAllSurveyResponses(){
+        try {
+            $q = "SELECT u.username, sr.* 
+                    FROM survey_responses sr 
+                    JOIN users u ON user_id = u.id; ";
+            $stmt = $this->conn->prepare($q);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return $e->getMessage();
+        }
     }
 
 

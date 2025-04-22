@@ -17,8 +17,8 @@ jQuery(document).ready(function ($) {
             type: 'POST',
             dataType: 'json',
             success: function (response) {
-
-                console.table(response)
+                
+                console.log(response)
 
                 var notificationList = $('.notification-list .list-group');
                 notificationList.empty();

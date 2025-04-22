@@ -1,4 +1,50 @@
 @charset "UTF-8";
+
+.svd-watermark {
+    display: none !important;
+}
+
+.rating-table-container {
+    margin-bottom: 10px;
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.rating-table {
+    margin-top: 15px;
+}
+
+.rating-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #111111;
+}
+
+.rating-table .progress {
+    height: 20px;
+    background-color: #e9ecef;
+}
+
+.rating-table .progress-bar {
+    background-color: #1ab394;
+}
+
+.summary-row {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+
+.viz-container {
+    margin-top: 40px;
+    padding: 20px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+
 /**
  * Summary:
  *

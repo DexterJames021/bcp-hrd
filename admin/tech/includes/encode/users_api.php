@@ -81,7 +81,7 @@ switch ($action) {
 
     case "employee_promotion":
         $id = $_POST["employee_id"];
-        $job_id = $_POST["job_id"]; 
+        $job_id = $_POST["job_id"];
 
         $result = $user->promotion($id, $job_id);
         if ($result) {
@@ -102,7 +102,7 @@ switch ($action) {
             echo json_encode(['error' => 'Something went wrong.']);
         }
         break;
-        
+
     case 'get_by_id_salary':
         $id = $_POST['id'] ?? null;
 
@@ -113,7 +113,24 @@ switch ($action) {
             echo json_encode(['error' => 'Employee not found']);
         }
         break;
-        
+
+    case "survey_response":
+        $data = [
+            "user_id" => $_POST["user_id"],
+            "survey_data" => json_encode($_POST["survey_data"])
+        ];
+
+        $result = $user->SurveyResponse($data);
+        if ($result) {
+            echo json_encode(["message" => $data]);
+        } else {
+            echo json_encode(['message' => 'Something went wrong.']);
+        }
+        break;
+
+    case "survey_manage_adm":
+        echo json_encode($user->GetAllSurveyResponses());
+        break;
 
 
     default:

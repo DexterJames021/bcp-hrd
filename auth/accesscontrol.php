@@ -40,6 +40,16 @@ function hasPermission($permission)
 }
 
 
+function hasSurveyResponse($user_id, $conn)
+{
+    $stmt = $conn->prepare("SELECT EXISTS( SELECT 1 FROM `survey_responses` WHERE user_id = ? ) AS has_responded; ");
+    $stmt->execute([$user_id]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    return $result;
+
+}
+
 function access_log($userData)
 {
     echo "<script>console.log('@@@@@@@@@@@@@@@@ ACCESS CONTROL @@@@@@@@@@@@@@@@')</script>";

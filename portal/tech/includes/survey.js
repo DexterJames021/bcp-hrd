@@ -1,70 +1,35 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const surveyJson = {
-        title: "Workplace Evaluation Survey",
-        pages: [{
-            elements: [
-                {
-                    type: "rating",
-                    name: "workplace",
-                    title: "Workplace Environment Satisfaction",
-                    rateMax: 5
-                },
-                {
-                    type: "rating",
-                    name: "facilities",
-                    title: "Facilities Quality Rating",
-                    rateMax: 5
-                },
-                {
-                    type: "rating",
-                    name: "ergonomics",
-                    title: "Workstation Ergonomics",
-                    rateMax: 5
-                },
-                {
-                    type: "rating",
-                    name: "satisfaction",
-                    title: "Overall Job Satisfaction",
-                    rateMax: 5
-                },
-                {
-                    type: "rating",
-                    name: "admin_services",
-                    title: "Administrative Services Rating",
-                    rateMax: 5
-                },
-                {
-                    type: "comment",
-                    name: "suggestions",
-                    title: "Additional Comments/Suggestions"
-                }
-            ]
-        }]
-    };
-
-    console.log("Survey container:", document.getElementById('surveyContainer'));
+$(function () {
+    console.log('ID @@@@@@@@@@@@', user_id);
+    const baseURI = "../../admin/tech/includes/encode/users_api.php?action=";
 
     const survey = new Survey.Model(surveyJson);
-
-    // Apply theme correctly (if needed)
-    Survey.StylesManager.applyTheme("modern");
-    survey.render("surveyContainer");
-
+    // survey_response
     survey.onComplete.add((sender) => {
-        fetch("save_survey.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(sender.data)
-        })
-        .then(response => {
-            if (!response.ok) throw new Error('Network error');
-            return response.json();
-        })
-        .then(data => {
-            survey.showCompletedPage();
-        })
-        .catch(error => {
-            alert("Submission failed: " + error.message);
-        });
+        const survey_data = sender.data;
+        
+        console.log('DATA @@@@@@@@@@', sender.data), ", USERID",user_id;
+
+        $.post(baseURI + "survey_response", {
+            user_id: user_id,
+            survey_data: survey_data
+        }, function (response) {
+            if (response.message) {
+                // $("#added").toast("show")
+                console.log("response", response.message)
+            } else {
+                $("#error").toast("show")
+            }
+        }, "json")
+
     });
+
+
+    $("#startSurveyBtn").on("click", function(){
+        survey.render("surveyContainer");
+        $("#surveyContainer").show()
+        $(".initial").hide();
+
+    })
+
+
 });

@@ -402,6 +402,7 @@ function previewProfile(event) {
                                     basename($_SERVER['PHP_SELF']) == 'usercontrol.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'facilities.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'resources.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'survey_responses.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'job_order.php') ? 'active' : ''; ?>" href="#"
                                     data-toggle="collapse" aria-expanded="false" data-target="#submenu-3"
                                     aria-controls="submenu-3"><i class="fas fa-fw fa-chart-pie"></i> Tech & Analytics</a>
@@ -410,6 +411,7 @@ function previewProfile(event) {
                                     basename($_SERVER['PHP_SELF']) == 'records.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'usercontrol.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'resources.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'survey_responses.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'facilities.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'job_order.php') ? 'show' : ''; ?>">
                                     <ul class="nav flex-column">
@@ -438,6 +440,10 @@ function previewProfile(event) {
                                             <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'records.php') ? 'active' : ''; ?>"
                                                 href="<?php echo $base_url; ?>/admin/tech/records.php">Employee Personnel
                                                 Records</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'survey_responses.php') ? 'active' : ''; ?>"
+                                                href="<?php echo $base_url; ?>/admin/tech/survey_responses.php">Engagement Analytics</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
@@ -665,6 +671,7 @@ function previewProfile(event) {
                                     basename($_SERVER['PHP_SELF']) == 'records.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'usercontrol.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'facilities.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'survey_responses.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'resources.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'job_order.php') ? 'active' : ''; ?>" href="#"
                                     data-toggle="collapse" aria-expanded="false" data-target="#submenu-3"
@@ -673,6 +680,7 @@ function previewProfile(event) {
                                     basename($_SERVER['PHP_SELF']) == 'room_book_list.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'records.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'usercontrol.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'survey_responses.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'resources.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'facilities.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'job_order.php') ? 'show' : ''; ?>">
@@ -709,11 +717,10 @@ function previewProfile(event) {
                                                 <!-- <i class="bi bi-person-fill-gear"></i> -->
                                                 User Control</a>
                                         </li>
-                                        <!-- <li class="nav-item">
-                                            <a class="nav-link < ?php echo (basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : ''; ?>"
-                                                href="< ?php echo $base_url; ?>/admin/tech/reports.php">Administrative
-                                                Report</a>
-                                        </li> -->
+                                        <li class="nav-item">
+                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'survey_responses.php') ? 'active' : ''; ?>"
+                                                href="<?php echo $base_url; ?>/admin/tech/survey_responses.php">Engagement Analytics</a>
+                                        </li>
                                         <li class="nav-item">
                                             <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'job_order.php') ? 'active' : ''; ?>"
                                                 href="<?php echo $base_url; ?>/admin/tech/job_order.php">Job Analysis</a>
@@ -826,12 +833,6 @@ function previewProfile(event) {
             </nav>
         </div>
     </div>
-    <!-- <script>
-        $(document).ready(function () {
-
-        });
-
-    </script> -->
 </body>
 
 </html>
