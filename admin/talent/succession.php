@@ -13,7 +13,13 @@ if ($result = $conn->query($sql)) {
     $assignment_count = $row['count'];
 }
 
-
+// Fetch the count of succession candidates
+$candidate_count = 0;
+$sql = "SELECT COUNT(*) AS count FROM succession_candidates";
+if ($result = $conn->query($sql)) {
+    $row = $result->fetch_assoc();
+    $candidate_count = $row['count'];
+}
 // Fetch the count of training sessions from the database
 $sql = "SELECT COUNT(*) AS training_count FROM training_sessions";
 $result = $conn->query($sql);
@@ -108,6 +114,15 @@ if ($result) {
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-md-3">
+                                            <div class="card bg-light text-dark">
+                                                <div class="card-body">
+                                                    <h5>Total Candidates</h5>
+                                                    <h3><?php echo $candidate_count; ?></h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
                                     </div>
                     <hr>
 
@@ -324,19 +339,24 @@ if (isset($_SESSION['success_message'])) {
                                         });
                                         </script>
                                         <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="training-sessions-tab" data-toggle="tab" href="#training-sessions" role="tab" aria-controls="training-sessions" aria-selected="false">Training Sessions</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="training-assignments-tab" data-toggle="tab" href="#training-assignments" role="tab" aria-controls="training-assignments" aria-selected="false">Training Assignments</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="training-applicants-tab" data-toggle="tab" href="#training-applicants" role="tab" aria-controls="training-applicants" aria-selected="false">Training Applicants</a>
-                                            </li>
-                                        </ul>
+                                        <li class="nav-item">
+        <a class="nav-link active" id="succession-candidates-tab" data-toggle="tab" href="#succession-candidates" role="tab" aria-controls="succession-candidates" aria-selected="false">Succession Candidates</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="training-sessions-tab" data-toggle="tab" href="#training-sessions" role="tab" aria-controls="training-sessions" aria-selected="true">Training Sessions</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="training-assignments-tab" data-toggle="tab" href="#training-assignments" role="tab" aria-controls="training-assignments" aria-selected="false">Training Assignments</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="training-applicants-tab" data-toggle="tab" href="#training-applicants" role="tab" aria-controls="training-applicants" aria-selected="false">Training Applicants</a>
+    </li>
+    
+</ul>
+
                                         <div class="tab-content" id="dashboardTabContent">
                                             <!-- Training Sessions Tab -->
-                                            <div class="tab-pane fade show active" id="training-sessions" role="tabpanel" aria-labelledby="training-sessions-tab">
+                                            <div class="tab-pane fade" id="training-sessions" role="tabpanel" aria-labelledby="training-sessions-tab">
                                             <div class="row">
                                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                             <div class="card">
@@ -384,18 +404,7 @@ if (isset($_SESSION['success_message'])) {
                                                     
                                                     // Action Icons (Edit & Delete)
                                                     echo "<td>
-                                                            <a href='#' 
-                                                                data-toggle='modal' 
-                                                                data-target='#editTrainingModal' 
-                                                                data-id='" . $row['training_id'] . "' 
-                                                                data-training_name='" . htmlspecialchars($row['training_name']) . "' 
-                                                                data-trainer='" . htmlspecialchars($row['trainer']) . "' 
-                                                                data-department='" . htmlspecialchars($row['department']) . "' 
-                                                                data-training_description='" . htmlspecialchars($row['training_description']) . "' 
-                                                                data-training_materials='" . htmlspecialchars($row['training_materials']) . "' 
-                                                                class='text-warning mx-2'>
-                                                                <i class='fas fa-edit'></i> <!-- Edit Icon -->
-                                                            </a>
+                                                            
 
                                                             <a href='onboarding/delete_training.php?id=" . htmlspecialchars($row['training_id']) . "' 
                                                                 class='text-danger mx-2' 
@@ -586,44 +595,149 @@ $('#saveGradeBtn').on('click', function() {
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-                            // Query to fetch training applicants data from the database
-                            $sql = "SELECT ta.application_id, e.EmployeeID as employee_id, e.FirstName, e.LastName, tr.training_name, ta.training_id, tr.training_name, ta.applied_at
-                            FROM training_applications ta
-                            JOIN employees e ON ta.employee_id = e.EmployeeID
-                            JOIN training_sessions tr ON ta.training_id = tr.training_id"; 
+<?php
+// Query to fetch training applicants data from the database
+$sql = "SELECT 
+            ta.application_id, 
+            e.EmployeeID AS employee_id, 
+            e.FirstName, 
+            e.LastName, 
+            tr.training_name, 
+            ta.training_id, 
+            ta.applied_at,
+            tas.status AS assignment_status
+        FROM training_applications ta
+        JOIN employees e ON ta.employee_id = e.EmployeeID
+        JOIN training_sessions tr ON ta.training_id = tr.training_id
+        LEFT JOIN training_assignments tas 
+            ON ta.employee_id = tas.employee_id 
+            AND ta.training_id = tas.training_id";
 
-                            $result = $conn->query($sql);
+$result = $conn->query($sql);
 
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    echo "<tr>";
-                                    echo "<td>" . htmlspecialchars($row['FirstName']) . " " . htmlspecialchars($row['LastName']) . "</td>"; // Applicant Name
-                                    echo "<td>" . htmlspecialchars($row['training_name']) . "</td>"; // Training Title
-                                    $applied_date = $row['applied_at'] ? date('M d, Y', strtotime($row['applied_at'])) : 'N/A'; // Format: Nov 31, 2020
-                                    echo "<td>" . htmlspecialchars($applied_date) . "</td>"; // Applied Date formatted
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>" . htmlspecialchars($row['FirstName']) . " " . htmlspecialchars($row['LastName']) . "</td>"; // Applicant Name
+        echo "<td>" . htmlspecialchars($row['training_name']) . "</td>"; // Training Title
+        $applied_date = $row['applied_at'] ? date('M d, Y', strtotime($row['applied_at'])) : 'N/A'; // Format: Nov 31, 2020
+        echo "<td>" . htmlspecialchars($applied_date) . "</td>"; // Applied Date formatted
 
-                                    // Action Buttons (Icons Only)
-                                    echo "<td>";
+        // Action Buttons
+        echo "<td>";
 
-                                    // For all applicants, show the "Assign Training" button
-                                    echo "<a href='#' class='btn btn-outline-primary mx-2' 
-                                            data-toggle='modal' 
-                                            data-target='#assignTrainingModal' 
-                                            data-employee-id='" . $row['employee_id'] . "' 
-                                            data-employee-name='" . htmlspecialchars($row['FirstName']) . " " . htmlspecialchars($row['LastName']) . "' 
-                                            data-training-id='" . $row['training_id'] . "' 
-                                            data-training-name='" . htmlspecialchars($row['training_name']) . "'>
-                                            Assign Training
-                                        </a>";
+        if (!empty($row['assignment_status'])) {
+            // Kung may assignment na
+            echo "<button class='btn btn-success mx-2' disabled>
+                    Assigned (" . htmlspecialchars($row['assignment_status']) . ")
+                  </button>";
+        } else {
+            // Kung hindi pa assigned
+            echo "<a href='#' class='btn btn-outline-primary mx-2' 
+                    data-toggle='modal' 
+                    data-target='#assignTrainingModal' 
+                    data-employee-id='" . $row['employee_id'] . "' 
+                    data-employee-name='" . htmlspecialchars($row['FirstName']) . " " . htmlspecialchars($row['LastName']) . "' 
+                    data-training-id='" . $row['training_id'] . "' 
+                    data-training-name='" . htmlspecialchars($row['training_name']) . "'>
+                    Assign Training
+                  </a>";
+        }
 
-                                    echo "</td>";
-                                    echo "</tr>";
-                                }
-                            } else {
-                                echo "<tr><td colspan='4' class='text-center'>No training applicants found.</td></tr>"; // Adjusted colspan
-                            }
-                            ?>
+        echo "</td>";
+        echo "</tr>";
+    }
+} else {
+    echo "<tr><td colspan='4' class='text-center'>No training applicants found.</td></tr>"; // Adjusted colspan
+}
+?>
+</tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="tab-pane fade show active" id="succession-candidates" role="tabpanel" aria-labelledby="succession-candidates-tab">
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h1 class="card-title">Succession Candidates</h1>
+                    <div class="btn-group">
+                                                
+                                                        <button type="button" class="btn btn-outline-primary float-right"
+                                                            data-toggle="modal" data-target="#addCandidateModal">Add Candidates</button>
+                                                
+                                                 
+                                                </div>
+                
+                </div>
+                <div class="card-body">
+                    <table id="myTableSuccession" class="table table-hover" style="width:100%">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Employee Name</th>
+                                <th>Target Position</th>
+                                <th>Status</th>
+                                <th>Assigned Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+<?php
+// Query to fetch succession candidates data
+$sql = "SELECT 
+            sc.candidate_id, 
+            e.EmployeeID AS employee_id, 
+            e.FirstName, 
+            e.LastName, 
+            sc.target_position, 
+            sc.status, 
+            sc.assigned_at
+        FROM succession_candidates sc
+        JOIN employees e ON sc.employee_id = e.EmployeeID";
+
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>" . htmlspecialchars($row['FirstName']) . " " . htmlspecialchars($row['LastName']) . "</td>"; // Employee Name
+        echo "<td>" . htmlspecialchars($row['target_position']) . "</td>"; // Target Position
+        echo "<td>" . htmlspecialchars($row['status']) . "</td>"; // Status
+        $assigned_date = $row['assigned_at'] ? date('M d, Y', strtotime($row['assigned_at'])) : 'N/A';
+        echo "<td>" . htmlspecialchars($assigned_date) . "</td>"; // Assigned Date
+
+        // Action Buttons
+        echo "<td>";
+
+        // Example: Edit or Remove Candidate
+        echo "<a href='#' 
+        data-toggle='modal' 
+        data-target='#updateCandidateModal' 
+        data-candidate-id='" . $row['candidate_id'] . "'
+        data-employee-name='" . htmlspecialchars($row['FirstName']) . " " . htmlspecialchars($row['LastName']) . "'
+        data-target-position='" . htmlspecialchars($row['target_position']) . "'
+        data-status='" . htmlspecialchars($row['status']) . "'
+        class='text-warning mx-2'>
+        <i class='fas fa-edit'></i> <!-- Edit Icon -->
+      </a>";
+
+echo "<a href='delete_candidate.php?id=" . $row['candidate_id'] . "' 
+        class='text-danger mx-2' 
+        onclick=\"return confirm('Are you sure you want to delete this candidate?');\">
+        <i class='fas fa-trash'></i> <!-- Trash Icon -->
+      </a>";
+
+        echo "</td>";
+        echo "</tr>";
+    }
+} else {
+    echo "<tr><td colspan='5' class='text-center'>No succession candidates found.</td></tr>";
+}
+?>
                         </tbody>
                     </table>
                 </div>
@@ -631,7 +745,131 @@ $('#saveGradeBtn').on('click', function() {
         </div>
     </div>
 </div>
+<!-- Update Candidate Modal -->
+<div class="modal fade" id="updateCandidateModal" tabindex="-1" role="dialog" aria-labelledby="updateCandidateModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form action="succession/update_candidate.php" method="POST"> <!-- Palitan mo yung action -->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="updateCandidateModalLabel">Update Candidate</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
 
+        <div class="modal-body">
+          <!-- Hidden field for candidate_id -->
+          <input type="hidden" name="candidate_id" id="updateCandidateId">
+
+          <!-- Employee Name (readonly) -->
+          <div class="form-group">
+            <label for="updateEmployeeName">Employee Name</label>
+            <input type="text" class="form-control" id="updateEmployeeName" name="employee_name" readonly>
+          </div>
+
+          <!-- Target Position -->
+          <div class="form-group">
+            <label for="updateTargetPosition">Target Position</label>
+            <input type="text" class="form-control" id="updateTargetPosition" name="target_position" required>
+          </div>
+
+          <!-- Status -->
+          <div class="form-group">
+            <label for="updateStatus">Status</label>
+            <select class="form-control" id="updateStatus" name="status" required>
+              <option value="Ready for Promotion">Ready Now</option>
+              <option value="Not Ready">Not Ready</option>
+              <option value="In Development">Needs Development</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-success">Save Changes</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+$(document).ready(function(){
+    $('#updateCandidateModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button na nag-trigger ng modal
+
+        // Kunin yung data attributes
+        var candidateId = button.data('candidate-id');
+        var employeeName = button.data('employee-name');
+        var targetPosition = button.data('target-position');
+        var status = button.data('status');
+
+        // Set mo yung values sa modal inputs
+        var modal = $(this);
+        modal.find('#updateCandidateId').val(candidateId);
+        modal.find('#updateEmployeeName').val(employeeName);
+        modal.find('#updateTargetPosition').val(targetPosition);
+        modal.find('#updateStatus').val(status);
+    });
+});
+</script>
+
+<!-- Add Candidate Modal -->
+<div class="modal fade" id="addCandidateModal" tabindex="-1" role="dialog" aria-labelledby="addCandidateModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form action="succession/add_candidate.php" method="POST">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addCandidateModalLabel">Add Succession Candidate</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+
+          <div class="form-group">
+            <label for="employee">Select Employee</label>
+            <select class="form-control" name="employee_id" id="employee" required>
+              <option value="">-- Select Employee --</option>
+              <?php
+              $emp_query = "SELECT EmployeeID, FirstName, LastName FROM employees WHERE Status = 'Active'";
+              $emp_result = $conn->query($emp_query);
+              if ($emp_result->num_rows > 0) {
+                  while ($emp = $emp_result->fetch_assoc()) {
+                      echo "<option value='" . $emp['EmployeeID'] . "'>" . htmlspecialchars($emp['FirstName'] . ' ' . $emp['LastName']) . "</option>";
+                  }
+              }
+              ?>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="target_position">Target Position</label>
+            <input type="text" class="form-control" id="target_position" name="target_position" required>
+          </div>
+
+          <div class="form-group">
+            <label for="status">Candidate Status</label>
+            <select class="form-control" id="status" name="status" required>
+              <option value="">-- Select Status --</option>
+              <option value="In Development">In Development</option>
+              <option value="Ready for Promotion">Ready for Promotion</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Candidate</button>
+          
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>
 
 
                                 </div>
@@ -697,6 +935,19 @@ $('#assignTrainingModal').on('show.bs.modal', function (event) {
     $(document).ready(function() {
         if ($("#myTable2 tbody tr").length > 1) { // Ensure at least one row exists
             $('#myTable2').DataTable({
+                "lengthMenu": [10, 25, 50, 100], 
+                "paging": true,
+                "searching": true,
+                "ordering": true
+            });
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        if ($("#myTableSuccession tbody tr").length > 1) { // Ensure at least one row exists
+            $('#myTableSuccession').DataTable({
                 "lengthMenu": [10, 25, 50, 100], 
                 "paging": true,
                 "searching": true,

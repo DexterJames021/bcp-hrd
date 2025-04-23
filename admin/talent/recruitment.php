@@ -272,26 +272,26 @@ if ($result->num_rows > 0) {
         echo "<td>" . htmlspecialchars($row['status']) . "</td>";
         echo "<td>" . htmlspecialchars($row['department_name']) . "</td>";
         echo "<td>
-                <button data-toggle='modal' 
-                        data-target='#editJobModal' 
-                        data-id='" . htmlspecialchars($row['id']) . "' 
-                        data-title='" . htmlspecialchars($row['job_title']) . "' 
-                        data-description='" . htmlspecialchars($row['job_description']) . "' 
-                        data-requirements='" . htmlspecialchars($row['requirements']) . "' 
-                        data-location='" . htmlspecialchars($row['location']) . "' 
-                        data-salary='" . htmlspecialchars($row['salary_range']) . "' 
-                        data-status='" . htmlspecialchars($row['status']) . "' 
-                        title='Edit Job' 
-                        style='border: none; background: none; cursor: pointer; margin-right: 10px;'>
-                    <i class='fas fa-edit' style='font-size: 16px; color: #007bff;'></i>
-                </button>
+        <button data-toggle='modal' 
+                data-target='#editJobModal' 
+                data-id='" . htmlspecialchars($row['id']) . "' 
+                data-title='" . htmlspecialchars($row['job_title']) . "' 
+                data-description='" . htmlspecialchars($row['job_description']) . "' 
+                data-requirements='" . htmlspecialchars($row['requirements']) . "' 
+                data-location='" . htmlspecialchars($row['location']) . "' 
+                data-salary='" . htmlspecialchars($row['salary_range']) . "' 
+                data-status='" . htmlspecialchars($row['status']) . "' 
+                title='Edit Job' 
+                style='border: none; background: none; cursor: pointer; margin-right: 10px;'>
+            <i class='fas fa-edit text-warning' style='font-size: 16px;'></i> <!-- Edit Icon -->
+        </button>
 
-                <a href='recruitment/delete_job.php?id=" . htmlspecialchars($row['id']) . "' 
-                   onclick='return confirm(\"Are you sure you want to delete this job posting?\");' 
-                   title='Delete Job' 
-                   style='margin-right: 10px; text-decoration: none;'>
-                    <i class='fas fa-trash-alt' style='font-size: 16px; color: #dc3545;'></i>
-                </a>
+        <a href='recruitment/delete_job.php?id=" . htmlspecialchars($row['id']) . "' 
+           onclick='return confirm(\"Are you sure you want to delete this job posting?\");' 
+           title='Delete Job' 
+           style='margin-right: 10px; text-decoration: none;'>
+            <i class='fas fa-trash-alt text-danger' style='font-size: 16px;'></i> <!-- Trash Icon -->
+        </a>
 
                 <a href='recruitment.php?job_id=" . htmlspecialchars($row['id']) . "#applicant' 
                    title='View Applicants' 
@@ -348,22 +348,22 @@ if ($result->num_rows > 0) {
             echo "<td>" . htmlspecialchars($row['DepartmentName']) . "</td>";
             echo "<td>" . htmlspecialchars($row['Manager'] ?? 'No Manager') . "</td>"; // Show manager or 'No Manager'
             echo "<td>
-                    <button data-toggle='modal' 
-                            data-target='#editDepartmentModal' 
-                            data-id='" . htmlspecialchars($row['DepartmentID']) . "' 
-                            data-name='" . htmlspecialchars($row['DepartmentName']) . "' 
-                            data-manager='" . htmlspecialchars($row['Manager'] ?? '') . "' 
-                            title='Edit Department' 
-                            style='border: none; background: none; cursor: pointer; margin-right: 10px;'>
-                        <i class='fas fa-edit' style='font-size: 16px; color: #007bff;'></i>
-                    </button>
+            <button data-toggle='modal' 
+                    data-target='#editDepartmentModal' 
+                    data-id='" . htmlspecialchars($row['DepartmentID']) . "' 
+                    data-name='" . htmlspecialchars($row['DepartmentName']) . "' 
+                    data-manager='" . htmlspecialchars($row['Manager'] ?? '') . "' 
+                    title='Edit Department' 
+                    style='border: none; background: none; cursor: pointer; margin-right: 10px;'>
+                <i class='fas fa-edit text-warning' style='font-size: 16px;'></i> <!-- Edit Icon -->
+            </button>
 
-                    <a href='recruitment/delete_department.php?DepartmentID=" . htmlspecialchars($row['DepartmentID']) . "' 
-                       onclick='return confirm(\"Are you sure you want to delete this department?\");' 
-                       title='Delete Department' 
-                       style='text-decoration: none;'>
-                        <i class='fas fa-trash-alt' style='font-size: 16px; color: #dc3545;'></i>
-                    </a>
+            <a href='recruitment/delete_department.php?DepartmentID=" . htmlspecialchars($row['DepartmentID']) . "' 
+               onclick='return confirm(\"Are you sure you want to delete this department?\");' 
+               title='Delete Department' 
+               style='text-decoration: none;'>
+                <i class='fas fa-trash-alt text-danger' style='font-size: 16px;'></i> <!-- Trash Icon -->
+            </a>
                 </td>";
             echo "</tr>";
         }
