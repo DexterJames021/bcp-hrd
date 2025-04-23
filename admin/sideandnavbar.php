@@ -402,6 +402,7 @@ function previewProfile(event) {
                                     basename($_SERVER['PHP_SELF']) == 'usercontrol.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'facilities.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'resources.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'attendance_tracker.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'survey_responses.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'job_order.php') ? 'active' : ''; ?>" href="#"
                                     data-toggle="collapse" aria-expanded="false" data-target="#submenu-3"
@@ -410,6 +411,7 @@ function previewProfile(event) {
                                     basename($_SERVER['PHP_SELF']) == 'room_book_list.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'records.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'usercontrol.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'attendance_tracker.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'resources.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'survey_responses.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'facilities.php' ||
@@ -443,11 +445,17 @@ function previewProfile(event) {
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'survey_responses.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/admin/tech/survey_responses.php">Engagement Analytics</a>
+                                                href="<?php echo $base_url; ?>/admin/tech/survey_responses.php">Engagement
+                                                Analytics</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'attendance_tracker.php') ? 'active' : ''; ?>"
+                                                href="<?php echo $base_url; ?>/admin/tech/attendance_tracker.php">Attendance Tracker</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                                                data-target="#submenu-3-2" aria-controls="submenu-3-2">Report and Analysis</a>
+                                                data-target="#submenu-3-2" aria-controls="submenu-3-2">Report and
+                                                Analysis</a>
                                             <div id="submenu-3-2" class="collapse submenu  <?php echo (basename($_SERVER['PHP_SELF']) == 'resources.php' ||
                                                 basename($_SERVER['PHP_SELF']) == 'facilities.php') ? 'show' : ''; ?>">
                                                 <ul class="nav flex-column">
@@ -672,6 +680,7 @@ function previewProfile(event) {
                                     basename($_SERVER['PHP_SELF']) == 'usercontrol.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'facilities.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'survey_responses.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'attendance_tracker.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'resources.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'job_order.php') ? 'active' : ''; ?>" href="#"
                                     data-toggle="collapse" aria-expanded="false" data-target="#submenu-3"
@@ -680,6 +689,7 @@ function previewProfile(event) {
                                     basename($_SERVER['PHP_SELF']) == 'room_book_list.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'records.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'usercontrol.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'attendance_tracker.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'survey_responses.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'resources.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'facilities.php' ||
@@ -719,11 +729,16 @@ function previewProfile(event) {
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'survey_responses.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/admin/tech/survey_responses.php">Engagement Analytics</a>
+                                                href="<?php echo $base_url; ?>/admin/tech/survey_responses.php">Engagement
+                                                Analytics</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'job_order.php') ? 'active' : ''; ?>"
                                                 href="<?php echo $base_url; ?>/admin/tech/job_order.php">Job Analysis</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'attendance_tracker.php') ? 'active' : ''; ?>"
+                                                href="<?php echo $base_url; ?>/admin/tech/attendance_tracker.php">Attendance Tracker</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"

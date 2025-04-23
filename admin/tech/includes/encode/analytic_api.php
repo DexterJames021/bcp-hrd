@@ -1,11 +1,11 @@
 <?php
 session_start();
 
-// if (!isset($_SESSION['user_id'])) {
-//     echo json_encode(['error' => 'Unauthorized access']);
-//     http_response_code(403);
-//     exit;
-// }
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(['error' => 'Unauthorized access']);
+    http_response_code(403);
+    exit;
+}
 
 
 header("Access-Control-Allow-Origin: *"); //  domain
@@ -62,23 +62,41 @@ switch ($action) {
     case "add_new_job_post":
 
         $data = [
-           ":job_title" => $_POST["job_title"],
-           ":job_description" => $_POST["job_description"],
-           ":requirements" => $_POST["requirements"],
-           ":location" => $_POST["location"],
-           ":salary_range" => $_POST["salary_range"]  
+            ":job_title" => $_POST["job_title"],
+            ":job_description" => $_POST["job_description"],
+            ":requirements" => $_POST["requirements"],
+            ":location" => $_POST["location"],
+            ":salary_range" => $_POST["salary_range"]
         ];
 
-        if($function->AddJobPosting($data)){
+        if ($function->AddJobPosting($data)) {
             echo json_encode(["message" => true]);
-        }else {
+        } else {
             echo json_encode(["message" => false]);
 
         }
         break;
-    // case "survey_form":
+    case "attendance_list":
+        echo json_encode($function->AttendanceList());
+        break;
+    case "record_attendance":
+        $data = [
+            ":employee_id" => $_POST["employee_id"],
+        ];
 
-    //     break;
+        $result = $function->AddAttendance($data);
+        echo json_encode($result ? ["success" => true] : ["error" => "Failed to record attendance"]);
+        break;
+
+    case "import_attendance":
+        if (!isset($_FILES['csvFile']) || $_FILES['csvFile']['error'] !== UPLOAD_ERR_OK) {
+            echo json_encode(['error' => true, 'message' => 'No file uploaded or upload error']);
+            break;
+        }
+
+        $result = $function->ImportAttendance($_FILES['csvFile']);
+        echo json_encode($result);
+        break;
 
     default:
         return null;

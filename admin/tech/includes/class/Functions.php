@@ -152,18 +152,169 @@ class Functions
             $q = "UPDATE `job_postings` SET status=:status WHERE id = :id";
             $stmt = $this->conn->prepare($q);
             $success = $stmt->execute(['id' => $job_id, 'status' => $job_status]);
-            
-            return $success ? ['success' => true, 'message' => 'Status updated'] 
-                           : ['success' => false, 'message' => 'Update failed'];
+
+            return $success ? ['success' => true, 'message' => 'Status updated']
+                : ['success' => false, 'message' => 'Update failed'];
         } catch (PDOException $e) {
             return ['success' => false, 'message' => $e->getMessage()];
         }
     }
 
-    public function AddJobPosting($data){
-        $q = "INSERT INTO `job_postings` ( `job_title`, `job_description`, `requirements`, `location`, `salary_range` ) 
+    public function AddJobPosting($data)
+    {
+        try {
+            $q = "INSERT INTO `job_postings` ( `job_title`, `job_description`, `requirements`, `location`, `salary_range` ) 
              VALUES ( :job_title, :job_description, :requirements, :location, :salary_range); ";
-                $stmt = $this->conn->prepare($q);
-                return $stmt->execute($data);
+            $stmt = $this->conn->prepare($q);
+            return $stmt->execute($data);
+        } catch (PDOException $e) {
+            return $e;
+        }
+    }
+
+    public function AttendanceList()
+    {
+        try {
+            $q = "SELECT 
+                    a.attendance_id,
+                    a.employee_id,
+                    CONCAT(e.FirstName, ' ', e.LastName) AS fullname,
+                    a.date,
+                    TIME_FORMAT(a.time_in, '%H:%i:%s') as time_in,
+                    TIME_FORMAT(a.time_out, '%H:%i:%s') as time_out,
+                    a.status
+                  FROM attendance a
+                  JOIN employees e ON a.employee_id = e.EmployeeID
+                  ORDER BY a.date DESC, a.time_in DESC";
+            $stmt = $this->conn->prepare($q);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("AttendanceList Error: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function AddAttendance($data)
+    {
+        try {
+            // Check if record exists for today
+            $stmt = $this->conn->prepare("
+                SELECT * FROM attendance 
+                WHERE employee_id = :employeeId AND date = CURDATE()
+            ");
+            $stmt->execute([':employeeId' => $data['employee_id']]);
+            $existing = $stmt->fetch();
+
+            if ($existing) {
+                // Update time out
+                $stmt = $this->conn->prepare("
+                    UPDATE attendance SET 
+                    time_out = CURTIME(),
+                    status = CASE 
+                        WHEN TIMEDIFF(CURTIME(), time_in) < '04:00:00' THEN 'half-day'
+                        WHEN time_in > '08:30:00' THEN 'late'
+                        ELSE 'present'
+                    END
+                    WHERE attendance_id = :id
+                ");
+                return $stmt->execute([':id' => $existing['attendance_id']]);
+            } else {
+                // Insert new record
+                $stmt = $this->conn->prepare("
+                    INSERT INTO attendance (employee_id, date, time_in, status)
+                    VALUES (:employeeId, CURDATE(), CURTIME(), 
+                    CASE 
+                        WHEN CURTIME() > '08:30:00' THEN 'late'
+                        ELSE 'present'
+                    END)
+                ");
+                return $stmt->execute([':employeeId' => $data['employee_id']]);
+            }
+        } catch (PDOException $e) {
+            error_log("AddAttendance Error: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function ImportAttendance($file)
+    {
+        try {
+            if ($file['error'] !== UPLOAD_ERR_OK) {
+                throw new \Exception("File upload error"); // Added backslash
+            }
+
+            $handle = fopen($file['tmp_name'], 'r');
+            if (!$handle) {
+                throw new \Exception("Cannot open file"); // Added backslash
+            }
+
+            // Skip header
+            fgetcsv($handle);
+
+            $this->conn->beginTransaction();
+            $stmt = $this->conn->prepare("
+                INSERT INTO attendance 
+                (employee_id, date, time_in, time_out, status)
+                VALUES (?, ?, ?, ?, ?)
+                ON DUPLICATE KEY UPDATE
+                time_in = VALUES(time_in),
+                time_out = VALUES(time_out),
+                status = VALUES(status)
+            ");
+
+            $lineNumber = 1;
+            $successCount = 0;
+            $errorMessages = [];
+
+            while (($data = fgetcsv($handle)) !== false) {
+                $lineNumber++;
+
+                try {
+                    // Skip empty lines
+                    if (empty($data[0])) {
+                        continue;
+                    }
+
+                    // Validate employee_id is numeric
+                    if (!is_numeric($data[0])) {
+                        throw new \Exception("Invalid employee ID at line $lineNumber"); // Added backslash
+                    }
+
+                    $employeeId = (int) $data[0];
+                    $date = date('Y-m-d', strtotime($data[1])); // Convert to proper date format
+                    $timeIn = !empty($data[2]) ? date('H:i:s', strtotime($data[2])) : null;
+                    $timeOut = !empty($data[3]) ? date('H:i:s', strtotime($data[3])) : null;
+                    $status = in_array($data[4], ['present', 'absent', 'late', 'half-day'])
+                        ? $data[4]
+                        : 'present';
+
+                    $stmt->execute([$employeeId, $date, $timeIn, $timeOut, $status]);
+                    $successCount++;
+                } catch (\Exception $e) { // Added backslash
+                    $errorMessages[] = $e->getMessage();
+                }
+            }
+
+            $this->conn->commit();
+            fclose($handle);
+
+            return [
+                'success' => true,
+                'imported' => $successCount,
+                'errors' => $errorMessages,
+                'message' => "Imported $successCount records" .
+                    (count($errorMessages) ? " with " . count($errorMessages) . " errors" : "")
+            ];
+        } catch (\Exception $e) { // Added backslash
+            $this->conn->rollBack();
+            if (isset($handle))
+                fclose($handle);
+            error_log("ImportAttendance Error: " . $e->getMessage());
+            return [
+                'error' => true,
+                'message' => $e->getMessage()
+            ];
+        }
     }
 }

@@ -2,11 +2,11 @@
 
 session_start();
 
-// if (!isset($_SESSION['user_id'])) {
-//     echo json_encode(['error' => 'Unauthorized access']);
-//     http_response_code(403);
-//     exit;
-// }
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(['error' => 'Unauthorized access']);
+    http_response_code(403);
+    exit;
+}
 
 
 header("Access-Control-Allow-Origin: *");
@@ -80,7 +80,7 @@ switch ($action) {
             ? "Your booking #{$id} has been approved. Thank you for using our service!" 
             : "Your booking #{$id} has been rejected. Please contact support for more information.";
 
-        $userid = $booking->getBookingByUserID($userID);
+        $userid = $booking->getBookingByUserID($_POST['userID']);
 
         if ($booking->updateStatus($id, $status)) {
             $nofication->InsertNotification($userid, $message, 'booking_status');

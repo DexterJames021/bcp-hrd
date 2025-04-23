@@ -15,7 +15,7 @@ jQuery(document).ready(function ($) {
             dataType: 'json',
             success: function (response) {
 
-                console.table(response)
+                console.log(response)
 
                 var notificationList = $('.notification-list .list-group');
                 notificationList.empty(); // Clear existing

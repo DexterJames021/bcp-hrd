@@ -22,10 +22,11 @@ class Booking
 
     public function getBookingByUserID($user_id){
         try {
-            $query = "SELECT employee_id FROM fm_bookings WHERE id = :id";
+            $query = "SELECT employee_id FROM fm_bookings WHERE id = :user_id";
             $stmt = $this->conn->prepare($query);
-            $stmt->execute([':id' => $user_id]);
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt->execute([":user_id" => $user_id]);
+            $rs = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['user_id'] ?? null;
         } catch (PDOException $e) {
             return $e->getMessage();
         }

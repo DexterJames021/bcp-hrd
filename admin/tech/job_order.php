@@ -30,6 +30,10 @@ access_log($userData);
     <link rel="stylesheet" href="../../node_modules/datatables.net-dt/css/dataTables.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 
+    
+    <!-- toastify cs -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
     <!-- Bootstrap JS -->
     <script defer src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
