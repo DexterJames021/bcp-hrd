@@ -148,6 +148,22 @@ $base_url = 'http://localhost/bcp-hrd';
                                     </ul>
                                 </div>
                             </li>
+                            <!-- Compensation & benefits -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-7" aria-controls="submenu-7"><i
+                                        class="fas fa-folder"></i>Compensation & benefits</a>
+                                <div id="submenu-7" class="collapse submenu" style="">
+                                    <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/portal/leave.php">My leave</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/portal/holiday.php">Holidays</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
                         <?php elseif ($userData['role'] === 'nonteaching'): ?>
                             <li class="nav-item">
                                 <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : ''; ?>"
@@ -202,6 +218,22 @@ $base_url = 'http://localhost/bcp-hrd';
                                                 href="<?php echo $base_url; ?>/portal/talent/available.php">
                                                 Available Trainings
                                             </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <!-- Compensation & benefits -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-7" aria-controls="submenu-7"><i
+                                        class="fas fa-folder"></i>Compensation & benefits</a>
+                                <div id="submenu-7" class="collapse submenu" style="">
+                                    <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/portal/leave.php">My leave</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/portal/holiday.php">Holidays</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -264,6 +296,22 @@ $base_url = 'http://localhost/bcp-hrd';
                                     </ul>
                                 </div>
                             </li>
+                            <!-- Compensation & benefits -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-7" aria-controls="submenu-7"><i
+                                        class="fas fa-folder"></i>Compensation & benefits</a>
+                                <div id="submenu-7" class="collapse submenu" style="">
+                                    <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/portal/leave.php">My leave</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/portal/holiday.php">Holidays</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
                         <?php elseif ($userData['role'] === 'staff'): ?>
                             <li class="nav-item">
                                 <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : ''; ?>"
@@ -318,6 +366,22 @@ $base_url = 'http://localhost/bcp-hrd';
                                                 href="<?php echo $base_url; ?>/portal/talent/available.php">
                                                 Available Trainings
                                             </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <!-- Compensation & benefits -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-7" aria-controls="submenu-7"><i
+                                        class="fas fa-folder"></i>Compensation & benefits</a>
+                                <div id="submenu-7" class="collapse submenu" style="">
+                                    <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/portal/leave.php">My leave</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/portal/holiday.php">Holidays</a>
                                         </li>
                                     </ul>
                                 </div>

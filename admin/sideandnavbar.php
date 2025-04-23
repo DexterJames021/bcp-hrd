@@ -445,10 +445,16 @@ $base_url = 'http://localhost/bcp-hrd';
                                 <div id="submenu-7" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="<?php echo $base_url; ?>/admin/compensation/index.php">compensation</a>
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/admin/compensation/dashboard.php">Rates</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/data-tables.html">compensation</a>
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/admin/compensation/leave.php">Leave</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/admin/compensation/benefits.php">Benefits</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/admin/compensation/index.php">Holidays</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -707,11 +713,17 @@ $base_url = 'http://localhost/bcp-hrd';
                                         class="fas fa-f fa-folder"></i>Compensation & benefits</a>
                                 <div id="submenu-7" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/general-table.html">General Tables</a>
+                                    <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/admin/compensation/dashboard.php">Rates</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/data-tables.html">Data Tables</a>
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/admin/compensation/leave.php">Leave</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/admin/compensation/benefits.php">Benefits</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/admin/compensation/index.php">Holidays</a>
                                         </li>
                                     </ul>
                                 </div>
