@@ -223,7 +223,7 @@ which is yung:
                 data: null,
                 render: function (data) {
                     return `<div class="form-check form-switch">
-                        <input class="form-control job-status-toggle" type="checkbox" role="switch"
+                        <input class=" job-status-toggle" type="checkbox" role="switch"
                             ${data.status === 'Open' ? 'checked' : ''}
                             data-job-id="${data.id}">
                     </div>`;
