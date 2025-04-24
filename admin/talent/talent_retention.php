@@ -99,7 +99,7 @@ $total_awards = $row['total_awards'];
                                             <div class="col-md-3">
                                                 <div class="card bg-light text-white">
                                                     <div class="card-body">
-                                                        <h5>Total Award</h5>
+                                                        <h5>Total Awardees</h5>
                                                         <h3><?php echo $total_awards; ?></h3>
                                                     </div>
                                                 </div>

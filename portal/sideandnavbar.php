@@ -280,7 +280,7 @@ function previewEmployeeProfile(event) {
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
                                     data-target="#submenu-7" aria-controls="submenu-7"><i
                                         class="fas fa-folder"></i>Compensation & benefits</a>
-                                <div id="submenu-7" class="collapse submenu" style="">
+                                <div id="submenu-7" class="collapse submenu bg-light" style="">
                                     <ul class="nav flex-column">
                                     <li class="nav-item">
                                             <a class="nav-link" href="<?php echo $base_url; ?>/portal/leave.php">My leave</a>

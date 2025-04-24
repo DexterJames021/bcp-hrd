@@ -236,7 +236,7 @@ $department_result = $conn->query($department_sql);
                 <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addJobModal">Add Job</button>
             </div>
             <div class="card-body">
-                <table class="table table-hover" id="myJobs" style="100%">
+                <table class="table table-hover" id="myJobs" style="width: 100%">
                     <thead class="thead-light">
                         <tr>
                             <th>No.</th>
@@ -248,7 +248,11 @@ $department_result = $conn->query($department_sql);
                     </thead>
                     <tbody>
 <?php
-$counter = 1; // Move the counter outside the loop
+$counter = 1;
+$sql = "SELECT jp.*, d.DepartmentName 
+        FROM job_postings jp 
+        JOIN departments d ON jp.DepartmentID = d.DepartmentID";
+$result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
@@ -267,48 +271,50 @@ if ($result->num_rows > 0) {
         }
 
         echo "<tr>";
-        echo "<td>" . $counter . "</td>"; // Correct numbering
+        echo "<td>" . $counter . "</td>";
         echo "<td>" . htmlspecialchars($row['job_title']) . "</td>";
         echo "<td>" . htmlspecialchars($row['status']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['department_name']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['DepartmentName']) . "</td>";
         echo "<td>
-        <button data-toggle='modal' 
-                data-target='#editJobModal' 
-                data-id='" . htmlspecialchars($row['id']) . "' 
-                data-title='" . htmlspecialchars($row['job_title']) . "' 
-                data-description='" . htmlspecialchars($row['job_description']) . "' 
-                data-requirements='" . htmlspecialchars($row['requirements']) . "' 
-                data-location='" . htmlspecialchars($row['location']) . "' 
-                data-salary='" . htmlspecialchars($row['salary_range']) . "' 
-                data-status='" . htmlspecialchars($row['status']) . "' 
-                title='Edit Job' 
-                style='border: none; background: none; cursor: pointer; margin-right: 10px;'>
-            <i class='fas fa-edit text-warning' style='font-size: 16px;'></i> <!-- Edit Icon -->
-        </button>
+                <button data-toggle='modal' 
+                        data-target='#editJobModal' 
+                        data-id='" . htmlspecialchars($row['id']) . "' 
+                        data-title='" . htmlspecialchars($row['job_title']) . "' 
+                        data-description='" . htmlspecialchars($row['job_description']) . "' 
+                        data-requirements='" . htmlspecialchars($row['requirements']) . "' 
+                        data-location='" . htmlspecialchars($row['location']) . "' 
+                        data-salary='" . htmlspecialchars($row['salary_range']) . "' 
+                        data-status='" . htmlspecialchars($row['status']) . "' 
+                        title='Edit Job' 
+                        style='border: none; background: none; cursor: pointer; margin-right: 10px;'>
+                    <i class='fas fa-edit text-warning' style='font-size: 16px;'></i> <!-- Edit Icon -->
+                </button>
 
-        <a href='recruitment/delete_job.php?id=" . htmlspecialchars($row['id']) . "' 
-           onclick='return confirm(\"Are you sure you want to delete this job posting?\");' 
-           title='Delete Job' 
-           style='margin-right: 10px; text-decoration: none;'>
-            <i class='fas fa-trash-alt text-danger' style='font-size: 16px;'></i> <!-- Trash Icon -->
-        </a>
+                <a href='recruitment/delete_job.php?id=" . htmlspecialchars($row['id']) . "' 
+                   onclick='return confirm(\"Are you sure you want to delete this job posting?\");' 
+                   title='Delete Job' 
+                   style='margin-right: 10px; text-decoration: none;'>
+                    <i class='fas fa-trash-alt text-danger' style='font-size: 16px;'></i> <!-- Trash Icon -->
+                </a>
 
                 <a href='recruitment.php?job_id=" . htmlspecialchars($row['id']) . "#applicant' 
                    title='View Applicants' 
                    style='text-decoration: none; color: inherit;'>
                     <i class='fas fa-users' style='font-size: 16px; color: #28a745;'></i> 
-                    <span style='margin-left: 5px;'>" . $applicantCount . "</span>
+                    <span style='margin-left: 5px;'>" . $applicantCount . "</span> <!-- Displaying the applicant count -->
                 </a>
-            </td>";
+              </td>";
         echo "</tr>";
-
-        $counter++; // Increment counter correctly
+        $counter++;
     }
 } else {
-    echo "<tr><td colspan='4'>No job postings found.</td></tr>"; // Adjusted colspan
+    echo "<tr><td colspan='5' class='text-center'>No job postings found.</td></tr>";
 }
 ?>
 </tbody>
+
+
+
 
 
 
