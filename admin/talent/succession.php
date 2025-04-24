@@ -725,7 +725,7 @@ if ($result->num_rows > 0) {
         <i class='fas fa-edit'></i> <!-- Edit Icon -->
       </a>";
 
-echo "<a href='delete_candidate.php?id=" . $row['candidate_id'] . "' 
+echo "<a href='#' 
         class='text-danger mx-2' 
         onclick=\"return confirm('Are you sure you want to delete this candidate?');\">
         <i class='fas fa-trash'></i> <!-- Trash Icon -->
