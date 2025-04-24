@@ -35,13 +35,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // If onboarding is complete, proceed based on usertype
                     switch ($user->usertype) {
                         case 'admin':
+                        case 'maintenance':
                         case 'superadmin':
                             header("Location: ../admin/index.php");
                             exit;
                         case 'manager':
+                        case 'officer':
                             header("Location: ../manager/index.php");
                             exit;
                         case 'employee':
+                        case 'nonteaching':
+                        case 'teaching':
+                        case 'staff':
                             header("Location: ../portal/index.php");
                             exit;
                         default:

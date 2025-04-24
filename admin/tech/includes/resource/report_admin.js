@@ -10,13 +10,13 @@ $(function () {
     const REPORT_TEMPLATES = {
         resources: {
             title: "assets/resources usage",
-            template: `FORMAL : Generate a structured assets/resources usage report based only on the provided data.  
+            template: `FORMAL : Generate a structured narative summary of assets/resources usage report based only on the provided data.  
             - Date today: {date}  
             - Document Table of Logs (Use only this data, do not invent any additional logs):  
             {logs}  
         
-            Follow this format:  
-            ----------------------  
+            Follow this format:
+              
             Date: [YYYY-MM-DD]  
 
             Analysis:  
@@ -33,13 +33,13 @@ $(function () {
         },
         facility: {
             title: "facility usage",
-            template: `Generate a structured facility usage report based only on the provided data.  
+            template: `Generate a structured narative summary of facility usage report based only on the provided data.  
             - Date today: {date}  
             - Document Table of Logs (Use only this data, do not invent any additional logs):  
             {logs}  
         
-            Follow this format:  
-            ----------------------  
+            Follow this format:
+              
             Date: [YYYY-MM-DD]  
         
             Analysis:  
@@ -57,13 +57,13 @@ $(function () {
         },
         analytics: {
             title: "Job analysis",
-            template: `Generate a structured Job analysis report based only on the provided data.  
+            template: `Generate a structured narative summary of Job analysis report based only on the provided data.  
             - Date today: {date}  
             - Document Table of Logs (Use only this data, do not invent any additional logs):  
             {logs}  
         
-            Follow this format:  
-            ----------------------  
+            Follow this format:
+              
             Date: [YYYY-MM-DD]  
         
             Analysis:  

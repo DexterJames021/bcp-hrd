@@ -84,11 +84,11 @@ class Booking
     public function getAll()
     {
         try {
-            $q = "SELECT b.*, u.username as employee_name , r.name 
-            FROM fm_bookings b 
-            JOIN users u ON b.employee_id = u.id 
-            JOIN fm_rooms r ON b.room_id = r.id
-            ORDER BY b.created_at ASC; ";
+            $q = "SELECT b.booking_date, b.start_time, b.end_time, b.status , r.name 
+                    FROM fm_bookings b 
+                    JOIN users u ON b.employee_id = u.id 
+                    JOIN fm_rooms r ON b.room_id = r.id 
+                    ORDER BY b.created_at ASC;  ";
             $stmt = $this->conn->prepare($q);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);

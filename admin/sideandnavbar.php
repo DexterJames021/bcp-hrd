@@ -276,7 +276,7 @@ function previewProfile(event) {
                         <li class="nav-divider">
                             Human Resource Dept.
                         </li>
-                        <?php if ($userData['role'] != "superadmin"): ?>
+                        <?php if ($userData['role'] === "admin"): ?>
                             <li class="nav-item">
                                 <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : ''; ?>"
                                     href="<?php echo $base_url; ?>/admin/index.php">
@@ -555,7 +555,28 @@ function previewProfile(event) {
                                     </ul>
                                 </div>
                             </li>
-                        <?php else: ?>
+                        <?php elseif ($userData['role'] === 'maintenance'): ?>
+                            <li class="nav-item">
+                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'facilities.php') ? 'active' : ''; ?>"
+                                    href="<?php echo $base_url; ?>/admin/tech/analytics/facilities.php">
+                                    Facilities Analytics</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'resources.php') ? 'active' : ''; ?>"
+                                    href="<?php echo $base_url; ?>/admin/tech/analytics/resources.php">
+                                    Resources Analytics</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'resource_list.php') ? 'active' : ''; ?>"
+                                    href="<?php echo $base_url; ?>/admin/tech/resource_list.php">Resources
+                                    Management</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'room_book_list.php') ? 'active' : ''; ?>"
+                                    href="<?php echo $base_url; ?>/admin/tech/room_book_list.php">Facility
+                                    Management</a>
+                            </li>
+                        <?php elseif ($userData['role'] === 'superadmin'): ?>
                             <!-- SUPER ADMIN NAVIGATION -->
                             <li class="nav-item">
                                 <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : ''; ?>"
@@ -738,7 +759,8 @@ function previewProfile(event) {
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'attendance_tracker.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/admin/tech/attendance_tracker.php">Attendance Tracker</a>
+                                                href="<?php echo $base_url; ?>/admin/tech/attendance_tracker.php">Attendance
+                                                Tracker</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
@@ -842,6 +864,8 @@ function previewProfile(event) {
                                     </ul>
                                 </div>
                             </li>
+                        <?php else: ?>
+                            <?php include "./403.php" ?>
                         <?php endif; ?>
                     </ul>
                 </div>

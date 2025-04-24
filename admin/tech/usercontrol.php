@@ -120,8 +120,8 @@ access_log($userData);
                             <div class="card-header d-flex justify-content-between align-text-center">
                                 <h2 class="card-title ">Roles and Permissions</h2>
                                 <div class="btn-group">
-                                    <!-- <button type="button" class="btn btn-outline-primary float-right"
-                                        data-toggle="modal" data-target="#NewRole">+ Roles</button> -->
+                                    <button type="button" class="btn btn-outline-primary float-right"
+                                        data-toggle="modal" data-target="#NewRole">+ Roles</button>
                                     <!-- <button type="button" class="btn btn-outline-primary float-right"
                                                 data-toggle="modal" data-target="#NewPermission">+ Permission</button>  -->
                                     <button type="button" class="btn btn-outline-primary float-right"
