@@ -7,38 +7,54 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['employeeID'])) {
     exit();
 }
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "bcp-hrd";
+require("../config/db_talent.php");
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+$employeeID = 44; // Directly select EmployeeID = 44 for testing
+
+// Get employee full name
+$stmt_name = $conn->prepare("SELECT CONCAT(FirstName, ' ', LastName) AS full_name FROM employees WHERE EmployeeID = ?");
+if ($stmt_name === false) {
+    die('Error preparing statement: ' . $conn->error);
 }
 
-$employeeID = $_SESSION['employeeID'];
+$stmt_name->bind_param("i", $employeeID);
+$stmt_name->execute();
+$name_result = $stmt_name->get_result();
 
-// Get all evaluations
+// Check if result exists
+if ($name_result->num_rows > 0) {
+    $employee_name = $name_result->fetch_assoc()['full_name']; // Assuming the field is 'full_name'
+} else {
+    $employee_name = "Unknown"; // Fallback if no name is found
+}
+
+$stmt_name->close();
+
+// Get all evaluations for the employee (EmployeeID = 44)
 $stmt = $conn->prepare("SELECT EvaluationType, Score, Comments, EvaluationDate 
                         FROM performanceevaluations 
                         WHERE EmployeeID = ? 
                         ORDER BY EvaluationDate DESC");
+if ($stmt === false) {
+    die('Error preparing statement: ' . $conn->error);
+}
+
 $stmt->bind_param("i", $employeeID);
 $stmt->execute();
 $result = $stmt->get_result();
 
 $evaluations = [];
 while ($row = $result->fetch_assoc()) {
-    $evaluations[$row['EvaluationType']][] = $row;
+    $evaluations[] = $row; // Store the evaluation rows
 }
 $stmt->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Full Evaluation History</title>
+    <title>Evaluation Results for Employee 44</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap + FontAwesome -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -134,38 +150,37 @@ $stmt->close();
     <a href="employee_dashboard.php"><i class="fas fa-home mr-2"></i>Dashboard</a>
     <a href="latest_eval.php"><i class="fas fa-star mr-2"></i>My Evaluations</a>
     <a href="eval_history.php"><i class="fas fa-history mr-2"></i>Evaluation History</a>
-    
 </div>
 
 <!-- Main Content -->
 <div class="main-content">
     <div class="card">
-        <h4 class="section-title">📜 Full Evaluation History</h4>
+        <h4 class="section-title">📜 Evaluation Results for Employee: <?= htmlspecialchars($employee_name) ?></h4>
 
         <?php if (!empty($evaluations)): ?>
-            <?php foreach ($evaluations as $type => $records): ?>
-                <h5 class="text-primary mt-4"><?= htmlspecialchars($type ?: 'Unspecified Evaluation Type') ?></h5>
-                <table class="table table-bordered table-sm">
-                    <thead class="thead-light">
+            <h5 class="text-primary mt-4">All Evaluations</h5>
+            <table class="table table-bordered table-sm">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Evaluation Type</th>
+                        <th>Score</th>
+                        <th>Comments</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($evaluations as $eval): ?>
                         <tr>
-                            <th>Score</th>
-                            <th>Comments</th>
-                            <th>Date</th>
+                            <td><?= htmlspecialchars($eval['EvaluationType']) ?></td>
+                            <td><?= htmlspecialchars($eval['Score']) ?></td>
+                            <td><?= htmlspecialchars($eval['Comments'] ?: 'No comment') ?></td>
+                            <td><?= date('F j, Y', strtotime($eval['EvaluationDate'])) ?></td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($records as $eval): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($eval['Score']) ?></td>
-                                <td><?= htmlspecialchars($eval['Comments'] ?: 'No comment') ?></td>
-                                <td><?= date('F j, Y', strtotime($eval['EvaluationDate'])) ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         <?php else: ?>
-            <div class="alert alert-info">No evaluation history found.</div>
+            <div class="alert alert-info">No evaluation history found for this employee.</div>
         <?php endif; ?>
     </div>
 </div>

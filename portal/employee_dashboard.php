@@ -8,17 +8,11 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['employeeID'])) {
 }
 
 // DB connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "bcp-hrd";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require("../config/db_talent.php");
 
 $employeeID = $_SESSION['employeeID'];
+
+// Fetch the latest evaluation for the logged-in employee
 $sql = "SELECT EvaluationType, Score, Comments, EvaluationDate 
         FROM performanceevaluations 
         WHERE EmployeeID = ? 
@@ -54,12 +48,17 @@ $stmt->close();
         .sidebar a:hover { background-color: #1a173d; }
         .card { box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         .section-title { font-weight: bold; color: #004a99; }
+        .notification { position: fixed; top: 0; width: 100%; background-color: #28a745; color: white; padding: 10px; text-align: center; display: none; }
     </style>
 </head>
 <body>
 
- 
+<!-- Notification -->
+<div id="notification" class="notification">
+    New Evaluation Available!
+</div>
 
+<!-- Main Content -->
 <div class="dashboard-main-wrapper">
     <!-- Header -->
     <div class="dashboard-header">
@@ -70,7 +69,6 @@ $stmt->close();
                     <a class="nav-link nav-user-img d-flex align-items-center" href="#" data-toggle="dropdown">
                         <img src="../assets/images/default-avatar.png" class="user-avatar-md rounded-circle mr-2" style="height: 35px;">
                     </a>
-                    
                     <div class="dropdown-menu dropdown-menu-right">
                         <div class="dropdown-header text-center bg-primary text-white">
                             <img src="../assets/images/default-avatar.png" class="rounded-circle mb-2" style="height: 60px;">
@@ -90,7 +88,6 @@ $stmt->close();
         <a href="#">Dashboard</a>
         <a href="latest_eval.php">My Evaluations</a>
         <a href="eval_history.php">Evaluation History</a>
-        
     </div>
 
     <!-- Content -->
@@ -120,11 +117,6 @@ $stmt->close();
                 <div class="card p-4 mb-4">
                     <h5 class="section-title">Evaluation History</h5>
                     <?php
-                    $conn = new mysqli($servername, $username, $password, $dbname);
-                    if ($conn->connect_error) {
-                        die("Connection failed: " . $conn->connect_error);
-                    }
-
                     $stmt = $conn->prepare("SELECT EvaluationType, Score, Comments, EvaluationDate FROM performanceevaluations WHERE EmployeeID = ? ORDER BY EvaluationDate DESC");
                     $stmt->bind_param("i", $employeeID);
                     $stmt->execute();
@@ -172,5 +164,26 @@ $stmt->close();
 <!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // AJAX polling to check for new evaluations
+    function checkNewEvaluation() {
+        $.ajax({
+            url: 'check_new_eval.php', // A PHP file to check for new evaluation
+            method: 'GET',
+            success: function(response) {
+                if (response === 'new') {
+                    // Show notification if new evaluation exists
+                    $('#notification').fadeIn().delay(5000).fadeOut();
+                }
+            }
+        });
+    }
+
+    // Poll every 30 seconds
+    setInterval(checkNewEvaluation, 30000);
+</script>
+
 </body>
 </html>
+

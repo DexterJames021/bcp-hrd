@@ -1,13 +1,7 @@
 <?php
 // submit_peer_evaluation.php
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "bcp-hrd";
-
-// Create DB connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+require('../../config/db_talent.php');
 
 // Check connection
 if ($conn->connect_error) {

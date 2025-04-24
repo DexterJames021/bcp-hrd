@@ -1,13 +1,6 @@
 <?php
 // Database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "bcp-hrd"; // Your database name
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
+require('../../config/db_talent.php');
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);

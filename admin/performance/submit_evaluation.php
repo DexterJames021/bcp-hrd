@@ -2,14 +2,7 @@
 // submit_evaluation.php
 
 // DB connection settings
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "bcp-hrd";
-
-// Connect to DB
-$conn = new mysqli($servername, $username, $password, $dbname);
-
+require('../../config/db_talent.php');
 // Check DB connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);

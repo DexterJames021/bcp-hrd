@@ -1,16 +1,6 @@
 <?php
-// Step 1: Connect to the Database
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "bcp-hrd";
+require('../../config/db_talent.php');  
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
 
 // Step 2: Fetch basic statistics for the dashboard
 $sqlEmployees = "SELECT COUNT(*) as totalEmployees FROM employees";
@@ -125,7 +115,7 @@ $conn->close();
     </style>
 </head>
 <body>
-
+    
 <!-- Sidebar -->
 <!-- Sidebar -->
 <div class="sidebar">

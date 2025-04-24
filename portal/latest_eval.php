@@ -8,17 +8,23 @@ if (!isset($_SESSION['username']) || !isset($_SESSION['employeeID'])) {
 }
 
 // DB connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "bcp-hrd";
+require("../config/db_talent.php");
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+// Set Employee ID to 44 (for testing)
+$employeeID = 44; // Set to EmployeeID 44 for testing
+
+// Fetch employee full name
+$stmt_name = $conn->prepare("SELECT CONCAT(FirstName, ' ', LastName) AS full_name FROM employees WHERE EmployeeID = ?");
+$stmt_name->bind_param("i", $employeeID);
+$stmt_name->execute();
+$name_result = $stmt_name->get_result();
+
+if ($name_result->num_rows > 0) {
+    $employee_name = $name_result->fetch_assoc()['full_name'];
+} else {
+    $employee_name = "Unknown";
 }
-
-$employeeID = $_SESSION['employeeID'];
+$stmt_name->close();
 
 // Fetch latest evaluation
 $sql = "SELECT EvaluationType, Score, Comments, EvaluationDate 
@@ -141,7 +147,6 @@ $stmt->close();
     <a href="employee_dashboard.php"><i class="fas fa-home mr-2"></i>Dashboard</a>
     <a href="latest_eval.php"><i class="fas fa-star mr-2"></i>My Evaluations</a>
     <a href="eval_history.php"><i class="fas fa-history mr-2"></i>Evaluation History</a>
-    
 </div>
 
 <!-- Main Content -->
