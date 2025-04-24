@@ -443,15 +443,15 @@ function previewProfile(event) {
                                                 href="<?php echo $base_url; ?>/admin/tech/records.php">Employee Personnel
                                                 Records</a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'survey_responses.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/admin/tech/survey_responses.php">Engagement
+                                        <!-- <li class="nav-item">
+                                            <a class="nav-link < ?php echo (basename($_SERVER['PHP_SELF']) == 'survey_responses.php') ? 'active' : ''; ?>"
+                                                href="< ?php echo $base_url; ?>/admin/tech/survey_responses.php">Engagement
                                                 Analytics</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'attendance_tracker.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/admin/tech/attendance_tracker.php">Attendance Tracker</a>
-                                        </li>
+                                            <a class="nav-link < ?php echo (basename($_SERVER['PHP_SELF']) == 'attendance_tracker.php') ? 'active' : ''; ?>"
+                                                href="< ?php echo $base_url; ?>/admin/tech/attendance_tracker.php">Attendance Tracker</a>
+                                        </li> -->
                                         <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
                                                 data-target="#submenu-3-2" aria-controls="submenu-3-2">Report and

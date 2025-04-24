@@ -84,6 +84,7 @@ access_log($userData);
 <body>
     <script>
         var userPermissions = <?= json_encode($userData['permissions']); ?>;
+        var userRole = <?= json_encode($_SESSION["user_type"]); ?>;
     </script>
     <!-- ============================================================== -->
     <!-- main wrapper -->
@@ -235,10 +236,10 @@ access_log($userData);
                                         data-target="#salaryModal">
                                         <i class="bi bi-plus-circle-fill text-primary" style="font-size:x-large;"></i>
                                     </button>
-                                    <button type="button" class="btn btn-primary float-right" data-toggle="modal"
+                                    <!-- <button type="button" class="btn btn-primary float-right" data-toggle="modal"
                                         data-target="#salaryModal">
                                         Generate payslip
-                                    </button>
+                                    </button> -->
                                 </div>
                             </div>
                             <div class="card-body">

@@ -59,8 +59,12 @@ access_log($userData);
     <script type="module" src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
     <script type="module" src="../../assets/libs/js/main-js.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
     <!-- custom js -->
     <script src="./includes/resource/attendance.js"></script>
+    <script src="./includes/resource/atendance_analytics.js"></script>
 
     <title>Admin Dashboard</title>
 </head>
@@ -90,11 +94,12 @@ access_log($userData);
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="page-header d-flex justify-content-between">
-                            <h2 class="pageheader-title">Attendance Tracker </h2>
+                        <h2 class="pageheader-title">Attendance Management </h2>
                             <div class="btn-group m-1">
                                 <!-- <button type="button" onclick="window.print()"
                                     class="btn btn-outline-primary">Print</button> -->
-                                <button type="button" id="logsView" class="btn btn-outline-primary">Logs</button>
+                                <button type="button" id="logsView" class="btn btn-outline-primary">Attendance
+                                    Analytics</button>
                             </div>
                         </div>
                     </div>
@@ -105,15 +110,6 @@ access_log($userData);
                         <div class="card">
                             <div class="card-header d-flex justify-content-between">
                                 <div class="col-md-6 py-2">
-                                    <!-- <div class="input-group">
-                                            <input type="text" id="employeeSearch" class="form-control"
-                                                placeholder="Search employee...">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-primary time-in-btn" type="button">Time In</button>
-                                                <button class="btn btn-secondary time-out-btn" type="button">Time
-                                                    Out</button>
-                                            </div>
-                                        </div> -->
                                 </div>
                                 <div class="col-md-6 text-right">
                                     <button id="importCsvBtn" class="btn btn-outline-primary">Import CSV</button>
@@ -140,42 +136,89 @@ access_log($userData);
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="page-header d-flex justify-content-between">
-                            <h2 class="pageheader-title">Attendance Analytics  </h2>
+                            <h2 class="pageheader-title">Attendance Analytics </h2>
                             <div class="btn-group m-1">
                                 <button id="analyticView" type="button" class="btn btn-outline-primary">Back</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="card">
-                            <div class="card-header d-flex justify-content-between ">
-                                <div class="d-flex ">
 
-                                </div>
-                                <div>
-                                    <button id="importCsvBtn" class="btn btn-outline-primary">Import CSV</button>
+
+                <!-- Filters -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label">Date Range</label>
+                                <div class="input-group">
+                                    <input type="date" id="startDate" class="form-control">
+                                    <span class="input-group-text">to</span>
+                                    <input type="date" id="endDate" class="form-control">
                                 </div>
                             </div>
-                            <div class="card-body table-responsive">
-                                <table id="LogbookingTable" class="table table-hover" width="100%">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th>Employee</th>
-                                            <th>Room</th>
-                                            <th>Date</th>
-                                            <th>Time</th>
-                                            <th>Purpose</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
+                            <div class="col-md-3">
+                                <label class="form-label">Employee</label>
+                                <select id="employeeFilter" class="form-control">
+                                    <option value="">All Employees</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">View Type</label>
+                                <select id="viewType" class="form-control">
+                                    <option value="daily">Daily Summary</option>
+                                    <option value="monthly">Monthly Summary</option>
+                                    <option value="trends">Trend Analysis</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button id="applyFilters" class="btn btn-primary w-100">
+                                    <i class="fas fa-filter me-2"></i>Apply Filters
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Main Content -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0" id="dataTableTitle">Daily Attendance Summary</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="dataTable" class="table table-bordered table-striped" style="width:100%">
+                                        <thead class="thead-light" style="background-color:#f8f9fa !important;"></thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Attendance Distribution</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="attendanceChart" height="500"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">Attendance Trend</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="trendChart" height="300"></canvas>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+
             </div>
 
             <!-- Toast Notifications Container -->
