@@ -500,12 +500,15 @@ access_log($userData);
                             <div class="modal-body">
                                 <form id="resourceAllocationForm">
                                     <div class="mb-3">
-                                        <label for="allocate">Name:</label>
+                                        <label for="allocate">Resource Name:</label>
                                         <select id="allocate_id" name="allocate_id" class="form-control" required>
                                         </select>
                                     </div>
-                                    <input type="hidden" id="employee_id" class="form-control"
-                                        value="<?= $_SESSION['user_id'] ?>" name="employee_id" />
+                                    <div class="mb-3">
+                                        <label for="employeeid">Employee:</label>
+                                        <select id="employeeid" name="employee_id" class="form-control" required>
+                                        </select>
+                                    </div>
                                     <div class="mb-3">
                                         <label for="quantity">Quantity:</label>
                                         <input type="number" id="quantity" class="form-control" name="quantity" min="1"

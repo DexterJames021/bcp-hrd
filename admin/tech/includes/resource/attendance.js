@@ -19,15 +19,22 @@ $(function () {
             processing: true,
             dom: 'Bfrtip',
             // searching: false,
+            order: [[2, 'desc']],
             ajax: {
                 url: BaseURL + "attendance_list",
                 dataSrc: "",
                 error: function (xhr, error, thrown) {
                     console.error("DataTables error:", error, thrown);
-                    showToast('Error loading attendance data', 'danger');
                 }
             },
             columns: [
+                {
+                    title: "Employee ID",
+                    data: null,
+                    render: function (data) {
+                        return `${data.employee_id}`;
+                    }
+                },
                 {
                     data: "fullname",
                     title: "Employee Name"
@@ -146,7 +153,7 @@ $(function () {
 
     function submitImportForm() {
         const formData = new FormData($('#csvImportForm')[0]);
-
+        console.log('CSV DATA', formData);
         $.ajax({
             url: BaseURL + "import_attendance",
             method: "POST",
@@ -159,19 +166,40 @@ $(function () {
                     .html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Importing...');
             },
             success: function (response) {
-                if (response.success) {
-                    let message = response.message;
-                    if (response.errors && response.errors.length) {
-                        message += '<br>Errors:<br>' + response.errors.join('<br>');
+                // Ensure response is properly parsed
+                if (typeof response === 'string') {
+                    try {
+                        response = JSON.parse(response);
+                    } catch (e) {
+                        console.error("Failed to parse JSON:", e);
+                        response = {
+                            success: false,
+                            message: "Invalid server response"
+                        };
                     }
-                    showToast(message, 'success');
-                    attendanceTable.ajax.reload();
+                }
+
+                if (response.success) {
+                    let message = response.message || 'CSV imported successfully';
+                    if (response.errors && response.errors.length) {
+                        message += '<br><br>Errors:<br>' + response.errors.join('<br>');
+                    }
+                    if (response.imported) {
+                        message += `<br>Records imported: ${response.imported}`;
+                    }
+                    $("#added").toast("show")
+                    attendanceTable.ajax.reload(null, false);
+                    $('#csvImportModal').modal('hide');
                 } else {
-                    showToast(response.message, 'danger');
+                    let errorMsg = response.message || 'Import failed';
+                    if (response.errors && response.errors.length) {
+                        errorMsg += '<br><br>Errors:<br>' + response.errors.join('<br>');
+                    }
+                    $("#error").toast("show")
                 }
             },
             error: function (xhr, status, error) {
-                showToast('Import failed: ' + error, 'danger');
+                $("#error").toast("show")
             },
             complete: function () {
                 $('#csvImportModal').find('button[type="submit"]')
@@ -181,57 +209,36 @@ $(function () {
             }
         });
     }
-    // $('#csvImportForm').on('submit', function (e) {
-    //     e.preventDefault();
-    //     const formData = new FormData(this);
-    //     console.log('FORM DATA', formData);
-    //     $.ajax({
-    //         url: BaseURL + "import_attendance",
-    //         method: "POST",
-    //         data: formData,
-    //         processData: false,
-    //         contentType: false,
-    //         beforeSend: function () {
-    //             $('#csvImportModal').find('button[type="submit"]')
-    //                 .prop('disabled', true)
-    //                 .html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Importing...');
-    //         },
-    //         success: function (response) {
-    //             if (response.success) {
-    //                 attendanceTable.ajax.reload(null, false);
-    //                 $('#csvImportModal').modal('hide');
-    //                 showToast(response.message, 'success');
-    //             } else {
-    //                 showToast(response.message, 'danger');
-    //             }
-    //         },
-    //         error: function (xhr, status, error) {
-    //             showToast('Import failed: ' + error, 'danger');
-    //         },
-    //         complete: function () {
-    //             $('#csvImportModal').find('button[type="submit"]')
-    //                 .prop('disabled', false)
-    //                 .text('Import');
-    //             $('#csvImportForm')[0].reset();
-    //         }
-    //     });
-    // });
 
-    // Toast notification function
- 
     function showToast(message, type) {
+        // Create container if needed
+        const container = $('.toast-container').length ? $('.toast-container') :
+            $('<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100"></div>').appendTo('body');
+
+        // Create toast
+        const toastId = 'toast-' + Date.now();
         const toast = $(`
-            <div class="toast fade show" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="toast-body bg-${type} text-white">
-                    <button type="button" class="ml-2 mb-1 close text-white" data-dismiss="toast" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+            <div id="${toastId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header bg-${type} text-white">
+                    <strong class="me-auto">Notification</strong>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
                     ${message}
                 </div>
             </div>
-        `);
+        `).appendTo(container);
 
-        $('.toast-container').append(toast);
-        setTimeout(() => toast.remove(), 5000);
+        // Initialize and show
+        const bsToast = new bootstrap.Toast(toast[0], {
+            autohide: true,
+            delay: 5000
+        });
+        bsToast.show();
+
+        // Clean up after hide
+        toast.on('hidden.bs.toast', function () {
+            $(this).remove();
+        });
     }
 });

@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['user_id']) ) {
+if (!isset($_SESSION['user_id'])) {
     header("Content-Type: application/json");
     echo json_encode(['error' => 'Unauthorized access']);
     http_response_code(403);
@@ -89,15 +89,31 @@ switch ($action) {
         $result = $function->AddAttendance($data);
         echo json_encode($result ? ["success" => true] : ["error" => "Failed to record attendance"]);
         break;
-
     case "import_attendance":
         if (!isset($_FILES['csvFile']) || $_FILES['csvFile']['error'] !== UPLOAD_ERR_OK) {
-            echo json_encode(['error' => true, 'message' => 'No file uploaded or upload error']);
+            echo json_encode([
+                'success' => false,
+                'message' => 'No file uploaded or upload error'
+            ]);
             break;
         }
 
         $result = $function->ImportAttendance($_FILES['csvFile']);
-        echo json_encode($result);
+
+        if ($result['success']) {
+            echo json_encode([
+                'success' => true,
+                'message' => 'CSV imported successfully!',
+                'imported' => $result['imported'] ?? 0,
+                'errors' => $result['errors'] ?? []
+            ]);
+        } else {
+            echo json_encode([
+                'success' => false,
+                'message' => $result['message'] ?? 'Import failed',
+                'errors' => $result['errors'] ?? []
+            ]);
+        }
         break;
 
     case "daily_summary":
@@ -230,25 +246,23 @@ switch ($action) {
         ]);
         break;
 
-        case "attendance_trends":
-            $start = $_GET['start_date'] ?? date('Y-m-01', strtotime('-1 year'));
-            $end = $_GET['end_date'] ?? date('Y-m-t');
-            $period = $_GET['period'] ?? 'monthly'; // monthly, weekly, daily
-            
-            if ($period === 'monthly') {
-                $group = "DATE_FORMAT(date, '%Y-%m-01')";
-                $label = "DATE_FORMAT(date, '%b %Y')";
-            } 
-            elseif ($period === 'weekly') {
-                $group = "YEARWEEK(date, 1)";
-                $label = "CONCAT('Week ', WEEK(date, 1), ' ', YEAR(date))";
-            } 
-            else { // daily
-                $group = "date";
-                $label = "date";
-            }
-            
-            $sql = "SELECT 
+    case "attendance_trends":
+        $start = $_GET['start_date'] ?? date('Y-m-01', strtotime('-1 year'));
+        $end = $_GET['end_date'] ?? date('Y-m-t');
+        $period = $_GET['period'] ?? 'monthly'; // monthly, weekly, daily
+
+        if ($period === 'monthly') {
+            $group = "DATE_FORMAT(date, '%Y-%m-01')";
+            $label = "DATE_FORMAT(date, '%b %Y')";
+        } elseif ($period === 'weekly') {
+            $group = "YEARWEEK(date, 1)";
+            $label = "CONCAT('Week ', WEEK(date, 1), ' ', YEAR(date))";
+        } else { // daily
+            $group = "date";
+            $label = "date";
+        }
+
+        $sql = "SELECT 
                         $group AS period,
                         $label AS label,
                         COUNT(*) AS total_records,
@@ -261,15 +275,15 @@ switch ($action) {
                     WHERE date BETWEEN :start AND :end
                     GROUP BY period
                     ORDER BY period";
-            
-            $stmt = $conn->prepare($sql);
-            $stmt->execute([':start' => $start, ':end' => $end]);
-            
-            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
-            header('Content-Type: application/json');
-            echo json_encode($results);
-            break;
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([':start' => $start, ':end' => $end]);
+
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        header('Content-Type: application/json');
+        echo json_encode($results);
+        break;
 
     default:
         return null;

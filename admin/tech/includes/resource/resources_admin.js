@@ -391,6 +391,26 @@ $(function () {
     );
   }
 
+  function loadEmployeeAllocSelectTag() {
+    $.get(BaseURL + "get_employee_for_allocation",
+      function (data) {
+        console.log('EMPLOYWW', data);
+        $("#employeeid")
+          .empty()
+          .append(
+            '<option value="" selected disabled hidden>Select Employee</option>'
+          );
+        data.map((employee) => {
+          $("#employeeid").append(
+            `<option value="${employee.EmployeeID}" >${employee.FirstName} ${employee.LastName}</option>`
+          );
+        });
+        requestsTable.ajax.reload();
+      },
+      "json"
+    );
+  }
+
   $(document).on("input", "#quantity", function () {
     const selectedOption = $("#resource_id").find(":selected");
     const availableQuantity = selectedOption.data("quantity");
@@ -621,6 +641,7 @@ $(function () {
   });
 
   loadAllocatedSelectTag();
+  loadEmployeeAllocSelectTag();
   loadRoomsSelectTag();
   loadAnalytics();
 });

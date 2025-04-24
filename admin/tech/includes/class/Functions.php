@@ -301,10 +301,9 @@ class Functions
 
             return [
                 'success' => true,
+                'message' => 'CSV imported successfully',
                 'imported' => $successCount,
-                'errors' => $errorMessages,
-                'message' => "Imported $successCount records" .
-                    (count($errorMessages) ? " with " . count($errorMessages) . " errors" : "")
+                'errors' => $errorMessages
             ];
         } catch (\Exception $e) { // Added backslash
             $this->conn->rollBack();
@@ -312,8 +311,9 @@ class Functions
                 fclose($handle);
             error_log("ImportAttendance Error: " . $e->getMessage());
             return [
-                'error' => true,
-                'message' => $e->getMessage()
+                'success' => false,
+                'message' => $e->getMessage(),
+                'errors' => [$e->getMessage()]
             ];
         }
     }

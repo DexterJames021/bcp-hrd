@@ -39,7 +39,7 @@ jQuery(document).ready(function ($) {
                         <a href="#" class="list-group-item list-group-item-action">
                             <div class="notification-info">
                                 <div class="notification-list-user-block">
-                                    <span class="notification-list-user-name">${notif.id}</span><br>
+                                    <span class="notification-list-user-name">${notif.username}</span><br>
                                     ${notif.message}
                                     <div class="notification-date">${notif.created_at}</div>
                                 </div>

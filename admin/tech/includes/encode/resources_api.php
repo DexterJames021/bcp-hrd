@@ -3,8 +3,8 @@
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
-    header("Content-Type: application/json"); 
-    echo json_encode(['error' => 'Unauthorized access']);
+    header("Content-Type: application/json");
+    // echo json_encode(['error' => 'Unauthorized access']);
     http_response_code(403);
     exit;
 }
@@ -54,12 +54,12 @@ switch ($action) {
         if (!isset($_POST['id']))
             return false;
 
-            $delete = $resource->delete_asset($_POST['id']);
-            if($delete){
-                echo json_encode(['success'=> true]);
-            }else {
-                echo json_encode(['success'=> false]);
-            }
+        $delete = $resource->delete_asset($_POST['id']);
+        if ($delete) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false]);
+        }
         break;
 
     case 'update_resource':
@@ -130,7 +130,7 @@ switch ($action) {
 
         $result = $resource->requestResource($data);
 
-        if($result){
+        if ($result) {
             $nofication->InsertNotification($_POST['employee_id'], $message, 'resource');
         }
 
@@ -156,14 +156,14 @@ switch ($action) {
             exit;
         }
 
-        $message = ($status === 'Approved') 
-        ? "Your request #{$requestId} has been approved. Thank you for using our service!" 
-        : "Your request #{$requestId} has been rejected. Please contact support for more information.";
+        $message = ($status === 'Approved')
+            ? "Your request #{$requestId} has been approved. Thank you for using our service!"
+            : "Your request #{$requestId} has been rejected. Please contact support for more information.";
 
 
         $result = $resource->updateRequestStatus($requestId, $status);
-        
-        if($result){
+
+        if ($result) {
             $nofication->InsertNotification($_SESSION['user_id'], $message, 'resource_status');
         }
 
@@ -237,7 +237,9 @@ switch ($action) {
     case 'categorize_resources':
         echo json_encode($resource->CategorizedResources());
         break;
-
+    case 'get_employee_for_allocation':
+        echo json_encode($resource->get_employee_for_allocation());
+        break;
     case 'return_all':
         if (empty($_POST['request_id'])) {
             echo json_encode(['success' => false, 'message' => 'Request ID is required.']);

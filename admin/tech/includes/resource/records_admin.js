@@ -2,6 +2,7 @@ $(function () {
 
     const baseURL = "./includes/encode/users_api.php?action="
     console.log("userPermissions:  ", userPermissions);
+    console.log("userRole:  ", userRole);
 
     let performanceChartInstance = null;
 
@@ -62,6 +63,11 @@ $(function () {
 
                     if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
                         buttons += `<button type="button" class="view btn btn-outline-primary" data-id="${data.EmployeeID}"> Details </button>
+                                    `
+                    }
+
+                    if (userRole === "superadmin") {
+                        buttons += `
                                     <button type="button" class="promotion-btn btn btn-outline-secondary" data-id="${data.applicant_id}"> Promotion </button>
                                     `
                     }
@@ -294,10 +300,11 @@ $(function () {
                     const row = `
                 <tr>
                     <td>${compen.BaseSalary || ''}</td>
-                    <td>${compen.Bonus || ''}</td>
                     <td>${compen.BenefitValue || ''}</td>
-                </tr>
-            `;
+                    </tr>
+                    `;
+
+                    // <td>${compen.Bonus || ''}</td>
                     recordsTable.ajax.reload();
                     $("#compensationList").append(row);
                 });

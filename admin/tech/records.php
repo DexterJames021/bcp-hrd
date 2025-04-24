@@ -84,7 +84,7 @@ access_log($userData);
 <body>
     <script>
         var userPermissions = <?= json_encode($userData['permissions']); ?>;
-        var userRole = <?= json_encode($_SESSION["user_type"]); ?>;
+        var userRole = <?= json_encode($_SESSION["usertype"]); ?>;
     </script>
     <!-- ============================================================== -->
     <!-- main wrapper -->
@@ -230,12 +230,12 @@ access_log($userData);
                         <!-- Compensation  list -->
                         <div class="card ">
                             <div class="card-title p-3 d-flex justify-content-between">
-                                <h3><span id="compensationName"></span> Compensation</h3>
+                                <h3><span id="compensationName"></span>Compensation and Benefits</h3>
                                 <div>
-                                    <button type="button" class="btn float-right" data-toggle="modal"
+                                    <!-- <button type="button" class="btn float-right" data-toggle="modal"
                                         data-target="#salaryModal">
                                         <i class="bi bi-plus-circle-fill text-primary" style="font-size:x-large;"></i>
-                                    </button>
+                                    </button> -->
                                     <!-- <button type="button" class="btn btn-primary float-right" data-toggle="modal"
                                         data-target="#salaryModal">
                                         Generate payslip
@@ -247,7 +247,7 @@ access_log($userData);
                                     <thead class="thead-light">
                                         <tr>
                                             <th>Base Salary</th>
-                                            <th>Bonus</th>
+                                            <!-- <th>Bonus</th> -->
                                             <th>Benefit Value</th>
                                         </tr>
                                     </thead>
