@@ -305,28 +305,7 @@ if (isset($_GET['deleteId'])) {
                                 </button>
 
                                 <!-- Second Modal: Edit Benefit -->
-                                <div id="secondModal"
-                                    style="display:none; background-color: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; justify-content: center; align-items: center;">
-                                    <div
-                                        style="background-color: white; padding: 20px; border-radius: 5px; max-width: 400px; width: 100%;">
-                                        <h3>Edit Benefit</h3>
-                                        <form method="POST" action="benefits.php">
-                                            <input type="hidden" name="benefitId" id="editBenefitId">
-                                            <label for="editBenefitType">Benefit Type:</label>
-                                            <input type="text" name="benefitType" id="editBenefitType" required><br><br>
-
-                                            <label for="editAmount">Amount:</label>
-                                            <input type="number" name="amount" id="editAmount" step="0.01"
-                                                required><br><br>
-
-                                            <button type="submit" name="editBenefit"
-                                                style="background-color: #3d405c; color: white; padding: 10px 20px; border: none; cursor: pointer;">Update
-                                                Benefit</button>
-                                            <button type="button" onclick="closeSecondModal()"
-                                                style="background-color: #d9534f; color: white; padding: 10px 20px; border: none; cursor: pointer;">Cancel</button>
-                                        </form>
-                                    </div>
-                                </div>
+                               
 
                                 <!-- Script to open and close modals -->
                                 <script>
@@ -535,6 +514,28 @@ if (isset($_GET['deleteId'])) {
                                                 style="background-color: #3d405c; color: white; padding: 10px 20px; border: none; cursor: pointer;">Add
                                                 Benefit</button>
                                             <button type="button" onclick="closeFirstModal()"
+                                                style="background-color: #d9534f; color: white; padding: 10px 20px; border: none; cursor: pointer;">Cancel</button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div id="secondModal"
+                                    style="display:none; background-color: rgba(0,0,0,0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; justify-content: center; align-items: center;">
+                                    <div
+                                        style="background-color: white; padding: 20px; border-radius: 5px; max-width: 400px; width: 100%;">
+                                        <h3>Edit Benefit</h3>
+                                        <form method="POST" action="benefits.php">
+                                            <input type="hidden" name="benefitId" id="editBenefitId">
+                                            <label for="editBenefitType">Benefit Type:</label>
+                                            <input type="text" name="benefitType" id="editBenefitType" required><br><br>
+
+                                            <label for="editAmount">Amount:</label>
+                                            <input type="number" name="amount" id="editAmount" step="0.01"
+                                                required><br><br>
+
+                                            <button type="submit" name="editBenefit"
+                                                style="background-color: #3d405c; color: white; padding: 10px 20px; border: none; cursor: pointer;">Update
+                                                Benefit</button>
+                                            <button type="button" onclick="closeSecondModal()"
                                                 style="background-color: #d9534f; color: white; padding: 10px 20px; border: none; cursor: pointer;">Cancel</button>
                                         </form>
                                     </div>
