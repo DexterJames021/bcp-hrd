@@ -482,5 +482,19 @@ class Resources
     }
 
 
+    public function get_employee_for_allocation()
+    {
+        try {
+            $q = "SELECT * FROM employees";
+            $stmt = $this->conn->prepare($q);
+            $stmt->execute();
+            $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $employees;
+        } catch (PDOException $e) {
+            return "Something went wrong" . $e;
+        }
+    }
+
+
 
 }

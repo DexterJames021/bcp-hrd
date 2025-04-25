@@ -1,7 +1,31 @@
 $(function () {
     console.log('Document is ready');
-    console.log('Permission js',userPermissions);
+    console.log('Permission js', userPermissions);
+    // console.log("sUSER ID", user_id)
+
     // const bookingTable = $('#bookingTable').DataTable();
+
+    const shareNote = {
+        tabsize: 2,
+        height: 120,
+        toolbar: [
+            // [groupName, [list of button]]
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough', 'superscript', 'subscript']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']]
+        ],
+        callbacks: {
+            onInit: function () {
+                $(this).summernote('code', '');
+            }
+        }
+    }
+
+    $("#bookingReason").summernote(shareNote);
+    $("#bookingReason2").summernote(shareNote);
 
 
     const baseURL = "../../admin/tech/includes/encode/facility_api.php?action="
@@ -39,16 +63,14 @@ $(function () {
 
         let bookingDate = new Date($('#bookingDate').val());
         let today = new Date();
-        
-        // Remove time part for accurate date comparison
+
         today.setHours(0, 0, 0, 0);
         bookingDate.setHours(0, 0, 0, 0);
-    
-        // Validate if the selected date is in the past
+
         if (bookingDate < today) {
-           $("#pastDate").toast("show")
-           $('#bookingForm')[0].reset();
-           $('#Addbooking').modal('hide');
+            $("#pastDate").toast("show")
+            $('#bookingForm')[0].reset();
+            $('#Addbooking').modal('hide');
             return; // Stop further execution
         }
 
@@ -63,6 +85,10 @@ $(function () {
                     loadRooms();
                     loadRooms2();
                     calendar.refetchEvents();
+                    $('#bookingReason2').summernote('reset');
+                    $('#bookingReason2').summernote('code', '');
+                    $('#bookingReason').summernote('reset');
+                    $('#bookingReason').summernote('code', '');
                 } else if (response.success == false) {
                     console.error(response);
                     $('#error').toast('show');
@@ -74,24 +100,25 @@ $(function () {
             });
     });
 
-    //bookform not fixed set date
+
+
     $('#bookingForm2').on('submit', function (e) {
         console.log('book not fixed set date' + $(this).serialize());
         e.preventDefault();
 
         let bookingDate = new Date($('#bookDateForm').val());
         let today = new Date();
-        
+
         // Remove time part for accurate date comparison
         today.setHours(0, 0, 0, 0);
         bookingDate.setHours(0, 0, 0, 0);
-    
+
         if (bookingDate < today) {
             $("#pastDate").toast("show")
             $('#bookingForm2')[0].reset();
             $('#Addbooking').modal('dispose');
-             return; // Stop further execution
-         }
+            return;
+        }
 
         $.post(baseURL + 'create_booking',
             $(this).serialize(),
@@ -101,6 +128,10 @@ $(function () {
                     $('#Addbooking').modal('dispose');
                     $('#status').toast('show');
                     calendar.refetchEvents();
+                    $('#bookingReason2').summernote('reset');
+                    $('#bookingReason2').summernote('code', '');
+                    $('#bookingReason').summernote('reset');
+                    $('#bookingReason').summernote('code', '');
                 } else if (response.failed) {
                     $('#error').toast('show');
                     console.log(response);
@@ -182,7 +213,7 @@ $(function () {
                     id="cancelBooking" 
                     data-room="${event.extendedProps.room}" 
                     class="btn btn-sm btn-outline-danger mt-3 ${status == 'Approved' ? 'd-none' : ''} " ${status == 'Cancelled' ? 'disabled' : ''}
-                    ${Array.isArray(userPermissions) && userPermissions.includes("EDIT")? '' : 'disabled' }
+                    ${Array.isArray(userPermissions) && userPermissions.includes("EDIT") ? '' : 'disabled'}
                 >
                     Cancel Booking
                 </button>

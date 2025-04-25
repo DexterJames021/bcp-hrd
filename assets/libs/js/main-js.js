@@ -1,6 +1,59 @@
 
-jQuery(document).ready(function($) {
+jQuery(document).ready(function ($) {
     'use strict';
+
+    console.log('notif', $("#navbarDropdownMenuLink1"));
+
+    const BaseUrl = 'http://localhost/bcp-hrd/admin/tech/includes/encode/general_api.php?action=get_general_notification'
+    // BaseUrl = 'http://bcp-hrd.site/admin/tech/includes/encode/general_api.php?action=get_general_notification'
+
+    function loadAdminNotifications() {
+
+        $.ajax({
+            url: BaseUrl,
+            type: 'POST',
+            dataType: 'json',
+            success: function (response) {
+
+                console.log(response)
+
+                var notificationList = $('.notification-list .list-group');
+                notificationList.empty(); // Clear existing
+
+                if (response.length === 0) {
+                    notificationList.append(`
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <div class="notification-list-user-block">
+                            <span class="notification-list-user-name">No notification</span>
+                        </div>
+                    </a>
+                `);
+                } else {
+                    $(".notification .indicator").removeClass("d-none");
+
+                    $.each(response, function (index, notif) {
+                        notificationList.append(`
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <div class="notification-info">
+                                <div class="notification-list-user-block">
+                                    <span class="notification-list-user-name">${notif.username}</span><br>
+                                    ${notif.message}
+                                    <div class="notification-date">${notif.created_at}</div>
+                                </div>
+                            </div>
+                        </a>
+                    `);
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error loading notifications:', error);
+            }
+        });
+    }
+
+
+    loadAdminNotifications();
 
     // ============================================================== 
     // Notification list
@@ -32,7 +85,7 @@ jQuery(document).ready(function($) {
         $('.sidebar-nav-fixed a')
             // Remove links that don't actually link to anything
 
-            .click(function(event) {
+            .click(function (event) {
                 // On-page links
                 if (
                     location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') &&
@@ -47,7 +100,7 @@ jQuery(document).ready(function($) {
                         event.preventDefault();
                         $('html, body').animate({
                             scrollTop: target.offset().top - 90
-                        }, 1000, function() {
+                        }, 1000, function () {
                             // Callback after animation
                             // Must change focus!
                             var $target = $(target);
@@ -61,7 +114,7 @@ jQuery(document).ready(function($) {
                         });
                     }
                 };
-                $('.sidebar-nav-fixed a').each(function() {
+                $('.sidebar-nav-fixed a').each(function () {
                     $(this).removeClass('active');
                 })
                 $(this).addClass('active');
@@ -73,25 +126,25 @@ jQuery(document).ready(function($) {
     // tooltip
     // ============================================================== 
     if ($('[data-toggle="tooltip"]').length) {
-            
-            $('[data-toggle="tooltip"]').tooltip()
 
-        }
-
-     // ============================================================== 
-    // popover
-    // ============================================================== 
-       if ($('[data-toggle="popover"]').length) {
-            $('[data-toggle="popover"]').popover()
+        $('[data-toggle="tooltip"]').tooltip()
 
     }
-     // ============================================================== 
+
+    // ============================================================== 
+    // popover
+    // ============================================================== 
+    if ($('[data-toggle="popover"]').length) {
+        $('[data-toggle="popover"]').popover()
+
+    }
+    // ============================================================== 
     // Chat List Slim Scroll
     // ============================================================== 
-        
 
-        if ($('.chat-list').length) {
-            $('.chat-list').slimScroll({
+
+    if ($('.chat-list').length) {
+        $('.chat-list').slimScroll({
             color: 'false',
             width: '100%'
 
@@ -102,31 +155,10 @@ jQuery(document).ready(function($) {
     // dropzone script
     // ============================================================== 
 
- //     if ($('.dz-clickable').length) {
- //            $(".dz-clickable").dropzone({ url: "/file/post" });
- // }
+    //     if ($('.dz-clickable').length) {
+    //            $(".dz-clickable").dropzone({ url: "/file/post" });
+    // }
 
 }); // AND OF JQUERY
 
 
-// $(function() {
-//     "use strict";
-
-
-    
-
-   // var monkeyList = new List('test-list', {
-    //    valueNames: ['name']
-
-     // });
-  // var monkeyList = new List('test-list-2', {
-    //    valueNames: ['name']
-
-   // });
-
-
-
-   
-   
-
-// });

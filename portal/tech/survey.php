@@ -1,20 +1,12 @@
-<!--
-create survey:
-workplace
-facilities
-ergonomoics
-satisfaction
-administrative services -->
 <?php
-session_start();
+require '../../config/Database.php';
+require '../../auth/accesscontrol.php';
 
-// if(isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'admin'){
-//     // echo "<script> alert('welcome') </script>";
-// }else{
-//     header("Location: ../auth/index.php");
+$userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
+access_log($userData);
 
-// }
-
+$hasSurveyResponse = hasSurveyResponse($_SESSION['user_id'], $conn);
+echo "<script>console.log('survey user id: " . json_encode($hasSurveyResponse) . "')</script>";
 
 ?>
 <!doctype html>
@@ -23,299 +15,118 @@ session_start();
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- icon -->
+    <link rel="shortcut icon" href="../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- check if bato-->
-    <link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <script defer src="../../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <link href="https://unpkg.com/survey-core/survey-core.min.css" type="text/css" rel="stylesheet">
 
-    <!-- datatable:  cs -->
-    <link rel="stylesheet" href="../../../node_modules/datatables.net-dt/css/dataTables.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script defer src="../../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
-    <!-- main js -->
-    <link rel="stylesheet" href="../../../assets/libs/css/style.css">
-
-    <!-- assts csss -->
-    <link rel="stylesheet" href="../../../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
-    <link rel="stylesheet" href="../../../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
-    <link rel="stylesheet" href="../../../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
 
     <!-- icon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
-
-    <!-- jQuery -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
-    <script src="../../../node_modules/jquery/dist/jquery.min.js"></script>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- DataTable JS -->
-    <script src="../../../node_modules/datatables.net/js/dataTables.min.js"></script>
-
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
 
     <!-- main js -->
-    <script src="../../../assets/libs/js/main-js.js"></script>
+    <link rel="stylesheet" href="../../assets/libs/css/style.css">
+
+    <!-- assts csss -->
+    <link rel="stylesheet" href="../../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <link rel="stylesheet" href="../../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
+    <link rel="stylesheet" href="../../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
+
+    <!-- jQuery -->
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+
+    <!-- main js -->
+    <script src="../notif.js"></script>
 
     <!-- slimscroll js -->
-    <script src="../../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <script src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+    <script src="https://unpkg.com/survey-core@latest/survey.core.min.js"></script>
+    <script src="https://unpkg.com/survey-jquery@latest/survey.jquery.min.js"></script>
 
-    <title>Admin Dashboard</title>
+    <script src="./includes/survey.js"></script>
+    <script src="./includes/constants.js"></script>
+
+    <title>Employee Dashboard</title>
 </head>
 
 <body>
+    <script>
+        var userPermissions = <?= json_encode($userData['permissions']); ?>;
+        var user_id = <?= json_encode($_SESSION['user_id']); ?>;
+    </script>
     <!-- ============================================================== -->
     <!-- main wrapper -->
     <!-- ============================================================== -->
     <div class="dashboard-main-wrapper">
-        <!-- ============================================================== -->
-        <!-- navbar -->
-        <!-- ============================================================== -->
-        <div class="dashboard-header ">
-            <nav class="navbar navbar-expand-lg bg-white fixed-top  ">
-                <a class="navbar-brand" href="index.php">
-                    <img src="../../../assets/images/bcp-hrd-logo.jpg" alt="" class="" style="height: 3rem;width: auto;">
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse " id="navbarSupportedContent">
-                    <ul class="navbar-nav ml-auto navbar-right-top">
-                        <li class="nav-item">
-                            <div id="custom-search" class="top-search-bar">
-                                <input class="form-control" type="text" placeholder="Search..">
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown notification">
-                            <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span class="indicator"></span></a>
-                            <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
-                                <li>
-                                    <div class="notification-title"> Notification</div>
-                                    <div class="notification-list">
-                                        <div class="list-group">
-                                            <a href="#" class="list-group-item list-group-item-action active">
-                                                <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Jeremy Rakestraw</span>accepted your invitation to join the team.
-                                                        <div class="notification-date">2 min ago</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <a href="#" class="list-group-item list-group-item-action">
-                                                <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">John Abraham </span>is now following you
-                                                        <div class="notification-date">2 days ago</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <a href="#" class="list-group-item list-group-item-action">
-                                                <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Monaan Pechi</span> is watching your main repository
-                                                        <div class="notification-date">2 min ago</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <a href="#" class="list-group-item list-group-item-action">
-                                                <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Jessica Caruso</span>accepted your invitation to join the team.
-                                                        <div class="notification-date">2 min ago</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="list-footer"> <a href="#">View all notifications</a></div>
-                                </li>
-                            </ul>
-                        </li>
-                        <!-- <li class="nav-item dropdown connection">
-                            <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-fw fa-th"></i> </a>
-                            <ul class="dropdown-menu dropdown-menu-right connection-dropdown">
-                                <li class="connection-list">
-                                    <div class="row">
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/github.png" alt="" > <span>Github</span></a>
-                                        </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/dribbble.png" alt="" > <span>Dribbble</span></a>
-                                        </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/dropbox.png" alt="" > <span>Dropbox</span></a>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/bitbucket.png" alt=""> <span>Bitbucket</span></a>
-                                        </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/mail_chimp.png" alt="" ><span>Mail chimp</span></a>
-                                        </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                            <a href="#" class="connection-item"><img src="assets/images/slack.png" alt="" > <span>Slack</span></a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="conntection-footer"><a href="#">More</a></div>
-                                </li>
-                            </ul>
-                        </li> -->
-                        <li class="nav-item dropdown nav-user">
-                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="#" alt="" class="user-avatar-md rounded-circle"></a>
-                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
-                                <div class="nav-user-info">
-                                    <h5 class="mb-0 text-white nav-user-name"> <?= $_SESSION['username'] ?> </h5>
-                                    <span class="status"></span><span class="ml-2">Available</span>
-                                </div>
-                                <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Account</a>
-                                <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
-                                <a class="dropdown-item" href="../../../auth/logout.php"><i class="fas fa-power-off mr-2"></i>Logout</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-        <!-- ============================================================== -->
-        <!-- end navbar -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- left sidebar -->
-        <!-- ============================================================== -->
-        <div class="nav-left-sidebar sidebar-white ">
-            <div class="menu-list">
-                <nav class="navbar navbar-expand-lg cc">
-                    <a class="d-xl-none d-lg-none" href="#"><?= strtoupper($_SESSION['usertype']) ?> PANEL</a>
-                    <button class="navbar-toggler btn-light" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav  flex-column">
-                            <li class="nav-divider">
-                                <?= strtoupper($_SESSION['usertype']) ?> PANEL
-                            </li>
-                            <li class="nav-item ">
-                                <a class="nav-link  " href="index.php">
-                                    <i class="fas fa-fw fa-home"></i> Dashboard
-                                </a>
-                            </li>
-                            <!-- temp -->
-                            <li class="nav-item ">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fa fa-fw fa-user-circle"></i>employee <span class="badge badge-success">6</span></a>
-                                <div id="submenu-1" class="collapse submenu bg-light">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1-2" aria-controls="submenu-1-2">Lorem, ipsum.</a>
-                                            <div id="submenu-1-2" class="collapse submenu bg-light">
-                                                <ul class="nav flex-column">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="index.html">Lorem.</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">lorem1</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">Lorem.</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">Lorem.</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="./records-management/Records.php">Lorem, ipsum dolor.</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="dashboard-sales.html">Lorem, ipsum dolor.</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1-1" aria-controls="submenu-1-1">Lorem, ipsum dolor.</a>
-                                            <div id="submenu-1-1" class="collapse submenu">
-                                                <ul class="nav flex-column">
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">Lorem, ipsum dolor.</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">Lorem, ipsum dolor.</a>
-                                                    </li>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" href="#">Lorem, ipsum dolor.</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <!-- facilities -->
-                            <li class="nav-item ">
-                                <a class="nav-link active" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2">
-                                    <i class="fa fa-fw fa-user-circle"></i>Facilites and Resources
-                                    <!-- <span class="badge badge-success">6</span> -->
-                                </a>
-                                <div id="submenu-2" class="collapse submenu show bg-light">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="./book_facility.php">Book Facility</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="./request_resources.php">Request Resources</a>
-                                        </li>
-                                        <!-- <li class="nav-item">
-                                            <a class="nav-link active" href="./survey.php">Survey</a>
-                                        </li> -->
-                                    </ul>
-                                </div>
-                            </li>
 
-                        </ul>
+        <?php include '../sideandnavbar.php'; ?>
+
+        <div class="dashboard-wrapper">
+            <div class="container-fluid dashboard-content ">
+                <?php if ($userData && in_array("VIEW", $userData['permissions'])): ?>
+                    <!-- ============================================================== -->
+                    <!-- pageheader  -->
+                    <!-- ============================================================== -->
+                    <div class="initial card shadow-sm" he>
+                        <div class="card-body text-center p-4">
+                            <div class="mb-4">
+                                <div class="p-3">
+
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor"
+                                        class="bi bi-emoji-smile" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                        <path
+                                            d="M4.285 9.567a.5.5 0 0 1 .683.183A3.5 3.5 0 0 0 8 11.5a3.5 3.5 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683M7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5m4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5" />
+                                    </svg>
+                                </div>
+                                <h2 class="card-title mb-2"> Help us Improve !</h2>
+                                <p class="card-text text-muted small">Your feedback is valuable to us. This short survey will take less than 1 minute.</p>
+                            </div>
+
+                            <?php if($hasSurveyResponse && in_array(1,$hasSurveyResponse, true)):?>
+                                <h4 class="lead">You have already completed this survey</h4>
+                            <?php else: ?>
+                                <button  id="startSurveyBtn" class="btn btn-primary btn-lg px-4 py-2">
+                                    <i class="bi bi-play-fill me-2"></i> Start Survey
+                                </button>
+                            <?php endif; ?>
+
+
+                        </div>
+                        <div class="card-footer mt-3 text-muted small text-center">
+                            <i class="bi bi-lock-fill me-1"></i> All responses are confidential
+                        </div>
                     </div>
-                </nav>
+
+                    <div id="surveyContainer" class="mt-4" style="display:none;"></div>
+                <?php else: ?>
+                    <?php include_once "../../403.php"; ?>
+                <?php endif; ?>
             </div>
         </div>
-        <!-- ============================================================== -->
-        <!-- end left sidebar -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- wrapper  -->
-        <!-- ============================================================== -->
-        <div class="dashboard-wrapper">
-            <!-- <div class="dashboard-ecommerce"> -->
-            <div class="container-fluid dashboard-content ">
-                <!-- ============================================================== -->
-                <!-- pageheader  -->
-                <!-- ============================================================== -->
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="page-header">
-                            <h2 class="pageheader-title">Survey </h2>
-                        </div>
-                    </div>
+
+        <!-- bs notification -->
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="added" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body bg-success text-light">
+                    Added, Successfully.
                 </div>
-
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            
-                        </div>
-                        <div class="card-body">
-                            <div class="survey_question">
-
-                            </div>
-                        </div>
-                    </div>
+            </div>
+            <div id="status" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body bg-success text-light">
+                    Status updated and email sent!
                 </div>
-
+            </div>
+            <div id="error" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body bg-danger text-light">
+                    Something went wrong.
+                </div>
             </div>
         </div>
         <!-- ============================================================== -->
@@ -325,6 +136,9 @@ session_start();
     <!-- ============================================================== -->
     <!-- end main wrapper  -->
     <!-- ============================================================== -->
+    <!-- Move this to the BOTTOM of the body, just before closing </body> tag -->
+    <!-- At bottom of body -->
+
 </body>
 
 </html>

@@ -820,7 +820,7 @@ $(document).ready(function () {
         <?php elseif ($usertype === 'superadmin'): ?>
             <option value="admin">Admin</option>
             <option value="employee">Employee</option>
-            <option value="superadmin">Superadmin</option>
+            <option value="manager">Manager</option>
         
         <?php endif; ?>
                         </select>

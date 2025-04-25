@@ -317,11 +317,11 @@ access_log($userData);
                                     <table id="LogbookingTable" class="table table-hover" width="100%">
                                         <thead class="thead-light">
                                             <tr>
-                                                <th>Employee</th>
+                                                <!-- <th>Employee</th> -->
                                                 <th>Room</th>
                                                 <th>Date</th>
                                                 <th>Time</th>
-                                                <th>Purpose</th>
+                                                <!-- <th>Purpose</th> -->
                                                 <th>Status</th>
                                             </tr>
                                         </thead>

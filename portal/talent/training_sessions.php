@@ -1,4 +1,5 @@
 <?php
+
 require "../../config/db_talent.php";
 require '../../auth/mysqli_accesscontrol.php';
 
@@ -96,12 +97,12 @@ if ($employee_id) {
     <!-- Slimscroll JS -->
     <script src="../../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 
-    <title>Employee Dashboard</title>
+    <title>Admin Dashboard</title>
 </head>
 
 <body>
 <div class="dashboard-main-wrapper">
-    <?php include '../sideandnavbar.php'; ?>
+<?php include '../sideandnavbar.php'; ?>
     
     <div class="dashboard-wrapper">
 

@@ -20,6 +20,18 @@ class Booking
         $this->conn = $db;
     }
 
+    public function getBookingByUserID($user_id){
+        try {
+            $query = "SELECT employee_id FROM fm_bookings WHERE id = :user_id";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute([":user_id" => $user_id]);
+            $rs = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['user_id'] ?? null;
+        } catch (PDOException $e) {
+            return $e->getMessage();
+        }
+    }
+
     /**
      * @param array[] $data Booking Creation 
      */
@@ -72,11 +84,11 @@ class Booking
     public function getAll()
     {
         try {
-            $q = "SELECT b.*, u.username as employee_name , r.name 
-            FROM fm_bookings b 
-            JOIN users u ON b.employee_id = u.id 
-            JOIN fm_rooms r ON b.room_id = r.id
-            ORDER BY b.created_at ASC; ";
+            $q = "SELECT b.booking_date, b.start_time, b.end_time, b.status , r.name 
+                    FROM fm_bookings b 
+                    JOIN users u ON b.employee_id = u.id 
+                    JOIN fm_rooms r ON b.room_id = r.id 
+                    ORDER BY b.created_at ASC;  ";
             $stmt = $this->conn->prepare($q);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);

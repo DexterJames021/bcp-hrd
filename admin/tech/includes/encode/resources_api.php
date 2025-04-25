@@ -2,11 +2,12 @@
 
 session_start();
 
-// if (!isset($_SESSION['user_id'])) {
-//     echo json_encode(['error' => 'Unauthorized access']);
-//     http_response_code(403);
-//     exit;
-// }
+if (!isset($_SESSION['user_id'])) {
+    header("Content-Type: application/json");
+    // echo json_encode(['error' => 'Unauthorized access']);
+    http_response_code(403);
+    exit;
+}
 
 header("Access-Control-Allow-Origin: *");
 // header("Access-Control-Allow-Origin: https://bcp-hrd.site");
@@ -16,12 +17,14 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
 
 require '../class/Resources.php';
+require '../class/Notification.php';
 require '../../../../config/Database.php';
 
 use Admin\Tech\Includes\Class\Resources;
+use Admin\Tech\Includes\Class\Notification;
 
 $resource = new Resources($conn);
-
+$nofication = new Notification($conn);
 $action = $_GET['action'] ?? null;
 
 switch ($action) {
@@ -51,12 +54,12 @@ switch ($action) {
         if (!isset($_POST['id']))
             return false;
 
-            $delete = $resource->delete_asset($_POST['id']);
-            if($delete){
-                echo json_encode(['success'=> true]);
-            }else {
-                echo json_encode(['success'=> false]);
-            }
+        $delete = $resource->delete_asset($_POST['id']);
+        if ($delete) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false]);
+        }
         break;
 
     case 'update_resource':
@@ -123,7 +126,14 @@ switch ($action) {
             'purpose' => $_POST['purpose'],
         ];
 
+        $message = "New Resource/s request for asset. ID:" . $_POST['resource_id'];
+
         $result = $resource->requestResource($data);
+
+        if ($result) {
+            $nofication->InsertNotification($_POST['employee_id'], $message, 'resource');
+        }
+
         echo json_encode(['success' => $result]);
         break;
 
@@ -139,13 +149,24 @@ switch ($action) {
 
         $requestId = $_POST['request_id'];
         $status = $_POST['status'];
+        // $userID = $_POST['user_id'];
 
         if (!in_array($status, ['Approved', 'Rejected'])) {
             echo json_encode(['success' => false, 'message' => 'Invalid status.']);
             exit;
         }
 
+        $message = ($status === 'Approved')
+            ? "Your request #{$requestId} has been approved. Thank you for using our service!"
+            : "Your request #{$requestId} has been rejected. Please contact support for more information.";
+
+
         $result = $resource->updateRequestStatus($requestId, $status);
+
+        if ($result) {
+            $nofication->InsertNotification($_SESSION['user_id'], $message, 'resource_status');
+        }
+
         echo json_encode($result);
         break;
 
@@ -216,7 +237,9 @@ switch ($action) {
     case 'categorize_resources':
         echo json_encode($resource->CategorizedResources());
         break;
-
+    case 'get_employee_for_allocation':
+        echo json_encode($resource->get_employee_for_allocation());
+        break;
     case 'return_all':
         if (empty($_POST['request_id'])) {
             echo json_encode(['success' => false, 'message' => 'Request ID is required.']);

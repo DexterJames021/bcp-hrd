@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['assignment_id'])) {
         $_SESSION['message'] = "Training started successfully!";
         
         // Redirect to training_sessions.php with the success message
-        header("Location: training_sessions.php");
+        header("Location: available.php");
         exit;
     } else {
         // Error handling

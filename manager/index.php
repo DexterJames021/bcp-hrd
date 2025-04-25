@@ -7,6 +7,7 @@ require __DIR__ . '../../auth/mysqli_accesscontrol.php';
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);
 
+$base_url = 'http://localhost/bcp-hrd';
 ?>
 <!doctype html>
 <html lang="en">
@@ -156,8 +157,8 @@ access_log($userData);
                         <li class="nav-item dropdown notification">
                             <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i>
-                                <!-- <span
-                                    class="indicator"></span> -->
+                                <span
+                                    class="indicator"></span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                                 <li>
@@ -294,8 +295,24 @@ access_log($userData);
                                 <a class="nav-link " href="./tech/facility.php">Facility
                                     Management</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link " href="./compen/index.php">Compen</a>
+                             <!-- Compensation & benefits -->
+                             <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-7" aria-controls="submenu-7">Compensation & benefits</a>
+                                <div id="submenu-7" class="collapse submenu" style="">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/manager/compen/leave.php">My Leave</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/manager/compen/requests.php">Leave Requests</a>
+                                        </li>
+                                        <li class="nav-item">
+                                        <a class="nav-link" href="<?php echo $base_url; ?>/manager/compen/holiday.php">Holidays</a>
+                                        </li>
+                                       
+                                    </ul>
+                                </div>
                             </li>
                             <!-- <li class="nav-item">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-7" aria-controls="submenu-7">

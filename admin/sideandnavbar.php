@@ -1,14 +1,58 @@
 <?php
-
 $base_url = 'http://localhost/bcp-hrd';
+$userID = $_SESSION['user_id'] ?? null;
 
-##################3###################
-#   DASHBOARD
-#       admin
-#       superadmin
-#####################################
+// Default profile picture
+$profilePicturePath = $base_url . '/assets/images/noprofile2.jpg';
 
+// Connect using mysqli
+$mysqli = new mysqli("localhost", "root", "", "bcp-hrd");
+if ($mysqli->connect_error) {
+    die("Connection failed (MySQLi): " . $mysqli->connect_error);
+}
+
+$employeeData = [];
+
+// Fetch employee info (FirstName, LastName, Email, etc.)
+if ($userID) {
+    $sql = "
+        SELECT 
+            e.FirstName,
+            e.LastName,
+            e.Email,
+            e.Phone,
+            u.username,
+            p.profile_picture_path
+        FROM employees e
+        INNER JOIN users u ON e.UserID = u.id
+        LEFT JOIN employee_profile_pictures p ON e.EmployeeID = p.EmployeeID
+        WHERE u.id = ?
+        LIMIT 1
+    ";
+
+    $stmt = $mysqli->prepare($sql);
+    if ($stmt) {
+        $stmt->bind_param("i", $userID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $employeeData = $result->fetch_assoc() ?: [];
+        $stmt->close();
+    }
+}
+$mysqli->close();
+
+// If profile picture exists in database, check if file exists using PHP file_exists (no need PDO)
+if (!empty($employeeData['profile_picture_path'])) {
+    $pictureFromDb = ltrim($employeeData['profile_picture_path'], '/'); // Remove leading slash if present
+    $fullPath = $_SERVER['DOCUMENT_ROOT'] . '/bcp-hrd/admin/' . $pictureFromDb; // Full physical path
+
+    if (file_exists($fullPath)) {
+        // Set accessible URL path
+        $profilePicturePath = $base_url . '/admin/' . $pictureFromDb;
+    }
+}
 ?>
+
 <!doctype html>
 <html lang="en">
 
@@ -25,6 +69,7 @@ $base_url = 'http://localhost/bcp-hrd';
     <script defer src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
 
+
     <!-- main js -->
     <script defer type="module" src="../assets/libs/js/main-js.js"></script>
     <link rel="stylesheet" href="../assets/libs/css/style.css">
@@ -34,6 +79,8 @@ $base_url = 'http://localhost/bcp-hrd';
     <link rel="stylesheet" href="../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
     <link rel="stylesheet" href="../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
 
+    <script src="./main.js"></script>
+
     <!-- slimscroll js -->
     <script defer type="module" src="../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 
@@ -41,6 +88,7 @@ $base_url = 'http://localhost/bcp-hrd';
 </head>
 
 <body>
+
     <div class="dashboard-header ">
         <nav class="navbar navbar-expand-lg bg-white fixed-top  ">
             <?php
@@ -52,8 +100,9 @@ $base_url = 'http://localhost/bcp-hrd';
                     style="height: 3rem;width: auto;">
             </a>
 
-            <button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler navbar-light" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse " id="navbarSupportedContent">
@@ -66,58 +115,20 @@ $base_url = 'http://localhost/bcp-hrd';
                     <li class="nav-item dropdown notification">
                         <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i>
-                            <!-- <span
-                                class="indicator"></span> -->
+                            <span class="indicator d-none"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                             <li>
                                 <div class="notification-title"> Notification</div>
                                 <div class="notification-list">
-                                    <div class="list-group">
-                                        <!--  <a href="#" class="list-group-item list-group-item-action active">
-                                            <div class="notification-info">
-                                                <div class="notification-list-user-img"><img src="#" alt=""
-                                                        class="user-avatar-md rounded-circle"></div>
-                                                <div class="notification-list-user-block"><span
-                                                        class="notification-list-user-name">Jeremy
-                                                        Rakestraw</span>accepted your invitation to join the team.
-                                                    <div class="notification-date">2 min ago</div>
-                                                </div>
-                                            </div>
-                                             </a>
-                                        <a href="#" class="list-group-item list-group-item-action">
-                                            <div class="notification-info">
-                                                <div class="notification-list-user-img"><img src="#" alt=""
-                                                        class="user-avatar-md rounded-circle"></div>
-                                                <div class="notification-list-user-block"><span
-                                                        class="notification-list-user-name">John Abraham </span>is now
-                                                    following you
-                                                    <div class="notification-date">2 days ago</div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="list-group-item list-group-item-action">
-                                            <div class="notification-info">
-                                                <div class="notification-list-user-img"><img src="#" alt=""
-                                                        class="user-avatar-md rounded-circle"></div>
-                                                <div class="notification-list-user-block"><span
-                                                        class="notification-list-user-name">Monaan Pechi</span> is
-                                                    watching your main repository
-                                                    <div class="notification-date">2 min ago</div>
-                                                </div>
-                                            </div>
-                                        </a> -->
-                                        <a href="#" class="list-group-item list-group-item-action">
-                                            <div class="notification-list-user-block"><span
-                                                    class="notification-list-user-name">No notification</span>
-                                            </div>
-                                        </a>
+                                    <div class="list-group" id="notification">
+                                        No notification
                                     </div>
                                 </div>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <div class="list-footer"> <a href="#">View all notifications</a></div>
-                            </li>
+                            </li> -->
                         </ul>
                     </li>
                     <!-- <li class="nav-item dropdown connection">
@@ -152,37 +163,106 @@ $base_url = 'http://localhost/bcp-hrd';
                                 </li>
                             </ul>
                         </li> -->
-                    <li class="nav-item dropdown nav-user">
-                        <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                            <img id="user-avatar" src="<?php
-                            $currentPage = basename($_SERVER['PHP_SELF']);
-                            if ($currentPage == 'facilities.php' || $currentPage == 'resources.php') {
-                                echo '../../../assets/images/noprofile2.jpg';
-                            } elseif ($currentPage == 'index.php') {
-                                echo '../assets/images/noprofile2.jpg';
-                            } else {
-                                echo '../../assets/images/noprofile2.jpg';
-                            }
-                            ?>" alt="" class="user-avatar-md rounded-circle">   
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right nav-user-dropdown"
-                            aria-labelledby="navbarDropdownMenuLink2">
-                            <div class="nav-user-info">
-                                <h5 class="mb-0 text-white nav-user-name"> <?= $_SESSION['username'] ?> </h5>
-                                <span class="status"></span><span class="ml-2">Available</span>
-                            </div>
-                            <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Account</a>
-                            <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
-                            <a class="dropdown-item" href="<?php echo $base_url; ?>/auth/logout.php">
-                                <i class="fas fa-power-off mr-2"></i>Logout
-                            </a>
-                        </div>
-                    </li>
+                        <li class="nav-item dropdown nav-user">
+    <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        <img id="user-avatar" src="<?php echo htmlspecialchars($profilePicturePath); ?>" alt="User Avatar" class="user-avatar-md rounded-circle">
+
+    </a>
+    <div class="dropdown-menu dropdown-menu-right nav-user-dropdown"
+        aria-labelledby="navbarDropdownMenuLink2">
+        <div class="nav-user-info">
+            <h5 class="mb-0 text-white nav-user-name"><?= $_SESSION['username'] ?></h5>
+            <span class="status"></span><span class="ml-2">Available</span>
+        </div>
+        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#accountModal">
+            <i class="fas fa-user mr-2"></i>Account
+        </a>
+        <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
+        <a class="dropdown-item" href="<?php echo $base_url; ?>/auth/logout.php">
+            <i class="fas fa-power-off mr-2"></i>Logout
+        </a>
+    </div>
+</li>
+
                 </ul>
             </div>
         </nav>
     </div>
+<!-- Account Modal -->
+<div class="modal fade" id="accountModal" tabindex="-1" role="dialog" aria-labelledby="accountModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <form action="<?= $base_url; ?>/admin/update_profile.php" method="POST" enctype="multipart/form-data">
+
+        <div class="modal-header">
+          <h5 class="modal-title" id="accountModalLabel">My Account</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Profile Picture -->
+          <div class="text-center mb-3">
+            <!-- Display current profile picture if available, else show default -->
+     <img src="<?= !empty($employeeData['profile_picture_path']) ? $base_url . '/admin/' . ltrim($employeeData['profile_picture_path'], '/') : $base_url . '/assets/images/noprofile2.jpg'; ?>"
+     class="rounded-circle" width="120" height="120" id="employee-profile-preview">
+
+
+            <div class="mt-2">
+                <!-- Show file input only if profile picture is not set -->
+                <?php if (empty($employeeData['profile_picture_path'])): ?>
+                    <input type="file" name="profile_picture" class="form-control" accept="image/*" onchange="previewProfile(event)" required>
+                <?php else: ?>
+                    <input type="file" name="profile_picture" class="form-control" accept="image/*" onchange="previewProfile(event)">
+                <?php endif; ?>
+            </div>
+          </div>
+
+          <!-- Profile Info -->
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label>First Name</label>
+              <input type="text" name="first_name" class="form-control" value="<?= htmlspecialchars($employeeData['FirstName'] ?? '') ?>" required>
+            </div>
+            <div class="form-group col-md-6">
+              <label>Last Name</label>
+              <input type="text" name="last_name" class="form-control" value="<?= htmlspecialchars($employeeData['LastName'] ?? '') ?>" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($employeeData['Email'] ?? '') ?>" required>
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="text" name="phone" class="form-control" value="<?= htmlspecialchars($employeeData['Phone'] ?? '') ?>">
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+function previewProfile(event) {
+    const reader = new FileReader();
+    reader.onload = function() {
+        const output = document.getElementById('profile-preview');
+        output.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+}
+</script>
+
+
     <div class="nav-left-sidebar sidebar-dark ">
         <div class="menu-list">
             <nav class="navbar navbar-expand-lg navbar-light">
@@ -196,7 +276,7 @@ $base_url = 'http://localhost/bcp-hrd';
                         <li class="nav-divider">
                             Human Resource Dept.
                         </li>
-                        <?php if ($userData['role'] != "superadmin"): ?>
+                        <?php if ($userData['role'] === "admin"): ?>
                             <li class="nav-item">
                                 <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : ''; ?>"
                                     href="<?php echo $base_url; ?>/admin/index.php">
@@ -262,7 +342,7 @@ $base_url = 'http://localhost/bcp-hrd';
                             </li>
                             <!-- Talent Management -->
                             <li class="nav-item">
-                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'recruitment.php' || basename($_SERVER['PHP_SELF']) == 'employees.php' || basename($_SERVER['PHP_SELF']) == 'succession.php' || basename($_SERVER['PHP_SELF']) == 'onboarding.php' || basename($_SERVER['PHP_SELF']) == 'indextalent.php') ? 'active' : ''; ?>"
+                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'recruitment.php' || basename($_SERVER['PHP_SELF']) == 'employees.php' || basename($_SERVER['PHP_SELF']) == 'succession.php' ||basename($_SERVER['PHP_SELF']) == 'talent_retention.php' || basename($_SERVER['PHP_SELF']) == 'onboarding.php' || basename($_SERVER['PHP_SELF']) == 'indextalent.php') ? 'active' : ''; ?>"
                                     href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2"
                                     aria-controls="submenu-2">
                                     <i class="fa fa-fw fa-rocket"></i> Employee Management
@@ -303,6 +383,13 @@ $base_url = 'http://localhost/bcp-hrd';
                                             </a>
                                         </li>
 
+                                        <li class="nav-item">
+                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'talent_retention.php') ? 'active' : ''; ?>"
+                                                href="<?php echo $base_url; ?>/admin/talent/talent_retention.php">
+                                                Talent Retention
+                                            </a>
+                                        </li>
+
 
                                     </ul>
                                 </div>
@@ -315,16 +402,20 @@ $base_url = 'http://localhost/bcp-hrd';
                                     basename($_SERVER['PHP_SELF']) == 'usercontrol.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'facilities.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'resources.php' ||
-                                    basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : ''; ?>" href="#"
+                                    basename($_SERVER['PHP_SELF']) == 'attendance_tracker.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'survey_responses.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'job_order.php') ? 'active' : ''; ?>" href="#"
                                     data-toggle="collapse" aria-expanded="false" data-target="#submenu-3"
                                     aria-controls="submenu-3"><i class="fas fa-fw fa-chart-pie"></i> Tech & Analytics</a>
                                 <div id="submenu-3" class="collapse submenu <?php echo (basename($_SERVER['PHP_SELF']) == 'resource_list.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'room_book_list.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'records.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'usercontrol.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'attendance_tracker.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'resources.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'survey_responses.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'facilities.php' ||
-                                    basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'show' : ''; ?>">
+                                    basename($_SERVER['PHP_SELF']) == 'job_order.php') ? 'show' : ''; ?>">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
@@ -352,25 +443,30 @@ $base_url = 'http://localhost/bcp-hrd';
                                                 href="<?php echo $base_url; ?>/admin/tech/records.php">Employee Personnel
                                                 Records</a>
                                         </li>
+                                        <!-- <li class="nav-item">
+                                            <a class="nav-link < ?php echo (basename($_SERVER['PHP_SELF']) == 'survey_responses.php') ? 'active' : ''; ?>"
+                                                href="< ?php echo $base_url; ?>/admin/tech/survey_responses.php">Engagement
+                                                Analytics</a>
+                                        </li>
                                         <li class="nav-item">
-                                        <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : ''; ?>"
-                                            href="<?php echo $base_url; ?>/admin/tech/reports.php">Administrative
-                                            Report</a>
-                                    </li>
+                                            <a class="nav-link < ?php echo (basename($_SERVER['PHP_SELF']) == 'attendance_tracker.php') ? 'active' : ''; ?>"
+                                                href="< ?php echo $base_url; ?>/admin/tech/attendance_tracker.php">Attendance Tracker</a>
+                                        </li> -->
                                         <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
-                                                data-target="#submenu-3-2" aria-controls="submenu-3-2">Analytics</a>
+                                                data-target="#submenu-3-2" aria-controls="submenu-3-2">Report and
+                                                Analysis</a>
                                             <div id="submenu-3-2" class="collapse submenu  <?php echo (basename($_SERVER['PHP_SELF']) == 'resources.php' ||
                                                 basename($_SERVER['PHP_SELF']) == 'facilities.php') ? 'show' : ''; ?>">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
                                                         <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'facilities.php') ? 'active' : ''; ?>"
-                                                            href="<?php echo $base_url; ?>/admin/tech/analytics/facilities.php">Monitor
+                                                            href="<?php echo $base_url; ?>/admin/tech/analytics/facilities.php">
                                                             Facilities</a>
                                                     </li>
                                                     <li class="nav-item">
                                                         <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'resources.php') ? 'active' : ''; ?>"
-                                                            href="<?php echo $base_url; ?>/admin/tech/analytics/resources.php">Monitor
+                                                            href="<?php echo $base_url; ?>/admin/tech/analytics/resources.php">
                                                             Resources</a>
                                                     </li>
                                                 </ul>
@@ -445,15 +541,42 @@ $base_url = 'http://localhost/bcp-hrd';
                                 <div id="submenu-7" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="<?php echo $base_url; ?>/admin/compensation/index.php">compensation</a>
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/admin/compensation/dashboard.php">Rates</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/data-tables.html">compensation</a>
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/admin/compensation/leave.php">Leave</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/admin/compensation/benefits.php">Benefits</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/admin/compensation/index.php">Holidays</a>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
-                        <?php else: ?>
+                        <?php elseif ($userData['role'] === 'maintenance'): ?>
+                            <li class="nav-item">
+                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'facilities.php') ? 'active' : ''; ?>"
+                                    href="<?php echo $base_url; ?>/admin/tech/analytics/facilities.php">
+                                    Facilities Analytics</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'resources.php') ? 'active' : ''; ?>"
+                                    href="<?php echo $base_url; ?>/admin/tech/analytics/resources.php">
+                                    Resources Analytics</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'resource_list.php') ? 'active' : ''; ?>"
+                                    href="<?php echo $base_url; ?>/admin/tech/resource_list.php">Resources
+                                    Management</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'room_book_list.php') ? 'active' : ''; ?>"
+                                    href="<?php echo $base_url; ?>/admin/tech/room_book_list.php">Facility
+                                    Management</a>
+                            </li>
+                        <?php elseif ($userData['role'] === 'superadmin'): ?>
                             <!-- SUPER ADMIN NAVIGATION -->
                             <li class="nav-item">
                                 <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : ''; ?>"
@@ -520,7 +643,7 @@ $base_url = 'http://localhost/bcp-hrd';
                             </li>
                             <!-- Talent Management -->
                             <li class="nav-item">
-                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'recruitment.php' || basename($_SERVER['PHP_SELF']) == 'employees.php' || basename($_SERVER['PHP_SELF']) == 'onboarding.php' || basename($_SERVER['PHP_SELF']) == 'indextalent.php') ? 'active' : ''; ?>"
+                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'recruitment.php' || basename($_SERVER['PHP_SELF']) == 'talent_retention.php' ||basename($_SERVER['PHP_SELF']) == 'employees.php' || basename($_SERVER['PHP_SELF']) == 'onboarding.php' || basename($_SERVER['PHP_SELF']) == 'indextalent.php') ? 'active' : ''; ?>"
                                     href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2"
                                     aria-controls="submenu-2">
                                     <i class="fa fa-fw fa-rocket"></i> Employee Management
@@ -560,6 +683,12 @@ $base_url = 'http://localhost/bcp-hrd';
                                                 Succession Planning
                                             </a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'talent_retention.php') ? 'active' : ''; ?>"
+                                                href="<?php echo $base_url; ?>/admin/talent/talent_retention.php">
+                                                Talent Retention
+                                            </a>
+                                        </li>
 
                                     </ul>
                                 </div>
@@ -571,17 +700,21 @@ $base_url = 'http://localhost/bcp-hrd';
                                     basename($_SERVER['PHP_SELF']) == 'records.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'usercontrol.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'facilities.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'survey_responses.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'attendance_tracker.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'resources.php' ||
-                                    basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : ''; ?>" href="#"
+                                    basename($_SERVER['PHP_SELF']) == 'job_order.php') ? 'active' : ''; ?>" href="#"
                                     data-toggle="collapse" aria-expanded="false" data-target="#submenu-3"
                                     aria-controls="submenu-3"><i class="fas fa-fw fa-chart-pie"></i> Tech & Analytics</a>
                                 <div id="submenu-3" class="collapse submenu <?php echo (basename($_SERVER['PHP_SELF']) == 'resource_list.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'room_book_list.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'records.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'usercontrol.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'attendance_tracker.php' ||
+                                    basename($_SERVER['PHP_SELF']) == 'survey_responses.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'resources.php' ||
                                     basename($_SERVER['PHP_SELF']) == 'facilities.php' ||
-                                    basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'show' : ''; ?>">
+                                    basename($_SERVER['PHP_SELF']) == 'job_order.php') ? 'show' : ''; ?>">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
@@ -615,11 +748,20 @@ $base_url = 'http://localhost/bcp-hrd';
                                                 <!-- <i class="bi bi-person-fill-gear"></i> -->
                                                 User Control</a>
                                         </li>
-                                        <!-- <li class="nav-item">
-                                            <a class="nav-link < ?php echo (basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : ''; ?>"
-                                                href="< ?php echo $base_url; ?>/admin/tech/reports.php">Administrative
-                                                Report</a>
-                                        </li> -->
+                                        <li class="nav-item">
+                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'survey_responses.php') ? 'active' : ''; ?>"
+                                                href="<?php echo $base_url; ?>/admin/tech/survey_responses.php">Engagement
+                                                Analytics</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'job_order.php') ? 'active' : ''; ?>"
+                                                href="<?php echo $base_url; ?>/admin/tech/job_order.php">Job Analysis</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'attendance_tracker.php') ? 'active' : ''; ?>"
+                                                href="<?php echo $base_url; ?>/admin/tech/attendance_tracker.php">Attendance
+                                                Tracker</a>
+                                        </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
                                                 data-target="#submenu-3-2" aria-controls="submenu-3-2">Analytics</a>
@@ -707,15 +849,23 @@ $base_url = 'http://localhost/bcp-hrd';
                                         class="fas fa-f fa-folder"></i>Compensation & benefits</a>
                                 <div id="submenu-7" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="pages/general-table.html">General Tables</a>
+                                    <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/admin/compensation/dashboard.php">Rates</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="pages/data-tables.html">Data Tables</a>
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/admin/compensation/leave.php">Leave</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/admin/compensation/benefits.php">Benefits</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/admin/compensation/index.php">Holidays</a>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
+                        <?php else: ?>
+                            <?php include "./403.php" ?>
                         <?php endif; ?>
                     </ul>
                 </div>

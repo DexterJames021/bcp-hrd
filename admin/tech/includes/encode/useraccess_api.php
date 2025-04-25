@@ -2,11 +2,12 @@
 session_start();
 
 
-// if (!isset($_SESSION['user_id'])) {
-//     echo json_encode(['error' => 'Unauthorized access']);
-//     http_response_code(403);
-//     exit;
-// }
+if (!isset($_SESSION['user_id'])) {
+    header("Content-Type: application/json"); 
+    // echo json_encode(['error' => 'Unauthorized access']);
+    http_response_code(403);
+    exit;
+}
 
 header("Access-Control-Allow-Origin: https://bcp-hrd.site"); //  domain
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");

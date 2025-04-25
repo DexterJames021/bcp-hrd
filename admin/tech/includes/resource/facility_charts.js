@@ -7,30 +7,6 @@ $(function () {
     // console.log("true")
     $("#analyticPage").hide();
     $("#logPage").show();
-
-    // $("#LogRequestTable").DataTable({
-    //   processing: true,
-    //   dom: "Bfrtip",
-    //   ajax: {
-    //     url: "../includes/encode/resources_api.php?action=fetch_all",
-    //     dataType: "json",
-    //     dataSrc: ''
-    //   },
-    //   columns: [
-    //     {
-    //       data: "name",
-    //     },
-    //     {
-    //       data: "category",
-    //     },
-    //     {
-    //       data: "quantity",
-    //     },
-    //     {
-    //       data: "location",
-    //     },
-    //   ],
-    // });
   });
 
   $("#analyticView").on("click", function () {
@@ -132,8 +108,8 @@ $(function () {
   // categorize
   $("#facilityTable").DataTable({
     processing: true,
-        scrollX: true,
-    scrollY: 200,
+    //     scrollX: true,
+    // scrollY: 200,
     searching: false,
     ajax: {
       url: BaseURL + "facility_categorization", // Replace with your API URL
@@ -173,9 +149,6 @@ $(function () {
     },
     columns: [
       {
-        data: "employee_name",
-      },
-      {
         data: "name",
       },
       {
@@ -187,9 +160,9 @@ $(function () {
           return `${data.start_time} to ${data.end_time}`;
         },
       },
-      {
-        data: "purpose",
-      },
+      // {
+      //   data: "purpose",
+      // },
       {
         data: "status",
       },

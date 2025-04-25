@@ -1,11 +1,12 @@
 $(function () {
 
-    const baseURL ="./includes/encode/users_api.php?action="
-
+    const baseURL = "./includes/encode/users_api.php?action="
+    console.log("userPermissions:  ", userPermissions);
+    console.log("userRole:  ", userRole);
 
     let performanceChartInstance = null;
 
-    let recordsTable = $('#RecordsTable').DataTable({
+    const recordsTable = $('#RecordsTable').DataTable({
         width: '100%',
         responsive: true,
         processing: true,
@@ -24,7 +25,6 @@ $(function () {
                 render: function (a, b, c, d) {
                     return d.row + 1;
                 },
-                // title: "No."
             },
             {
                 title: 'Name',
@@ -59,7 +59,20 @@ $(function () {
                 data: null,
                 orderable: false,
                 render: (data) => {
-                    return `<button type="button" class="view btn btn-outline-light" data-id="${data.EmployeeID}"> View Info </button>`;
+                    let buttons = "";
+
+                    if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
+                        buttons += `<button type="button" class="view btn btn-outline-primary" data-id="${data.EmployeeID}"> Details </button>
+                                    `
+                    }
+
+                    if (userRole === "superadmin") {
+                        buttons += `
+                                    <button type="button" class="promotion-btn btn btn-outline-secondary" data-id="${data.applicant_id}"> Promotion </button>
+                                    `
+                    }
+
+                    return buttons || '';
                 }
             }
         ],
@@ -107,6 +120,58 @@ $(function () {
             }
         });
     }
+
+
+    $(document).on("click", ".promotion-btn", function () {
+        let applicant_id = $(this).data("id");
+        console.log('asdasd', $("#promotionModal"), applicant_id);
+
+        $("#employee_id").val(applicant_id);
+        $("#promotionModal").modal("show");
+        loadJob();
+
+    })
+
+    function loadJob() {
+        $.get(baseURL + 'available_job_title',
+            function (data) {
+                const jobs = JSON.parse(data);
+                $('#job_titles').empty().append('<option value="" selected disabled hidden>Select Job Title</option>');
+
+                const avail_jobs = jobs.filter(job => job.status === "Open");
+
+                avail_jobs.forEach(job => {
+                    $('#job_titles').append(`<option value="${job.id}">${job.job_title} (${job.salary_range})</option>`);
+                });
+            });
+    }
+
+
+    $("#promotion_form").on("submit", function (e) {
+        e.preventDefault()
+        let data = $(this).serialize();
+        console.log('DTA', data);
+
+        $.ajax({
+            url: baseURL + "employee_promotion",
+            method: "POST",
+            data: data,
+            success: function (response) {
+                if (response.success) {
+                    $("#added").toast("show");
+                    recordsTable.ajax.reload();
+                    $("#promotionModal").modal("hide");
+                } else {
+                    $("#error").toast("show");
+                }
+            },
+            error: function () {
+                $("#error").toast("show");
+            },
+        });
+
+    })
+
 
     $(document).on('click', '.view', function () {
         const employeeId = $(this).data('id');
@@ -235,10 +300,11 @@ $(function () {
                     const row = `
                 <tr>
                     <td>${compen.BaseSalary || ''}</td>
-                    <td>${compen.Bonus || ''}</td>
                     <td>${compen.BenefitValue || ''}</td>
-                </tr>
-            `;
+                    </tr>
+                    `;
+
+                    // <td>${compen.Bonus || ''}</td>
                     recordsTable.ajax.reload();
                     $("#compensationList").append(row);
                 });
@@ -267,7 +333,7 @@ $(function () {
                 if (response.success) {
                     $('#status').toast('show')
                     location.reload();
-                    recordsTable.ajax.reload(); 
+                    recordsTable.ajax.reload();
                 } else {
                     $('#error').toast('show')
                 }

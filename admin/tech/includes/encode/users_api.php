@@ -2,11 +2,12 @@
 session_start();
 
 
-// if (!isset($_SESSION['user_id'])) {
-//     echo json_encode(['error' => 'Unauthorized access']);
-//     http_response_code(403);
-//     exit;
-// }
+if (!isset($_SESSION['user_id'])) {
+    header("Content-Type: application/json"); 
+    // echo json_encode(['error' => 'Unauthorized access']);
+    http_response_code(403);
+    exit;
+}
 
 header("Access-Control-Allow-Origin: https://bcp-hrd.site"); //  domain
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
@@ -15,14 +16,17 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 require_once '../class/User.php';
 require_once '../class/Roles.php';
+require_once '../class/Functions.php';
 require_once '../class/Permission.php';
 require '../../../../config/Database.php';
 
 use Admin\Tech\Includes\Class\User;
+use Admin\Tech\Includes\Class\Functions;
 use Admin\Tech\Includes\Class\Roles;
 use Admin\Tech\Includes\Class\Permission;
 
 $user = new User($conn);
+$function = new Functions($conn);
 
 $action = $_GET['action'] ?? null;
 switch ($action) {
@@ -39,6 +43,9 @@ switch ($action) {
         } else {
             echo json_encode(['error' => 'Employee not found']);
         }
+        break;
+    case "available_job_title":
+        echo json_encode($function->GetAllJobPost());
         break;
 
     case 'employee_records_edit':
@@ -69,8 +76,21 @@ switch ($action) {
         if ($result) {
             echo json_encode($result);
         } else {
-            echo json_encode(['error' => 'Employee not found']);
+            echo json_encode(['error' => 'Something went wrong.']);
         }
+        break;
+
+    case "employee_promotion":
+        $id = $_POST["employee_id"];
+        $job_id = $_POST["job_id"];
+
+        $result = $user->promotion($id, $job_id);
+        if ($result) {
+            echo json_encode($result);
+        } else {
+            echo json_encode(['error' => 'Something went wrong.']);
+        }
+
         break;
 
     case 'get_by_id_training_list':
@@ -80,9 +100,10 @@ switch ($action) {
         if ($result) {
             echo json_encode($result);
         } else {
-            echo json_encode(['error' => 'Employee not found']);
+            echo json_encode(['error' => 'Something went wrong.']);
         }
         break;
+
     case 'get_by_id_salary':
         $id = $_POST['id'] ?? null;
 
@@ -93,7 +114,24 @@ switch ($action) {
             echo json_encode(['error' => 'Employee not found']);
         }
         break;
-        
+
+    case "survey_response":
+        $data = [
+            "user_id" => $_POST["user_id"],
+            "survey_data" => json_encode($_POST["survey_data"])
+        ];
+
+        $result = $user->SurveyResponse($data);
+        if ($result) {
+            echo json_encode(["message" => $data]);
+        } else {
+            echo json_encode(['message' => 'Something went wrong.']);
+        }
+        break;
+
+    case "survey_manage_adm":
+        echo json_encode($user->GetAllSurveyResponses());
+        break;
 
 
     default:

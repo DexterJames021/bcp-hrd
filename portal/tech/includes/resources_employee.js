@@ -6,7 +6,8 @@ $(function () {
 
   const ResourcesTable = $("#ResourcesTable").DataTable({
     processing: true,
-    // width: "100%",
+    width: "100%",
+    // searching: true,  
     ajax: {
       url: baseURL + "fetch_all",
       dataType: "json",
@@ -26,6 +27,24 @@ $(function () {
         data: "quantity",
       },
     ],
+  });
+
+  $("#purpose").summernote({
+    tabsize: 2,
+    height: 120,
+    toolbar: [
+        ['style', ['bold', 'italic', 'underline', 'clear']],
+        ['font', ['strikethrough', 'superscript', 'subscript']],
+        ['fontsize', ['fontsize']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['height', ['height']]
+      ],
+      callbacks: {
+        onInit: function() {
+            $(this).summernote('code', '');
+        }
+    }
   });
 
   function loadResourcesSelectTag() {
@@ -80,6 +99,10 @@ $(function () {
             //   alert("Request submitted successfully!");
             $('#added').toast('show');
             $("#resourceRequestForm")[0].reset();
+
+            $('#purpose').summernote('reset'); 
+            $('#purpose').summernote('code', ''); 
+
             ResourcesTable.ajax.reload();
           } else {
             $('#error').toast('show');

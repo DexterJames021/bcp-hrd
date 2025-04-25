@@ -79,7 +79,7 @@ $employeesJSON = json_encode($employeesData);
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
 
     <!-- global JavaScript -->
-    <!-- <!-- <script defer type="module" src="../assets/libs/js/global-script.js"></script> --> -->
+    <!--  <script defer type="module" src="../assets/libs/js/global-script.js"></script> --> -->
 
     <!-- main js -->
     <script defer type="module" src="../assets/libs/js/main-js.js"></script>
@@ -89,6 +89,8 @@ $employeesJSON = json_encode($employeesData);
     <link rel="stylesheet" href="../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
     <link rel="stylesheet" href="../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
     <link rel="stylesheet" href="../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
+
+    <script src="./main.js"></script>
 
     <!-- slimscroll js -->
     <script defer type="module" src="../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
@@ -253,27 +255,7 @@ $employeesJSON = json_encode($employeesData);
                         <?php else: ?>
                             <?php include_once "./403.php"; ?>
                         <?php endif; ?>
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                var loadingOverlay = document.getElementById('loading-overlay');
 
-                                window.addEventListener('load', function () {
-                                    setTimeout(function () {
-                                        loadingOverlay.style.opacity = '0';
-                                        setTimeout(function () {
-                                            loadingOverlay.style.display = 'none';
-                                        }, 300);
-                                    }, 500);
-                                });
-
-                                setTimeout(function () {
-                                    loadingOverlay.style.opacity = '0';
-                                    setTimeout(function () {
-                                        loadingOverlay.style.display = 'none';
-                                    }, 300);
-                                }, 3000); 
-                            });
-                        </script>
                         <!-- Chart.js Library -->
                         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                         <script>
