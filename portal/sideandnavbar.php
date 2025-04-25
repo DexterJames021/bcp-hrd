@@ -57,18 +57,6 @@ if (!empty($employeeData['profile_picture_path'])) {
 }
 ?>
 
-
-
-
-##################3###################
-#   DASHBOARD
-#       employee
-#       nonteaching
-#       teaching
-#       staff
-#####################################
-?>
-
 <head>
     <script src="./notif.js"></script>
 </head>

@@ -444,7 +444,7 @@ access_log($userData);
                 </div>
                 <div id="status" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-body bg-success text-light">
-                        Status updated and email sent!
+                        Status updated Successfully
                     </div>
                 </div>
                 <div id="room_updated" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">

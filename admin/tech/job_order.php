@@ -257,8 +257,13 @@ access_log($userData);
                                         </h3>
                                     </div>
                                     <div>
+                                    <?php if ($userData && in_array("CREATE", $userData['permissions'])): ?>
                                         <button type="button" id="openModalBtn" class="btn btn-outline-primary float-right"
+                                        data-toggle="modal" data-target="#reportModal">Generate Report</button>
+                                        <?php else: ?>
+                                            <button disabled type="button" id="openModalBtn" class="btn btn-outline-primary float-right"
                                             data-toggle="modal" data-target="#reportModal">Generate Report</button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -285,11 +290,17 @@ access_log($userData);
                                         <h3 class="">
                                             Manage Job Postings
                                         </h3>
-                                        <button type="button" data-toggle="modal" data-target="#AddJob" class="btn"> Post
+                                        <?php if ($userData && in_array("CREATE", $userData['permissions'])): ?>
+                                            <button type="button" data-toggle="modal" data-target="#AddJob" class="btn"> Post
                                             New Job
                                             <i class="fa-solid fa-circle-plus"></i>
-
                                         </button>
+                                        <?php else: ?>
+                                            <button disabled type="button" data-toggle="modal" data-target="#AddJob" class="btn"> Post
+                                            New Job
+                                            <i class="fa-solid fa-circle-plus"></i>
+                                        </button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -311,7 +322,7 @@ access_log($userData);
                 </div>
 
             <?php else: ?>
-                <?php include_once "../../403.php"; ?>
+                <?php include_once "../403.php"; ?>
             <?php endif; ?>
         </div>
 

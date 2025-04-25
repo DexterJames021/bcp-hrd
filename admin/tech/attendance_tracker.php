@@ -268,7 +268,7 @@ access_log($userData);
                 </div>
 
         <?php else: ?>
-            <?php include_once "../../403.php"; ?>
+            <?php include_once "../403.php"; ?>
         <?php endif; ?>
     </div>
 
