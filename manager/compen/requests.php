@@ -79,14 +79,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $deleteStmt->bindParam(':id', $leaveId, PDO::PARAM_INT);
                     $deleteStmt->execute();
 
-                    echo "<script>alert('Leave accepted and moved to leave_requests table');</script>";
+                    echo "<script>alert('Leave accepted and moved HR');</script>";
                 } else {
                     echo "<script>alert('Leave request not found.');</script>";
                 }
 
-            } elseif ($newStatus === 'denied') {
+            } elseif ($newStatus === 'rejected') {
                 // Update status to denied
-                $updateStmt = $conn->prepare("UPDATE leaveapplication SET status = 'denied' WHERE id = :id");
+                $updateStmt = $conn->prepare("UPDATE leaveapplication SET status = 'rejected' WHERE id = :id");
                 $updateStmt->bindParam(':id', $leaveId, PDO::PARAM_INT);
                 $updateStmt->execute();
 
@@ -168,7 +168,7 @@ if (isset($_POST['delete_leave'])) {
         $deleteStmt->execute();
 
         // Redirect back to the same page (or show a success message)
-        header("Location: leave.php");  // Replace 'your_page.php' with the actual page URL
+        header("Location: requests.php");  // Replace 'your_page.php' with the actual page URL
         exit();
 
     } catch (PDOException $e) {
@@ -284,8 +284,8 @@ if ($row['status'] == 'pending') {
 $statusClass = 'status-pending';
 } elseif ($row['status'] == 'accepted') {
 $statusClass = 'status-accepted';
-} elseif ($row['status'] == 'denied') {
-$statusClass = 'status-denied';
+} elseif ($row['status'] == 'rejected') {
+$statusClass = 'status-rejected';
 }
 
 echo "<tr>
@@ -307,7 +307,7 @@ echo "<form method='POST' action=''>
 </form>
 <form method='POST' action=''>
 <input type='hidden' name='leave_id' value='" . htmlspecialchars($row['id']) . "' />
-<button type='submit' name='update_status' value='denied' style='background-color: #d9534f; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;'>Decline</button>
+<button type='submit' name='update_status' value='rejected' style='background-color: #d9534f; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;'>Decline</button>
 </form>";
 } else {
 // Show delete button for accepted or denied statuses

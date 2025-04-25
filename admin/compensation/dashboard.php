@@ -6,6 +6,7 @@ require '../../auth/accesscontrol.php';
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);
 
+
 // Initialize variables for displaying messages
 $message = '';
 $success = false;
@@ -56,13 +57,38 @@ try {
         }
     }
 
-    // Fetch all records for display (Read)
-    $stmt = $conn->query("SELECT `id`, `date`, `min_salary`, `max_salary`, `position` FROM `average_rates`");
+    // Define records per page
+    $recordsPerPage = 10;
+
+    // Calculate total number of records
+    $stmt = $conn->query("SELECT COUNT(*) FROM `average_rates`");
+    $totalRecords = $stmt->fetchColumn();
+
+    // Calculate total pages
+    $totalPages = ceil($totalRecords / $recordsPerPage);
+
+    // Get current page from URL (default to page 1)
+    $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+    // Ensure current page is within valid range
+    if ($currentPage < 1) {
+        $currentPage = 1;
+    } elseif ($currentPage > $totalPages) {
+        $currentPage = $totalPages;
+    }
+
+    // Calculate offset for the SQL query
+    $offset = ($currentPage - 1) * $recordsPerPage;
+
+    // Fetch records for the current page
+    $stmt = $conn->prepare("SELECT `id`, `date`, `min_salary`, `max_salary`, `position` FROM `average_rates` LIMIT ?, ?");
+    $stmt->bindParam(1, $offset, PDO::PARAM_INT);
+    $stmt->bindParam(2, $recordsPerPage, PDO::PARAM_INT);
+    $stmt->execute();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die("Connection failed: " . $e->getMessage());
 }
-
 
 
 //salary data chart
@@ -278,7 +304,7 @@ try {
                                                 y: {
                                                     title: {
                                                         display: true,
-                                                        text: 'Salary (in USD)'
+                                                        text: 'Salary (in Pesos)'
                                                     },
                                                     grid: {
                                                         color: '#ddd'
@@ -363,40 +389,67 @@ try {
         <!-- Table to display all records -->
         <h3>Existing Entries</h3>
         <div class="table-responsive">
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th style="color:black">Date</th>
-                    <th style="color:black">Min Salary</th>
-                    <th style="color:black">Max Salary</th>
-                    <th style="color:black">Position</th>
-                    <th style="color:black">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($data as $row): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($row['date']) ?></td>
-                        <td><?= htmlspecialchars($row['min_salary']) ?></td>
-                        <td><?= htmlspecialchars($row['max_salary']) ?></td>
-                        <td><?= htmlspecialchars($row['position']) ?></td>
-                        <td>
-                            <!-- Update Button (Triggers Modal) -->
-                            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#updateModal" 
-                                    data-id="<?= $row['id'] ?>" data-date="<?= $row['date'] ?>" 
-                                    data-min_salary="<?= $row['min_salary'] ?>" data-max_salary="<?= $row['max_salary'] ?>" 
-                                    data-position="<?= $row['position'] ?>">Edit</button>
-                            
-                            <!-- Delete Form -->
-                            <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this?');">
-                                <input type="hidden" name="id" value="<?= $row['id'] ?>">
-                                <button type="submit" name="delete" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+    <!-- Table to Display Data -->
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th style="color:black">Date</th>
+            <th style="color:black">Min Salary</th>
+            <th style="color:black">Max Salary</th>
+            <th style="color:black">Position</th>
+            <th style="color:black">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($data as $row): ?>
+            <tr>
+                <td><?= htmlspecialchars($row['date']) ?></td>
+                <td><?= htmlspecialchars($row['min_salary']) ?></td>
+                <td><?= htmlspecialchars($row['max_salary']) ?></td>
+                <td><?= htmlspecialchars($row['position']) ?></td>
+                <td>
+                    <!-- Edit Button (Triggers Modal) -->
+                    <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editModal" 
+                            data-id="<?= $row['id'] ?>" data-date="<?= $row['date'] ?>" 
+                            data-min_salary="<?= $row['min_salary'] ?>" data-max_salary="<?= $row['max_salary'] ?>" 
+                            data-position="<?= $row['position'] ?>">Edit</button>
+
+                    <!-- Delete Form -->
+                    <form method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this?');">
+                        <input type="hidden" name="id" value="<?= $row['id'] ?>">
+                        <button type="submit" name="delete" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+<!-- Pagination -->
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        <li class="page-item <?= ($currentPage == 1) ? 'disabled' : '' ?>">
+            <a class="page-link" href="?page=1">First</a>
+        </li>
+        <li class="page-item <?= ($currentPage == 1) ? 'disabled' : '' ?>">
+            <a class="page-link" href="?page=<?= $currentPage - 1 ?>">Previous</a>
+        </li>
+
+        <!-- Display page numbers -->
+        <?php for ($page = 1; $page <= $totalPages; $page++): ?>
+            <li class="page-item <?= ($page == $currentPage) ? 'active' : '' ?>">
+                <a class="page-link" href="?page=<?= $page ?>"><?= $page ?></a>
+            </li>
+        <?php endfor; ?>
+
+        <li class="page-item <?= ($currentPage == $totalPages) ? 'disabled' : '' ?>">
+            <a class="page-link" href="?page=<?= $currentPage + 1 ?>">Next</a>
+        </li>
+        <li class="page-item <?= ($currentPage == $totalPages) ? 'disabled' : '' ?>">
+            <a class="page-link" href="?page=<?= $totalPages ?>">Last</a>
+        </li>
+    </ul>
+</nav>
         </div>
     </div>
 
@@ -494,6 +547,7 @@ try {
     </div>
     <!-- ============================================================== -->
     <!-- end main wrapper  -->
+     
     <!-- ============================================================== -->
 </body>
 
