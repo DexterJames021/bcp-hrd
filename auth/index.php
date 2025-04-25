@@ -1,57 +1,40 @@
-<?php
+<?php 
 session_start();
-require __DIR__ . "/../config/Database.php";
+require "../config/Database.php";
 
 $err = "";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if($_SERVER["REQUEST_METHOD"] == "POST"){
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
-
-    if ($err == "") {
-        // Prepare the query to select the user by username only
-        $query = "SELECT * FROM users WHERE username = :username LIMIT 1";
+    
+    if($err == ""){
+        $query = "SELECT * FROM users WHERE username = :username && password = :password LIMIT 1";
         $stmt = $conn->prepare($query);
-        $stmt->execute(['username' => $username]);
+        $check = $stmt->execute(['username'=> $username,'password'=>$password]);
 
-        $user = $stmt->fetch(PDO::FETCH_OBJ);
+        if ($check) {
+            $user = $stmt->fetch(PDO::FETCH_OBJ);
+            if($user){
+                if($user->usertype == 'admin'){
+                    $_SESSION['user_id'] = $user->id;
+                    $_SESSION['username'] = $user->username;
+                    $_SESSION['usertype'] = $user->usertype;
 
-        if ($user) {
-            // Verify the hashed password
-            if (password_verify($password, $user->password)) {
-                // Start the session with user details
-                $_SESSION['user_id'] = $user->id;
-                $_SESSION['username'] = $user->username;
-                $_SESSION['usertype'] = $user->usertype;
-                $_SESSION['onboarding_step'] = $user->onboarding_step; // Store onboarding step in session
+                    header("Location:../admin/index.php");
 
-                // Check the user's onboarding step status
-                if ($user->onboarding_step < 4) {
-                    // If onboarding step is not complete, redirect to the appropriate step
-                    header("Location: ../admin/talent/onboarding/new_hire/step1.php");
-                    exit;
-                } else {
-                    // If onboarding is complete, proceed based on usertype
-                    switch ($user->usertype) {
-                        case 'admin':
-                        case 'superadmin':
-                            header("Location: ../admin/index.php");
-                            exit;
-                        case 'manager':
-                            header("Location: ../manager/index.php");
-                            exit;
-                        case 'employee':
-                            header("Location: ../portal/index.php");
-                            exit;
-                        default:
-                            $err = '405 No permission to access this portal.';
-                    }
+                } elseif($user->usertype == 'employee'){
+                    $_SESSION['user_id'] = $user->id;
+                    $_SESSION['username'] = $user->username;
+                    $_SESSION['usertype'] = $user->usertype;
+
+                    header("Location:../portal/index.php");
                 }
+
+                echo "<script>confirm('405 no permission')</script>";
             } else {
-                $err = 'Incorrect password.';
+                echo "<script>confirm('Something Wrong in email or password')</script>";
             }
-        } else {
-            $err = 'Username not found.';
         }
     }
 }
@@ -59,67 +42,78 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!doctype html>
 <html lang="en">
-
+ 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Login</title>
     <link rel="shortcut icon" href="../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
     <link href="../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/libs/css/style.css">
     <link rel="stylesheet" href="../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
     <style>
-        html,
-        body {
+        html, body {
             height: 100%;
+            margin: 0;
+            padding: 0;
         }
 
         body {
+            background-image: url('../assets/images/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             display: flex;
             align-items: center;
-            padding-top: 40px;
-            padding-bottom: 40px;
-            min-height: 100vh;
-            overflow: hidden;
-            background: url('../assets/images/bcp1.jpg') no-repeat center center/cover;
+            justify-content: center;
+            padding: 40px 0;
+        }
+
+        .splash-container {
+            z-index: 2;
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
         }
     </style>
 </head>
 
 <body>
+    <!-- Login Page -->
     <div class="splash-container">
+        <?php 
+            if(isset($err) && $err != ""){
+                echo $err;
+            }
+        ?>
         <div class="card">
             <div class="card-header text-center">
                 <a href="../index.php">
-                    <img class="logo-img" src="../assets/images/bcp-hrd-logo.jpg" alt="logo"
-                        style="height:10rem;width:auto;">
+                    <img class="logo-img" src="../assets/images/bcp-hrd-logo.jpg" alt="logo" style="height:10rem;width:auto;">
                 </a>
             </div>
             <div class="card-body">
-                <?php if (!empty($err)): ?>
-                    <div class="alert alert-danger"><?= $err ?></div>
-                <?php endif; ?>
                 <form action="index.php" method="POST">
                     <div class="form-group">
-                        <input class="form-control form-control-lg" name="username" id="username" type="text"
-                            placeholder="Username" autocomplete="off" required>
+                        <input class="form-control form-control-lg" name="username" id="username" type="text" placeholder="Username" autocomplete="off">
                     </div>
                     <div class="form-group">
-                        <input class="form-control form-control-lg" name="password" id="password" type="password"
-                            placeholder="Password" required>
+                        <input class="form-control form-control-lg" name="password" id="password" type="password" placeholder="Password">
                     </div>
-                    <input type="submit" name="submit" id="submit" class="btn btn-primary btn-lg btn-block"
-                        value="Sign in">
+                    <input type="submit" name="submit" class="btn btn-primary btn-lg btn-block" value="Sign in">
                 </form>
             </div>
             <div class="card-footer bg-white p-0">
                 <div class="card-footer-item card-footer-item-bordered">
-                    <!-- Additional links can be added here -->
+                    <!-- Optional footer link -->
                 </div>
             </div>
         </div>
     </div>
 </body>
-
 </html>

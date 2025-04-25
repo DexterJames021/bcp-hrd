@@ -1,21 +1,34 @@
 <?php
-include 'config.php';
 session_start();
-$employee_id = $_SESSION['user_id'] ?? 0;
+include 'config.php'; // Update path as needed
 
-// Total Trainings Attended
-$totalAttended = $conn->query("SELECT COUNT(*) AS total FROM course_enrollments WHERE employee_id = $employee_id")->fetch_assoc()['total'];
+// Summary Data
+$totalCourses = $conn->query("SELECT COUNT(*) as total FROM training_courses")->fetch_assoc()['total'];
+$totalParticipants = $conn->query("SELECT COUNT(DISTINCT employee_id) as total FROM course_enrollments")->fetch_assoc()['total'];
+$avgRating = number_format($conn->query("SELECT AVG(rating) as avg_rating FROM training_evaluations")->fetch_assoc()['avg_rating'], 2);
 
-// Certificates Earned (if approval status is 'Approved')
-$certificatesEarned = $conn->query("SELECT COUNT(*) AS total FROM employee_certifications 
-                                    WHERE user_id = $employee_id AND approval_status = 'Approved'")->fetch_assoc()['total'];
+// Most popular course
+$popularResult = $conn->query("
+    SELECT tc.course_title, COUNT(ce.id) as enroll_count
+    FROM course_enrollments ce
+    JOIN training_courses tc ON ce.course_id = tc.id
+    GROUP BY ce.course_id
+    ORDER BY enroll_count DESC
+    LIMIT 1
+");
+$popularCourse = $popularResult->fetch_assoc();
 
-// Ongoing Courses (e.g., future training dates)
-$ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses tc
-                                JOIN course_enrollments ce ON ce.course_id = tc.id
-                                WHERE ce.employee_id = $employee_id AND tc.start_date >= CURDATE()")
-                                ->fetch_assoc()['total'];
-?> 
+// Employee Training List
+$employeeList = $conn->query("
+    SELECT u.first_name, u.last_name, COUNT(ce.id) AS trainings_attended
+    FROM course_enrollments ce
+    JOIN users u ON ce.employee_id = u.id
+    WHERE u.usertype != 'officer'
+    GROUP BY ce.employee_id
+    ORDER BY trainings_attended DESC
+");
+?>
+
 <!doctype html>
 <html lang="en">
  
@@ -258,44 +271,66 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                     </ul>
                                 </div>
                             </li>
-                            <!-- Talent Management -->
+                            <!-- Training Management -->
                             <li class="nav-item ">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5"><i class="fa fa-fw fa-user-circle"></i>Training and Development <span class="badge badge-success">6</span></a>
                                 <div id="submenu-5" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-6-7" aria-controls="submenu-6-7">Training</a>
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-6-7" aria-controls="submenu-6-7">User</a>
                                             <div id="submenu-6-7" class="collapse submenu">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="course_list_view.php">View Training</a>
+                                                        <a class="nav-link" href="add_user.php">Add User</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="training_evaluation_list.php">Training Evaluation</a>
+                                                        <a class="nav-link" href="users.php">User List</a>
                                                     </li>
-                                                  
+                                                 
                                                 </ul>
+                                                
                                             </div>
                                         </li>
+                                        
                                         <li class="nav-item">
-                                            <a class="nav-link" href="employee_tasks.php">Task</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-9-10" aria-controls="submenu-9-10">Certification</a>
-                                            <div id="submenu-9-10" class="collapse submenu">
+                                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-8-9" aria-controls="submenu-8-9">Training</a>
+                                            <div id="submenu-8-9" class="collapse submenu">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="submit_certifications.php">Submit Certificate</a>
+                                                        <a class="nav-link" href="courses.php">View Courses</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="employee_certifications.php">View Certificate</a>
+                                                        <a class="nav-link" href="training_evaluation_results.php">Training Evaluation</a>
                                                     </li>
-                                                  
+                                                 
                                                 </ul>
+                                                
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                        <a href="schedule_calendar.php" class="nav-link">Schedule</a>
+                                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-10-11" aria-controls="submenu-10-11">Task</a>
+                                            <div id="submenu-10-11" class="collapse submenu">
+                                                <ul class="nav flex-column">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="view_tasks.php">View Task</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="add_task.php">Add Task</a>
+                                                    </li>
+                                                 
+                                                </ul>
+                                                
+                                            </div>
+                                        </li>
+                                       
+                                    
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="certifications_admin.php">Certificate</a>
+                                        </li>
+                                          
+                                          
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="admin_reports.php">reports</a>
                                         </li>
                                             
                                         </li>
@@ -473,99 +508,121 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                 
                                 </div>
                             </div>
+                          
                             <head>
   <meta charset="UTF-8">
-  <title>Employee Dashboard</title>
+  <title>Admin | Training Reports</title>
   <style>
- body {
-  background-color: #f1f5f9;
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-}
-
-.dashboard-container {
-  max-width: 1500px;
-  margin: 40px auto;
-  background: #fff;
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-}
-
-.dashboard-title {
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #1e293b;
-  text-align: center;
-}
-
-.dashboard-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap; /* Ensures responsiveness */
-}
-
-.card {
-  flex: 1;
-  min-width: 280px;
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 25px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
-  text-align: center;
-  transition: all 0.2s ease-in-out;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  background-color: #f1f5f9;
-}
-
-.card-title {
-  font-size: 14px;
-  color: #64748b;
-  margin-bottom: 8px;
-}
-
-.card-value {
-  font-size: 28px;
-  font-weight: bold;
-  color: #1d4ed8;
-}
-</style>
+    body { background-color: #f1f5f9; font-family: 'Segoe UI', sans-serif; margin: 0; }
+    .card-container {
+        width: 100%;
+        max-width: 1500px;
+        margin: 40px auto;
+        background: #fff;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+    h2 {
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 30px;
+        color: #1e293b;
+    }
+    .dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 40px;
+    }
+    .card {
+        background: #f8fafc;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 5px 12px rgba(0, 0, 0, 0.05);
+        transition: 0.3s ease;
+    }
+    .card-title {
+        font-size: 14px;
+        color: #334155;
+        margin-bottom: 10px;
+    }
+    .card-value {
+        font-size: 28px;
+        font-weight: bold;
+        color: #1e40af;
+    }
+    .card:hover {
+        background: #e2e8f0;
+        transform: translateY(-3px);
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 14px 18px;
+        border-bottom: 1px solid #e2e8f0;
+        text-align: center;
+    }
+    th {
+        background-color: #f8fafc;
+        color: #334155;
+        font-size: 14px;
+    }
+    tr:hover { background-color: #f1f5f9; }
+  </style>
 </head>
 <body>
 
+<div class="card-container">
+  <h2>📊 Training Reports & Analytics</h2>
 
-<div class="dashboard-container">
-  <h2 class="dashboard-title">🎯 My Training Dashboard</h2>
-
-  <div class="dashboard-row">
+  <div class="dashboard">
     <div class="card">
-      <div class="card-title">Total Trainings Attended</div>
-      <div class="card-value"><?= $totalAttended ?></div>
+      <div class="card-title">Total Training Courses</div>
+      <div class="card-value"><?= $totalCourses ?></div>
     </div>
-
     <div class="card">
-      <div class="card-title">Certificates Earned</div>
-      <div class="card-value"><?= $certificatesEarned ?></div>
+      <div class="card-title">Total Participants</div>
+      <div class="card-value"><?= $totalParticipants ?></div>
     </div>
-
     <div class="card">
-      <div class="card-title">Ongoing Courses</div>
-      <div class="card-value"><?= $ongoingCourses ?></div>
+      <div class="card-title">Average Course Rating</div>
+      <div class="card-value"><?= $avgRating ?> / 5</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Most Popular Course</div>
+      <div class="card-value">
+        <?= $popularCourse ? $popularCourse['course_title'] . " ({$popularCourse['enroll_count']})" : "No data yet" ?>
+      </div>
     </div>
   </div>
+
+  <h2>👥 Employee Training Participation</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Employee Name</th>
+        <th>Trainings Attended</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php while ($row = $employeeList->fetch_assoc()): ?>
+        <tr>
+          <td><?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></td>
+          <td><?= $row['trainings_attended'] ?></td>
+        </tr>
+      <?php endwhile; ?>
+    </tbody>
+  </table>
 </div>
 
-</body>
 
 
 
-
-
+                            
                             </div>
     
                         </div>

@@ -1,85 +1,61 @@
-<?php
-require __DIR__ . "../../config/db_talent.php";
-require __DIR__ . '../../auth/mysqli_accesscontrol.php';
+<?php 
+session_start();
+//check usertype
+if(isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'employee'){
+    
+}else{
 
-$userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
-access_log($userData);
-
-// echo "console.log(ROOT +++++++++++ " . $_SERVER['DOCUMENT_ROOT'] . ")";
-
-
-// Fetch total employees
-$queryEmployees = "SELECT COUNT(*) AS total FROM employees";
-$resultEmployees = mysqli_query($conn, $queryEmployees);
-$totalEmployees = mysqli_fetch_assoc($resultEmployees)['total'];
-
-// Fetch total applicants
-$queryApplicants = "SELECT COUNT(*) AS total FROM applicants";
-$resultApplicants = mysqli_query($conn, $queryApplicants);
-$totalApplicants = mysqli_fetch_assoc($resultApplicants)['total'];
-
-// Fetch total job postings
-$queryJobPostings = "SELECT COUNT(*) AS total FROM job_postings";
-$resultJobPostings = mysqli_query($conn, $queryJobPostings);
-$totalJobPostings = mysqli_fetch_assoc($resultJobPostings)['total'];
-
-// Fetch total hired employees
-$queryHired = "SELECT COUNT(*) AS total FROM applicants WHERE status = 'Hired'";
-$resultHired = mysqli_query($conn, $queryHired);
-$totalHired = mysqli_fetch_assoc($resultHired)['total'];
-
-// Fetch applicants per department
-$queryApplicantsPerDept = "
-    SELECT d.DepartmentName, COUNT(a.id) AS totalApplicants
-    FROM applicants a
-    LEFT JOIN departments d ON a.DepartmentID = d.DepartmentID
-    GROUP BY d.DepartmentName";
-$resultApplicantsPerDept = mysqli_query($conn, $queryApplicantsPerDept);
-$applicantsData = [];
-while ($row = mysqli_fetch_assoc($resultApplicantsPerDept)) {
-    $applicantsData[$row['DepartmentName']] = $row['totalApplicants'];
+    header("Location: ../auth/index.php");
+   
 }
 
-// Fetch employees per department
-$queryEmployeesPerDept = "
-    SELECT d.DepartmentName, COUNT(e.EmployeeID) AS totalEmployees
-FROM employees e
-LEFT JOIN users u ON e.UserID = u.id  -- Get the applicant ID through users table
-LEFT JOIN applicants a ON u.applicant_id = a.id  -- Get the department through the applicant
-LEFT JOIN departments d ON a.DepartmentID = d.DepartmentID  -- Fetch department name
-GROUP BY d.DepartmentName";
 
-$resultEmployeesPerDept = mysqli_query($conn, $queryEmployeesPerDept);
-$employeesData = [];
-while ($row = mysqli_fetch_assoc($resultEmployeesPerDept)) {
-    $employeesData[$row['DepartmentName']] = $row['totalEmployees'];
-}
+include 'config.php'; // Update path as needed
 
-// Convert PHP arrays to JSON
-$applicantsJSON = json_encode($applicantsData);
-$employeesJSON = json_encode($employeesData);
+// Summary Data
+$totalCourses = $conn->query("SELECT COUNT(*) as total FROM training_courses")->fetch_assoc()['total'];
+$totalParticipants = $conn->query("SELECT COUNT(DISTINCT employee_id) as total FROM course_enrollments")->fetch_assoc()['total'];
+$avgRating = number_format($conn->query("SELECT AVG(rating) as avg_rating FROM training_evaluations")->fetch_assoc()['avg_rating'], 2);
 
+// Most popular course
+$popularResult = $conn->query("
+    SELECT tc.course_title, COUNT(ce.id) as enroll_count
+    FROM course_enrollments ce
+    JOIN training_courses tc ON ce.course_id = tc.id
+    GROUP BY ce.course_id
+    ORDER BY enroll_count DESC
+    LIMIT 1
+");
+$popularCourse = $popularResult->fetch_assoc();
 
+// Employee Training List
+$employeeList = $conn->query("
+    SELECT u.first_name, u.last_name, COUNT(ce.id) AS trainings_attended
+    FROM course_enrollments ce
+    JOIN users u ON ce.employee_id = u.id
+    WHERE u.usertype != 'officer'
+    GROUP BY ce.employee_id
+    ORDER BY trainings_attended DESC
+");
 ?>
 
 <!doctype html>
 <html lang="en">
-
+ 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    
     <!-- icon -->
-    <link rel="shortcut icon" href="../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
+    <link rel="shortcut icon" href="../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
 
-    <!-- ajax -->
     <script defer src="../node_modules/jquery/dist/jquery.min.js"></script>
 
-    <!-- bs -->
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script defer src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <!-- global JavaScript -->
-    <!-- <!-- <script defer type="module" src="../assets/libs/js/global-script.js"></script> --> -->
+    <script defer type="module" src="../assets/libs/js/global-script.js"></script> 
 
     <!-- main js -->
     <script defer type="module" src="../assets/libs/js/main-js.js"></script>
@@ -94,231 +70,572 @@ $employeesJSON = json_encode($employeesData);
     <script defer type="module" src="../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
 
     <title>Admin Dashboard</title>
-
-    <style>
-        #loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #0e0c28;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            transition: opacity 0.3s ease;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .loading-text {
-            font-size: 18px;
-            color: white;
-            font-weight: bold;
-        }
-    </style>
 </head>
 
 <body>
-
-    <body>
-        <div id="loading-overlay">
-            <div class="spinner"></div>
-            <div class="loading-text">Loading Dashboard...</div>
-        </div>
-
-        <!-- Rest of your body content -->
-        <div class="dashboard-main-wrapper" style="padding:0px;">
-            <!-- ... -->
-            <!-- ============================================================== -->
-            <!-- main wrapper -->
-            <!-- ============================================================== -->
-            <div class="dashboard-main-wrapper">
-                <!-- ============================================================== -->
-                <!-- navbar -->
-                <!-- ============================================================== -->
-                <?php include 'sideandnavbar.php'; ?>
-                <!-- ============================================================== -->
-                <!-- end navbar -->
-                <!-- ============================================================== -->
-                <!-- ============================================================== -->
-                <!-- left sidebar -->
-
-                <!-- ============================================================== -->
-                <!-- end left sidebar -->
-                <!-- ============================================================== -->
-                <!-- ============================================================== -->
-                <!-- wrapper  -->
-                <!-- ============================================================== -->
-                <div class="dashboard-wrapper">
-                    <!-- <div class="dashboard-ecommerce"> -->
-                    <div class="container-fluid dashboard-content ">
-                        <!-- ============================================================== -->
-                        <!-- pageheader  -->
-                        <!-- ============================================================== -->
-
-                        <!-- ============================================================== -->
-                        <!-- end pageheader  -->
-                        <!-- ============================================================== -->
-                        <!-- <div class="ecommerce-widget"> -->
-
-                        <?php if ($userData && in_array("VIEW", $userData['permissions'])): ?>
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h1>DASHBOARD</h1>
-
-                                            <!-- Summary Cards -->
-                                            <div class="row">
-                                                <div class="col-md-3">
-                                                    <div class="card bg-light text-white">
-                                                        <div class="card-body">
-                                                            <h5>Total Employees</h5>
-                                                            <h3><?php echo $totalEmployees; ?></h3>
-                                                        </div>
+    <div class="dashboard-main-wrapper">
+        <div class="dashboard-header ">
+            <nav class="navbar navbar-expand-lg bg-white fixed-top  ">
+                <a class="navbar-brand" href="index.php">
+                    <img src="../assets/images/bcp-hrd-logo.jpg" alt="" class="" style="height: 3rem;width: auto;">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse " id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto navbar-right-top">
+                        <li class="nav-item">
+                            <div id="custom-search" class="top-search-bar">
+                                <input class="form-control" type="text" placeholder="Search..">
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown notification">
+                            <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span class="indicator"></span></a>
+                            <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
+                                <li>
+                                    <div class="notification-title"> Notification</div>
+                                    <div class="notification-list">
+                                        <div class="list-group">
+                                            <a href="#" class="list-group-item list-group-item-action active">
+                                                <div class="notification-info">
+                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Jeremy Rakestraw</span>accepted your invitation to join the team.
+                                                        <div class="notification-date">2 min ago</div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <div class="card bg-light text-white">
-                                                        <div class="card-body">
-                                                            <h5>Total Applicants</h5>
-                                                            <h3><?php echo $totalApplicants; ?></h3>
-                                                        </div>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="notification-info">
+                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">John Abraham </span>is now following you
+                                                        <div class="notification-date">2 days ago</div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <div class="card bg-light text-dark">
-                                                        <div class="card-body">
-                                                            <h5>Total Job Postings</h5>
-                                                            <h3><?php echo $totalJobPostings; ?></h3>
-                                                        </div>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="notification-info">
+                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Monaan Pechi</span> is watching your main repository
+                                                        <div class="notification-date">2 min ago</div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <div class="card bg-light text-white">
-                                                        <div class="card-body">
-                                                            <h5>Total Hired</h5>
-                                                            <h3><?php echo $totalHired; ?></h3>
-                                                        </div>
+                                            </a>
+                                            <a href="#" class="list-group-item list-group-item-action">
+                                                <div class="notification-info">
+                                                    <div class="notification-list-user-img"><img src="#" alt="" class="user-avatar-md rounded-circle"></div>
+                                                    <div class="notification-list-user-block"><span class="notification-list-user-name">Jessica Caruso</span>accepted your invitation to join the team.
+                                                        <div class="notification-date">2 min ago</div>
                                                     </div>
                                                 </div>
-                                            </div>
-
-                                        </div> <!-- End of Card Body -->
-                                    </div> <!-- End of Card -->
-
-                                    <!-- Charts -->
-                                    <div class="row mt-4">
-                                        <div class="col-md-6">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <h5>Applicants Per Job</h5>
-                                                    <canvas id="applicantsChart" height="100" width="100"></canvas>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <h5>Employees Per Department</h5>
-                                                    <canvas id="departmentChart" height="100" width="100"></canvas>
-                                                </div>
-                                            </div>
+                                            </a>
                                         </div>
                                     </div>
-                                </div> <!-- End of Col-12 -->
-                            </div> <!-- End of Row -->
-
-                        <?php else: ?>
-                            <?php include_once "./403.php"; ?>
-                        <?php endif; ?>
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                var loadingOverlay = document.getElementById('loading-overlay');
-
-                                window.addEventListener('load', function () {
-                                    setTimeout(function () {
-                                        loadingOverlay.style.opacity = '0';
-                                        setTimeout(function () {
-                                            loadingOverlay.style.display = 'none';
-                                        }, 300);
-                                    }, 500);
-                                });
-
-                                setTimeout(function () {
-                                    loadingOverlay.style.opacity = '0';
-                                    setTimeout(function () {
-                                        loadingOverlay.style.display = 'none';
-                                    }, 300);
-                                }, 3000); 
-                            });
-                        </script>
-                        <!-- Chart.js Library -->
-                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                        <script>
-                            // Convert PHP JSON to JavaScript Object
-                            var applicantsData = <?php echo $applicantsJSON; ?>;
-                            var employeesData = <?php echo $employeesJSON; ?>;
-
-                            // Generate labels and data for charts
-                            var applicantLabels = Object.keys(applicantsData);
-                            var applicantCounts = Object.values(applicantsData);
-
-                            var employeeLabels = Object.keys(employeesData);
-                            var employeeCounts = Object.values(employeesData);
-
-                            // Applicants per Department Chart
-                            var ctx1 = document.getElementById('applicantsChart').getContext('2d');
-                            var applicantsChart = new Chart(ctx1, {
-                                type: 'bar',
-                                data: {
-                                    labels: applicantLabels,
-                                    datasets: [{
-                                        label: 'Applicants',
-                                        data: applicantCounts,
-                                        backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8']
-                                    }]
-                                }
-                            });
-
-                            // Employees per Department Chart
-                            var ctx2 = document.getElementById('departmentChart').getContext('2d');
-                            var departmentChart = new Chart(ctx2, {
-                                type: 'pie',
-                                data: {
-                                    labels: employeeLabels,
-                                    datasets: [{
-                                        data: employeeCounts,
-                                        backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8']
-                                    }]
-                                }
-                            });
-                        </script>
-
-                    </div>
+                                </li>
+                                <li>
+                                    <div class="list-footer"> <a href="#">View all notifications</a></div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown nav-user">
+                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="#" alt="" class="user-avatar-md rounded-circle"></a>
+                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
+                                <div class="nav-user-info">
+                                    <h5 class="mb-0 text-white nav-user-name"> <?= $_SESSION['username'] ?> </h5>
+                                    <span class="status"></span><span class="ml-2">Available</span>
+                                </div>
+                                <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Account</a>
+                                <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
+                                <a class="dropdown-item" href="../auth/logout.php"><i class="fas fa-power-off mr-2"></i>Logout</a>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
+            </nav>
+        </div>
+        <div class="nav-left-sidebar sidebar-dark ">
+            <div class="menu-list">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <a class="d-xl-none d-lg-none" href="#">Dashboard</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav flex-column">
+                            <li class="nav-divider">
+                                Human Resource Dept.
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link active" href="index.php" >
+                                    <i class="fas fa-fw fa-home"></i> Dashboard
+                                </a>
+                            </li>
+                            <!-- Selection and Recuitment -->
+                            <li class="nav-item ">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fa fa-fw fa-user-circle"></i>Selection and Recuitment <span class="badge badge-success">6</span></a>
+                                <div id="submenu-1" class="collapse submenu">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1-2" aria-controls="submenu-1-2">insert</a>
+                                            <div id="submenu-1-2" class="collapse submenu">
+                                                <ul class="nav flex-column">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="index.html">insert</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="#">insert</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="#">insert</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="#">insert</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="./records-management/Records.php">insert</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="dashboard-sales.html">insert</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1-1" aria-controls="submenu-1-1">insert</a>
+                                            <div id="submenu-1-1" class="collapse submenu">
+                                                <ul class="nav flex-column">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="#">insert</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="#">insert</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="#">insert</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <!-- Talent Management -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2"><i class="fa fa-fw fa-rocket"></i>Talent Management</a>
+                                <div id="submenu-2" class="collapse submenu">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/cards.html">Cards <span class="badge badge-secondary">New</span></a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/general.html">General</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/carousel.html">Carousel</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/listgroup.html">Group</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/typography.html">Typography</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/accordions.html">Accordions</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/tabs.html">Tabs</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <!-- Document and Legal -->
+                            <li class="nav-item ">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3" aria-controls="submenu-3"><i class="fab fa-fw fa-wpforms"></i>Legal and Documents</a>
+                                <div id="submenu-3" class="collapse submenu" style="">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="emanual.php">Employee's Manual</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="complaint.php">Complaints</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="loi.php">Letter of Intent</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="contract.php">Contracts</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <!-- Performance -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4"><i class="fas fa-fw fa-table"></i>Performance</a>
+                                <div id="submenu-4" class="collapse submenu" style="">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/general-table.html">General Tables</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/data-tables.html">Data Tables</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <!-- Training Management -->
+                            <li class="nav-item ">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5"><i class="fa fa-fw fa-user-circle"></i>Training and Development <span class="badge badge-success">6</span></a>
+                                <div id="submenu-5" class="collapse submenu">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-6-7" aria-controls="submenu-6-7">User</a>
+                                            <div id="submenu-6-7" class="collapse submenu">
+                                                <ul class="nav flex-column">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="add_user.php">Add User</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="users.php">User List</a>
+                                                    </li>
+                                                 
+                                                </ul>
+                                                
+                                            </div>
+                                        </li>
+                                        
+                                        <li class="nav-item">
+                                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-8-9" aria-controls="submenu-8-9">Training</a>
+                                            <div id="submenu-8-9" class="collapse submenu">
+                                                <ul class="nav flex-column">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="courses.php">View Courses</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="training_evaluation_results.php">Training Evaluation</a>
+                                                    </li>
+                                                 
+                                                </ul>
+                                                
+                                            </div>
+                                        </li>
+                                        <li class="nav-item">
+                                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-10-11" aria-controls="submenu-10-11">Task</a>
+                                            <div id="submenu-10-11" class="collapse submenu">
+                                                <ul class="nav flex-column">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="view_tasks.php">View Task</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="add_task.php">Add Task</a>
+                                                    </li>
+                                                 
+                                                </ul>
+                                                
+                                            </div>
+                                        </li>
+                                       
+                                    
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="certifications_admin.php">Certificate</a>
+                                        </li>
+                                          
+                                            
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <!-- Compensation & Benefits -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-6" aria-controls="submenu-6"><i class="fas fa-f fa-folder"></i>Compensation & Benefits</a>
+                                <div id="submenu-6" class="collapse submenu" style="">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/general-table.html">General Tables</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/data-tables.html">Data Tables</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <!-- Tech & Analytics -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="./analytics/index.php" data-toggle="collapse" aria-expanded="false" data-target="#submenu-7" aria-controls="submenu-7"><i class="fas fa-fw fa-chart-pie"></i> Tech & Analytics</a>
+                                <div id="submenu-7" class="collapse submenu" style="">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="./analytics/index.php">C3 Charts</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/chart-chartist.html">Chartist Charts</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/chart-charts.html">Chart</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/chart-morris.html">Morris</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/chart-sparkline.html">Sparkline</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/chart-gauge.html">Guage</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-divider">
+                                Features
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-8" aria-controls="submenu-8"><i class="fas fa-fw fa-file"></i> Pages </a>
+                                <div id="submenu-8" class="collapse submenu" style="">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/blank-page.html">Blank Page</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/blank-page-header.html">Blank Page Header</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/login.html">Login</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/404-page.html">404 page</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/sign-up.html">Sign up Page</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/forgot-password.html">Forgot Password</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/pricing.html">Pricing Tables</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/timeline.html">Timeline</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/calendar.html">Calendar</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/sortable-nestable-lists.html">Sortable/Nestable List</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/widgets.html">Widgets</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/media-object.html">Media Objects</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/cropper-image.html">Cropper</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/color-picker.html">Color Picker</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-9" aria-controls="submenu-9"><i class="fas fa-fw fa-inbox"></i>Apps <span class="badge badge-secondary">New</span></a>
+                                <div id="submenu-9" class="collapse submenu" style="">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/inbox.html">Inbox</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/email-details.html">Email Detail</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/email-compose.html">Email Compose</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/message-chat.html">Message Chat</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        <div class="dashboard-wrapper">
+            <!-- <div class="dashboard-ecommerce"> -->
+                <div class="container-fluid dashboard-content ">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="page-header">
+                                          
+                            </div>
+                        </div>
+                    </div>
 
-    </body>
+                        <div class="row">
+                            <!-- Modal -->
+                            <div class="modal fade" id="myModal" role="dialog">
+                                <div class="modal-dialog">
+                                
+                                <!-- Modal content-->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">New Task</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form>
+                                            <div class="mb-3">
+                                                <label for="exampleInputEmail1" class="form-label">Creator:</label>
+                                                <input type="text" class="form-control" id="exampleInputEmail1" value="<?= $_SESSION['username']?>"  disabled>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="exampleInputEmail1" class="form-label">Task</label>
+                                                <input type="text" class="form-control" id="exampleInputEmail1">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="exampleInputEmail1" class="form-label">Description</label>
+                                                <textarea class="form-control" id="exampleInputEmail1"></textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <select class="form-control form-select" aria-label="Default select example">
+                                                    <option selected disabled>Basic</option>
+                                                    <option value="1">Important</option>
+                                                    <option value="2">Report</option>
+                                                    <option value="3">Problem</option>
+                                                </select>
+                                            </div>
+                                            
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                                
+                                </div>
+                            </div>
+                          
+                            <head>
+  <meta charset="UTF-8">
+  <title>Admin | Training Reports</title>
+  <style>
+    body { background-color: #f1f5f9; font-family: 'Segoe UI', sans-serif; margin: 0; }
+    .card-container {
+        width: 100%;
+        max-width: 1500px;
+        margin: 40px auto;
+        background: #fff;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+    h2 {
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 30px;
+        color: #1e293b;
+    }
+    .dashboard {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 40px;
+    }
+    .card {
+        background: #f8fafc;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 5px 12px rgba(0, 0, 0, 0.05);
+        transition: 0.3s ease;
+    }
+    .card-title {
+        font-size: 14px;
+        color: #334155;
+        margin-bottom: 10px;
+    }
+    .card-value {
+        font-size: 28px;
+        font-weight: bold;
+        color: #1e40af;
+    }
+    .card:hover {
+        background: #e2e8f0;
+        transform: translateY(-3px);
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 14px 18px;
+        border-bottom: 1px solid #e2e8f0;
+        text-align: center;
+    }
+    th {
+        background-color: #f8fafc;
+        color: #334155;
+        font-size: 14px;
+    }
+    tr:hover { background-color: #f1f5f9; }
+  </style>
+</head>
+<body>
 
+<div class="card-container">
+  <h2>📊 Training Reports & Analytics</h2>
+
+  <div class="dashboard">
+    <div class="card">
+      <div class="card-title">Total Training Courses</div>
+      <div class="card-value"><?= $totalCourses ?></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Total Participants</div>
+      <div class="card-value"><?= $totalParticipants ?></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Average Course Rating</div>
+      <div class="card-value"><?= $avgRating ?> / 5</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Most Popular Course</div>
+      <div class="card-value">
+        <?= $popularCourse ? $popularCourse['course_title'] . " ({$popularCourse['enroll_count']})" : "No data yet" ?>
+      </div>
+    </div>
+  </div>
+
+  <h2>👥 Employee Training Participation</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Employee Name</th>
+        <th>Trainings Attended</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php while ($row = $employeeList->fetch_assoc()): ?>
+        <tr>
+          <td><?= htmlspecialchars($row['first_name'] . ' ' . $row['last_name']) ?></td>
+          <td><?= $row['trainings_attended'] ?></td>
+        </tr>
+      <?php endwhile; ?>
+    </tbody>
+  </table>
+</div>
+
+
+
+
+                            
+                            </div>
+    
+                        </div>
+                       
+                </div>
+        </div>
+    </div>
+</body>
+ 
 </html>

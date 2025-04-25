@@ -1,21 +1,27 @@
 <?php
-include 'config.php';
 session_start();
-$employee_id = $_SESSION['user_id'] ?? 0;
+include 'config.php';
 
-// Total Trainings Attended
-$totalAttended = $conn->query("SELECT COUNT(*) AS total FROM course_enrollments WHERE employee_id = $employee_id")->fetch_assoc()['total'];
+// Fetch users for dropdown (no role filtering)
+$userResult = $conn->query("SELECT id, CONCAT(first_name, ' ', last_name) AS full_name FROM users WHERE usertype IN ('employee', 'teaching', 'non-teaching','staff','officer')");
+$courseResult = $conn->query("SELECT id, course_title FROM training_courses");
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $title = $_POST['title'];
+    $description = $_POST['description'];
+    $assigned_to = $_POST['assigned_to'];
+    $due_date = $_POST['due_date'];
 
-// Certificates Earned (if approval status is 'Approved')
-$certificatesEarned = $conn->query("SELECT COUNT(*) AS total FROM employee_certifications 
-                                    WHERE user_id = $employee_id AND approval_status = 'Approved'")->fetch_assoc()['total'];
+    $sql = "INSERT INTO tasks (title, description, assigned_to, due_date, status) 
+            VALUES ('$title', '$description', '$assigned_to', '$due_date', 'Pending')";
 
-// Ongoing Courses (e.g., future training dates)
-$ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses tc
-                                JOIN course_enrollments ce ON ce.course_id = tc.id
-                                WHERE ce.employee_id = $employee_id AND tc.start_date >= CURDATE()")
-                                ->fetch_assoc()['total'];
-?> 
+    if ($conn->query($sql) === TRUE) {
+        header("Location: view_tasks.php");
+        exit();
+    } else {
+        echo "Error: " . $conn->error;
+    }
+}
+?>
 <!doctype html>
 <html lang="en">
  
@@ -258,45 +264,63 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                     </ul>
                                 </div>
                             </li>
-                            <!-- Talent Management -->
-                            <li class="nav-item ">
+                           <!-- Training Management -->
+                           <li class="nav-item ">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5"><i class="fa fa-fw fa-user-circle"></i>Training and Development <span class="badge badge-success">6</span></a>
                                 <div id="submenu-5" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-6-7" aria-controls="submenu-6-7">Training</a>
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-6-7" aria-controls="submenu-6-7">User</a>
                                             <div id="submenu-6-7" class="collapse submenu">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="course_list_view.php">View Training</a>
+                                                        <a class="nav-link" href="add_user.php">Add User</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="training_evaluation_list.php">Training Evaluation</a>
+                                                        <a class="nav-link" href="users.php">User List</a>
                                                     </li>
-                                                  
+                                                 
                                                 </ul>
+                                                
                                             </div>
                                         </li>
+                                        
                                         <li class="nav-item">
-                                            <a class="nav-link" href="employee_tasks.php">Task</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-9-10" aria-controls="submenu-9-10">Certification</a>
-                                            <div id="submenu-9-10" class="collapse submenu">
+                                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-8-9" aria-controls="submenu-8-9">Training</a>
+                                            <div id="submenu-8-9" class="collapse submenu">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="submit_certifications.php">Submit Certificate</a>
+                                                        <a class="nav-link" href="courses.php">View Courses</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="employee_certifications.php">View Certificate</a>
+                                                    <a class="nav-link" href="training_evaluation_results.php">Training Evaluation</a>
                                                     </li>
-                                                  
+                                                 
                                                 </ul>
+                                                
                                             </div>
                                         </li>
+                                       
                                         <li class="nav-item">
-                                        <a href="schedule_calendar.php" class="nav-link">Schedule</a>
+                                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-10-11" aria-controls="submenu-10-11">Task</a>
+                                            <div id="submenu-10-11" class="collapse submenu">
+                                                <ul class="nav flex-column">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="view_tasks.php">View Task</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="add_task.php">Add Task</a>
+                                                    </li>
+                                                 
+                                                </ul>
+                                                
+                                            </div>
                                         </li>
+                                       
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="certifications_admin.php">Certificate</a>
+                                        </li>
+                                          
                                             
                                         </li>
                                     </ul>
@@ -473,95 +497,74 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                 
                                 </div>
                             </div>
+                          
                             <head>
-  <meta charset="UTF-8">
-  <title>Employee Dashboard</title>
-  <style>
- body {
-  background-color: #f1f5f9;
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-}
+    <title>Add Task</title>
+    <style>
+        body { background-color: #f1f5f9; font-family: 'Segoe UI', sans-serif; }
+        .card-container { width : 90% ;max-width: 1000px; margin: 40px auto; background: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .card-container h2 { font-size: 20px; font-weight: 600; margin-bottom: 20px; color: #1e293b; }
+        label { display: block; margin-top: 16px; margin-bottom: 6px; font-weight: 500; color: #334155; }
+        input[type="text"], input[type="date"], textarea, select {
+            width: 100%; padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 10px;
+            font-size: 14px; color: #334155; background-color: #f8fafc;
+        }
+        textarea { resize: vertical; min-height: 120px; }
+        button {
+            margin-top: 24px; background-color: #22c55e; color: white; padding: 12px 18px;
+            border: none; border-radius: 10px; font-size: 16px; cursor: pointer;
+        }
+        button:hover { background-color: #16a34a; }
+        .btn-view-list {
+        display: inline-block;
+        margin-bottom: 20px;
+        background-color: #6366f1;
+        color: white;
+        padding: 10px 14px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 14px;
+    }
 
-.dashboard-container {
-  max-width: 1500px;
-  margin: 40px auto;
-  background: #fff;
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-}
-
-.dashboard-title {
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #1e293b;
-  text-align: center;
-}
-
-.dashboard-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap; /* Ensures responsiveness */
-}
-
-.card {
-  flex: 1;
-  min-width: 280px;
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 25px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
-  text-align: center;
-  transition: all 0.2s ease-in-out;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  background-color: #f1f5f9;
-}
-
-.card-title {
-  font-size: 14px;
-  color: #64748b;
-  margin-bottom: 8px;
-}
-
-.card-value {
-  font-size: 28px;
-  font-weight: bold;
-  color: #1d4ed8;
-}
-</style>
+    .btn-view-list:hover {
+        background-color: #4f46e5;
+    }
+    </style>
 </head>
 <body>
 
+<div class="card-container">
+    <h2>Add Task</h2>
 
-<div class="dashboard-container">
-  <h2 class="dashboard-title">🎯 My Training Dashboard</h2>
+    <!-- View Task List Button -->
+    <a href="view_tasks.php" class="btn-view-list">← View Task List</a>
 
-  <div class="dashboard-row">
-    <div class="card">
-      <div class="card-title">Total Trainings Attended</div>
-      <div class="card-value"><?= $totalAttended ?></div>
-    </div>
+    <form method="POST">
+        <label>Training Course:</label>
+        <select name="title" required>
+            <option value="">Select Course</option>
+            <?php while($course = $courseResult->fetch_assoc()): ?>
+                <option value="<?= htmlspecialchars($course['course_title']) ?>"><?= htmlspecialchars($course['course_title']) ?></option>
+            <?php endwhile; ?>
+        </select>
 
-    <div class="card">
-      <div class="card-title">Certificates Earned</div>
-      <div class="card-value"><?= $certificatesEarned ?></div>
-    </div>
+        <label>Description:</label>
+        <textarea name="description" required></textarea>
 
-    <div class="card">
-      <div class="card-title">Ongoing Courses</div>
-      <div class="card-value"><?= $ongoingCourses ?></div>
-    </div>
-  </div>
+        <label>Assign To (Employee):</label>
+        <select name="assigned_to" required>
+            <option value="">Select Employee</option>
+            <?php while($user = $userResult->fetch_assoc()): ?>
+                <option value="<?= $user['id'] ?>"><?= $user['full_name'] ?></option>
+            <?php endwhile; ?>
+        </select>
+
+        <label>Due Date:</label>
+        <input type="date" name="due_date" required>
+
+        <button type="submit">Add Task</button>
+    </form>
 </div>
-
-</body>
-
 
 
 

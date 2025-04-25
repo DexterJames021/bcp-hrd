@@ -1,21 +1,22 @@
 <?php
 include 'config.php';
 session_start();
-$employee_id = $_SESSION['user_id'] ?? 0;
 
-// Total Trainings Attended
-$totalAttended = $conn->query("SELECT COUNT(*) AS total FROM course_enrollments WHERE employee_id = $employee_id")->fetch_assoc()['total'];
+$id = $_GET['id']; // Certification ID
 
-// Certificates Earned (if approval status is 'Approved')
-$certificatesEarned = $conn->query("SELECT COUNT(*) AS total FROM employee_certifications 
-                                    WHERE user_id = $employee_id AND approval_status = 'Approved'")->fetch_assoc()['total'];
+// Fetch certificate details with course and instructor info
+$query = $conn->query("
+    SELECT ec.certification_date, u.first_name, u.last_name, tc.course_title, tc.instructor
+    FROM employee_certifications ec
+    JOIN users u ON ec.user_id = u.id
+    JOIN training_courses tc ON ec.course_id = tc.id
+    WHERE ec.id = $id
+");
 
-// Ongoing Courses (e.g., future training dates)
-$ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses tc
-                                JOIN course_enrollments ce ON ce.course_id = tc.id
-                                WHERE ce.employee_id = $employee_id AND tc.start_date >= CURDATE()")
-                                ->fetch_assoc()['total'];
-?> 
+$row = $query->fetch_assoc();
+?>
+
+
 <!doctype html>
 <html lang="en">
  
@@ -258,8 +259,8 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                     </ul>
                                 </div>
                             </li>
-                            <!-- Talent Management -->
-                            <li class="nav-item ">
+                       <!-- Talent Management -->
+                       <li class="nav-item ">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5"><i class="fa fa-fw fa-user-circle"></i>Training and Development <span class="badge badge-success">6</span></a>
                                 <div id="submenu-5" class="collapse submenu">
                                     <ul class="nav flex-column">
@@ -278,7 +279,7 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="employee_tasks.php">Task</a>
+                                        <a class="nav-link" href="employee_tasks.php">Task</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-9-10" aria-controls="submenu-9-10">Certification</a>
@@ -297,7 +298,6 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                         <li class="nav-item">
                                         <a href="schedule_calendar.php" class="nav-link">Schedule</a>
                                         </li>
-                                            
                                         </li>
                                     </ul>
                                 </div>
@@ -473,98 +473,149 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                 
                                 </div>
                             </div>
+                          
+                            
+
+
+
                             <head>
   <meta charset="UTF-8">
-  <title>Employee Dashboard</title>
+  <title>Certificate of Completion</title>
   <style>
- body {
-  background-color: #f1f5f9;
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-}
+    body {
+      font-family: 'Georgia', serif;
+      background-color: #f1f5f9;
+      margin: 0;
+    }
 
-.dashboard-container {
-  max-width: 1500px;
-  margin: 40px auto;
-  background: #fff;
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-}
+    .certificate-container {
+      background: #fff;
+      padding: 60px 80px;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+      max-width: 900px;
+      margin: auto;
+      border: 8px double #1e3a8a;
+      position: relative;
+      text-align: center;
+    }
 
-.dashboard-title {
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #1e293b;
-  text-align: center;
-}
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: auto;
+    }
 
-.dashboard-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap; /* Ensures responsiveness */
-}
+    .certificate-title {
+      font-size: 40px;
+      font-weight: bold;
+      color: #1e3a8a;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 40px;
+    }
 
-.card {
-  flex: 1;
-  min-width: 280px;
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 25px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
-  text-align: center;
-  transition: all 0.2s ease-in-out;
-}
+    .certificate-subtitle {
+      font-size: 20px;
+      color: #374151;
+      margin-bottom: 40px;
+    }
 
-.card:hover {
-  transform: translateY(-4px);
-  background-color: #f1f5f9;
-}
+    .recipient-name {
+      font-size: 32px;
+      color: #0f172a;
+      font-weight: bold;
+      margin: 20px 0;
+      font-family: 'Times New Roman', serif;
+      border-bottom: 1px solid #cbd5e1;
+      display: inline-block;
+      padding: 5px 40px;
+    }
 
-.card-title {
-  font-size: 14px;
-  color: #64748b;
-  margin-bottom: 8px;
-}
+    .course-title {
+      font-size: 24px;
+      color: #1e293b;
+      font-style: italic;
+      margin-top: 20px;
+    }
 
-.card-value {
-  font-size: 28px;
-  font-weight: bold;
-  color: #1d4ed8;
-}
-</style>
+    .certificate-date {
+      font-size: 18px;
+      color: #1e3a8a;
+      font-weight: bold;
+      margin-top: 40px;
+    }
+
+    .signature-section {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 80px;
+      padding: 0 40px;
+    }
+
+    .signature-block {
+      text-align: center;
+    }
+
+    .signature-line {
+      border-top: 1px solid #334155;
+      width: 200px;
+      margin: 0 auto 5px auto;
+    }
+
+    .signature-label {
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .btn-print {
+      background-color: #0ea5e9;
+      color: white;
+      padding: 12px 28px;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-top: 50px;
+      display: inline-block;
+    }
+
+    .btn-print:hover {
+      background-color: #0284c7;
+    }
+  </style>
 </head>
 <body>
 
+  <div class="certificate-container">
+    <!-- Optional logo -->
+    <!-- <img src="your-logo.png" alt="Logo" class="logo"> -->
 
-<div class="dashboard-container">
-  <h2 class="dashboard-title">🎯 My Training Dashboard</h2>
+    <div class="certificate-title">Certificate of Completion</div>
+    <div class="certificate-subtitle">This certify is proudly presented to</div>
 
-  <div class="dashboard-row">
-    <div class="card">
-      <div class="card-title">Total Trainings Attended</div>
-      <div class="card-value"><?= $totalAttended ?></div>
+    <div class="recipient-name"><?= $row['first_name'] . ' ' . $row['last_name'] ?></div>
+
+    <div class="certificate-subtitle">for successfully completing the training program</div>
+    <div class="course-title">"<?= $row['course_title'] ?>"</div>
+    <div class="certificate-subtitle">Thank you for your dedication and commitment to professsional Development</div>
+    <div class="certificate-date">Awarded on <?= date('F j, Y', strtotime($row['certification_date'])) ?></div>
+
+    <div class="signature-section">
+    <div class="signature-block">
+      <div class="signature-line"></div>
+      <div class="signature-label"><?= $row['instructor'] ?></div>
+    </div>
+      <div class="signature-block">
+        <div class="signature-line"></div>
+        <div class="signature-label">HR Department</div>
+      </div>
     </div>
 
-    <div class="card">
-      <div class="card-title">Certificates Earned</div>
-      <div class="card-value"><?= $certificatesEarned ?></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Ongoing Courses</div>
-      <div class="card-value"><?= $ongoingCourses ?></div>
-    </div>
+    <a href="javascript:window.print()" class="btn-print">Print Certificate</a>
   </div>
-</div>
-
-</body>
-
-
-
-
 
                             </div>
     

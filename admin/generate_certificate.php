@@ -1,21 +1,28 @@
 <?php
 include 'config.php';
-session_start();
-$employee_id = $_SESSION['user_id'] ?? 0;
 
-// Total Trainings Attended
-$totalAttended = $conn->query("SELECT COUNT(*) AS total FROM course_enrollments WHERE employee_id = $employee_id")->fetch_assoc()['total'];
+if (isset($_GET['course_id']) && isset($_GET['employee_id'])) {
+    $course_id = $_GET['course_id'];
+    $employee_id = $_GET['employee_id'];
 
-// Certificates Earned (if approval status is 'Approved')
-$certificatesEarned = $conn->query("SELECT COUNT(*) AS total FROM employee_certifications 
-                                    WHERE user_id = $employee_id AND approval_status = 'Approved'")->fetch_assoc()['total'];
+    // Get course details
+    $courseResult = $conn->query("SELECT * FROM training_courses WHERE id = $course_id");
+    $course = $courseResult->fetch_assoc();
 
-// Ongoing Courses (e.g., future training dates)
-$ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses tc
-                                JOIN course_enrollments ce ON ce.course_id = tc.id
-                                WHERE ce.employee_id = $employee_id AND tc.start_date >= CURDATE()")
-                                ->fetch_assoc()['total'];
-?> 
+    // Get employee details
+    $employeeResult = $conn->query("SELECT * FROM users WHERE id = $employee_id");
+    $employee = $employeeResult->fetch_assoc();
+
+    $employee_name = $employee['first_name'] . ' ' . $employee['last_name']; // Concatenate first_name and last_name
+    $dateIssued = date('F j, Y');
+
+} else {
+    echo "Invalid request.";
+    exit;
+}
+?>
+
+
 <!doctype html>
 <html lang="en">
  
@@ -258,45 +265,67 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                     </ul>
                                 </div>
                             </li>
-                            <!-- Talent Management -->
+                            <!-- Training Management -->
                             <li class="nav-item ">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5"><i class="fa fa-fw fa-user-circle"></i>Training and Development <span class="badge badge-success">6</span></a>
                                 <div id="submenu-5" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-6-7" aria-controls="submenu-6-7">Training</a>
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-6-7" aria-controls="submenu-6-7">User</a>
                                             <div id="submenu-6-7" class="collapse submenu">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="course_list_view.php">View Training</a>
+                                                        <a class="nav-link" href="add_user.php">Add User</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="training_evaluation_list.php">Training Evaluation</a>
+                                                        <a class="nav-link" href="users.php">User List</a>
                                                     </li>
-                                                  
+                                                 
                                                 </ul>
+                                                
                                             </div>
                                         </li>
+                                        
                                         <li class="nav-item">
-                                            <a class="nav-link" href="employee_tasks.php">Task</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-9-10" aria-controls="submenu-9-10">Certification</a>
-                                            <div id="submenu-9-10" class="collapse submenu">
+                                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-8-9" aria-controls="submenu-8-9">Training</a>
+                                            <div id="submenu-8-9" class="collapse submenu">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="submit_certifications.php">Submit Certificate</a>
+                                                        <a class="nav-link" href="courses.php">View Courses</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="employee_certifications.php">View Certificate</a>
+                                                        <a class="nav-link" href="training_evaluation_results.php">Training Evaluation</a>
                                                     </li>
-                                                  
+                                                 
                                                 </ul>
+                                                
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                        <a href="schedule_calendar.php" class="nav-link">Schedule</a>
+                                        <a href="add_task.php" class="nav-link">Task</a>
                                         </li>
+                                       
+                                        <li class="nav-item">
+                                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-10-11" aria-controls="submenu-10-11">Task</a>
+                                            <div id="submenu-10-11" class="collapse submenu">
+                                                <ul class="nav flex-column">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="view_tasks.php">View Task</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="add_task.php">Add Task</a>
+                                                    </li>
+                                                 
+                                                </ul>
+                                                
+                                            </div>
+                                        </li>
+                                       
+                                    
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="certifications_admin.php">Certificate</a>
+                                        </li>
+                                          
                                             
                                         </li>
                                     </ul>
@@ -473,96 +502,88 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                 
                                 </div>
                             </div>
+                          
                             <head>
-  <meta charset="UTF-8">
-  <title>Employee Dashboard</title>
-  <style>
- body {
-  background-color: #f1f5f9;
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-}
+                            <title>Employee Certificate</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f1f5f9;
+            margin: 0;
+            padding: 0;
+        }
 
-.dashboard-container {
-  max-width: 1500px;
-  margin: 40px auto;
-  background: #fff;
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-}
+        .certificate-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
 
-.dashboard-title {
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #1e293b;
-  text-align: center;
-}
+        .certificate-header {
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
 
-.dashboard-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap; /* Ensures responsiveness */
-}
+        .certificate-body {
+            margin-top: 30px;
+            font-size: 20px;
+            line-height: 1.6;
+        }
 
-.card {
-  flex: 1;
-  min-width: 280px;
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 25px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
-  text-align: center;
-  transition: all 0.2s ease-in-out;
-}
+        .certificate-footer {
+            margin-top: 40px;
+            font-size: 16px;
+            color: #777;
+        }
 
-.card:hover {
-  transform: translateY(-4px);
-  background-color: #f1f5f9;
-}
+        .btn-print {
+            background-color: #6366f1;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
 
-.card-title {
-  font-size: 14px;
-  color: #64748b;
-  margin-bottom: 8px;
-}
+        .btn-print:hover {
+            background-color: #4f46e5;
+        }
 
-.card-value {
-  font-size: 28px;
-  font-weight: bold;
-  color: #1d4ed8;
-}
-</style>
+        /* Optional: Add a border to make it look more like a certificate */
+        .certificate-container {
+            border: 5px solid #6366f1;
+        }
+    </style>
 </head>
 <body>
 
-
-<div class="dashboard-container">
-  <h2 class="dashboard-title">🎯 My Training Dashboard</h2>
-
-  <div class="dashboard-row">
-    <div class="card">
-      <div class="card-title">Total Trainings Attended</div>
-      <div class="card-value"><?= $totalAttended ?></div>
+<div class="certificate-container">
+    <div class="certificate-header">
+        Certificate of Completion
     </div>
 
-    <div class="card">
-      <div class="card-title">Certificates Earned</div>
-      <div class="card-value"><?= $certificatesEarned ?></div>
+    <div class="certificate-body">
+        <p>This certifies that</p>
+        <h2><?= htmlspecialchars($employee['first_name'] . ' ' . $employee['last_name']) ?></h2>
+        <p>has successfully completed the training course</p>
+        <h3><?= htmlspecialchars($course['course_title']) ?></h3>
+        <p>on</p>
+        <p><?= htmlspecialchars($dateIssued) ?></p>
     </div>
 
-    <div class="card">
-      <div class="card-title">Ongoing Courses</div>
-      <div class="card-value"><?= $ongoingCourses ?></div>
+    <div class="certificate-footer">
+        <p>Authorized by: [Admin Name or Position]</p>
+        <p>Training Department</p>
     </div>
-  </div>
+
+    <button class="btn-print" onclick="window.print()">Print Certificate</button>
 </div>
-
-</body>
-
-
 
 
 

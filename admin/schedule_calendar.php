@@ -1,21 +1,11 @@
 <?php
 include 'config.php';
 session_start();
-$employee_id = $_SESSION['user_id'] ?? 0;
-
-// Total Trainings Attended
-$totalAttended = $conn->query("SELECT COUNT(*) AS total FROM course_enrollments WHERE employee_id = $employee_id")->fetch_assoc()['total'];
-
-// Certificates Earned (if approval status is 'Approved')
-$certificatesEarned = $conn->query("SELECT COUNT(*) AS total FROM employee_certifications 
-                                    WHERE user_id = $employee_id AND approval_status = 'Approved'")->fetch_assoc()['total'];
-
-// Ongoing Courses (e.g., future training dates)
-$ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses tc
-                                JOIN course_enrollments ce ON ce.course_id = tc.id
-                                WHERE ce.employee_id = $employee_id AND tc.start_date >= CURDATE()")
-                                ->fetch_assoc()['total'];
+$result = $conn->query("SELECT * FROM training_courses ORDER BY start_date ASC");
 ?> 
+
+
+
 <!doctype html>
 <html lang="en">
  
@@ -258,45 +248,62 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                     </ul>
                                 </div>
                             </li>
-                            <!-- Talent Management -->
+                            <!-- Training Management -->
                             <li class="nav-item ">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5"><i class="fa fa-fw fa-user-circle"></i>Training and Development <span class="badge badge-success">6</span></a>
                                 <div id="submenu-5" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-6-7" aria-controls="submenu-6-7">Training</a>
+                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-6-7" aria-controls="submenu-6-7">User</a>
                                             <div id="submenu-6-7" class="collapse submenu">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="course_list_view.php">View Training</a>
+                                                        <a class="nav-link" href="add_user.php">Add User</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="training_evaluation_list.php">Training Evaluation</a>
+                                                        <a class="nav-link" href="users.php">User List</a>
                                                     </li>
-                                                  
+                                                 
                                                 </ul>
+                                                
                                             </div>
                                         </li>
+                                        
                                         <li class="nav-item">
-                                            <a class="nav-link" href="employee_tasks.php">Task</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-9-10" aria-controls="submenu-9-10">Certification</a>
-                                            <div id="submenu-9-10" class="collapse submenu">
+                                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-8-9" aria-controls="submenu-8-9">Training</a>
+                                            <div id="submenu-8-9" class="collapse submenu">
                                                 <ul class="nav flex-column">
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="submit_certifications.php">Submit Certificate</a>
+                                                        <a class="nav-link" href="courses.php">View Courses</a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a class="nav-link" href="employee_certifications.php">View Certificate</a>
+                                                        <a class="nav-link" href="training_evaluation_results.php">Training Evaluation</a>
                                                     </li>
-                                                  
+                                                 
                                                 </ul>
+                                                
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                        <a href="schedule_calendar.php" class="nav-link">Schedule</a>
+                                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-10-11" aria-controls="submenu-10-11">Task</a>
+                                            <div id="submenu-10-11" class="collapse submenu">
+                                                <ul class="nav flex-column">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="view_tasks.php">View Task</a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" href="add_task.php">Add Task</a>
+                                                    </li>
+                                                 
+                                                </ul>
+                                                
+                                            </div>
                                         </li>
+                                       
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="certifications_admin.php">Certificate</a>
+                                        </li>
+                                          
                                             
                                         </li>
                                     </ul>
@@ -473,97 +480,74 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                 
                                 </div>
                             </div>
-                            <head>
-  <meta charset="UTF-8">
-  <title>Employee Dashboard</title>
-  <style>
- body {
-  background-color: #f1f5f9;
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-}
-
-.dashboard-container {
-  max-width: 1500px;
-  margin: 40px auto;
-  background: #fff;
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-}
-
-.dashboard-title {
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #1e293b;
-  text-align: center;
-}
-
-.dashboard-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap; /* Ensures responsiveness */
-}
-
-.card {
-  flex: 1;
-  min-width: 280px;
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 25px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
-  text-align: center;
-  transition: all 0.2s ease-in-out;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  background-color: #f1f5f9;
-}
-
-.card-title {
-  font-size: 14px;
-  color: #64748b;
-  margin-bottom: 8px;
-}
-
-.card-value {
-  font-size: 28px;
-  font-weight: bold;
-  color: #1d4ed8;
-}
-</style>
+                       <head> 
+    <title>Schedule Calendar</title>
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+    <style>
+        body { background-color: #f1f5f9; font-family: 'Segoe UI', sans-serif; margin: 0; }
+        .card-container {
+            max-width: 1500px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        h2 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1e293b;
+        }
+        #calendar {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
 
-
-<div class="dashboard-container">
-  <h2 class="dashboard-title">🎯 My Training Dashboard</h2>
-
-  <div class="dashboard-row">
-    <div class="card">
-      <div class="card-title">Total Trainings Attended</div>
-      <div class="card-value"><?= $totalAttended ?></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Certificates Earned</div>
-      <div class="card-value"><?= $certificatesEarned ?></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Ongoing Courses</div>
-      <div class="card-value"><?= $ongoingCourses ?></div>
-    </div>
-  </div>
+<div class="card-container">
+    <h2>Training Schedule Calendar</h2>
+    <div id="calendar"></div>
 </div>
 
-</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
 
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            height: 'auto',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,listWeek'
+            },
+            events: [
+                <?php while ($course = $result->fetch_assoc()):
+    $formattedTime = date('h:i A', strtotime($course['schedule_time']));
+?>
+{
+    title: "<?= addslashes($course['course_title']) ?> (<?= addslashes($course['designation']) ?>)",
+    start: "<?= $course['start_date'] ?>T<?= date('H:i', strtotime($course['schedule_time'])) ?>",
+    description: "Instructor: <?= addslashes($course['instructor']) ?> | Time: <?= $formattedTime ?>",
+},
+<?php endwhile; ?>
+            ],
+            eventClick: function(info) {
+                alert(info.event.title + "\n" + info.event.extendedProps.description);
+            },
+            eventDidMount: function(info) {
+    info.el.style.whiteSpace = 'normal';
+    info.el.style.fontSize = '13px'; // change this to your desired size
+    info.el.style.fontWeight = 'bold'; // optional: makes the title stand out
+}
+        });
 
-
+        calendar.render();
+    });
+</script>
 
 
                             </div>

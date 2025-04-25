@@ -1,13 +1,9 @@
 <?php 
-session_start(); // Start the session
+session_start();
 
-// Unset all session variables
-session_unset();
+if(isset($_SESSION['user_id'])){
+    unset($_SESSION['user_id']);
+}
 
-// Destroy the session
-session_destroy();
-
-// Redirect to login page
 header("Location: ../auth/index.php");
-exit; // Stop script execution after redirect
-?>
+

@@ -1,21 +1,9 @@
 <?php
 include 'config.php';
-session_start();
-$employee_id = $_SESSION['user_id'] ?? 0;
 
-// Total Trainings Attended
-$totalAttended = $conn->query("SELECT COUNT(*) AS total FROM course_enrollments WHERE employee_id = $employee_id")->fetch_assoc()['total'];
-
-// Certificates Earned (if approval status is 'Approved')
-$certificatesEarned = $conn->query("SELECT COUNT(*) AS total FROM employee_certifications 
-                                    WHERE user_id = $employee_id AND approval_status = 'Approved'")->fetch_assoc()['total'];
-
-// Ongoing Courses (e.g., future training dates)
-$ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses tc
-                                JOIN course_enrollments ce ON ce.course_id = tc.id
-                                WHERE ce.employee_id = $employee_id AND tc.start_date >= CURDATE()")
-                                ->fetch_assoc()['total'];
-?> 
+// Fetch all training courses
+$courses = $conn->query("SELECT * FROM training_courses ORDER BY schedule_date ASC");
+?>
 <!doctype html>
 <html lang="en">
  
@@ -258,8 +246,8 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                     </ul>
                                 </div>
                             </li>
-                            <!-- Talent Management -->
-                            <li class="nav-item ">
+                     <!-- Talent Management -->
+                     <li class="nav-item ">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5"><i class="fa fa-fw fa-user-circle"></i>Training and Development <span class="badge badge-success">6</span></a>
                                 <div id="submenu-5" class="collapse submenu">
                                     <ul class="nav flex-column">
@@ -278,7 +266,7 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="employee_tasks.php">Task</a>
+                                        <a class="nav-link" href="employee_tasks.php">Task</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-9-10" aria-controls="submenu-9-10">Certification</a>
@@ -297,7 +285,6 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                         <li class="nav-item">
                                         <a href="schedule_calendar.php" class="nav-link">Schedule</a>
                                         </li>
-                                            
                                         </li>
                                     </ul>
                                 </div>
@@ -473,99 +460,79 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                 
                                 </div>
                             </div>
+                          
+
+
+
                             <head>
-  <meta charset="UTF-8">
-  <title>Employee Dashboard</title>
-  <style>
- body {
-  background-color: #f1f5f9;
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-}
-
-.dashboard-container {
-  max-width: 1500px;
-  margin: 40px auto;
-  background: #fff;
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-}
-
-.dashboard-title {
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #1e293b;
-  text-align: center;
-}
-
-.dashboard-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap; /* Ensures responsiveness */
-}
-
-.card {
-  flex: 1;
-  min-width: 280px;
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 25px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
-  text-align: center;
-  transition: all 0.2s ease-in-out;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  background-color: #f1f5f9;
-}
-
-.card-title {
-  font-size: 14px;
-  color: #64748b;
-  margin-bottom: 8px;
-}
-
-.card-value {
-  font-size: 28px;
-  font-weight: bold;
-  color: #1d4ed8;
-}
-</style>
+    <title>Training Courses</title>
+    <style>
+        body { background-color: #f1f5f9; font-family: 'Segoe UI', sans-serif; }
+        .card-container { max-width: 1000px; margin: 40px auto; background: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h2 { font-size: 24px; font-weight: 600; margin-bottom: 20px; color: #1e293b; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { padding: 12px 16px; border-bottom: 1px solid #e2e8f0; text-align: left; }
+        th { background-color: #f8fafc; color: #334155; }
+        tr:hover { background-color: #f1f5f9; }
+        .action-btn {
+            background-color: #6366f1;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .action-btn:hover { background-color: #4f46e5; }
+        .back-btn {
+            background-color: #22c55e;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+        }
+        .back-btn:hover { background-color: #16a34a; }
+    </style>
 </head>
 <body>
+<div class="card-container">
+    <h2>Available Training Courses</h2>
 
+    <?php if ($courses->num_rows > 0): ?>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Course Title</th>
+            <th>Instructor</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Location</th>
+            <th>Action</th>
+        </tr>
+        <?php while ($course = $courses->fetch_assoc()): ?>
+        <tr>
+            <td><?= $course['id'] ?></td>
+            <td><?= htmlspecialchars($course['course_title']) ?></td>
+            <td><?= htmlspecialchars($course['instructor']) ?></td>
+            <td><?= htmlspecialchars($course['schedule_date']) ?></td>
+            <td><?= htmlspecialchars($course['schedule_time']) ?></td>
+            <td><?= htmlspecialchars($course['location']) ?></td>
+            <td>
+                <a href="view_enrollment.php?course_id=<?= $course['id'] ?>" class="action-btn">View Enrolled</a>
+                <!-- REMOVE CERTIFICATE BUTTON FROM HERE -->
+            </td>
+        </tr>
+        <?php endwhile; ?>
+    </table>
+    <?php else: ?>
+        <p>No training courses available at the moment.</p>
+    <?php endif; ?>
 
-<div class="dashboard-container">
-  <h2 class="dashboard-title">🎯 My Training Dashboard</h2>
-
-  <div class="dashboard-row">
-    <div class="card">
-      <div class="card-title">Total Trainings Attended</div>
-      <div class="card-value"><?= $totalAttended ?></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Certificates Earned</div>
-      <div class="card-value"><?= $certificatesEarned ?></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Ongoing Courses</div>
-      <div class="card-value"><?= $ongoingCourses ?></div>
-    </div>
-  </div>
+    <a href="index.php" class="back-btn">← Back </a>
 </div>
-
 </body>
-
-
-
-
-
+                            
                             </div>
     
                         </div>

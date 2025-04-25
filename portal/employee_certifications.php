@@ -1,21 +1,22 @@
 <?php
-include 'config.php';
 session_start();
-$employee_id = $_SESSION['user_id'] ?? 0;
+include('config.php');
 
-// Total Trainings Attended
-$totalAttended = $conn->query("SELECT COUNT(*) AS total FROM course_enrollments WHERE employee_id = $employee_id")->fetch_assoc()['total'];
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
 
-// Certificates Earned (if approval status is 'Approved')
-$certificatesEarned = $conn->query("SELECT COUNT(*) AS total FROM employee_certifications 
-                                    WHERE user_id = $employee_id AND approval_status = 'Approved'")->fetch_assoc()['total'];
+$user_id = $_SESSION['user_id'];
 
-// Ongoing Courses (e.g., future training dates)
-$ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses tc
-                                JOIN course_enrollments ce ON ce.course_id = tc.id
-                                WHERE ce.employee_id = $employee_id AND tc.start_date >= CURDATE()")
-                                ->fetch_assoc()['total'];
-?> 
+$sql = "SELECT ec.*, tc.course_title 
+        FROM employee_certifications ec 
+        JOIN training_courses tc ON ec.course_id = tc.id 
+        WHERE ec.user_id = $user_id";
+$result = mysqli_query($conn, $sql);
+?>
+
+
 <!doctype html>
 <html lang="en">
  
@@ -278,9 +279,6 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="employee_tasks.php">Task</a>
-                                        </li>
-                                        <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-9-10" aria-controls="submenu-9-10">Certification</a>
                                             <div id="submenu-9-10" class="collapse submenu">
                                                 <ul class="nav flex-column">
@@ -473,96 +471,64 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                 
                                 </div>
                             </div>
+                          
                             <head>
-  <meta charset="UTF-8">
-  <title>Employee Dashboard</title>
-  <style>
- body {
-  background-color: #f1f5f9;
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-}
-
-.dashboard-container {
-  max-width: 1500px;
-  margin: 40px auto;
-  background: #fff;
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-}
-
-.dashboard-title {
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #1e293b;
-  text-align: center;
-}
-
-.dashboard-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap; /* Ensures responsiveness */
-}
-
-.card {
-  flex: 1;
-  min-width: 280px;
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 25px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
-  text-align: center;
-  transition: all 0.2s ease-in-out;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  background-color: #f1f5f9;
-}
-
-.card-title {
-  font-size: 14px;
-  color: #64748b;
-  margin-bottom: 8px;
-}
-
-.card-value {
-  font-size: 28px;
-  font-weight: bold;
-  color: #1d4ed8;
-}
-</style>
+    <title>My Certifications</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f1f5f9; }
+        .container { background: #fff; padding: 30px; border-radius: 16px; max-width: 900px; margin: auto; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        h2 { margin-bottom: 24px; color: #1e293b; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 14px; border-bottom: 1px solid #ddd; text-align: center; }
+        th { background-color: #f8fafc; color: #1e293b; }
+        tr:hover { background-color: #f1f5f9; }
+        .status-Approved { color: green; font-weight: bold; }
+        .status-Pending { color: orange; font-weight: bold; }
+        .status-Rejected { color: red; font-weight: bold; }
+        .btn-view {
+            background-color: #0ea5e9;
+            color: white;
+            padding: 6px 12px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        .btn-view:hover {
+            background-color: #0284c7;
+        }
+    </style>
 </head>
 <body>
-
-
-<div class="dashboard-container">
-  <h2 class="dashboard-title">🎯 My Training Dashboard</h2>
-
-  <div class="dashboard-row">
-    <div class="card">
-      <div class="card-title">Total Trainings Attended</div>
-      <div class="card-value"><?= $totalAttended ?></div>
+    <div class="container">
+        <h2>My Certifications</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Course</th>
+                    <th>Certification Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php while ($row = mysqli_fetch_assoc($result)) : ?>
+                <tr>
+                    <td><?= $row['course_title'] ?></td>
+                    <td><?= $row['certification_date'] ?></td>
+                    <td class="status-<?= $row['approval_status'] ?>"><?= $row['approval_status'] ?></td>
+                    <td>
+                        <?php if ($row['approval_status'] === 'Approved') : ?>
+                            <a href="view_certificate.php?id=<?= $row['id'] ?>" class="btn-view" target="_blank">View</a>
+                        <?php else: ?>
+                            -
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endwhile; ?>
+            </tbody>
+        </table>
     </div>
-
-    <div class="card">
-      <div class="card-title">Certificates Earned</div>
-      <div class="card-value"><?= $certificatesEarned ?></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Ongoing Courses</div>
-      <div class="card-value"><?= $ongoingCourses ?></div>
-    </div>
-  </div>
-</div>
-
 </body>
-
-
 
 
 

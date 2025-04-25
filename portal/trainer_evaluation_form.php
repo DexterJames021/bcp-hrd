@@ -1,21 +1,47 @@
 <?php
 include 'config.php';
 session_start();
-$employee_id = $_SESSION['user_id'] ?? 0;
+// Get the course ID from the URL
+$course_id = isset($_GET['course_id']) ? $_GET['course_id'] : 0;
 
-// Total Trainings Attended
-$totalAttended = $conn->query("SELECT COUNT(*) AS total FROM course_enrollments WHERE employee_id = $employee_id")->fetch_assoc()['total'];
+// Fetch course details (including the trainer's name)
+$course_query = "SELECT * FROM training_courses WHERE id = ?";
+$stmt = $conn->prepare($course_query);
+$stmt->bind_param('i', $course_id);
+$stmt->execute();
+$course_result = $stmt->get_result();
+$course = $course_result->fetch_assoc();
 
-// Certificates Earned (if approval status is 'Approved')
-$certificatesEarned = $conn->query("SELECT COUNT(*) AS total FROM employee_certifications 
-                                    WHERE user_id = $employee_id AND approval_status = 'Approved'")->fetch_assoc()['total'];
+// Check if the course exists
+if (!$course) {
+    die("Course not found.");
+}
 
-// Ongoing Courses (e.g., future training dates)
-$ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses tc
-                                JOIN course_enrollments ce ON ce.course_id = tc.id
-                                WHERE ce.employee_id = $employee_id AND tc.start_date >= CURDATE()")
-                                ->fetch_assoc()['total'];
-?> 
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $ratings = [
+        $_POST['q1'], $_POST['q2'], $_POST['q3'], $_POST['q4'], $_POST['q5'],
+        $_POST['q6'], $_POST['q7'], $_POST['q8'], $_POST['q9'], $_POST['q10']
+    ];
+    $feedback = $_POST['feedback'];
+
+    for ($i = 1; $i <= 10; $i++) {
+        $question_id = $i;
+        $rating = $ratings[$i - 1];
+        $feedback_value = ($i == 1) ? $feedback : NULL; // only insert feedback for the first question
+    
+        $insert_query = "INSERT INTO training_evaluations (course_id, question_id, rating, feedback)
+                         VALUES (?, ?, ?, ?)";
+        $insert_stmt = $conn->prepare($insert_query);
+        $insert_stmt->bind_param("iiis", $course_id, $question_id, $rating, $feedback_value);
+        $insert_stmt->execute();
+    }
+
+    header('Location: training_evaluation_list.php');
+    exit();
+}
+?>
+
 <!doctype html>
 <html lang="en">
  
@@ -258,8 +284,8 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                     </ul>
                                 </div>
                             </li>
-                            <!-- Talent Management -->
-                            <li class="nav-item ">
+                         <!-- Talent Management -->
+                         <li class="nav-item ">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5"><i class="fa fa-fw fa-user-circle"></i>Training and Development <span class="badge badge-success">6</span></a>
                                 <div id="submenu-5" class="collapse submenu">
                                     <ul class="nav flex-column">
@@ -278,7 +304,7 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="employee_tasks.php">Task</a>
+                                        <a class="nav-link" href="employee_tasks.php">Task</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-9-10" aria-controls="submenu-9-10">Certification</a>
@@ -297,7 +323,6 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                         <li class="nav-item">
                                         <a href="schedule_calendar.php" class="nav-link">Schedule</a>
                                         </li>
-                                            
                                         </li>
                                     </ul>
                                 </div>
@@ -473,94 +498,128 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                 
                                 </div>
                             </div>
+                          
                             <head>
-  <meta charset="UTF-8">
-  <title>Employee Dashboard</title>
-  <style>
- body {
-  background-color: #f1f5f9;
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
+    <title>Training Evaluation Form - <?= htmlspecialchars($course['course_title']) ?></title>
+    <style>
+        body { background-color: #f1f5f9; font-family: 'Segoe UI', sans-serif; }
+        .card-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        h2 { font-size: 24px; font-weight: 600; margin-bottom: 20px; color: #1e293b; }
+        label { font-size: 18px; margin-bottom: 10px; display: block; color: #334155; }
+        .question { margin-bottom: 20px; }
+        .question label { font-size: 16px; }
+        .question select {
+            width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #e2e8f0;
+        }
+        textarea { width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 8px; border: 1px solid #e2e8f0; }
+        .submit-btn {
+    background-color: #6366f1;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    font-size: 14px;
+    float: right; /* This will align the button to the right */
 }
-
-.dashboard-container {
-  max-width: 1500px;
-  margin: 40px auto;
-  background: #fff;
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-}
-
-.dashboard-title {
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #1e293b;
-  text-align: center;
-}
-
-.dashboard-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap; /* Ensures responsiveness */
-}
-
-.card {
-  flex: 1;
-  min-width: 280px;
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 25px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
-  text-align: center;
-  transition: all 0.2s ease-in-out;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  background-color: #f1f5f9;
-}
-
-.card-title {
-  font-size: 14px;
-  color: #64748b;
-  margin-bottom: 8px;
-}
-
-.card-value {
-  font-size: 28px;
-  font-weight: bold;
-  color: #1d4ed8;
-}
-</style>
+        .submit-btn:hover { background-color: #4f46e5; }
+        .back-btn {
+            background-color: #22c55e;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+        }
+        .back-btn:hover { background-color: #16a34a; }
+        .instructions { background-color: #e2e8f0; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .instructions ul { margin-top: 0; }
+        .instructions li { margin-bottom: 10px; font-size: 16px; }
+    </style>
 </head>
 <body>
+<div class="card-container">
+    <h2>Evaluation Form for <?= htmlspecialchars($course['course_title']) ?></h2>
+    <h3><strong>Trainer:</strong> <?= htmlspecialchars($course['instructor']) ?></h3>  <!-- Display Trainer's Name -->
 
+    <!-- Instructions and Reminder Section -->
+    <div class="instructions">
+        <h3>Reminder & Instructions:</h3>
+        <ul>
+            <li>Please rate the training on a scale from 1 to 5, where:
+                <ul>
+                <li><strong>1 = Strongly Disagree</strong></li>
+<li><strong>2 = Disagree</strong></li>
+<li><strong>3 = Neutral</strong></li>
+<li><strong>4 = Agree</strong></li>
+<li><strong>5 = Strongly Agree</strong></li>
 
-<div class="dashboard-container">
-  <h2 class="dashboard-title">🎯 My Training Dashboard</h2>
-
-  <div class="dashboard-row">
-    <div class="card">
-      <div class="card-title">Total Trainings Attended</div>
-      <div class="card-value"><?= $totalAttended ?></div>
+                </ul>
+            </li>
+            <li>Your feedback is important and will help improve future training sessions.</li>
+            <li>If you have any additional comments, please include them in the feedback section.</li>
+            <li>Be honest and thoughtful in your responses.</li>
+        </ul>
     </div>
 
-    <div class="card">
-      <div class="card-title">Certificates Earned</div>
-      <div class="card-value"><?= $certificatesEarned ?></div>
-    </div>
+    <form method="POST">
+        <input type="hidden" name="course_id" value="<?= $course['id'] ?>">
 
-    <div class="card">
-      <div class="card-title">Ongoing Courses</div>
-      <div class="card-value"><?= $ongoingCourses ?></div>
-    </div>
-  </div>
+        <?php 
+        $questions = [
+            "The objectives of the training were clearly communicated to me before the session.",
+            "I felt adequately prepared and equipped to conduct this training.",
+            "The training materials and resources provided were appropriate and sufficient.",
+            "The training venue and environment were suitable for effective delivery.",
+            "Participants were actively engaged and participated throughout the training.",
+            "The allocated time was sufficient to cover all training topics.",
+            "I was able to effectively manage questions and discussions from participants.",
+            "The training successfully achieved its intended learning objectives.",
+            "I am satisfied with the overall outcome of the training session.",
+            "I would be willing to conduct this training or a similar one again in the future."
+        ];
+
+        for ($i = 1; $i <= 10; $i++): ?>
+            <div class="question">
+                <label for="q<?= $i ?>"><?= $questions[$i - 1] ?></label>
+                <select name="q<?= $i ?>" required>
+                    <option value="1">1 - Strongly Disagree</option>
+                    <option value="2">2 - Disagree</option>
+                    <option value="3">3 - Neutral</option>
+                    <option value="4">4 - Agree</option>
+                    <option value="5">5 - Strongly Agree</option>
+                </select>
+            </div>
+        <?php endfor; ?>
+
+        <label for="feedback">Additional Feedback:</label>
+        <textarea name="feedback" rows="5" placeholder="Your comments here..." required></textarea>
+        <a href="training_evaluation_list.php" class="back-btn">← Back to Training List</a>
+        <button type="submit" class="submit-btn">Submit Evaluation</button>
+       
+    </form>
+
+   
 </div>
-
 </body>
+</html>
+
+<?php
+// Close the database connection
+$conn->close();
+?>
+
+
+
+
+
 
 
 

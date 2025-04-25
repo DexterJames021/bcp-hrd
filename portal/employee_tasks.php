@@ -1,21 +1,14 @@
 <?php
 include 'config.php';
 session_start();
-$employee_id = $_SESSION['user_id'] ?? 0;
 
-// Total Trainings Attended
-$totalAttended = $conn->query("SELECT COUNT(*) AS total FROM course_enrollments WHERE employee_id = $employee_id")->fetch_assoc()['total'];
+$user_id = $_SESSION['user_id'];
 
-// Certificates Earned (if approval status is 'Approved')
-$certificatesEarned = $conn->query("SELECT COUNT(*) AS total FROM employee_certifications 
-                                    WHERE user_id = $employee_id AND approval_status = 'Approved'")->fetch_assoc()['total'];
+// Fetch tasks assigned to this employee
+$sql = "SELECT * FROM tasks WHERE assigned_to = $user_id ORDER BY due_date ASC";
+$result = $conn->query($sql);
+?>
 
-// Ongoing Courses (e.g., future training dates)
-$ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses tc
-                                JOIN course_enrollments ce ON ce.course_id = tc.id
-                                WHERE ce.employee_id = $employee_id AND tc.start_date >= CURDATE()")
-                                ->fetch_assoc()['total'];
-?> 
 <!doctype html>
 <html lang="en">
  
@@ -258,8 +251,8 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                     </ul>
                                 </div>
                             </li>
-                            <!-- Talent Management -->
-                            <li class="nav-item ">
+                           <!-- Talent Management -->
+                           <li class="nav-item ">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5"><i class="fa fa-fw fa-user-circle"></i>Training and Development <span class="badge badge-success">6</span></a>
                                 <div id="submenu-5" class="collapse submenu">
                                     <ul class="nav flex-column">
@@ -278,7 +271,7 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                             </div>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="employee_tasks.php">Task</a>
+                                        <a class="nav-link" href="employee_tasks.php">Task</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-9-10" aria-controls="submenu-9-10">Certification</a>
@@ -296,8 +289,7 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                         </li>
                                         <li class="nav-item">
                                         <a href="schedule_calendar.php" class="nav-link">Schedule</a>
-                                        </li>
-                                            
+                                        </li>   
                                         </li>
                                     </ul>
                                 </div>
@@ -473,94 +465,72 @@ $ongoingCourses = $conn->query("SELECT COUNT(*) AS total FROM training_courses t
                                 
                                 </div>
                             </div>
+                          
                             <head>
-  <meta charset="UTF-8">
-  <title>Employee Dashboard</title>
-  <style>
- body {
-  background-color: #f1f5f9;
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-}
-
-.dashboard-container {
-  max-width: 1500px;
-  margin: 40px auto;
-  background: #fff;
-  border-radius: 20px;
-  padding: 30px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-}
-
-.dashboard-title {
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: #1e293b;
-  text-align: center;
-}
-
-.dashboard-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap; /* Ensures responsiveness */
-}
-
-.card {
-  flex: 1;
-  min-width: 280px;
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 25px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
-  text-align: center;
-  transition: all 0.2s ease-in-out;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  background-color: #f1f5f9;
-}
-
-.card-title {
-  font-size: 14px;
-  color: #64748b;
-  margin-bottom: 8px;
-}
-
-.card-value {
-  font-size: 28px;
-  font-weight: bold;
-  color: #1d4ed8;
-}
-</style>
+    <title>My Tasks</title>
+    <style>
+        body { background-color: #f1f5f9; font-family: 'Segoe UI', sans-serif; }
+        .card-container { width: 90%;max-width: 1000px; margin: 40px auto; background: #fff; border-radius: 16px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .card-container h2 { font-size: 20px; font-weight: 600; margin-bottom: 20px; color: #1e293b; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { padding: 12px 16px; border-bottom: 1px solid #e2e8f0; text-align: left; }
+        th { background-color: #f8fafc; color: #334155; }
+        tr:hover { background-color: #f1f5f9; }
+        .update-btn {
+            background-color: #6366f1; color: white; padding: 6px 12px;
+            border: none; border-radius: 8px; cursor: pointer;
+        }
+        .update-btn:hover { background-color: #4f46e5; }
+        select {
+            padding: 6px 10px; border-radius: 6px; border: 1px solid #e2e8f0;
+        }
+    </style>
 </head>
 <body>
 
+<div class="card-container">
+    <h2>My Assigned Tasks</h2>
 
-<div class="dashboard-container">
-  <h2 class="dashboard-title">🎯 My Training Dashboard</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Update</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($result->num_rows > 0): ?>
+                <?php while($task = $result->fetch_assoc()): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($task['title']) ?></td>
+                        <td><?= htmlspecialchars($task['description']) ?></td>
+                        <td><?= htmlspecialchars($task['due_date']) ?></td>
+                        <td><?= htmlspecialchars($task['status']) ?></td>
+                        <td>
+                            <form method="POST" action="update_task_status.php">
+                                <input type="hidden" name="task_id" value="<?= $task['id'] ?>">
+                                <select name="status">
+                                    <option value="Pending" <?= $task['status'] == 'Pending' ? 'selected' : '' ?>>Pending</option>
+                                    <option value="In Progress" <?= $task['status'] == 'In Progress' ? 'selected' : '' ?>>In Progress</option>
+                                    <option value="Completed" <?= $task['status'] == 'Completed' ? 'selected' : '' ?>>Completed</option>
+                                </select>
+                                <button type="submit" class="update-btn">📝Update</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="5">You have no tasks assigned.</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
 
-  <div class="dashboard-row">
-    <div class="card">
-      <div class="card-title">Total Trainings Attended</div>
-      <div class="card-value"><?= $totalAttended ?></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Certificates Earned</div>
-      <div class="card-value"><?= $certificatesEarned ?></div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">Ongoing Courses</div>
-      <div class="card-value"><?= $ongoingCourses ?></div>
-    </div>
-  </div>
 </div>
-
-</body>
 
 
 
