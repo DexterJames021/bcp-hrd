@@ -289,13 +289,13 @@ try {
                                     border: 1px solid;
                                     color: <?php
                                     if ($value === 'pending') echo '#8a6d3b';
-                                    elseif ($value === 'accepted') echo 'white';
+                                    elseif ($value === 'approved') echo 'white';
                                     elseif ($value === 'denied') echo 'white';
                                     else echo 'black';
                                     ?>;
                                     background-color: <?php
                                     if ($value === 'pending') echo '#f0ad4e'; // Yellowish color
-                                    elseif ($value === 'accepted') echo '#5cb85c'; // Green
+                                    elseif ($value === 'approved') echo '#5cb85c'; // Green
                                     elseif ($value === 'denied') echo '#d9534f'; // Red
                                     else echo 'transparent';
                                     ?>;
