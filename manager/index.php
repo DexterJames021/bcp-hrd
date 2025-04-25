@@ -305,10 +305,10 @@ $base_url = 'http://localhost/bcp-hrd';
                                             <a class="nav-link" href="<?php echo $base_url; ?>/manager/compen/leave.php">My Leave</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="<?php echo $base_url; ?>./compen/requests.php">Leave Requests</a>
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/manager/compen/requests.php">Leave Requests</a>
                                         </li>
                                         <li class="nav-item">
-                                        <a class="nav-link" href="<?php echo $base_url; ?>./compen/holiday.php">Holidays</a>
+                                        <a class="nav-link" href="<?php echo $base_url; ?>/manager/compen/holiday.php">Holidays</a>
                                         </li>
                                        
                                     </ul>
