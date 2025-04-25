@@ -73,262 +73,75 @@ $base_url = 'http://localhost/bcp-hrd';
     </nav>
 </div>
 
-<div class="nav-left-sidebar sidebar-white">
-    <div class="menu-list">
-        <nav class="navbar navbar-expand-lg">
-            <a class="d-xl-none d-lg-none" href="#"><?= strtoupper($_SESSION['usertype']) ?> PANEL</a>
-            <button class="navbar-toggler navbar-light btn-light" type="button" data-toggle="collapse"
-                data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav flex-column">
-                    <li class="nav-divider">
-                        <?= strtoupper($_SESSION['usertype']) ?> PANEL
-                    </li>
-                    <?php if (isset($userData['role'])): ?>
-                        <?php if ($userData['role'] === 'employee'): ?>
+<div class="nav-left-sidebar sidebar-primary ">
+            <div class="menu-list ">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                <a class="d-xl-none d-lg-none" href="#"><?= strtoupper($_SESSION['usertype']) ?> PANEL</a>
+                    <a class="d-xl-none d-lg-none" href="index.php">Human Resource Dept.</a>
+                    <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav flex-column">
+                            <li class="nav-divider">
+                                Human Resource Dept.
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : ''; ?>"
                                     href="<?php echo $base_url; ?>/portal/index.php">
                                     <i class="fas fa-fw fa-home"></i> Dashboard
                                 </a>
                             </li>
-                            <!-- facilities -->
-                            <li class="nav-item ">
-                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'request_resources.php' ||
-                                    basename($_SERVER['PHP_SELF']) == 'book_facility.php') ? 'active' : ''; ?>"
-                                    href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2"
-                                    aria-controls="submenu-2">
-                                    <i class="fa fa-fw fa-user-circle"></i>Facilites and Resources
-                                </a>
-                                <div id="submenu-2"
-                                    class="collapse submenu bg-light <?php echo (basename($_SERVER['PHP_SELF']) == 'book_facility.php' || basename($_SERVER['PHP_SELF']) == 'request_resources.php') ? 'show' : ''; ?>">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link  <?php echo (basename($_SERVER['PHP_SELF']) == 'book_facility.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/portal/tech/book_facility.php">Book
-                                                Facility</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'request_resources.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/portal/tech/request_resources.php">Request
-                                                Resources</a>
-                                        </li>
-                                        <!-- <li class="nav-item">
-                                                    <a class="nav-link" href="./tech/facilities/survey.php">Survey</a>
-                                                </li> -->
-                                    </ul>
-                                </div>
-                            </li>
-                            <!-- talent -->
                             <li class="nav-item">
-                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'training_sessions.php' || basename($_SERVER['PHP_SELF']) == 'available.php' || basename($_SERVER['PHP_SELF']) == 'onboarding.php' || basename($_SERVER['PHP_SELF']) == 'indextalent.php') ? 'active' : ''; ?>"
-                                    href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3"
-                                    aria-controls="submenu-3">
-                                    <i class="fa fa-fw fa-rocket"></i> Employee Management
-                                </a>
-                                <div id="submenu-3" class="collapse submenu bg-light">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'talent/training_sessions.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/portal/talent/training_sessions.php">
-                                                My Training Sessions
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'talent/training_sessions.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/portal/talent/available.php">
-                                                Available Trainings
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
+                                <a class="nav-link " href="./tech/resources.php">Resources Management</a>
                             </li>
-                        <?php elseif ($userData['role'] === 'nonteaching'): ?>
                             <li class="nav-item">
-                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : ''; ?>"
-                                    href="<?php echo $base_url; ?>/portal/index.php">
-                                    <i class="fas fa-fw fa-home"></i> Dashboard
-                                </a>
+                                <a class="nav-link " href="./tech/facility.php">Facility
+                                    Management</a>
                             </li>
-                            <!-- facilities -->
-                            <li class="nav-item ">
-                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'request_resources.php' ||
-                                    basename($_SERVER['PHP_SELF']) == 'book_facility.php') ? 'active' : ''; ?>"
-                                    href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2"
-                                    aria-controls="submenu-2">
-                                    <i class="fa fa-fw fa-user-circle"></i>Facilites and Resources
-                                </a>
-                                <div id="submenu-2"
-                                    class="collapse submenu bg-light <?php echo (basename($_SERVER['PHP_SELF']) == 'book_facility.php' || basename($_SERVER['PHP_SELF']) == 'request_resources.php') ? 'show' : ''; ?>">
+                             <!-- Compensation & benefits -->
+                             <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                                    data-target="#submenu-7" aria-controls="submenu-7"> Compensation & benefits</a>
+                                <div id="submenu-7" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link  <?php echo (basename($_SERVER['PHP_SELF']) == 'book_facility.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/portal/tech/book_facility.php">Book
-                                                Facility</a>
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/manager/compen/leave.php">My Leave</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'request_resources.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/portal/tech/request_resources.php">Request
-                                                Resources</a>
+                                            <a class="nav-link" href="<?php echo $base_url; ?>/manager/compen/requests.php">Leave Requests</a>
                                         </li>
-                                        <!-- <li class="nav-item">
-                                            <a class="nav-link" href="./tech/facilities/survey.php">Survey</a>
-                                        </li> -->
+                                        <li class="nav-item">
+                                        <a class="nav-link" href="<?php echo $base_url; ?>/manager/compen/holiday.php">Holidays</a>
+                                        </li>
+                                       
                                     </ul>
                                 </div>
                             </li>
-                            <!-- talent -->
-                            <li class="nav-item">
-                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'training_sessions.php' || basename($_SERVER['PHP_SELF']) == 'available.php' || basename($_SERVER['PHP_SELF']) == 'onboarding.php' || basename($_SERVER['PHP_SELF']) == 'indextalent.php') ? 'active' : ''; ?>"
-                                    href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3"
-                                    aria-controls="submenu-3">
-                                    <i class="fa fa-fw fa-rocket"></i> Employee Management
+                            <!-- <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-7" aria-controls="submenu-7">
+                                    <i class="fas fa-fw fa-inbox"></i>Facility and Resources Request <span class="badge badge-secondary">New</span>
                                 </a>
-                                <div id="submenu-3" class="collapse submenu bg-light">
+                                <div id="submenu-7" class="collapse submenu">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'talent/training_sessions.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/portal/talent/training_sessions.php">
-                                                My Training Sessions
-                                            </a>
+                                            <a class="nav-link" href="pages/inbox.html">Inbox</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'talent/training_sessions.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/portal/talent/available.php">
-                                                Available Trainings
-                                            </a>
+                                            <a class="nav-link" href="pages/email-details.html">Email Detail</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/email-compose.html">Email Compose</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="pages/message-chat.html">Message Chat</a>
                                         </li>
                                     </ul>
                                 </div>
-                            </li>
-                        <?php elseif ($userData['role'] === 'teaching'): ?>
-                            <li class="nav-item">
-                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : ''; ?>"
-                                    href="<?php echo $base_url; ?>/portal/index.php">
-                                    <i class="fas fa-fw fa-home"></i> Dashboard
-                                </a>
-                            </li>
-                            <!-- facilities -->
-                            <li class="nav-item ">
-                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'request_resources.php' ||
-                                    basename($_SERVER['PHP_SELF']) == 'book_facility.php') ? 'active' : ''; ?>"
-                                    href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2"
-                                    aria-controls="submenu-2">
-                                    <i class="fa fa-fw fa-user-circle"></i>Facilites and Resources
-                                </a>
-                                <div id="submenu-2"
-                                    class="collapse submenu bg-light <?php echo (basename($_SERVER['PHP_SELF']) == 'book_facility.php' || basename($_SERVER['PHP_SELF']) == 'request_resources.php') ? 'show' : ''; ?>">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link  <?php echo (basename($_SERVER['PHP_SELF']) == 'book_facility.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/portal/tech/book_facility.php">Book
-                                                Facility</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'request_resources.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/portal/tech/request_resources.php">Request
-                                                Resources</a>
-                                        </li>
-                                        <!-- <li class="nav-item">
-                                            <a class="nav-link" href="./tech/facilities/survey.php">Survey</a>
-                                        </li> -->
-                                    </ul>
-                                </div>
-                            </li>
-                            <!-- talent -->
-                            <li class="nav-item">
-                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'training_sessions.php' || basename($_SERVER['PHP_SELF']) == 'available.php' || basename($_SERVER['PHP_SELF']) == 'onboarding.php' || basename($_SERVER['PHP_SELF']) == 'indextalent.php') ? 'active' : ''; ?>"
-                                    href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3"
-                                    aria-controls="submenu-3">
-                                    <i class="fa fa-fw fa-rocket"></i> Employee Management
-                                </a>
-                                <div id="submenu-3" class="collapse submenu bg-light">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'talent/training_sessions.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/portal/talent/training_sessions.php">
-                                                My Training Sessions
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'talent/training_sessions.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/portal/talent/available.php">
-                                                Available Trainings
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                        <?php elseif ($userData['role'] === 'staff'): ?>
-                            <li class="nav-item">
-                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : ''; ?>"
-                                    href="<?php echo $base_url; ?>/portal/index.php">
-                                    <i class="fas fa-fw fa-home"></i> Dashboard
-                                </a>
-                            </li>
-                            <!-- facilities -->
-                            <li class="nav-item ">
-                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'request_resources.php' ||
-                                    basename($_SERVER['PHP_SELF']) == 'book_facility.php') ? 'active' : ''; ?>"
-                                    href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2"
-                                    aria-controls="submenu-2">
-                                    <i class="fa fa-fw fa-user-circle"></i>Facilites and Resources
-                                </a>
-                                <div id="submenu-2"
-                                    class="collapse submenu bg-light <?php echo (basename($_SERVER['PHP_SELF']) == 'book_facility.php' || basename($_SERVER['PHP_SELF']) == 'request_resources.php') ? 'show' : ''; ?>">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link  <?php echo (basename($_SERVER['PHP_SELF']) == 'book_facility.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/portal/tech/book_facility.php">Book
-                                                Facility</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'request_resources.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/portal/tech/request_resources.php">Request
-                                                Resources</a>
-                                        </li>
-                                        <!-- <li class="nav-item">
-                                            <a class="nav-link" href="./tech/facilities/survey.php">Survey</a>
-                                        </li> -->
-                                    </ul>
-                                </div>
-                            </li>
-                            <!-- talent -->
-                            <li class="nav-item">
-                                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'training_sessions.php' || basename($_SERVER['PHP_SELF']) == 'available.php' || basename($_SERVER['PHP_SELF']) == 'onboarding.php' || basename($_SERVER['PHP_SELF']) == 'indextalent.php') ? 'active' : ''; ?>"
-                                    href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3"
-                                    aria-controls="submenu-3">
-                                    <i class="fa fa-fw fa-rocket"></i> Employee Management
-                                </a>
-                                <div id="submenu-3" class="collapse submenu bg-light">
-                                    <ul class="nav flex-column">
-                                        <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'talent/training_sessions.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/portal/talent/training_sessions.php">
-                                                My Training Sessions
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'talent/training_sessions.php') ? 'active' : ''; ?>"
-                                                href="<?php echo $base_url; ?>/portal/talent/available.php">
-                                                Available Trainings
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                        <?php else: ?>
-                            <li>
-                                <p>Unauthorized role.</p>
-                            </li>
-                        <?php endif; ?>
-                    <?php else: ?>
-                        <?php Header("Location: ../"); ?>
-                    <?php endif; ?>
-                </ul>
+                            </li> -->
+                        </ul>
+                    </div>
+                </nav>
             </div>
-        </nav>
-    </div>
-</div>
+        </div>

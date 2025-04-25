@@ -166,7 +166,7 @@ if (isset($_POST['delete_leave'])) {
                                 <h1>Leave Applications</h1>
                                 <div class="table-responsive">
                                     <!-- Start of Table -->
-                                    <table class="table table-hover" style="width: 100%; max-width: 1500px; border-collapse: collapse;">
+                                    <table class="table table-hover" >
     <thead>
         <tr>
             <th style="color:black;">ID</th>
