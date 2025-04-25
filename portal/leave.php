@@ -249,7 +249,7 @@ try {
                             <div class="card-body">
                                 <div class="leaves">
                                     <h3>My Leaves</h3>
-                                    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                                    <table class="table table-hover">
     <thead>
         <tr>
             <?php if (!empty($allLeaveData)): ?>
@@ -281,7 +281,7 @@ try {
                                             echo '#8a6d3b';
                                         elseif ($value === 'approved')
                                             echo 'white';
-                                        elseif ($value === 'denied')
+                                        elseif ($value === 'rejected')
                                             echo 'white';
                                         else
                                             echo 'black';
@@ -291,7 +291,7 @@ try {
                                             echo '#f0ad4e';
                                         elseif ($value === 'approved')
                                             echo '#5cb85c';
-                                        elseif ($value === 'denied')
+                                        elseif ($value === 'rejected')
                                             echo '#d9534f';
                                         else
                                             echo 'transparent';

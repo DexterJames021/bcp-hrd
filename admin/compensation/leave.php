@@ -166,35 +166,33 @@ if (isset($_POST['delete_leave'])) {
                                 <h1>Leave Applications</h1>
                                 <div class="table-responsive">
                                     <!-- Start of Table -->
-                                    <table class="table table-hover" >
+                                    <table class="table table-hover">
     <thead>
         <tr>
-            <th style="color:black;">ID</th>
-            <th style="color:black;">Employee ID</th>
-            <th style="color:black;">Name</th>
-            <th style="color:black;">Leave</th>
-            <th style="color:black;">Date</th>
-            <th style="color:black;">Department</th>
-            <th style="color:black;">Message</th>
-            <th style="color:black;">Head</th>
-            <th style="color:black;">Status</th>
-            <th style="color:black;">Action</th>
+            <th>ID</th>
+            <th>Employee ID</th>
+            <th>Name</th>
+            <th>Leave</th>
+            <th>Date</th>
+            <th>Department</th>
+            <th>Message</th>
+            <th>Head</th>
+            <th>Status</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
         <?php
-        // Check if we have any records
         if (!empty($benefitData)) {
-            // Loop through the data and display each row
             foreach ($benefitData as $row) {
-                // Determine the status and its corresponding CSS class
+                // Apply status class for styling
                 $statusClass = '';
                 if ($row['status'] == 'pending') {
                     $statusClass = 'status-pending';
                 } elseif ($row['status'] == 'approved') {
-                    $statusClass = 'status-accepted';
-                } elseif ($row['status'] == 'denied') {
-                    $statusClass = 'status-denied';
+                    $statusClass = 'status-approved';
+                } elseif ($row['status'] == 'rejected') {
+                    $statusClass = 'status-rejected';
                 }
 
                 echo "<tr>
@@ -211,29 +209,28 @@ if (isset($_POST['delete_leave'])) {
 
                 // Only show buttons if the status is 'pending'
                 if ($row['status'] == 'pending') {
-                    // Show accept and deny buttons
                     echo "<form method='POST' action='' style='display:inline-block;'>
-                        <input type='hidden' name='leave_id' value='" . htmlspecialchars($row['id']) . "' />
-                        <button type='submit' name='update_status' value='accepted' class='btn btn-secondary btn-sm' style='background-color:#169976;'>Accept</button>
-                      </form>
-                      <form method='POST' action='' style='display:inline-block;'>
-                        <input type='hidden' name='leave_id' value='" . htmlspecialchars($row['id']) . "' />
-                        <button type='submit' name='update_status' value='denied' class='btn btn-danger btn-sm'>Decline</button>
-                      </form>";
+                            <input type='hidden' name='leave_id' value='" . htmlspecialchars($row['id']) . "' />
+                            <button type='submit' name='update_status' value='approved' class='btn btn-secondary btn-sm' style='background-color:#169976;'>Approve</button>
+                          </form>
+                          <form method='POST' action='' style='display:inline-block;'>
+                            <input type='hidden' name='leave_id' value='" . htmlspecialchars($row['id']) . "' />
+                            <button type='submit' name='update_status' value='rejected' class='btn btn-danger btn-sm'>Decline</button>
+                          </form>";
                 } else {
-                    // Show delete button for accepted or denied statuses
+                    // Show delete button for non-pending
                     echo "<form method='POST' action=''>
-                        <input type='hidden' name='leave_id' value='" . htmlspecialchars($row['id']) . "' />
-                        <a href='benefits.php?deleteId=" . $row['id'] . "' onclick='return confirm(\"Are you sure you want to delete this record?\");'>
-                            <button type='submit' name='delete_leave' value='delete' style='background-color:#dc3545; color: white; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer;'>Delete</button>
-                        </a>
-                      </form>";
+                            <input type='hidden' name='leave_id' value='" . htmlspecialchars($row['id']) . "' />
+                            <a href='benefits.php?deleteId=" . $row['id'] . "' onclick='return confirm(\"Are you sure you want to delete this record?\");'>
+                                <button type='submit' name='delete_leave' value='delete' class='btn btn-danger btn-sm'>Delete</button>
+                            </a>
+                          </form>";
                 }
 
                 echo "</td></tr>";
             }
         } else {
-            echo "<tr><td colspan='8'>No records found</td></tr>";
+            echo "<tr><td colspan='10'>No records found</td></tr>";
         }
         ?>
     </tbody>

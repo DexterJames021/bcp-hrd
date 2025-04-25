@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             throw new Exception("All fields are required. Please fill out the form completely.");
         }
 
-        // Fetch employeeId and department based on the logged-in user
+        // Fetch employeeId, name, and department based on the logged-in user
         $fetchStmt = $conn->prepare("
             SELECT a.id AS employeeId, a.applicant_name AS name, d.DepartmentName AS department
             FROM users u
@@ -54,14 +54,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             throw new Exception("User data not found. Cannot apply for leave.");
         }
 
-        // Now insert using SELECT and JOIN logic
+        // Insert leave request using direct values
         $insertStmt = $conn->prepare("
             INSERT INTO leave_requests (employeeId, name, leave_type, date, department, message, head)
-            SELECT 
-                :employeeId, :name, :leaveType, :leaveDate, :department, :message, a.applicant_name
-            FROM users u
-            LEFT JOIN applicants a ON u.applicant_id = a.id
-            WHERE u.id = :userId
+            VALUES (:employeeId, :name, :leaveType, :leaveDate, :department, :message, :head)
         ");
 
         // Bind parameters
@@ -71,8 +67,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $insertStmt->bindParam(':leaveDate', $leaveDate, PDO::PARAM_STR);
         $insertStmt->bindParam(':department', $userData['department'], PDO::PARAM_STR);
         $insertStmt->bindParam(':message', $message, PDO::PARAM_STR);
-        $insertStmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $insertStmt->bindParam(':head', $userData['name'], PDO::PARAM_STR); // Set head same as name
 
+        // Execute and confirm
         if ($insertStmt->execute()) {
             echo "<script>alert('Leave request submitted successfully!');</script>";
             echo "<p style='color:green;'>Leave request submitted successfully!</p>";
@@ -84,6 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         echo "<p style='color:red;'>Error: " . $e->getMessage() . "</p>";
     }
 }
+
 
 // try {
 //     // Query to get all records from the leaveapplication table for the specific user
@@ -98,6 +96,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 //     die("Connection failed: " . $e->getMessage());
 // }
 
+
+
 try {
     // Define the number of records per page
     $recordsPerPage = 5;
@@ -109,8 +109,8 @@ try {
     $offset = ($currentPage - 1) * $recordsPerPage;
 
     // First, get the total number of records for pagination
-    $countStmt = $conn->prepare("SELECT COUNT(*) FROM leave_requests WHERE employeeId = :user_id");
-    $countStmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+    $countStmt = $conn->prepare("SELECT COUNT(*) FROM leave_requests WHERE employeeId = :employee_id");
+    $countStmt->bindParam(':employee_id', $_SESSION['applicant_id'], PDO::PARAM_INT);
     $countStmt->execute();
     $totalRecords = $countStmt->fetchColumn();
 
@@ -118,8 +118,8 @@ try {
     $totalPages = ceil($totalRecords / $recordsPerPage);
 
     // Now, query to get the records for the current page
-    $stmt = $conn->prepare("SELECT * FROM leave_requests WHERE employeeId = :user_id ORDER BY id DESC LIMIT :limit OFFSET :offset");
-    $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+    $stmt = $conn->prepare("SELECT * FROM leave_requests WHERE employeeId = :employee_id ORDER BY id DESC LIMIT :limit OFFSET :offset");
+    $stmt->bindParam(':employee_id', $_SESSION['applicant_id'], PDO::PARAM_INT);
     $stmt->bindValue(':limit', $recordsPerPage, PDO::PARAM_INT);
     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     $stmt->execute();
@@ -130,6 +130,10 @@ try {
 } catch (PDOException $e) {
     die("Connection failed: " . $e->getMessage());
 }
+
+
+
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -257,76 +261,66 @@ try {
                                     <div class="leaves">
                                         <h3>My Leaves</h3>
                                         <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-                                            <thead>
-                                                <tr>
-                                                    <?php if (!empty($leaveApplications)): ?>
-                                                        <?php foreach (array_keys($leaveApplications[0]) as $column): ?>
-                                                            <th
-                                                                style="background-color: #3d405c; color: white; padding: 10px; text-align: left;">
-                                                                <?= htmlspecialchars($column) ?>
-                                                            </th>
-                                                        <?php endforeach; ?>
-                                                    <?php else: ?>
-                                                        <th style="padding: 10px;">No data available</th>
-                                                    <?php endif; ?>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php if (!empty($leaveApplications)): ?>
-                                                    <?php foreach ($leaveApplications as $application): ?>
-                                                        <tr>
-                                                            <?php foreach ($application as $key => $value): ?>
-                                                                <?php if ($key === 'status'): ?>
-                                                                    <td style="padding: 8px; border: 1px solid #ddd;">
-                                                                        <span style="
+    <thead>
+        <tr>
+            <?php if (!empty($leaveApplications)): ?>
+                <?php foreach (array_keys($leaveApplications[0]) as $column): ?>
+                    <th style="background-color: #3d405c; color: white; padding: 10px; text-align: left;">
+                        <?= htmlspecialchars($column) ?>
+                    </th>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <th style="padding: 10px;">No data available</th>
+            <?php endif; ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php if (!empty($leaveApplications)): ?>
+            <?php foreach ($leaveApplications as $application): ?>
+                <tr>
+                    <?php foreach ($application as $key => $value): ?>
+                        <?php if ($key === 'status'): ?>
+                            <td style="padding: 8px; border: 1px solid #ddd;">
+                                <span style="
                                     display: inline-block;
                                     padding: 5px 10px;
                                     border-radius: 4px;
                                     font-weight: bold;
                                     border: 1px solid;
                                     color: <?php
-                                    if ($value === 'pending')
-                                        echo '#8a6d3b';
-                                    elseif ($value === 'accepted')
-                                        echo 'white';
-                                    elseif ($value === 'denied')
-                                        echo 'white';
-                                    else
-                                        echo 'black';
+                                    if ($value === 'pending') echo '#8a6d3b';
+                                    elseif ($value === 'accepted') echo 'white';
+                                    elseif ($value === 'denied') echo 'white';
+                                    else echo 'black';
                                     ?>;
                                     background-color: <?php
-                                    if ($value === 'pending')
-                                        echo '#f0ad4e'; // Yellowish color
-                                    elseif ($value === 'accepted')
-                                        echo '#5cb85c'; // Green
-                                    elseif ($value === 'denied')
-                                        echo '#d9534f'; // Red
-                                    else
-                                        echo 'transparent';
+                                    if ($value === 'pending') echo '#f0ad4e'; // Yellowish color
+                                    elseif ($value === 'accepted') echo '#5cb85c'; // Green
+                                    elseif ($value === 'denied') echo '#d9534f'; // Red
+                                    else echo 'transparent';
                                     ?>;
                                     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
                                 ">
-                                                                            <?= htmlspecialchars($value) ?>
-                                                                        </span>
-                                                                    </td>
-                                                                <?php else: ?>
-                                                                    <td style="padding: 8px; border: 1px solid #ddd;">
-                                                                        <?= htmlspecialchars($value) ?>
-                                                                    </td>
-                                                                <?php endif; ?>
-                                                            <?php endforeach; ?>
-                                                        </tr>
-                                                    <?php endforeach; ?>
-                                                <?php else: ?>
-                                                    <tr>
-                                                        <td colspan="<?= count($leaveApplications[0]) ?>"
-                                                            style="padding: 10px; text-align: center;">
-                                                            No records found.
-                                                        </td>
-                                                    </tr>
-                                                <?php endif; ?>
-                                            </tbody>
-                                        </table>
+                                    <?= htmlspecialchars($value) ?>
+                                </span>
+                            </td>
+                        <?php else: ?>
+                            <td style="padding: 8px; border: 1px solid #ddd;">
+                                <?= htmlspecialchars($value) ?>
+                            </td>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="<?= count($leaveApplications[0]) ?>" style="padding: 10px; text-align: center;">
+                    No records found.
+                </td>
+            </tr>
+        <?php endif; ?>
+    </tbody>
+</table>
 
                                         <!-- Pagination Links -->
                                         <div style="margin-top: 20px; text-align: center;">
