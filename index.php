@@ -1,154 +1,130 @@
-<?php
-session_start();
-require __DIR__ . "/config/db_talent.php"; // Adjust path if needed
-
-// Helper function to truncate text
-function truncateText($text, $maxChars = 100)
-{
-    return strlen($text) > $maxChars ? substr($text, 0, $maxChars) . '...' : $text;
-}
-
-// Fetch departments for filtering
-$dept_query = "SELECT DISTINCT DepartmentName FROM departments";
-$dept_result = mysqli_query($conn, $dept_query);
-
-// Fetch locations for filtering
-$loc_query = "SELECT DISTINCT location FROM job_postings";
-$loc_result = mysqli_query($conn, $loc_query);
-
-// Fetch job postings with filters
-$whereClauses = ["job_postings.status = 'Open'"];
-if (!empty($_GET['query'])) {
-    $search = mysqli_real_escape_string($conn, $_GET['query']);
-    $whereClauses[] = "(job_postings.job_title LIKE '%$search%' OR job_postings.job_description LIKE '%$search%')";
-}
-if (!empty($_GET['department'])) {
-    $department = mysqli_real_escape_string($conn, $_GET['department']);
-    $whereClauses[] = "departments.DepartmentName = '$department'";
-}
-if (!empty($_GET['location'])) {
-    $location = mysqli_real_escape_string($conn, $_GET['location']);
-    $whereClauses[] = "job_postings.location = '$location'";
-}
-$whereSQL = implode(" AND ", $whereClauses);
-
-$query = "SELECT job_postings.*, departments.DepartmentName 
-          FROM job_postings 
-          LEFT JOIN departments ON job_postings.DepartmentID = departments.DepartmentID 
-          WHERE $whereSQL";
-$result = mysqli_query($conn, $query);
-?>
-
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+  <link rel="shortcut icon" href="assets/img/bcp-logo-page.png" type="image/x-icon">
+  </head>
+    <?php
+    session_start();
+    include('admin/db_connect.php');
+    ob_start();
+    $query = $conn->query("SELECT * FROM system_settings limit 1")->fetch_array();
+     foreach ($query as $key => $value) {
+      if(!is_numeric($key))
+        $_SESSION['setting_'.$key] = $value;
+    }
+    ob_end_flush();
+    include('header.php');
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Management System</title>
-    <!-- icon -->
-    <link rel="shortcut icon" href="./assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
-    <link rel="stylesheet" href="styledashboard.css">
-    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</head>
+	
+    ?>
 
-<body>
-
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="index.php">BCP <span class="text-warning">HRD</span></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <form class="d-flex me-3" id="searchForm">
-                            <input class="form-control me-2" type="search" id="searchInput"
-                                placeholder="Search jobs...">
-                        </form>
-
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="#jobs">Apply Now</a></li>
-                    <li class="nav-item"><a class="btn btn-light text-primary" href="auth/index.php">Login</a></li>
-                </ul>
+    <style>
+    	header.masthead {
+		  background: url(admin/assets/img/<?php echo $_SESSION['setting_cover_img'] ?>);
+		  background-repeat: no-repeat;
+		  background-size: cover;
+		}
+    </style>
+    <body id="page-top">
+        <!-- Navigation-->
+        <div class="toast" id="alert_toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body text-white">
+        </div>
+      </div>
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand js-scroll-trigger" href="./"><?php echo $_SESSION['setting_name'] ?></a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto my-2 my-lg-0">
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="index.php?page=home">Home</a></li>
+                        <li class="nav-item"><a class="nav-link js-scroll-trigger" href="index.php?page=about">About</a></li>
+                        
+                     
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+       
+        <?php 
+        $page = isset($_GET['page']) ?$_GET['page'] : "home";
+        include $page.'.php';
+        ?>
+       
 
-    <header class="text-white text-center d-flex align-items-center justify-content-center position-relative"
-        style="min-height: 100vh; overflow: hidden;">
-        <div class="slideshow position-absolute w-100 h-100">
-            <img src="assets/images/bcp1.jpg" class="active">
-            <img src="assets/images/bcp2.jpg">
-            <img src="assets/images/bcp4.jpg">
-        </div>
-        <div class="container position-relative z-index-2">
-            <h1 class="display-4 fw-bold">Welcome to the Human Resources of Bestlink College of the Philippines</h1>
-            <p class="lead">Find job opportunities and manage employees efficiently.</p>
-        </div>
-    </header>
-
-    <section id="jobs" class="container my-5">
-        <h2 class="text-center mb-4">NOW HIRING!</h2>
-        <div class="row" id="jobListings">
-            <?php if (mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) { ?>
-                    <div class="col-md-4 mb-4">
-                        <div class="card border-primary">
-                            <div class="card-body">
-                                <h5 class="card-title text-primary"><?php echo htmlspecialchars($row['job_title']); ?></h5>
-                                <p class="card-text"><strong>Job Description:</strong>
-                                    <?php echo truncateText(htmlspecialchars($row['job_description']), 100); ?></p>
-
-                                <!-- Requirements Section -->
-                                <p><strong>Requirements:</strong></p>
-                                <ul>
-                                    <?php
-                                    $requirements = explode("\n", $row['requirements']); // Hatiin bawat linya
-                                    foreach ($requirements as $requirement) {
-                                        if (!empty(trim($requirement))) { // Iwasan ang blank items
-                                            echo "<li>" . htmlspecialchars($requirement) . "</li>";
-                                        }
-                                    }
-                                    ?>
-                                </ul>
-
-                                <p><strong>Location:</strong> <?php echo htmlspecialchars($row['location']); ?></p>
-                                <p><strong>Salary:</strong> <?php echo htmlspecialchars($row['salary_range']); ?></p>
-                                <p><strong>Department:</strong> <?php echo htmlspecialchars($row['DepartmentName']); ?></p>
-                                <a href="admin/talent/recruitment/apply.php?job_id=<?php echo htmlspecialchars($row['id']); ?>"
-                                    class="btn btn-success">Apply Now</a>
-                            </div>
-                        </div>
+<div class="modal fade" id="confirm_modal" role='dialog'>
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title">Confirmation</h5>
+      </div>
+      <div class="modal-body">
+        <div id="delete_content"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id='confirm' onclick="">Continue</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="uni_modal" role='dialog'>
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title"></h5>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id='submit' onclick="$('#uni_modal form').submit()">Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="uni_modal_right" role='dialog'>
+    <div class="modal-dialog modal-full-height  modal-md" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span class="fa fa-arrow-righ t"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+      </div>
+      </div>
+    </div>
+  </div>
+  <div id="preloader"></div>
+        <footer class="bg-light py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 text-center">
+                        <h2 class="mt-0">Contact us</h2>
+                        <hr class="divider my-4" />
                     </div>
-                <?php }
-            } else { ?>
-                <p class="text-center">No job postings available at the moment.</p>
-            <?php } ?>
-        </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 ml-auto text-center mb-5 mb-lg-0">
+                        <i class="fas fa-phone fa-3x mb-3 text-muted"></i>
+                        <div><?php echo $_SESSION['setting_contact'] ?></div>
+                    </div>
+                    <div class="col-lg-4 mr-auto text-center">
+                        <i class="fas fa-envelope fa-3x mb-3 text-muted"></i>
+                        <!-- Make sure to change the email address in BOTH the anchor text and the link target below!-->
+                        <a class="d-block" href="mailto:<?php echo $_SESSION['setting_email'] ?>"><?php echo $_SESSION['setting_email'] ?></a>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="container"><div class="small text-center text-muted">Welcome - <?php echo $_SESSION['setting_name'] ?> | </div></div>
+        </footer>
+        
+       <?php include('footer.php') ?>
+    </body>
 
-    </section>
-
-    <footer class="bg-dark text-white text-center py-3">
-        <p>&copy; <?php echo date("Y"); ?> Employee Management System. All rights reserved.</p>
-    </footer>
-    <script>
-        document.getElementById('searchInput').addEventListener('keyup', function () {
-            let query = this.value.trim(); // Kunin ang input value
-            let xhr = new XMLHttpRequest(); // Gumawa ng AJAX request
-            xhr.open('GET', 'search_jobs.php?query=' + encodeURIComponent(query), true);
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    document.getElementById('jobListings').innerHTML = xhr.responseText; // Palitan ang job listings
-                }
-            };
-            xhr.send();
-        });
-    </script>
-
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-</body>
+    <?php $conn->close() ?>
 
 </html>

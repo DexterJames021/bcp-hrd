@@ -1,324 +1,158 @@
-<?php
-require __DIR__ . "../../config/db_talent.php";
-require __DIR__ . '../../auth/mysqli_accesscontrol.php';
-
-$userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
-access_log($userData);
-
-// echo "console.log(ROOT +++++++++++ " . $_SERVER['DOCUMENT_ROOT'] . ")";
-
-
-// Fetch total employees
-$queryEmployees = "SELECT COUNT(*) AS total FROM employees";
-$resultEmployees = mysqli_query($conn, $queryEmployees);
-$totalEmployees = mysqli_fetch_assoc($resultEmployees)['total'];
-
-// Fetch total applicants
-$queryApplicants = "SELECT COUNT(*) AS total FROM applicants";
-$resultApplicants = mysqli_query($conn, $queryApplicants);
-$totalApplicants = mysqli_fetch_assoc($resultApplicants)['total'];
-
-// Fetch total job postings
-$queryJobPostings = "SELECT COUNT(*) AS total FROM job_postings";
-$resultJobPostings = mysqli_query($conn, $queryJobPostings);
-$totalJobPostings = mysqli_fetch_assoc($resultJobPostings)['total'];
-
-// Fetch total hired employees
-$queryHired = "SELECT COUNT(*) AS total FROM applicants WHERE status = 'Hired'";
-$resultHired = mysqli_query($conn, $queryHired);
-$totalHired = mysqli_fetch_assoc($resultHired)['total'];
-
-// Fetch applicants per department
-$queryApplicantsPerDept = "
-    SELECT d.DepartmentName, COUNT(a.id) AS totalApplicants
-    FROM applicants a
-    LEFT JOIN departments d ON a.DepartmentID = d.DepartmentID
-    GROUP BY d.DepartmentName";
-$resultApplicantsPerDept = mysqli_query($conn, $queryApplicantsPerDept);
-$applicantsData = [];
-while ($row = mysqli_fetch_assoc($resultApplicantsPerDept)) {
-    $applicantsData[$row['DepartmentName']] = $row['totalApplicants'];
-}
-
-// Fetch employees per department
-$queryEmployeesPerDept = "
-    SELECT d.DepartmentName, COUNT(e.EmployeeID) AS totalEmployees
-FROM employees e
-LEFT JOIN users u ON e.UserID = u.id  -- Get the applicant ID through users table
-LEFT JOIN applicants a ON u.applicant_id = a.id  -- Get the department through the applicant
-LEFT JOIN departments d ON a.DepartmentID = d.DepartmentID  -- Fetch department name
-GROUP BY d.DepartmentName";
-
-$resultEmployeesPerDept = mysqli_query($conn, $queryEmployeesPerDept);
-$employeesData = [];
-while ($row = mysqli_fetch_assoc($resultEmployeesPerDept)) {
-    $employeesData[$row['DepartmentName']] = $row['totalEmployees'];
-}
-
-// Convert PHP arrays to JSON
-$applicantsJSON = json_encode($applicantsData);
-$employeesJSON = json_encode($employeesData);
-
-
-?>
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <!-- icon -->
-    <link rel="shortcut icon" href="../../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
+  <title>Admin | Recruitment And Selection</title>
+  
+ 	
 
-    <!-- ajax -->
-    <script defer src="../node_modules/jquery/dist/jquery.min.js"></script>
+<?php
+	session_start();
+  if(!isset($_SESSION['login_id']))
+    header('location:login.php');
+ include('./header.php'); 
+ // include('./auth.php'); 
+ ?>
 
-    <!-- bs -->
-    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
-
-    <!-- global JavaScript -->
-    <!-- <!-- <script defer type="module" src="../assets/libs/js/global-script.js"></script> --> -->
-
-    <!-- main js -->
-    <script defer type="module" src="../assets/libs/js/main-js.js"></script>
-    <link rel="stylesheet" href="../assets/libs/css/style.css">
-
-    <!-- assts csss -->
-    <link rel="stylesheet" href="../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
-    <link rel="stylesheet" href="../assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
-    <link rel="stylesheet" href="../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
-
-    <!-- slimscroll js -->
-    <script defer type="module" src="../assets/vendor/slimscroll/jquery.slimscroll.js"></script>
-
-    <title>Admin Dashboard</title>
-
-    <style>
-        #loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #0e0c28;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            transition: opacity 0.3s ease;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #3498db;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .loading-text {
-            font-size: 18px;
-            color: white;
-            font-weight: bold;
-        }
-    </style>
 </head>
+<style>
+	body{
+        background: #80808045;
+  }
+  .modal-dialog.large {
+    width: 80% !important;
+    max-width: unset;
+  }
+  .modal-dialog.mid-large {
+    width: 50% !important;
+    max-width: unset;
+  }
+</style>
 
 <body>
+	<?php include 'topbar.php' ?>
+	<?php include 'navbar.php' ?>
+  <div class="toast" id="alert_toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-body text-white">
+    </div>
+  </div>
+  <main id="view-panel" >
+      <?php $page = isset($_GET['page']) ? $_GET['page'] :'home'; ?>
+  	<?php include $page.'.php' ?>
+  	
 
-    <body>
-        <div id="loading-overlay">
-            <div class="spinner"></div>
-            <div class="loading-text">Loading Dashboard...</div>
-        </div>
+  </main>
 
-        <!-- Rest of your body content -->
-        <div class="dashboard-main-wrapper" style="padding:0px;">
-            <!-- ... -->
-            <!-- ============================================================== -->
-            <!-- main wrapper -->
-            <!-- ============================================================== -->
-            <div class="dashboard-main-wrapper">
-                <!-- ============================================================== -->
-                <!-- navbar -->
-                <!-- ============================================================== -->
-                <?php include 'sideandnavbar.php'; ?>
-                <!-- ============================================================== -->
-                <!-- end navbar -->
-                <!-- ============================================================== -->
-                <!-- ============================================================== -->
-                <!-- left sidebar -->
+  <div id="preloader"></div>
+  <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
 
-                <!-- ============================================================== -->
-                <!-- end left sidebar -->
-                <!-- ============================================================== -->
-                <!-- ============================================================== -->
-                <!-- wrapper  -->
-                <!-- ============================================================== -->
-                <div class="dashboard-wrapper">
-                    <!-- <div class="dashboard-ecommerce"> -->
-                    <div class="container-fluid dashboard-content ">
-                        <!-- ============================================================== -->
-                        <!-- pageheader  -->
-                        <!-- ============================================================== -->
+<div class="modal fade" id="confirm_modal" role='dialog'>
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title">Confirmation</h5>
+      </div>
+      <div class="modal-body">
+        <div id="delete_content"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id='confirm' onclick="">Continue</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="uni_modal" role='dialog'>
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title"></h5>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id='submit' onclick="$('#uni_modal form').submit()">Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+	 window.start_load = function(){
+    $('body').prepend('<di id="preloader2"></di>')
+  }
+  window.end_load = function(){
+    $('#preloader2').fadeOut('fast', function() {
+        $(this).remove();
+      })
+  }
 
-                        <!-- ============================================================== -->
-                        <!-- end pageheader  -->
-                        <!-- ============================================================== -->
-                        <!-- <div class="ecommerce-widget"> -->
+  window.uni_modal = function($title = '' , $url='',$size=""){
+    start_load()
+    $.ajax({
+        url:$url,
+        error:err=>{
+            console.log()
+            alert("An error occured")
+        },
+        success:function(resp){
+            if(resp){
+                $('#uni_modal .modal-title').html($title)
+                $('#uni_modal .modal-body').html(resp)
+                if($size != ''){
+                    $('#uni_modal .modal-dialog').addClass($size)
+                }else{
+                    $('#uni_modal .modal-dialog').removeAttr("class").addClass("modal-dialog modal-md")
+                }
+                $('#uni_modal').modal({
+                  show:true,
+                  backdrop:'static',
+                  keyboard:false,
+                  focus:true
+                })
+                end_load()
+            }
+        }
+    })
+}
+window._conf = function($msg='',$func='',$params = []){
+     $('#confirm_modal #confirm').attr('onclick',$func+"("+$params.join(',')+")")
+     $('#confirm_modal .modal-body').html($msg)
+     $('#confirm_modal').modal('show')
+  }
+   window.alert_toast= function($msg = 'TEST',$bg = 'success'){
+      $('#alert_toast').removeClass('bg-success')
+      $('#alert_toast').removeClass('bg-danger')
+      $('#alert_toast').removeClass('bg-info')
+      $('#alert_toast').removeClass('bg-warning')
 
-                        <?php if ($userData && in_array("VIEW", $userData['permissions'])): ?>
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h1>DASHBOARD</h1>
-
-                                            <!-- Summary Cards -->
-                                            <div class="row">
-                                                <div class="col-md-3">
-                                                    <div class="card bg-light text-white">
-                                                        <div class="card-body">
-                                                            <h5>Total Employees</h5>
-                                                            <h3><?php echo $totalEmployees; ?></h3>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <div class="card bg-light text-white">
-                                                        <div class="card-body">
-                                                            <h5>Total Applicants</h5>
-                                                            <h3><?php echo $totalApplicants; ?></h3>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <div class="card bg-light text-dark">
-                                                        <div class="card-body">
-                                                            <h5>Total Job Postings</h5>
-                                                            <h3><?php echo $totalJobPostings; ?></h3>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <div class="card bg-light text-white">
-                                                        <div class="card-body">
-                                                            <h5>Total Hired</h5>
-                                                            <h3><?php echo $totalHired; ?></h3>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div> <!-- End of Card Body -->
-                                    </div> <!-- End of Card -->
-
-                                    <!-- Charts -->
-                                    <div class="row mt-4">
-                                        <div class="col-md-6">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <h5>Applicants Per Job</h5>
-                                                    <canvas id="applicantsChart" height="100" width="100"></canvas>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <h5>Employees Per Department</h5>
-                                                    <canvas id="departmentChart" height="100" width="100"></canvas>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> <!-- End of Col-12 -->
-                            </div> <!-- End of Row -->
-
-                        <?php else: ?>
-                            <?php include_once "./403.php"; ?>
-                        <?php endif; ?>
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                var loadingOverlay = document.getElementById('loading-overlay');
-
-                                window.addEventListener('load', function () {
-                                    setTimeout(function () {
-                                        loadingOverlay.style.opacity = '0';
-                                        setTimeout(function () {
-                                            loadingOverlay.style.display = 'none';
-                                        }, 300);
-                                    }, 500);
-                                });
-
-                                setTimeout(function () {
-                                    loadingOverlay.style.opacity = '0';
-                                    setTimeout(function () {
-                                        loadingOverlay.style.display = 'none';
-                                    }, 300);
-                                }, 3000); 
-                            });
-                        </script>
-                        <!-- Chart.js Library -->
-                        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-                        <script>
-                            // Convert PHP JSON to JavaScript Object
-                            var applicantsData = <?php echo $applicantsJSON; ?>;
-                            var employeesData = <?php echo $employeesJSON; ?>;
-
-                            // Generate labels and data for charts
-                            var applicantLabels = Object.keys(applicantsData);
-                            var applicantCounts = Object.values(applicantsData);
-
-                            var employeeLabels = Object.keys(employeesData);
-                            var employeeCounts = Object.values(employeesData);
-
-                            // Applicants per Department Chart
-                            var ctx1 = document.getElementById('applicantsChart').getContext('2d');
-                            var applicantsChart = new Chart(ctx1, {
-                                type: 'bar',
-                                data: {
-                                    labels: applicantLabels,
-                                    datasets: [{
-                                        label: 'Applicants',
-                                        data: applicantCounts,
-                                        backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8']
-                                    }]
-                                }
-                            });
-
-                            // Employees per Department Chart
-                            var ctx2 = document.getElementById('departmentChart').getContext('2d');
-                            var departmentChart = new Chart(ctx2, {
-                                type: 'pie',
-                                data: {
-                                    labels: employeeLabels,
-                                    datasets: [{
-                                        data: employeeCounts,
-                                        backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8']
-                                    }]
-                                }
-                            });
-                        </script>
-
-                    </div>
-                </div>
-
-    </body>
-
+    if($bg == 'success')
+      $('#alert_toast').addClass('bg-success')
+    if($bg == 'danger')
+      $('#alert_toast').addClass('bg-danger')
+    if($bg == 'info')
+      $('#alert_toast').addClass('bg-info')
+    if($bg == 'warning')
+      $('#alert_toast').addClass('bg-warning')
+    $('#alert_toast .toast-body').html($msg)
+    $('#alert_toast').toast({delay:3000}).toast('show');
+  }
+  $(document).ready(function(){
+    $('#preloader').fadeOut('fast', function() {
+        $(this).remove();
+      })
+  })
+  $('.datetimepicker').datetimepicker({
+      format:'Y/m/d H:i',
+      startDate: '+3d'
+  })
+  $('.select2').select2({
+    placeholder:"Please select here",
+    width: "100%"
+  })
+</script>	
 </html>
