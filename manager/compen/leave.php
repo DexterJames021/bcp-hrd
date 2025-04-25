@@ -191,7 +191,7 @@ try {
         <!-- ============================================================== -->
         <!-- left sidebar -->
         <!-- ============================================================== -->
-        
+
         <!-- ============================================================== -->
         <!-- end left sidebar -->
         <!-- ============================================================== -->
@@ -261,66 +261,76 @@ try {
                                     <div class="leaves">
                                         <h3>My Leaves</h3>
                                         <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-    <thead>
-        <tr>
-            <?php if (!empty($leaveApplications)): ?>
-                <?php foreach (array_keys($leaveApplications[0]) as $column): ?>
-                    <th style="background-color: #3d405c; color: white; padding: 10px; text-align: left;">
-                        <?= htmlspecialchars($column) ?>
-                    </th>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <th style="padding: 10px;">No data available</th>
-            <?php endif; ?>
-        </tr>
-    </thead>
-    <tbody>
-        <?php if (!empty($leaveApplications)): ?>
-            <?php foreach ($leaveApplications as $application): ?>
-                <tr>
-                    <?php foreach ($application as $key => $value): ?>
-                        <?php if ($key === 'status'): ?>
-                            <td style="padding: 8px; border: 1px solid #ddd;">
-                                <span style="
+                                            <thead>
+                                                <tr>
+                                                    <?php if (!empty($leaveApplications)): ?>
+                                                        <?php foreach (array_keys($leaveApplications[0]) as $column): ?>
+                                                            <th
+                                                                style="background-color: #3d405c; color: white; padding: 10px; text-align: left;">
+                                                                <?= htmlspecialchars($column) ?>
+                                                            </th>
+                                                        <?php endforeach; ?>
+                                                    <?php else: ?>
+                                                        <th style="padding: 10px;">No data available</th>
+                                                    <?php endif; ?>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php if (!empty($leaveApplications)): ?>
+                                                    <?php foreach ($leaveApplications as $application): ?>
+                                                        <tr>
+                                                            <?php foreach ($application as $key => $value): ?>
+                                                                <?php if ($key === 'status'): ?>
+                                                                    <td style="padding: 8px; border: 1px solid #ddd;">
+                                                                        <span style="
                                     display: inline-block;
                                     padding: 5px 10px;
                                     border-radius: 4px;
                                     font-weight: bold;
                                     border: 1px solid;
                                     color: <?php
-                                    if ($value === 'pending') echo '#8a6d3b';
-                                    elseif ($value === 'approved') echo 'white';
-                                    elseif ($value === 'denied') echo 'white';
-                                    else echo 'black';
+                                    if ($value === 'pending')
+                                        echo '#8a6d3b';
+                                    elseif ($value === 'approved')
+                                        echo 'white';
+                                    elseif ($value === 'rejected')
+                                        echo 'white';
+                                    else
+                                        echo 'black';
                                     ?>;
                                     background-color: <?php
-                                    if ($value === 'pending') echo '#f0ad4e'; // Yellowish color
-                                    elseif ($value === 'approved') echo '#5cb85c'; // Green
-                                    elseif ($value === 'denied') echo '#d9534f'; // Red
-                                    else echo 'transparent';
+                                    if ($value === 'pending')
+                                        echo '#f0ad4e'; // Yellowish color
+                                    elseif ($value === 'approved')
+                                        echo '#5cb85c'; // Green
+                                    elseif ($value === 'rejected')
+                                        echo '#d9534f'; // Red
+                                    else
+                                        echo 'transparent';
                                     ?>;
                                     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
                                 ">
-                                    <?= htmlspecialchars($value) ?>
-                                </span>
-                            </td>
-                        <?php else: ?>
-                            <td style="padding: 8px; border: 1px solid #ddd;">
-                                <?= htmlspecialchars($value) ?>
-                            </td>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
-                </tr>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <tr>
-                <td colspan="<?= count($leaveApplications[0]) ?>" style="padding: 10px; text-align: center;">
-                    No records found.
-                </td>
-            </tr>
-        <?php endif; ?>
-    </tbody>
-</table>
+                                                                            <?= htmlspecialchars($value) ?>
+                                                                        </span>
+                                                                    </td>
+                                                                <?php else: ?>
+                                                                    <td style="padding: 8px; border: 1px solid #ddd;">
+                                                                        <?= htmlspecialchars($value) ?>
+                                                                    </td>
+                                                                <?php endif; ?>
+                                                            <?php endforeach; ?>
+                                                        </tr>
+                                                    <?php endforeach; ?>
+                                                <?php else: ?>
+                                                    <tr>
+                                                        <td colspan="<?= count($leaveApplications[0]) ?>"
+                                                            style="padding: 10px; text-align: center;">
+                                                            No records found.
+                                                        </td>
+                                                    </tr>
+                                                <?php endif; ?>
+                                            </tbody>
+                                        </table>
 
                                         <!-- Pagination Links -->
                                         <div style="margin-top: 20px; text-align: center;">

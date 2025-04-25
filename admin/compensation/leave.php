@@ -169,16 +169,16 @@ if (isset($_POST['delete_leave'])) {
                                     <table class="table table-hover">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Employee ID</th>
-            <th>Name</th>
-            <th>Leave</th>
-            <th>Date</th>
-            <th>Department</th>
-            <th>Message</th>
-            <th>Head</th>
-            <th>Status</th>
-            <th>Action</th>
+            <th style="color:black">ID</th>
+            <th style="color:black">Employee ID</th>
+            <th style="color:black">Name</th>
+            <th style="color:black">Leave</th>
+            <th style="color:black">Date</th>
+            <th style="color:black">Department</th>
+            <th style="color:black">Message</th>
+            <th style="color:black">Head</th>
+            <th style="color:black">Status</th>
+            <th style="color:black">Action</th>
         </tr>
     </thead>
     <tbody>
