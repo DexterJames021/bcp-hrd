@@ -2,6 +2,13 @@
 session_start();
 require __DIR__ . "/../config/Database.php";
 
+// Load PHPMailer
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require '../vendor/autoload.php'; // Adjust path if needed
+
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE);
+
 $err = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -9,49 +16,65 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = trim($_POST['password']);
 
     if ($err == "") {
-        // Prepare the query to select the user by username only
+        // Fetch user
         $query = "SELECT * FROM users WHERE username = :username LIMIT 1";
         $stmt = $conn->prepare($query);
         $stmt->execute(['username' => $username]);
-
         $user = $stmt->fetch(PDO::FETCH_OBJ);
 
         if ($user) {
-            // Verify the hashed password
             if (password_verify($password, $user->password)) {
-                // Start the session with user details
-                $_SESSION['user_id'] = $user->id;
-                $_SESSION['username'] = $user->username;
-                $_SESSION['usertype'] = $user->usertype;
-                $_SESSION['applicant_id'] = $user->applicant_id;
-                $_SESSION['onboarding_step'] = $user->onboarding_step; // Store onboarding step in session
+                // Fetch applicant email
+                $query = "SELECT email FROM applicants WHERE id = :applicant_id LIMIT 1";
+                $stmt = $conn->prepare($query);
+                $stmt->execute(['applicant_id' => $user->applicant_id]);
+                $applicant = $stmt->fetch(PDO::FETCH_OBJ);
 
-                // Check the user's onboarding step status
-                if ($user->onboarding_step < 4) {
-                    // If onboarding step is not complete, redirect to the appropriate step
-                    header("Location: ../admin/talent/onboarding/new_hire/step1.php");
-                    exit;
-                } else {
-                    // If onboarding is complete, proceed based on usertype
-                    switch ($user->usertype) {
-                        case 'admin':
-                        case 'maintenance':
-                        case 'superadmin':
-                            header("Location: ../admin/index.php");
-                            exit;
-                        case 'manager':
-                        case 'officer':
-                            header("Location: ../manager/index.php");
-                            exit;
-                        case 'employee':
-                        case 'nonteaching':
-                        case 'teaching':
-                        case 'staff':
-                            header("Location: ../portal/index.php");
-                            exit;
-                        default:
-                            $err = '405 No permission to access this portal.';
+                if ($applicant) {
+                    $email = $applicant->email;
+
+                    // Generate OTP
+                    $otp = rand(100000, 999999);
+
+                    // Save temp session
+                    $_SESSION['temp_user'] = [
+                        'user_id' => $user->id,
+                        'username' => $user->username,
+                        'usertype' => $user->usertype,
+                        'applicant_id' => $user->applicant_id,
+                        'onboarding_step' => $user->onboarding_step,
+                        'otp' => $otp,
+                        'otp_created' => time()
+                    ];
+
+                    // Send OTP email via PHPMailer
+                    $mail = new PHPMailer(true);
+                    try {
+                        $mail->isSMTP();
+                        $mail->Host       = 'smtp.gmail.com';
+                        $mail->SMTPAuth   = true;
+                        $mail->Username   = 'fantastiassasin@gmail.com'; // <-- your gmail
+                        $mail->Password   = 'ifst tyvw lflb bsfr';   // <-- your generated App Password
+                        $mail->SMTPSecure = 'tls';
+                        $mail->Port       = 587;
+
+                        $mail->setFrom('fantastiassasin@gmail.com', 'HR Portal');
+                        $mail->addAddress($email, $user->username);
+
+                        $mail->isHTML(true);
+                        $mail->Subject = 'Your OTP Code';
+                        $mail->Body    = "Hello {$user->username},<br><br>Your OTP is: <b>{$otp}</b><br><br>This code will expire in 5 minutes.";
+
+                        $mail->send();
+
+                        // Redirect to OTP page
+                        header("Location: verify_otp.php");
+                        exit;
+                    } catch (Exception $e) {
+                        $err = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
                     }
+                } else {
+                    $err = 'Applicant email not found.';
                 }
             } else {
                 $err = 'Incorrect password.';
@@ -65,67 +88,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!doctype html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Login</title>
-    <link rel="shortcut icon" href="../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
     <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
-    <link href="../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/libs/css/style.css">
-    <link rel="stylesheet" href="../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
-    <style>
-        html,
-        body {
-            height: 100%;
-        }
-
-        body {
-            display: flex;
-            align-items: center;
-            padding-top: 40px;
-            padding-bottom: 40px;
-            min-height: 100vh;
-            overflow: hidden;
-            background: url('../assets/images/bcp1.jpg') no-repeat center center/cover;
-        }
-    </style>
 </head>
-
-<body>
-    <div class="splash-container">
-        <div class="card">
+<body style="background: url('../assets/images/bcp1.jpg') no-repeat center center/cover; height: 100vh;">
+    <div class="container d-flex justify-content-center align-items-center" style="height:100%;">
+        <div class="card" style="width: 400px;">
             <div class="card-header text-center">
-                <a href="../index.php">
-                    <img class="logo-img" src="../assets/images/bcp-hrd-logo.jpg" alt="logo"
-                        style="height:10rem;width:auto;">
-                </a>
+                <img src="../assets/images/bcp-hrd-logo.jpg" alt="logo" style="height:100px;">
             </div>
             <div class="card-body">
                 <?php if (!empty($err)): ?>
                     <div class="alert alert-danger"><?= $err ?></div>
                 <?php endif; ?>
-                <form action="index.php" method="POST">
+                <form method="POST" action="index.php">
                     <div class="form-group">
-                        <input class="form-control form-control-lg" name="username" id="username" type="text"
-                            placeholder="Username" autocomplete="off" required>
+                        <input type="text" name="username" class="form-control" placeholder="Username" required autofocus>
                     </div>
                     <div class="form-group">
-                        <input class="form-control form-control-lg" name="password" id="password" type="password"
-                            placeholder="Password" required>
+                        <input type="password" name="password" class="form-control" placeholder="Password" required>
                     </div>
-                    <input type="submit" name="submit" id="submit" class="btn btn-primary btn-lg btn-block"
-                        value="Sign in">
+                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
                 </form>
-            </div>
-            <div class="card-footer bg-white p-0">
-                <div class="card-footer-item card-footer-item-bordered">
-                    <!-- Additional links can be added here -->
-                </div>
             </div>
         </div>
     </div>
 </body>
-
 </html>
