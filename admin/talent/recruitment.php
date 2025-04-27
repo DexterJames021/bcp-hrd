@@ -407,13 +407,27 @@ if ($result->num_rows > 0) {
                         <i class='fas fa-user-times'></i> 
                       </button>"; 
             } elseif ($row['status'] === 'Shortlisted') {
-                echo "<button type='submit' name='status' value='Hired' class='btn btn-success btn-sm'>
-                        <i class='fas fa-briefcase'></i> 
+                echo "<button type='submit' name='status' value='Document Submission' class='btn btn-success btn-sm'>
+                        <i class='fas fa-paperclip'></i> 
                       </button>"; 
                 echo "<button type='submit' name='status' value='Rejected' class='btn btn-danger btn-sm'>
                         <i class='fas fa-user-times'></i> 
                       </button>"; 
-            }
+            } elseif ($row['status'] === 'Document Submission') {
+            echo "<button type='submit' name='status' value='Background Check' class='btn btn-success btn-sm'>
+                    <i class='fas fa-search'></i> 
+                  </button>"; 
+            echo "<button type='submit' name='status' value='Rejected' class='btn btn-danger btn-sm'>
+                    <i class='fas fa-user-times'></i> 
+                  </button>"; 
+            } elseif ($row['status'] === 'Background Check') {
+                    echo "<button type='submit' name='status' value='Hired' class='btn btn-success btn-sm'>
+                            <i class='fas fa-user-check'></i> 
+                          </button>"; 
+                    echo "<button type='submit' name='status' value='Rejected' class='btn btn-danger btn-sm'>
+                            <i class='fas fa-user-times'></i> 
+                          </button>"; 
+        }
 
             echo "</form>";
 
@@ -460,6 +474,11 @@ if ($result->num_rows > 0) {
         </div>
     
     </div>
+    
+<script>
+    // Set the minimum date for the interview date input to today's date
+    document.getElementById('interview_date').setAttribute('min', new Date().toISOString().split('T')[0]);
+</script>
     <!-- Add Job Modal -->
 <div class="modal fade" id="addJobsModal" tabindex="-1" role="dialog" aria-labelledby="addJobsModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -761,16 +780,17 @@ $(document).ready(function() {
 
     // SQL query to fetch applicants excluding those who are "Hired"
     $sql = $job_id > 0 
-        ? "SELECT a.id, a.applicant_name, a.email, j.job_title, a.status, a.applied_at, a.interview_date, a.interview_time, a.resume_path, d.DepartmentName
-            FROM applicants a
-            LEFT JOIN job_postings j ON a.job_id = j.id
-            LEFT JOIN departments d ON a.DepartmentID = d.DepartmentID
-            WHERE a.job_id = $job_id AND a.status != 'Hired'"
-        : "SELECT a.id, a.applicant_name, a.email, j.job_title, a.status, a.applied_at, a.interview_date, a.interview_time, a.resume_path, d.DepartmentName
-            FROM applicants a
-            LEFT JOIN job_postings j ON a.job_id = j.id
-            LEFT JOIN departments d ON a.DepartmentID = d.DepartmentID
-            WHERE a.status != 'Hired'"; // Exclude hired applicants
+    ? "SELECT a.id, a.applicant_name, a.email, j.job_title, a.status, a.applied_at, a.interview_date, a.interview_time, a.resume_path, d.DepartmentName
+        FROM applicants a
+        LEFT JOIN job_postings j ON a.job_id = j.id
+        LEFT JOIN departments d ON a.DepartmentID = d.DepartmentID
+        WHERE a.job_id = $job_id AND a.status NOT IN ('Hired')"
+    : "SELECT a.id, a.applicant_name, a.email, j.job_title, a.status, a.applied_at, a.interview_date, a.interview_time, a.resume_path, d.DepartmentName
+        FROM applicants a
+        LEFT JOIN job_postings j ON a.job_id = j.id
+        LEFT JOIN departments d ON a.DepartmentID = d.DepartmentID
+        WHERE a.status NOT IN ('Hired')"; // Exclude hired applicants
+
 
     $result = $conn->query($sql);
     $counter = 1; // Start numbering from 1
@@ -803,30 +823,38 @@ $(document).ready(function() {
             echo "<form action='recruitment/update_status.php?job_id=" . htmlspecialchars($job_id) . "' method='POST'>";
             echo "<input type='hidden' name='applicant_id' value='" . htmlspecialchars($row['id']) . "'>";
 
-            if ($row['status'] === 'Pending') {
-                echo "<button type='submit' name='status' value='Selected for Interview' class='btn btn-primary btn-sm' 
-                        onclick='return confirm(\"Are you sure you want to select this applicant for an interview?\")'>
-                        <i class='fas fa-calendar-check'></i> 
-                      </button>"; 
-                echo "<button type='submit' name='status' value='Rejected' class='btn btn-danger btn-sm' 
-                        onclick='return confirm(\"Are you sure you want to reject this applicant?\")'>
-                        <i class='fas fa-user-times'></i> 
-                      </button>"; 
-            } elseif ($row['status'] === 'Interviewed') {
-                echo "<button type='submit' name='status' value='Shortlisted' class='btn btn-success btn-sm'>
-                        <i class='fas fa-user-check'></i> 
-                      </button>"; 
-                echo "<button type='submit' name='status' value='Rejected' class='btn btn-danger btn-sm'>
-                        <i class='fas fa-user-times'></i> 
-                      </button>"; 
-            } elseif ($row['status'] === 'Shortlisted') {
-                echo "<button type='submit' name='status' value='Hired' class='btn btn-success btn-sm'>
-                        <i class='fas fa-briefcase'></i> 
-                      </button>"; 
-                echo "<button type='submit' name='status' value='Rejected' class='btn btn-danger btn-sm'>
-                        <i class='fas fa-user-times'></i> 
-                      </button>"; 
-            }
+         // Status Buttons for Status Updates
+if ($row['status'] === 'Pending') {
+    echo "<button type='submit' name='status' value='Selected for Interview' class='btn btn-primary btn-sm'>
+            <i class='fas fa-calendar-check'></i> 
+          </button>"; 
+    echo "<button type='submit' name='status' value='Rejected' class='btn btn-danger btn-sm'>
+            <i class='fas fa-user-times'></i> 
+          </button>"; 
+} elseif ($row['status'] === 'Interviewed') {
+    echo "<button type='submit' name='status' value='Shortlisted' class='btn btn-success btn-sm'>
+            <i class='fas fa-user-check'></i> 
+          </button>"; 
+    echo "<button type='submit' name='status' value='Rejected' class='btn btn-danger btn-sm'>
+            <i class='fas fa-user-times'></i> 
+          </button>"; 
+} elseif ($row['status'] === 'Shortlisted') {
+    echo "<button type='submit' name='status' value='Document Submission' class='btn btn-warning btn-sm'>
+            <i class='fas fa-paperclip'>HAHA</i> 
+          </button>"; 
+    echo "<button type='submit' name='status' value='Rejected' class='btn btn-danger btn-sm'>
+            <i class='fas fa-user-times'></i> 
+          </button>"; 
+} elseif ($row['status'] === 'Document Submission') {
+    echo "<button type='submit' name='status' value='Hired' class='btn btn-success btn-sm'>
+            <i class='fas fa-briefcase'></i> 
+          </button>"; 
+    echo "<button type='submit' name='status' value='Rejected' class='btn btn-danger btn-sm'>
+            <i class='fas fa-user-times'></i> 
+          </button>"; 
+}
+
+            
 
             echo "</form>";
 

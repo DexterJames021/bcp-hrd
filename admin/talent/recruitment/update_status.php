@@ -81,8 +81,7 @@ function sendNotificationEmail($to_email, $status) {
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
-        // Enable SMTP debugging (optional for testing)
-        $mail->SMTPDebug = 2;
+        $applicant_id = $_POST['applicant_id'];
 
         // Set sender and recipient to the same email address (your own)
         $mail->setFrom('hrofbcp@gmail.com', 'HR Department');
@@ -96,6 +95,30 @@ function sendNotificationEmail($to_email, $status) {
             $mail->Body = "Dear Applicant, <br><br>Congratulations! Your interview was successful, and you have been shortlisted for the next step. <br><br>Thank you,<br>HR Department";
         } elseif ($status == 'Interview Failed') {
             $mail->Body = "Dear Applicant, <br><br>Thank you for attending the interview. Unfortunately, we have decided not to move forward with your application at this time. <br><br>Thank you,<br>HR Department";
+        } elseif ($status == 'Document Submission') {
+            // Generate a link for the applicant's portal, assuming it's based on their ID
+                // Retrieve the applicant ID and new status from the form
+            
+                $portal_link = "http://localhost/bcp-hrd/admin/talent/applicant_portal.php?id=" . $applicant_id;
+        
+            $mail->Body = "Dear Applicant, <br><br>
+            We are pleased to inform you that you have reached the Document Submission stage of the recruitment process.<br><br>
+            Please submit the following documents to proceed to the next step in the hiring process:<br>
+            <ul>
+                <li>Valid Government-issued ID (e.g., Passport, Driver's License, or National ID)</li>
+                <li>Updated Resume or Curriculum Vitae (CV)</li>
+                <li>Proof of Address (e.g., Utility Bill, Bank Statement, Lease Agreement)</li>
+                <li>Recent Passport-sized Photo</li>
+                <li>Any Certifications or Licenses relevant to the position</li>
+                <li>Academic Transcripts or Diplomas (if applicable)</li>
+                <li>NBI Clearance (National Bureau of Investigation Clearance)</li>
+            </ul>
+            Please ensure that all documents are clear and legible. You can upload the documents via the link provided below or send them directly to our HR department:<br><br>
+            <a href='".$portal_link."'>Applicant Portal</a><br><br>
+            Thank you for your prompt submission, and we look forward to moving forward with your application.<br><br>
+            Should you have any questions or concerns, please do not hesitate to contact us.<br><br>
+            Thank you,<br>
+            HR Department";
         } elseif ($status == 'Hired') {
             $mail->Body = "Dear Applicant, <br><br>We are pleased to inform you that you have been hired for the position! We will be in touch with the next steps shortly. <br><br>Thank you,<br>HR Department";
         } elseif ($status == 'Selected for Interview') {

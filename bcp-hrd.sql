@@ -42,7 +42,7 @@ CREATE TABLE `applicants` (
   `applicant_name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `resume_path` varchar(255) DEFAULT NULL,
-  `status` enum('Pending','Shortlisted','Interviewed','Hired','Rejected','Selected for Interview') DEFAULT 'Pending',
+  `status` enum('Pending','Shortlisted','Interviewed','Hired','Rejected','Selected for Interview','Document Submission','Background Check') DEFAULT 'Pending',
   `applied_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `interview_date` date DEFAULT NULL,
   `interview_time` time DEFAULT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE `applicants` (
   KEY `FK_Applicants_DepartmentID` (`DepartmentID`),
   CONSTRAINT `FK_Applicants_DepartmentID` FOREIGN KEY (`DepartmentID`) REFERENCES `departments` (`DepartmentID`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `applicants_ibfk_1` FOREIGN KEY (`job_id`) REFERENCES `job_postings` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `applicants` */
 
@@ -68,7 +68,7 @@ insert  into `applicants`(`id`,`job_id`,`applicant_name`,`email`,`resume_path`,`
 (55,65,'Bob Brown','bobbrown@example.com','uploads/resume/bobbrown.txt','Rejected','2025-01-26 11:14:16','2025-03-30','16:29:00',10),
 (56,66,'Charlie Davis','charliedavis@example.com','uploads/resume/charliedavis.txt','Hired','2025-01-26 11:14:16','2025-04-01','22:42:00',9),
 (57,67,'Diana Evans','dianaevans@example.com','uploads/resume/dianaevans.txt','Hired','2025-01-26 11:14:16','2025-04-01','22:43:00',11),
-(58,68,'Ethan Foster','ethanfoster@example.com','uploads/resume/ethanfoster.txt','Pending','2025-01-26 11:14:16',NULL,NULL,12),
+(58,68,'Ethan Foster','ethanfoster@example.com','uploads/resume/ethanfoster.txt','Interviewed','2025-01-26 11:14:16','2025-04-27','20:51:00',12),
 (59,69,'Fiona Green','fionagreen@example.com','uploads/resume/fionagreen.txt','Hired','2025-01-26 11:14:16','2025-03-30','16:45:00',10),
 (60,70,'George Harris','georgeharris@example.com','uploads/resume/georgeharris.txt','Pending','2025-01-26 11:14:16',NULL,NULL,9),
 (61,71,'Hannah Ivers','hannahivers@example.com','uploads/resume/hannahivers.txt','Pending','2025-01-26 11:14:16',NULL,NULL,8),
@@ -78,9 +78,11 @@ insert  into `applicants`(`id`,`job_id`,`applicant_name`,`email`,`resume_path`,`
 (68,65,'Jeremy Apundar','apundarjeremy@gmail.com','uploads/resume/RESUME-FOR-OJT-JA.docx','Hired','2025-03-30 23:26:23','2025-03-30','23:27:00',10),
 (69,72,'test applicant','apundarjeremy@gmail.com','uploads/resume/GMAIL-ACC.txt','Hired','2025-04-01 11:35:48','2025-04-01','11:36:00',15),
 (70,63,'test3','test3@gmail.com','uploads/resume/ACCOUNT-1.txt','Hired','2025-04-01 22:51:18','2025-04-01','23:14:00',8),
-(71,62,'applicant1','apundarjeremy@gmail.com','uploads/resume/Aljhon Resume.docx','Pending','2025-04-05 16:33:23',NULL,NULL,9),
+(71,62,'applicant1','apundarjeremy@gmail.com','uploads/resume/Aljhon Resume.docx','Hired','2025-04-05 16:33:23','2025-04-27','20:14:00',9),
 (72,66,'Penpen ','apundarjeremy@gmail.com','uploads/resume/Aljhon Resume.docx','Hired','2025-04-05 16:43:42','2025-04-06','13:00:00',9),
-(74,74,'PENPEN','apundarjeremy@gmail.com','uploads/resume/Aljhon Resume.docx','Hired','2025-04-05 17:14:53','2025-04-06','13:15:00',15);
+(74,74,'PENPEN','apundarjeremy@gmail.com','uploads/resume/Aljhon Resume.docx','Hired','2025-04-05 17:14:53','2025-04-06','13:15:00',15),
+(80,78,'Apundar, Jeremy','apundarjeremy@gmail.com','uploads/verify/bcp logo.png','Background Check','2025-04-27 15:51:34','2025-04-27','21:27:00',10),
+(81,62,'Apundar','apundarjeremy@gmail.com','uploads/verify/bcp logo.png','Pending','2025-04-27 21:55:07',NULL,NULL,9);
 
 /*Table structure for table `attendance` */
 
@@ -334,6 +336,26 @@ insert  into `departments`(`DepartmentID`,`DepartmentName`,`ManagerID`) values
 (12,'Teacher Department',NULL),
 (15,'Test department',NULL);
 
+/*Table structure for table `document_submissions` */
+
+DROP TABLE IF EXISTS `document_submissions`;
+
+CREATE TABLE `document_submissions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `applicant_id` int(11) NOT NULL,
+  `document` varchar(255) DEFAULT NULL,
+  `submission_date` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `applicant_id` (`applicant_id`),
+  CONSTRAINT `document_submissions_ibfk_1` FOREIGN KEY (`applicant_id`) REFERENCES `applicants` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `document_submissions` */
+
+insert  into `document_submissions`(`id`,`applicant_id`,`document`,`submission_date`) values 
+(8,80,'admin/talent/recruitment/uploads/documents/bcp logo.png','2025-04-28 00:59:08'),
+(10,80,'admin/talent/recruitment/uploads/documents/bcp2.jpg','2025-04-28 01:00:52');
+
 /*Table structure for table `documents` */
 
 DROP TABLE IF EXISTS `documents`;
@@ -384,9 +406,13 @@ CREATE TABLE `email_verifications` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`,`job_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `email_verifications` */
+
+insert  into `email_verifications`(`id`,`email`,`applicant_name`,`resume_path`,`department_id`,`job_id`,`verification_token`,`is_verified`,`created_at`) values 
+(9,'apundarjeremy@gmail.com','Apundar, Jeremy','uploads/verify/bcp logo.png',10,78,'879b9be681221e30ef48a3efdc9d719b65edde0618875f7628ae8d6a55b11f5a',1,'2025-04-27 15:50:54'),
+(10,'apundarjeremy@gmail.com','Apundar','uploads/verify/bcp logo.png',9,62,'61d9c0929671ba1d41b4867131f14a2258efff3a80c4b8464f625aad60d13291',1,'2025-04-27 21:54:19');
 
 /*Table structure for table `employee_awards` */
 
@@ -1286,7 +1312,7 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `usertype` enum('admin','employee','manager','superadmin','New Hire') NOT NULL DEFAULT 'admin',
+  `usertype` enum('admin','employee','manager','superadmin','New Hire','staff') NOT NULL DEFAULT 'admin',
   `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
   `lastLogin` datetime DEFAULT current_timestamp(),
   `applicant_id` int(11) DEFAULT NULL,
