@@ -13,10 +13,10 @@ $queryEmployees = "SELECT COUNT(*) AS total FROM employees";
 $resultEmployees = mysqli_query($conn, $queryEmployees);
 $totalEmployees = mysqli_fetch_assoc($resultEmployees)['total'];
 
-// Fetch total applicants
-$queryApplicants = "SELECT COUNT(*) AS total FROM applicants";
-$resultApplicants = mysqli_query($conn, $queryApplicants);
-$totalApplicants = mysqli_fetch_assoc($resultApplicants)['total'];
+$sql = "SELECT COUNT(*) AS pending_applicants FROM applicants WHERE status != 'Hired'";
+$result = $conn->query($sql);
+$row = $result->fetch_assoc();
+$pendingApplicants = $row['pending_applicants'];
 
 // Fetch total job postings
 $queryJobPostings = "SELECT COUNT(*) AS total FROM job_postings";
@@ -204,8 +204,8 @@ $employeesJSON = json_encode($employeesData);
                                                 <div class="col-md-3">
                                                     <div class="card bg-light text-white">
                                                         <div class="card-body">
-                                                            <h5>Total Applicants</h5>
-                                                            <h3><?php echo $totalApplicants; ?></h3>
+                                                            <h5>Pending Applicants</h5>
+                                                            <h3><?php echo $pendingApplicants; ?></h3>
                                                         </div>
                                                     </div>
                                                 </div>

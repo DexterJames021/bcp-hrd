@@ -116,7 +116,7 @@ $result = mysqli_query($conn, $query);
                                 </ul>
 
                                 <p><strong>Location:</strong> <?php echo htmlspecialchars($row['location']); ?></p>
-                                <p><strong>Salary:</strong> <?php echo htmlspecialchars($row['salary_range']); ?></p>
+                               
                                 <p><strong>Department:</strong> <?php echo htmlspecialchars($row['DepartmentName']); ?></p>
                                 <a href="admin/talent/recruitment/apply.php?job_id=<?php echo htmlspecialchars($row['id']); ?>"
                                     class="btn btn-success">Apply Now</a>

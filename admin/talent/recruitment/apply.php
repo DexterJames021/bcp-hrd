@@ -18,7 +18,7 @@ if (isset($_GET['job_id'])) {
         exit;
     }
 } else {
-    echo "<p>No job specified.</p>";
+    echo "<p>You have already applied for this position.</p>";
     exit;
 }
 
@@ -74,27 +74,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<?php
-// Display success or error message
-if (isset($_SESSION['message'])) {
-    echo "<div id='popupMessage' class='alert alert-danger text-center' role='alert' 
-            style='position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            z-index: 1050; width: 40%; padding: 20px; border-radius: 10px; 
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); background:linear-gradient(90deg, #007bff, #00c6ff); color: white;'>
-            <strong>Oops!</strong> " . $_SESSION['message'] . "
-          </div>";
-    unset($_SESSION['message']);
-}
-?>
 
-<script>
-    function closePopup() {
-        document.getElementById('popupMessage').style.display = 'none';
-    }
 
-    // Auto-hide after 5 seconds
-    setTimeout(closePopup, 3000);
-</script>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -147,24 +128,27 @@ if (isset($_SESSION['message'])) {
 <header class="text-white text-center d-flex align-items-center justify-content-center position-relative" style="min-height: 100vh; overflow: hidden;">
 
     <!-- Move the Back to Job Listings Button inside the job details -->
+    <form action="verifyApplicantEmail.php" method="POST" enctype="multipart/form-data">
+    <h2>Apply for <?php echo htmlspecialchars($job['job_title']); ?></h2>
     
+    <label for="applicant_name">Your Name:</label>
+    <input type="text" id="applicant_name" name="applicant_name" required>
 
-    <form action="" method="POST" enctype="multipart/form-data">
-        <h2>Apply for <?php echo htmlspecialchars($job['job_title']); ?></h2>
-        <label for="applicant_name">Your Name:</label>
-        <input type="text" id="applicant_name" name="applicant_name" required>
+    <label for="email">Your Email:</label>
+    <input type="email" id="email" name="email" required>
 
-        <label for="email">Your Email:</label>
-        <input type="email" id="email" name="email" required>
+    <label for="resume">Upload Resume:</label>
+    <input type="file" id="resume" name="resume" required>
 
-        <label for="resume">Upload Resume:</label>
-        <input type="file" id="resume" name="resume" required>
+    <!-- Hidden field for DepartmentID -->
+    <input type="hidden" name="department_id" value="<?php echo htmlspecialchars($job['DepartmentID']); ?>">
 
-        <!-- Hidden field for DepartmentID -->
-        <input type="hidden" name="department_id" value="<?php echo htmlspecialchars($job['DepartmentID']); ?>">
+    <!-- Hidden field for Job ID -->
+    <input type="hidden" name="job_id" value="<?php echo htmlspecialchars($job['id']); ?>">
 
-        <button type="submit">Submit Application</button>
-    </form>
+    <button type="submit">Submit Application</button>
+</form>
+
 
 </header>
 </body>

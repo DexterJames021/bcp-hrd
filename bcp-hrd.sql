@@ -52,7 +52,7 @@ CREATE TABLE `applicants` (
   KEY `FK_Applicants_DepartmentID` (`DepartmentID`),
   CONSTRAINT `FK_Applicants_DepartmentID` FOREIGN KEY (`DepartmentID`) REFERENCES `departments` (`DepartmentID`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `applicants_ibfk_1` FOREIGN KEY (`job_id`) REFERENCES `job_postings` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `applicants` */
 
@@ -80,7 +80,6 @@ insert  into `applicants`(`id`,`job_id`,`applicant_name`,`email`,`resume_path`,`
 (70,63,'test3','test3@gmail.com','uploads/resume/ACCOUNT-1.txt','Hired','2025-04-01 22:51:18','2025-04-01','23:14:00',8),
 (71,62,'applicant1','apundarjeremy@gmail.com','uploads/resume/Aljhon Resume.docx','Pending','2025-04-05 16:33:23',NULL,NULL,9),
 (72,66,'Penpen ','apundarjeremy@gmail.com','uploads/resume/Aljhon Resume.docx','Hired','2025-04-05 16:43:42','2025-04-06','13:00:00',9),
-(73,73,'PENPEN','apundarjeremy@gmail.com','uploads/resume/Aljhon Resume.docx','Hired','2025-04-05 17:08:32','2025-04-06','13:10:00',15),
 (74,74,'PENPEN','apundarjeremy@gmail.com','uploads/resume/Aljhon Resume.docx','Hired','2025-04-05 17:14:53','2025-04-06','13:15:00',15);
 
 /*Table structure for table `attendance` */
@@ -369,6 +368,26 @@ insert  into `documents`(`id`,`user_id`,`document_name`,`file_path`,`uploaded_at
 (39,55,'GMAIL-ACC.txt','uploads/GMAIL-ACC.txt','2025-04-01 11:39:27'),
 (42,60,'1-INDORSEMENT-FOR-INTERNSHIP.docx','uploads/1-INDORSEMENT-FOR-INTERNSHIP.docx','2025-04-05 17:18:16');
 
+/*Table structure for table `email_verifications` */
+
+DROP TABLE IF EXISTS `email_verifications`;
+
+CREATE TABLE `email_verifications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(255) NOT NULL,
+  `applicant_name` varchar(255) NOT NULL,
+  `resume_path` varchar(255) NOT NULL,
+  `department_id` int(11) NOT NULL,
+  `job_id` int(11) NOT NULL,
+  `verification_token` varchar(64) NOT NULL,
+  `is_verified` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`,`job_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `email_verifications` */
+
 /*Table structure for table `employee_awards` */
 
 DROP TABLE IF EXISTS `employee_awards`;
@@ -405,13 +424,14 @@ CREATE TABLE `employee_profile_pictures` (
   PRIMARY KEY (`id`),
   KEY `EmployeeID` (`EmployeeID`),
   CONSTRAINT `employee_profile_pictures_ibfk_1` FOREIGN KEY (`EmployeeID`) REFERENCES `employees` (`EmployeeID`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `employee_profile_pictures` */
 
 insert  into `employee_profile_pictures`(`id`,`EmployeeID`,`profile_picture_path`,`uploaded_at`) values 
 (1,88,'uploads/profile_pictures/1745159252_student1.jpg','2025-04-20 20:08:32'),
-(2,91,'uploads/profile_pictures/1745161537_student1.jpg','2025-04-20 22:03:42');
+(2,91,'uploads/profile_pictures/1745161537_student1.jpg','2025-04-20 22:03:42'),
+(3,45,'uploads/profile_pictures/1745714416_bcp logo.png','2025-04-27 08:40:16');
 
 /*Table structure for table `employees` */
 
@@ -763,12 +783,12 @@ CREATE TABLE `job_postings` (
   KEY `fk_employee` (`EmployeeID`),
   CONSTRAINT `FK_JobPostings_DepartmentID` FOREIGN KEY (`DepartmentID`) REFERENCES `departments` (`DepartmentID`),
   CONSTRAINT `fk_employee` FOREIGN KEY (`EmployeeID`) REFERENCES `employees` (`EmployeeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=79 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `job_postings` */
 
 insert  into `job_postings`(`id`,`job_title`,`job_description`,`requirements`,`location`,`salary_range`,`status`,`created_at`,`DepartmentID`,`EmployeeID`) values 
-(57,'HR Manager','Oversee the HR department and manage all HR functions, including recruitment, employee relations, training, and compliance.','Bachelor’s degree in Human Resources, Business Administration, or related field\r\n5+ years of HR experience, with at least 2 years in a management role\r\nStrong knowledge of labor laws and regulations.','Bestlink College of the Philippines','PHP 60,000 - PHP 100,000 per month.','Closed','2024-11-02 19:05:54',8,44),
+(57,'HR Manager','Oversee the HR department and manage all HR functions, including recruitment, employee relations, training, and compliance.','Bachelor’s degree in Human Resources, Business Administration, or related field\r\n5+ years of HR experience, with at least 2 years in a management role\r\nStrong knowledge of labor laws and regulations.','Bestlink College of the Philippines','PHP 60,000 - PHP 100,000 per month.','Open','2024-11-02 19:05:54',8,44),
 (58,'HR Coordinator','Assist in recruitment activities, onboarding of new hires, and maintaining employee records.\r\nSupport HR projects and initiatives, including training and employee engagement programs.','Bachelor’s degree in Human Resource Management or related field.\r\n1-3 years of HR experience.\r\nGood communication and organizational skills.','Bestlink College of the Philippines','PHP 25,000 - PHP 45,000 per month.','Open','2024-11-02 20:30:44',8,47),
 (59,'Systems Administrator','Manage and maintain school servers, networks, and computer systems.\r\nEnsure system availability, security, and performance.','Bachelor’s degree in Computer Science, Information Technology, or related field.\r\n3-5 years of experience in systems administration.\r\nFamiliarity with server management and network protocols.','Bestlink College of the Philippines','PHP 30,000 - PHP 60,000 per month.','Open','2024-11-02 20:31:56',9,48),
 (60,'Network Administrator','Configure, maintain, and troubleshoot the school\'s network infrastructure.\r\nMonitor network performance and security.','Bachelor’s degree in Information Technology, Network Engineering, or related field.\r\n3+ years of experience in network administration.\r\nKnowledge of network protocols, routers, and firewalls.','Bestlink College of the Philippines','PHP 30,000 - PHP 55,000 per month.','Open','2024-11-02 20:32:31',9,49),
@@ -785,7 +805,9 @@ insert  into `job_postings`(`id`,`job_title`,`job_description`,`requirements`,`l
 (71,'Project Manager','Manage projects from initiation to closure.','Bachelor’s degree in Management.','Bestlink College of the Philippines','PHP 50,000 - PHP 90,000 per month.','Open','2025-01-26 11:14:16',8,NULL),
 (72,'TEST JOB','TEST JOB','TEST JOB','TEST JOB LOCATION','3000','Open','2025-04-01 11:34:57',15,NULL),
 (73,'TESTING JOBS','TESTING JOBS','TESTING JOBS','BESTLINK','30000 - 50000','Open','2025-04-05 17:07:40',15,NULL),
-(74,'JOB TESTING','JOB TESTING','JOB TESTING','BESTLINK','30000 - 50000','Open','2025-04-05 17:14:10',15,NULL);
+(74,'JOB TESTING','JOB TESTING','JOB TESTING','BESTLINK','30000 - 50000','Open','2025-04-05 17:14:10',15,NULL),
+(77,'IT Specialist','ASDASD','SADASDAS','Bestlink College of the Philippines','₱25,000 - ₱30,000','Open','2025-04-27 11:17:33',9,NULL),
+(78,'Operations Manager','asdfas','dasdasdas','Bestlink College of the Philippines','₱30,000 - ₱50,000','Open','2025-04-27 11:19:52',10,NULL);
 
 /*Table structure for table `jobroles` */
 
@@ -801,7 +823,7 @@ CREATE TABLE `jobroles` (
   PRIMARY KEY (`JobRoleID`),
   KEY `FK_JobRoles_DepartmentID` (`DepartmentID`),
   CONSTRAINT `FK_JobRoles_DepartmentID` FOREIGN KEY (`DepartmentID`) REFERENCES `departments` (`DepartmentID`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `jobroles` */
 
