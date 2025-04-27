@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 // Include the database connection file
 require "../../../config/db_talent.php";
 

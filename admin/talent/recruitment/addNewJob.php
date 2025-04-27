@@ -1,4 +1,5 @@
 <?php
+session_start();
 require "../../../config/db_talent.php";
 
 // Check if the form is submitted

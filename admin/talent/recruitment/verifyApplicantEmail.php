@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // Redirect after success
             $_SESSION['message1'] = "Please check your email to verify your application.";
-            header("Location: apply.php"); // Redirect to thank you page
+            header("Location: thank_you.php"); // Redirect to thank you page
             exit;
         } catch (Exception $e) {
             $_SESSION['error_message1'] = "Error sending verification email. Please try again later. " . $mail->ErrorInfo;

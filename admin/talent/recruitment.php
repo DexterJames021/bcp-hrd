@@ -14,14 +14,12 @@ $pendingApplicants = $row['pending_applicants'];
 $sql = "SELECT COUNT(*) as totalJobRoles FROM jobroles";
 $result = $conn->query($sql);
 
-if ($result->num_rows > 0) {
+
     // Fetch the result and store the count in $totaljobroles
     $row = $result->fetch_assoc();
     $totaljobroles = $row['totalJobRoles'];  // Store the total number of job roles
-    echo "Total Job Roles: " . $totaljobroles;  // Display the count
-} else {
-    echo "No job roles found.";
-}
+
+    
 
 
 // Fetch the total number of job postings
