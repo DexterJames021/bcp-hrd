@@ -137,7 +137,7 @@ access_log($userData);
                             <!-- Bookings trend -->
                             <div class="card">
                                 <div class="card-header">
-                                    <h4>Booking Trends</h4>
+                                    <h4>Request Trends</h4>
                                 </div>
                                 <div class="card-body">
                                     <canvas id="bookingTrends"></canvas>

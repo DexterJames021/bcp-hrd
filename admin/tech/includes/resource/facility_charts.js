@@ -202,7 +202,7 @@ $(function () {
             plugins: {
               title: {
                 display: true,
-                text: 'Booking Status Distribution'
+                text: 'Request Status Distribution'
               },
               legend: {
                 position: 'bottom'
@@ -236,7 +236,7 @@ $(function () {
           data: {
             labels: response.labels,
             datasets: [{
-              label: "Number of Bookings",
+              label: "Number of Request",
               data: response.data,
               backgroundColor: "rgba(155, 89, 182, 0.2)",
               borderColor: "#9b59b6",
@@ -252,7 +252,7 @@ $(function () {
                 beginAtZero: true,
                 title: {
                   display: true,
-                  text: 'Number of Bookings'
+                  text: 'Number of Request'
                 }
               },
               x: {
@@ -265,7 +265,7 @@ $(function () {
             plugins: {
               title: {
                 display: true,
-                text: 'Booking Trends Over Time'
+                text: 'Request Trends Over Time'
               }
             }
           }
