@@ -84,106 +84,6 @@ access_log($userData);
         <!-- ============================================================== -->
         <!-- navbar -->
         <!-- ============================================================== -->
-        <div class="dashboard-header ">
-            <nav class="navbar navbar-expand-lg bg-white fixed-top ">
-                <a class="navbar-brand" href="index.php">
-                    <img src="../../../assets/images/bcp-hrd-logo.jpg" alt="" class=""
-                        style="height: 3rem;width: auto;">
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse"
-                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse " id="navbarSupportedContent">
-                    <ul class="navbar-nav ml-auto navbar-right-top">
-                        <li class="nav-item">
-                            <div id="custom-search" class="top-search-bar">
-                                <input class="form-control" type="text" placeholder="Search..">
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown notification">
-                            <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false"><i class="fas fa-fw fa-bell"></i> <span
-                                    class="indicator"></span></a>
-                            <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
-                                <li>
-                                    <div class="notification-title"> Notification</div>
-                                    <div class="notification-list">
-                                        <div class="list-group">
-                                            <a href="#" class="list-group-item list-group-item-action active">
-                                                <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt=""
-                                                            class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span
-                                                            class="notification-list-user-name">Jeremy
-                                                            Rakestraw</span>accepted your invitation to join the team.
-                                                        <div class="notification-date">2 min ago</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <a href="#" class="list-group-item list-group-item-action">
-                                                <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt=""
-                                                            class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span
-                                                            class="notification-list-user-name">John Abraham </span>is
-                                                        now following you
-                                                        <div class="notification-date">2 days ago</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <a href="#" class="list-group-item list-group-item-action">
-                                                <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt=""
-                                                            class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span
-                                                            class="notification-list-user-name">Monaan Pechi</span> is
-                                                        watching your main repository
-                                                        <div class="notification-date">2 min ago</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <a href="#" class="list-group-item list-group-item-action">
-                                                <div class="notification-info">
-                                                    <div class="notification-list-user-img"><img src="#" alt=""
-                                                            class="user-avatar-md rounded-circle"></div>
-                                                    <div class="notification-list-user-block"><span
-                                                            class="notification-list-user-name">Jessica
-                                                            Caruso</span>accepted your invitation to join the team.
-                                                        <div class="notification-date">2 min ago</div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="list-footer"> <a href="#">View all notifications</a></div>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown nav-user">
-                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="#" alt=""
-                                    class="user-avatar-md rounded-circle"></a>
-                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown"
-                                aria-labelledby="navbarDropdownMenuLink2">
-                                <div class="nav-user-info">
-                                    <h5 class="mb-0 text-white nav-user-name"> <?= $_SESSION['username'] ?> </h5>
-                                    <span class="status"></span><span class="ml-2">Available</span>
-                                </div>
-                                <a class="dropdown-item" href="./settings/emp-info.php"><i
-                                        class="fas fa-user mr-2"></i>Account</a>
-                                <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
-                                <a class="dropdown-item" href="../../../auth/logout.php"><i
-                                        class="fas fa-power-off mr-2"></i>Logout</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
         <!-- ============================================================== -->
         <!-- end navbar -->
         <!-- ============================================================== -->
@@ -217,21 +117,33 @@ access_log($userData);
                         </div>
                     </div>
 
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <label for="startDate">Start Date</label>
+                            <input type="date" id="startDate" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="endDate">End Date</label>
+                            <input type="date" id="endDate" class="form-control">
+                        </div>
+                        <div class="col-md-2 d-flex  align-items-end">
+                            <button class="btn btn-primary" id="applyDateFilter">Apply Filter</button>
+                            <button id="resetFilterBtn" class="btn btn-outline-primary">Reset</button>
+                        </div>
+                    </div>
+
                     <div class="row d-flex">
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-6">
-
-                            <!-- utilization -->
+                            <!-- Bookings trend -->
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 style="cursor:pointer;"
-                                        title="calculates much a facility is being used compared to its total available capacity">
-                                        Over Utilized</h4>
+                                    <h4>Booking Trends</h4>
                                 </div>
-                                <!-- utilize -->
-                                <div class="card-body" width="100%" height="100%">
-                                    <canvas id="facilityUtilization"></canvas>
+                                <div class="card-body">
+                                    <canvas id="bookingTrends"></canvas>
                                 </div>
                             </div>
+
 
                             <!-- category -->
                             <div class="card">
@@ -245,7 +157,7 @@ access_log($userData);
                                                 <td>Facility Name</td>
                                                 <td>Location</td>
                                                 <td>Capacity</td>
-                                                <td>Status</td>
+                                                <!-- <td>Status</td> -->
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -261,30 +173,22 @@ access_log($userData);
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Status Distribution</h4>
-                                    <select id="statusDistributionFilter" class="form-select mb-3" style="width: 250px;">
-                                        <option value="">All Statuses</option>
-                                        <option value="Pending">Pending</option>
-                                        <option value="Approved">Approved</option>
-                                        <option value="Rejected">Rejected</option>
-                                        <option value="Cancelled">Cancelled</option>
-                                    </select>
-
                                 </div>
                                 <div class="card-body" width="100%" height="100%">
                                     <canvas id="bookingStatusDistribution"></canvas>
                                 </div>
                             </div>
 
-                            <!-- Bookings trend -->
+                            <!-- utilization -->
                             <div class="card">
                                 <div class="card-header">
-                                    <h4>Booking Trends</h4>
-                                    <select id="categoryFilter" class="form-select mb-3" style="width: 200px;">
-                                        <option value="">Date</option>
-                                    </select>
+                                    <h4 style="cursor:pointer;"
+                                        title="calculates much a facility is being used compared to its total available capacity">
+                                        Over Utilized</h4>
                                 </div>
-                                <div class="card-body">
-                                    <canvas id="bookingTrends"></canvas>
+                                <!-- utilize -->
+                                <div class="card-body" width="100%" height="100%">
+                                    <canvas id="facilityUtilization"></canvas>
                                 </div>
                             </div>
 
@@ -313,17 +217,19 @@ access_log($userData);
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between ">
+                                    <div></div>
                                     <div class="d-flex ">
-
-                                    </div>
-                                    <div>
-                                        <button type="button" id="openModalBtn" class="btn btn-outline-primary float-right"
-                                            data-toggle="modal" data-target="#reportModal">Generate Report</button>
-                                        <!--
-                                            logs number
-                                            suggestion not need 
-                                            what is trend
-                                        -->
+                                        <label for="statusFilter">Filter by:</label>
+                                        <select id="statusFilter" class="form-control mx-2" style="width: 250px;">
+                                            <option value="">All Statuses</option>
+                                            <option value="Approved">Approved</option>
+                                            <option value="Pending">Pending</option>
+                                            <option value="Rejected">Rejected</option>
+                                            <option value="Cancelled">Cancelled</option>
+                                            <option value="Completed">Completed</option>
+                                        </select>
+                                        <!-- <button type="button" id="openModalBtn" class="btn btn-outline-primary float-right"
+                                            data-toggle="modal" data-target="#reportModal">Generate Report</button> -->
                                     </div>
                                 </div>
                                 <div class="card-body table-responsive">

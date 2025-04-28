@@ -269,14 +269,15 @@ access_log($userData);
                                         <div class="card-header d-flex justify-content-between">
                                             <h2 class="card-title">Resources Management</h2>
                                             <div class="d-flex">
-                                                <select id="statusFilter" class="form-select mb-3 mx-1" style="width: 200px;">
+                                                <label for="statusFilter">Filter by:</label>
+                                                <select id="statusFilter" class="form-control mb-3 mx-1" style="width: 200px;">
                                                     <option value="">All Status</option>
                                                     <option value="Available">Available</option>
                                                     <option value="In Maintenance">In Maintenance</option>
                                                     <option value="Damaged">Damaged</option>
                                                 </select>
 
-                                                <select id="categoryFilter" class="form-select mb-3" style="width: 200px;">
+                                                <select id="categoryFilter" class="form-control mb-3" style="width: 200px;">
                                                     <option value="">All Categories</option>
                                                     <option value="Utilities">Utilities</option>
                                                     <option value="Hardware">Hardware</option>

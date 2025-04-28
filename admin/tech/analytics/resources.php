@@ -218,15 +218,16 @@ access_log($userData);
                                     <h1></h1>
                                     
                                     <div class="d-flex ">
-                                        <select id="statusFilter" class="form-select mb-3 mx-2" style="width: 250px;">
+                                    <label for="statusFilter">Filter by:</label>
+                                        <select id="statusFilter" class="form-control mb-3 mx-2" style="width: 250px;">
                                             <option value="">All Statuses</option>
                                             <option value="Returned">Returned</option>
                                             <option value="Pending">Pending</option>
                                             <option value="Approved">Approved</option>
                                             <option value="Rejected">Rejected</option>
                                         </select>
-                                        <button type="button" id="openModalBtn" class="btn btn-outline-primary float-right"
-                                            data-toggle="modal" data-target="#reportModal">Generate Report</button>
+                                        <!-- <button type="button" id="openModalBtn" class="btn btn-outline-primary float-right"
+                                            data-toggle="modal" data-target="#reportModal">Generate Report</button> -->
                                     </div>
 
                                 </div>

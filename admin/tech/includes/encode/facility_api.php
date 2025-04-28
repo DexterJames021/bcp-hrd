@@ -3,7 +3,7 @@
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
-    header("Content-Type: application/json"); 
+    header("Content-Type: application/json");
     // echo json_encode(['error' => 'Unauthorized access']);
     http_response_code(403);
     exit;
@@ -77,8 +77,8 @@ switch ($action) {
         $id = $_POST['id'];
         $status = $_POST['status'];
 
-        $message = ($status === 'Approved') 
-            ? "Your booking #{$id} has been approved. Thank you for using our service!" 
+        $message = ($status === 'Approved')
+            ? "Your booking #{$id} has been approved. Thank you for using our service!"
             : "Your booking #{$id} has been rejected. Please contact support for more information.";
 
         $userid = $booking->getBookingByUserID($_POST['userID']);
@@ -296,19 +296,25 @@ switch ($action) {
         break;
 
     case 'facility_utilization':
-        echo json_encode($room->FacilityUtilization());
+        $start_date = $_POST['start_date'] ?? null;
+        $end_date = $_POST['end_date'] ?? null;
+        echo json_encode($room->FacilityUtilization($start_date, $end_date));
+        break;
+
+    case 'booking_status_distribution':
+        $start_date = $_POST['start_date'] ?? null;
+        $end_date = $_POST['end_date'] ?? null;
+        echo json_encode($room->BookingStatusDistribution($start_date, $end_date));
+        break;
+
+    case 'booking_trends':
+        $start_date = $_POST['start_date'] ?? null;
+        $end_date = $_POST['end_date'] ?? null;
+        echo json_encode($room->BookingTrends($start_date, $end_date));
         break;
 
     case 'facility_categorization':
         echo json_encode($room->FacilityCategorization());
-        break;
-
-    case 'booking_status_distribution':
-        echo json_encode($room->BookingStatusDistribution());
-        break;
-
-    case 'booking_trends':
-        echo json_encode($room->BookingTrends());
         break;
     case 'events_all_approved':
         echo json_encode($room->ApproveEvents());

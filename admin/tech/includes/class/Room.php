@@ -85,36 +85,7 @@ class Room
         return $stmt->execute([':id' => $id]);
     }
 
-    public function FacilityUtilization()
-    {
-        try {
-            $q = "SELECT f.name AS facility_name, 
-                    COUNT(b.id) AS booking_count, 
-                    f.capacity, (COUNT(b.id) / f.capacity) * 100 AS utilization_rate 
-                    FROM fm_rooms f 
-                    LEFT JOIN fm_bookings b 
-                    ON f.id = b.room_id 
-                    WHERE b.is_active = 1 
-                    GROUP BY f.id; ";
-            $stmt = $this->conn->prepare($q);
-            $stmt->execute();
 
-            $labels = [];
-            $data = [];
-
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $labels[] = $row['facility_name'];
-                $data[] = $row['utilization_rate'];
-            }
-
-            return [
-                'labels' => $labels,
-                'data' => $data
-            ];
-        } catch (Exception $e) {
-            return $e->getMessage();
-        }
-    }
 
     public function FacilityCategorization()
     {
@@ -124,6 +95,7 @@ class Room
                     capacity, 
                     status 
                     FROM fm_rooms 
+                    WHERE status = 'booked'
                     ORDER BY status DESC, capacity DESC;";
             $stmt = $this->conn->prepare($q);
             $stmt->execute();
@@ -147,14 +119,62 @@ class Room
         }
     }
 
-    public function BookingStatusDistribution()
+    public function FacilityUtilization($start_date, $end_date)
+    {
+        try {
+            $q = "SELECT f.name AS facility_name, 
+                        COUNT(b.id) AS booking_count, 
+                        f.capacity, 
+                        (COUNT(b.id) / f.capacity) * 100 AS utilization_rate 
+                  FROM fm_rooms f 
+                  LEFT JOIN fm_bookings b 
+                    ON f.id = b.room_id 
+                    AND b.is_active = 1 
+                    " . ($start_date && $end_date ? "AND b.start_date BETWEEN :start_date AND :end_date" : "") . "
+                  GROUP BY f.id;";
+
+            $stmt = $this->conn->prepare($q);
+
+            if ($start_date && $end_date) {
+                $stmt->bindParam(':start_date', $start_date);
+                $stmt->bindParam(':end_date', $end_date);
+            }
+
+            $stmt->execute();
+
+            $labels = [];
+            $data = [];
+
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $labels[] = $row['facility_name'];
+                $data[] = $row['utilization_rate'];
+            }
+
+            return [
+                'labels' => $labels,
+                'data' => $data
+            ];
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function BookingStatusDistribution($start_date, $end_date)
     {
         try {
             $q = "SELECT status, COUNT(id) AS status_count 
-                    FROM fm_bookings 
-                    WHERE is_active = 1 
-                    GROUP BY status;";
+                  FROM fm_bookings 
+                  WHERE is_active = 1
+                  " . ($start_date && $end_date ? "AND start_date BETWEEN :start_date AND :end_date" : "") . "
+                  GROUP BY status;";
+
             $stmt = $this->conn->prepare($q);
+
+            if ($start_date && $end_date) {
+                $stmt->bindParam(':start_date', $start_date);
+                $stmt->bindParam(':end_date', $end_date);
+            }
+
             $stmt->execute();
 
             $labels = [];
@@ -174,21 +194,33 @@ class Room
         }
     }
 
-    public function BookingTrends()
+    public function BookingTrends($start_date, $end_date)
     {
         try {
-            $q = "SELECT DATE(booking_date) AS date, COUNT(id) AS total_bookings FROM fm_bookings WHERE is_active = 1 GROUP BY DATE(booking_date) ORDER BY date;";
+            $q = "SELECT DATE(booking_date) AS booking_date, COUNT(id) AS total_bookings
+                  FROM fm_bookings
+                  WHERE is_active = 1
+                  " . ($start_date && $end_date ? "AND booking_date BETWEEN :start_date AND :end_date" : "") . "
+                  GROUP BY DATE(booking_date)
+                  ORDER BY booking_date ASC;";
+    
             $stmt = $this->conn->prepare($q);
+    
+            if ($start_date && $end_date) {
+                $stmt->bindParam(':start_date', $start_date);
+                $stmt->bindParam(':end_date', $end_date);
+            }
+    
             $stmt->execute();
-
+    
             $labels = [];
             $data = [];
-
+    
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $labels[] = $row['date'];
+                $labels[] = $row['booking_date'];
                 $data[] = $row['total_bookings'];
             }
-
+    
             return [
                 'labels' => $labels,
                 'data' => $data
@@ -197,4 +229,6 @@ class Room
             return $e->getMessage();
         }
     }
+    
+
 }
