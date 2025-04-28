@@ -28,12 +28,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             switch ($_SESSION['usertype']) {
                 case 'admin':
-                case 'maintenance':
+                case 'operator':
                 case 'superadmin':
                     header("Location: ../admin/index.php");
                     exit;
                 case 'manager':
                 case 'officer':
+                case 'maintenance':
                     header("Location: ../manager/index.php");
                     exit;
                 case 'employee':
@@ -59,13 +60,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="utf-8">
     <title>Verify OTP</title>
     <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <title>Login</title>
+    <link rel="shortcut icon" href="../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link href="../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/libs/css/style.css">
+    <link rel="stylesheet" href="../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+            min-height: 100vh;
+            overflow: hidden;
+            background: url('../assets/images/bcp1.jpg') no-repeat center center/cover;
+        }
+    </style>    
 </head>
 
 <body>
     <div class="container d-flex justify-content-center align-items-center" style="height:100vh;">
         <div class="card" style="width: 400px;">
             <div class="card-header text-center">
-                <h4>OTP Verification</h4>
+                <h1>OTP Verification</h1>
             </div>
             <div class="card-body">
                 <?php if (!empty($err)): ?>
@@ -76,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <input type="text" name="otp" maxlength="6" pattern="\d{6}" title="Enter the 6-digit OTP"
                             class="form-control" placeholder="Enter OTP" required autofocus>
                     </div>
-                    <button type="submit" class="btn btn-success btn-block">Verify OTP</button>
+                    <button type="submit" class="btn btn-primary btn-block">Verify OTP</button>
                 </form>
 
                 <div class="text-center mt-2">

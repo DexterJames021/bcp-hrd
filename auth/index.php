@@ -51,19 +51,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $mail = new PHPMailer(true);
                     try {
                         $mail->isSMTP();
-                        $mail->Host       = 'smtp.gmail.com';
-                        $mail->SMTPAuth   = true;
-                        $mail->Username   = 'fantastiassasin@gmail.com'; // <-- your gmail
-                        $mail->Password   = 'ifst tyvw lflb bsfr';   // <-- your generated App Password
+                        $mail->Host = 'smtp.gmail.com';
+                        $mail->SMTPAuth = true;
+                        $mail->Username = 'fantastiassasin@gmail.com'; // <-- your gmail
+                        $mail->Password = 'ifst tyvw lflb bsfr';   // <-- your generated App Password
                         $mail->SMTPSecure = 'tls';
-                        $mail->Port       = 587;
+                        $mail->Port = 587;
 
                         $mail->setFrom('fantastiassasin@gmail.com', 'HR Portal');
                         $mail->addAddress($email, $user->username);
 
                         $mail->isHTML(true);
                         $mail->Subject = 'Your OTP Code';
-                        $mail->Body    = "Hello {$user->username},<br><br>Your OTP is: <b>{$otp}</b><br><br>This code will expire in 5 minutes.";
+                        $mail->Body = "Hello {$user->username},<br><br>Your OTP is: <b>{$otp}</b><br><br>This code will expire in 5 minutes.";
 
                         $mail->send();
 
@@ -88,32 +88,67 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Login</title>
+    <link rel="shortcut icon" href="../assets/images/bcp-hrd-logo.jpg" type="image/x-icon">
     <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link href="../assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/libs/css/style.css">
+    <link rel="stylesheet" href="../assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+            min-height: 100vh;
+            overflow: hidden;
+            background: url('../assets/images/bcp1.jpg') no-repeat center center/cover;
+        }
+    </style>
 </head>
-<body style="background: url('../assets/images/bcp1.jpg') no-repeat center center/cover; height: 100vh;">
-    <div class="container d-flex justify-content-center align-items-center" style="height:100%;">
-        <div class="card" style="width: 400px;">
+
+<body>
+    <div class="splash-container">
+        <div class="card">
             <div class="card-header text-center">
-                <img src="../assets/images/bcp-hrd-logo.jpg" alt="logo" style="height:100px;">
+                <a href="../index.php">
+                    <img class="logo-img" src="../assets/images/bcp-hrd-logo.jpg" alt="logo"
+                        style="height:10rem;width:auto;">
+                </a>
             </div>
             <div class="card-body">
                 <?php if (!empty($err)): ?>
                     <div class="alert alert-danger"><?= $err ?></div>
                 <?php endif; ?>
-                <form method="POST" action="index.php">
+                <form action="index.php" method="POST">
                     <div class="form-group">
-                        <input type="text" name="username" class="form-control" placeholder="Username" required autofocus>
+                        <input class="form-control form-control-lg" name="username" id="username" type="text"
+                            placeholder="Username" autocomplete="off" required>
                     </div>
                     <div class="form-group">
-                        <input type="password" name="password" class="form-control" placeholder="Password" required>
+                        <input class="form-control form-control-lg" name="password" id="password" type="password"
+                            placeholder="Password" required>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                    <input type="submit" name="submit" id="submit" class="btn btn-primary btn-lg btn-block"
+                        value="Sign in">
                 </form>
+            </div>
+            <div class="card-footer bg-white p-0">
+                <div class="card-footer-item card-footer-item-bordered">
+                    <!-- Additional links can be added here -->
+                </div>
             </div>
         </div>
     </div>
 </body>
+
 </html>
