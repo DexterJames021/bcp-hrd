@@ -54,11 +54,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <title>Verify OTP</title>
     <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.min.css">
 </head>
+
 <body>
     <div class="container d-flex justify-content-center align-items-center" style="height:100vh;">
         <div class="card" style="width: 400px;">
@@ -71,10 +73,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php endif; ?>
                 <form method="POST" action="verify_otp.php">
                     <div class="form-group">
-                        <input type="text" name="otp" class="form-control" placeholder="Enter OTP" required autofocus>
+                        <input type="text" name="otp" maxlength="6" pattern="\d{6}" title="Enter the 6-digit OTP"
+                            class="form-control" placeholder="Enter OTP" required autofocus>
                     </div>
                     <button type="submit" class="btn btn-success btn-block">Verify OTP</button>
                 </form>
+
+                <div class="text-center mt-2">
+                    <a href="resend_otp.php" class="btn btn-link">Resend OTP</a>
+                </div>
             </div>
             <div class="card-footer text-center">
                 <small>Check your email for the OTP code.</small>
@@ -82,4 +89,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 </body>
+
 </html>
