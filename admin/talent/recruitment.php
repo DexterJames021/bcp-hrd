@@ -329,7 +329,7 @@ if ($result->num_rows > 0) {
                 <h1 class="card-title">Applicants</h1>
             </div>
             
-                <table id="myApplicants" class="table table-hover" style="100%">
+                <table id="myApplicants1" class="table table-hover" style="100%">
                     <thead class="thead-light">
                         <tr>
                             <th>No.</th>
@@ -462,7 +462,7 @@ if ($result->num_rows > 0) {
             $counter++; // Increment counter
         }
     } else {
-        echo "<tr><td colspan='7'>No applicants found.</td></tr>";
+        echo "<tr><td colspan='7' class='text-center'>No applicants fount.</td></tr>";
     }
     ?>
 </tbody>
@@ -809,154 +809,8 @@ $(document).ready(function() {
 
   
 
-    <!-- Applicants Tab -->
-    <div class="tab-pane fade" id="applicants" role="tabpanel" aria-labelledby="applicants-tab">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between">
-                <h1 class="card-title">Applicants</h1>
-            </div>
-            <div class="card-body">
-                <table id="myApplicants" class="table table-hover" style="100%">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>No.</th>
-                            <th>Name</th>
-                            <th>Job Applied</th>
-                            <th>Status</th>
-                            <th>Department</th>
-                            <th>Resume</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-    <?php
-    // Get job_id from URL, default to 0 if not set
-    $job_id = isset($_GET['job_id']) ? intval($_GET['job_id']) : 0;
-
-    // SQL query to fetch applicants excluding those who are "Hired"
-    $sql = $job_id > 0 
-    ? "SELECT a.id, a.applicant_name, a.email, j.job_title, a.status, a.applied_at, a.interview_date, a.interview_time, a.resume_path, d.DepartmentName
-        FROM applicants a
-        LEFT JOIN job_postings j ON a.job_id = j.id
-        LEFT JOIN departments d ON a.DepartmentID = d.DepartmentID
-        WHERE a.job_id = $job_id AND a.status NOT IN ('Hired')"
-    : "SELECT a.id, a.applicant_name, a.email, j.job_title, a.status, a.applied_at, a.interview_date, a.interview_time, a.resume_path, d.DepartmentName
-        FROM applicants a
-        LEFT JOIN job_postings j ON a.job_id = j.id
-        LEFT JOIN departments d ON a.DepartmentID = d.DepartmentID
-        WHERE a.status NOT IN ('Hired')"; // Exclude hired applicants
-
-
-    $result = $conn->query($sql);
-    $counter = 1; // Start numbering from 1
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr>";
-            echo "<td>" . $counter . "</td>"; // Row number
-            echo "<td>" . htmlspecialchars($row['applicant_name']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['job_title']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['status']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['DepartmentName']) . "</td>";
-
-            // Resume Download Button
-            echo "<td>";
-            if (!empty($row['resume_path'])) {
-                $file_path = htmlspecialchars($row['resume_path']);
-                $file_name = basename($file_path); // Extract filename
-            
-                echo "<a href='/bcp-hrd/admin/talent/recruitment/" . $file_path . "' download='" . $file_name . "' class='btn btn-info btn-sm'>
-                        <i class='fas fa-file-download'></i> Download Resume
-                      </a>";
-            } else {
-                echo "No File";
-            }
-            echo "</td>";
-            
-            echo "<td class='action-buttons'>";
-
-            // Form for status updates
-            echo "<form action='recruitment/update_status.php?job_id=" . htmlspecialchars($job_id) . "' method='POST'>";
-            echo "<input type='hidden' name='applicant_id' value='" . htmlspecialchars($row['id']) . "'>";
-
-         // Status Buttons for Status Updates
-if ($row['status'] === 'Pending') {
-    echo "<button type='submit' name='status' value='Selected for Interview' class='btn btn-primary btn-sm'>
-            <i class='fas fa-calendar-check'></i> 
-          </button>"; 
-    echo "<button type='submit' name='status' value='Rejected' class='btn btn-danger btn-sm'>
-            <i class='fas fa-user-times'></i> 
-          </button>"; 
-} elseif ($row['status'] === 'Interviewed') {
-    echo "<button type='submit' name='status' value='Shortlisted' class='btn btn-success btn-sm'>
-            <i class='fas fa-user-check'></i> 
-          </button>"; 
-    echo "<button type='submit' name='status' value='Rejected' class='btn btn-danger btn-sm'>
-            <i class='fas fa-user-times'></i> 
-          </button>"; 
-} elseif ($row['status'] === 'Shortlisted') {
-    echo "<button type='submit' name='status' value='Document Submission' class='btn btn-warning btn-sm'>
-            <i class='fas fa-paperclip'>HAHA</i> 
-          </button>"; 
-    echo "<button type='submit' name='status' value='Rejected' class='btn btn-danger btn-sm'>
-            <i class='fas fa-user-times'></i> 
-          </button>"; 
-} elseif ($row['status'] === 'Document Submission') {
-    echo "<button type='submit' name='status' value='Hired' class='btn btn-success btn-sm'>
-            <i class='fas fa-briefcase'></i> 
-          </button>"; 
-    echo "<button type='submit' name='status' value='Rejected' class='btn btn-danger btn-sm'>
-            <i class='fas fa-user-times'></i> 
-          </button>"; 
-}
-
-            
-
-            echo "</form>";
-
-            // Delete button for rejected applicants
-            if ($row['status'] === 'Rejected') {
-                echo "<a href='recruitment/delete_applicant.php?applicant_id=" . htmlspecialchars($row['id']) . "' 
-                       class='btn btn-danger btn-sm' 
-                       onclick='return confirm(\"Are you sure you want to delete this rejected applicant?\");'>
-                        <i class='fas fa-trash'></i> 
-                      </a>"; 
-            }
-
-            // Interview scheduling form
-            if ($row['status'] === 'Selected for Interview') {
-                echo "<form action='recruitment/schedule_interview.php?job_id=" . htmlspecialchars($job_id) . "' method='POST' class='schedule-form'>";
-                echo "<input type='hidden' name='applicant_id' value='" . htmlspecialchars($row['id']) . "'>";
-
-                echo "<label for='interview_date'></label>
-                      <input type='date' name='interview_date' required>
-                      
-                      <label for='interview_time'></label>
-                      <input type='time' name='interview_time' required>
-                      
-                      <button type='submit' class='btn btn-primary btn-sm'>
-                        <i class='fas fa-clock'></i> 
-                      </button>";
-                echo "</form>";
-            }
-
-            echo "</td>";
-            echo "</tr>";
-            $counter++; // Increment counter
-        }
-    } else {
-        echo "<tr><td colspan='7'>No applicants found.</td></tr>";
-    }
-    ?>
-</tbody>
-
-
-
-                </table>
-            </div>
-        </div>
-    </div>
-
-</div>
+  
+      
 
 <script>
     // Check if the page is being reloaded
@@ -1364,8 +1218,8 @@ if ($row['status'] === 'Pending') {
 </script>
 <script>
     $(document).ready(function() {
-        if ($("#myApplicants tbody tr").length > 1) { // Ensure at least one row exists
-            $('#myApplicants').DataTable({
+        if ($("#myApplicants1 tbody tr").length > 1) { // Ensure at least one row exists
+            $('#myApplicants1').DataTable({
                 "lengthMenu": [10, 25, 50, 100], 
                 "paging": true,
                 "searching": true,
