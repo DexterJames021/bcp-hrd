@@ -304,7 +304,7 @@ session_start();
                             </li>
                             <!-- Performance -->
                             <li class="nav-item">
-                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5"><i class="fas fa-fw fa-table"></i>Performance</a>
+                                <a class="nav-link" href="perf_dboard.php" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5"><i class="fas fa-fw fa-table"></i>Performance</a>
                                 <div id="submenu-5" class="collapse submenu" style="">
                                 <ul class="nav flex-column">
                                         <li class="nav-item">
