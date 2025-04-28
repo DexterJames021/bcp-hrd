@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_FILES['document'])) {
         // Move file to upload directory
         if (move_uploaded_file($file['tmp_name'], $file_destination)) {
             // Save to database
-            $relative_path = 'admin/talent/recruitment/uploads/documents/' . $original_name; 
+            $relative_path = $original_name; 
             // This is the path saved into DB
 
             $query = "INSERT INTO document_submissions (applicant_id, document, submission_date) VALUES (?, ?, NOW())";

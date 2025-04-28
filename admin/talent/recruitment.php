@@ -470,6 +470,61 @@ if ($result->num_rows > 0) {
 
 
                 </table>
+                <hr>
+                <div class="card-header d-flex justify-content-between">
+                <h1 class="card-title">Documents</h1>
+                </div>
+                <table id="applicantDocument" class="table table-hover" style="100%">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>No.</th>
+                            <th>Name</th>
+                            <th>Document</th>
+                            <th>Submission Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $uploadDirectory = 'recruitment/uploads/documents/'; // Dito yung folder mo
+                        // Get job_id from URL, default to 0 if not set
+                        $job_id = isset($_GET['job_id']) ? intval($_GET['job_id']) : 0;
+
+                        // Check kung may job_id na pinasa
+                        if ($job_id > 0) {
+                            $sql = "SELECT ds.id, a.applicant_name, ds.document, ds.submission_date 
+                                    FROM document_submissions ds
+                                    INNER JOIN applicants a ON ds.applicant_id = a.id
+                                    WHERE a.job_id = $job_id";
+                        } else {
+                            $sql = "SELECT ds.id, a.applicant_name, ds.document, ds.submission_date 
+                                    FROM document_submissions ds
+                                    INNER JOIN applicants a ON ds.applicant_id = a.id";
+                        }
+
+                        $result = $conn->query($sql);
+
+                        if ($result->num_rows > 0) {
+                            $no = 1; // Counter for the "No." column
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<tr>";
+                                echo "<td>" . $no++ . "</td>";
+                                echo "<td>" . htmlspecialchars($row['applicant_name']) . "</td>";
+                                echo "<td>" . basename(htmlspecialchars($row['document'])) . "</td>"; // Show filename only
+                                echo "<td>" . htmlspecialchars(date('F d, Y', strtotime($row['submission_date']))) . "</td>";
+                                echo "<td>
+                                      <a href='" . $uploadDirectory . htmlspecialchars($row['document']) . "' class='btn btn-primary btn-sm' target='_blank'>View</a>
+                                    </td>";
+                                echo "</tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='5' class='text-center'>No documents submitted yet.</td></tr>";
+                        }
+                        ?>
+                        </tbody>
+
+                </table>
+            
             </div>
         </div>
     
@@ -1287,6 +1342,30 @@ if ($row['status'] === 'Pending') {
     $(document).ready(function() {
         if ($("#myOpens tbody tr").length > 1) { // Ensure at least one row exists
             $('#myOpens').DataTable({
+                "lengthMenu": [10, 25, 50, 100], 
+                "paging": true,
+                "searching": true,
+                "ordering": true
+            });
+        }
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        if ($("#applicantDocument tbody tr").length > 1) { // Ensure at least one row exists
+            $('#applicantDocument').DataTable({
+                "lengthMenu": [10, 25, 50, 100], 
+                "paging": true,
+                "searching": true,
+                "ordering": true
+            });
+        }
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        if ($("#myApplicants tbody tr").length > 1) { // Ensure at least one row exists
+            $('#myApplicants').DataTable({
                 "lengthMenu": [10, 25, 50, 100], 
                 "paging": true,
                 "searching": true,

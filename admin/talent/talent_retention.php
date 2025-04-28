@@ -78,7 +78,7 @@ $total_awards = $row['total_awards'];
                         <div class="col-12">
                             <div class="card">
                                     <div class="card-body"> 
-                                        <h1>Talent Retention</h1>
+                                        <h1>Employee Recognition</h1>
                                         <div class="row">
                                             <div class="col-md-3">
                                                 <div class="card bg-light text-white">
@@ -91,7 +91,7 @@ $total_awards = $row['total_awards'];
                                             <div class="col-md-3">
                                                 <div class="card bg-light text-white">
                                                     <div class="card-body">
-                                                        <h5>Achievement Programs</h5>
+                                                        <h5>Recognition Programs</h5>
                                                         <h3><?php echo $total_programs; ?></h3>
                                                     </div>
                                                 </div>
@@ -345,7 +345,7 @@ if (isset($_SESSION['success_message'])) {
                                             <!-- Content for Retention Programs goes here -->
                                             <div class="card">
                                                 <div class="card-header d-flex justify-content-between">
-                                                    <h1 class="card-title">Employee Achievement Programs</h1>
+                                                    <h1 class="card-title">Employee Recognition Programs</h1>
                                                     <div class="btn-group">
                                                 
                                                         <button type="button" class="btn btn-outline-primary float-right"

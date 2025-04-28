@@ -119,9 +119,24 @@ function sendNotificationEmail($to_email, $status) {
             Should you have any questions or concerns, please do not hesitate to contact us.<br><br>
             Thank you,<br>
             HR Department";
+        }elseif ($status == 'Background Check') {
+            $mail->Body = "Dear Applicant,<br><br>
+            We are pleased to inform you that you have successfully completed the initial phases of our hiring process, including your interview and document submissions.<br><br>
+            As the final step, we are now conducting a background check to complete your onboarding requirements.<br><br>
+            Kindly wait for further updates. Our HR team will contact you once the background verification process is completed.<br><br>
+            Thank you for your continued cooperation!<br><br>
+            Best regards,<br>
+            HR Department";
         } elseif ($status == 'Hired') {
-            $mail->Body = "Dear Applicant, <br><br>We are pleased to inform you that you have been hired for the position! We will be in touch with the next steps shortly. <br><br>Thank you,<br>HR Department";
-        } elseif ($status == 'Selected for Interview') {
+            $mail->Body = "Dear Applicant, <br><br>
+            Congratulations! We are pleased to inform you that you have officially been hired for the position! <br><br>
+            Please visit our office **as soon as possible** to physically sign your employment contract. Once signed, we will proceed with setting up your company account and providing you with your login credentials. Our HR team will assist you with the next steps when you arrive.<br><br>
+            We are excited to welcome you to the team and look forward to seeing you soon!<br><br>
+            Thank you,<br>
+            HR Department";
+        }
+        
+         elseif ($status == 'Selected for Interview') {
             $mail->Body = "Dear Applicant, <br><br>Your application status has been updated to: <strong>$status</strong>.<br><br>Wait for the scheduled. Thank you,<br>HR Department";
         }
         
