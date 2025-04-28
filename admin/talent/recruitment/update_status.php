@@ -114,7 +114,7 @@ function sendNotificationEmail($to_email, $status) {
                 <li>NBI Clearance (National Bureau of Investigation Clearance)</li>
             </ul>
             Please ensure that all documents are clear and legible. You can upload the documents via the link provided below or send them directly to our HR department:<br><br>
-            <a href='".$portal_link."'>Applicant Portal</a><br><br>
+            <a href='".$portal_link."'>Applicant Submission Portal</a><br><br>
             Thank you for your prompt submission, and we look forward to moving forward with your application.<br><br>
             Should you have any questions or concerns, please do not hesitate to contact us.<br><br>
             Thank you,<br>

@@ -52,37 +52,38 @@ CREATE TABLE `applicants` (
   KEY `FK_Applicants_DepartmentID` (`DepartmentID`),
   CONSTRAINT `FK_Applicants_DepartmentID` FOREIGN KEY (`DepartmentID`) REFERENCES `departments` (`DepartmentID`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `applicants_ibfk_1` FOREIGN KEY (`job_id`) REFERENCES `job_postings` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `applicants` */
 
 insert  into `applicants`(`id`,`job_id`,`applicant_name`,`email`,`resume_path`,`status`,`applied_at`,`interview_date`,`interview_time`,`DepartmentID`) values 
-(43,59,'SAWADA','apundarjeremy@gmail.com','uploads/resume/jere.txt','Hired','2024-11-13 18:51:07',NULL,NULL,9),
-(44,57,'QWERTY','apundarjeremy@gmail.com','uploads/resume/jere.txt','Hired','2024-11-13 18:51:31','2024-11-13','22:15:00',8),
-(49,60,'Kevin Durant','apundarjeremy@gmail.com','uploads/resume/jere.txt','Hired','2024-11-13 21:58:16',NULL,NULL,9),
-(50,58,'LeBron James','apundarjeremy@gmail.com','uploads/resume/jere.txt','Hired','2024-11-13 21:58:39','2025-03-30','17:39:00',8),
-(51,57,'Steph Curry','apundarjeremy@gmail.com','uploads/resume/jere.txt','Hired','2024-11-13 21:59:12','2025-03-30','15:11:00',8),
-(52,62,'John Doe','johndoe@example.com','uploads/resume/johndoe.txt','Rejected','2025-01-26 11:14:16',NULL,NULL,9),
-(53,63,'Jane Smith','janesmith@example.com','uploads/resume/janesmith.txt','Rejected','2025-01-26 11:14:16',NULL,NULL,8),
-(54,64,'Alice Johnson','alicejohnson@example.com','uploads/resume/alicejohnson.txt','Hired','2025-01-26 11:14:16','2025-03-30','16:19:00',9),
-(55,65,'Bob Brown','bobbrown@example.com','uploads/resume/bobbrown.txt','Rejected','2025-01-26 11:14:16','2025-03-30','16:29:00',10),
-(56,66,'Charlie Davis','charliedavis@example.com','uploads/resume/charliedavis.txt','Hired','2025-01-26 11:14:16','2025-04-01','22:42:00',9),
-(57,67,'Diana Evans','dianaevans@example.com','uploads/resume/dianaevans.txt','Hired','2025-01-26 11:14:16','2025-04-01','22:43:00',11),
-(58,68,'Ethan Foster','ethanfoster@example.com','uploads/resume/ethanfoster.txt','Interviewed','2025-01-26 11:14:16','2025-04-27','20:51:00',12),
-(59,69,'Fiona Green','fionagreen@example.com','uploads/resume/fionagreen.txt','Hired','2025-01-26 11:14:16','2025-03-30','16:45:00',10),
-(60,70,'George Harris','georgeharris@example.com','uploads/resume/georgeharris.txt','Pending','2025-01-26 11:14:16',NULL,NULL,9),
-(61,71,'Hannah Ivers','hannahivers@example.com','uploads/resume/hannahivers.txt','Pending','2025-01-26 11:14:16',NULL,NULL,8),
-(62,58,'test','test@gmail.com','uploads/resume/dexter-schoolresume.docx','Hired','2025-03-26 20:28:46','2025-04-01','22:45:00',8),
-(63,58,'qwe','qwe@masd.com','uploads/resume/internship-memorandum-of-agreement-between-student-and-company.docx','Hired','2025-03-26 20:47:03','2025-03-30','19:38:00',8),
-(67,67,'JEREMY','apundarjeremy@gmail.com','uploads/resume/RESUME-FOR-OJT-JA.docx','Hired','2025-03-30 19:20:28','2025-03-30','19:28:00',11),
-(68,65,'Jeremy Apundar','apundarjeremy@gmail.com','uploads/resume/RESUME-FOR-OJT-JA.docx','Hired','2025-03-30 23:26:23','2025-03-30','23:27:00',10),
-(69,72,'test applicant','apundarjeremy@gmail.com','uploads/resume/GMAIL-ACC.txt','Hired','2025-04-01 11:35:48','2025-04-01','11:36:00',15),
-(70,63,'test3','test3@gmail.com','uploads/resume/ACCOUNT-1.txt','Hired','2025-04-01 22:51:18','2025-04-01','23:14:00',8),
-(71,62,'applicant1','apundarjeremy@gmail.com','uploads/resume/Aljhon Resume.docx','Hired','2025-04-05 16:33:23','2025-04-27','20:14:00',9),
-(72,66,'Penpen ','apundarjeremy@gmail.com','uploads/resume/Aljhon Resume.docx','Hired','2025-04-05 16:43:42','2025-04-06','13:00:00',9),
-(74,74,'PENPEN','apundarjeremy@gmail.com','uploads/resume/Aljhon Resume.docx','Hired','2025-04-05 17:14:53','2025-04-06','13:15:00',15),
-(80,78,'Apundar, Jeremy','apundarjeremy@gmail.com','uploads/verify/bcp logo.png','Background Check','2025-04-27 15:51:34','2025-04-27','21:27:00',10),
-(81,62,'Apundar','apundarjeremy@gmail.com','uploads/verify/bcp logo.png','Pending','2025-04-27 21:55:07',NULL,NULL,9);
+(43,59,'SAWADA','apundarjeremy@gmail.com','uploads/resume/jere.txt','Hired','2024-11-14 02:51:07',NULL,NULL,9),
+(44,57,'QWERTY','apundarjeremy@gmail.com','uploads/resume/jere.txt','Hired','2024-11-14 02:51:31','2024-11-13','22:15:00',8),
+(49,60,'Kevin Durant','apundarjeremy@gmail.com','uploads/resume/jere.txt','Hired','2024-11-14 05:58:16',NULL,NULL,9),
+(50,58,'LeBron James','apundarjeremy@gmail.com','uploads/resume/jere.txt','Hired','2024-11-14 05:58:39','2025-03-30','17:39:00',8),
+(51,57,'Steph Curry','apundarjeremy@gmail.com','uploads/resume/jere.txt','Hired','2024-11-14 05:59:12','2025-03-30','15:11:00',8),
+(52,62,'John Doe','johndoe@example.com','uploads/resume/johndoe.txt','Rejected','2025-01-26 19:14:16',NULL,NULL,9),
+(53,63,'Jane Smith','janesmith@example.com','uploads/resume/janesmith.txt','Rejected','2025-01-26 19:14:16',NULL,NULL,8),
+(54,64,'Alice Johnson','alicejohnson@example.com','uploads/resume/alicejohnson.txt','Hired','2025-01-26 19:14:16','2025-03-30','16:19:00',9),
+(55,65,'Bob Brown','bobbrown@example.com','uploads/resume/bobbrown.txt','Rejected','2025-01-26 19:14:16','2025-03-30','16:29:00',10),
+(56,66,'Charlie Davis','charliedavis@example.com','uploads/resume/charliedavis.txt','Hired','2025-01-26 19:14:16','2025-04-01','22:42:00',9),
+(57,67,'Diana Evans','dianaevans@example.com','uploads/resume/dianaevans.txt','Hired','2025-01-26 19:14:16','2025-04-01','22:43:00',11),
+(58,68,'Ethan Foster','ethanfoster@example.com','uploads/resume/ethanfoster.txt','Interviewed','2025-01-26 19:14:16','2025-04-27','20:51:00',12),
+(59,69,'Fiona Green','fionagreen@example.com','uploads/resume/fionagreen.txt','Hired','2025-01-26 19:14:16','2025-03-30','16:45:00',10),
+(60,70,'George Harris','georgeharris@example.com','uploads/resume/georgeharris.txt','Pending','2025-01-26 19:14:16',NULL,NULL,9),
+(61,71,'Hannah Ivers','hannahivers@example.com','uploads/resume/hannahivers.txt','Pending','2025-01-26 19:14:16',NULL,NULL,8),
+(62,58,'test','test@gmail.com','uploads/resume/dexter-schoolresume.docx','Hired','2025-03-27 04:28:46','2025-04-01','22:45:00',8),
+(63,58,'qwe','qwe@masd.com','uploads/resume/internship-memorandum-of-agreement-between-student-and-company.docx','Hired','2025-03-27 04:47:03','2025-03-30','19:38:00',8),
+(67,67,'JEREMY','apundarjeremy@gmail.com','uploads/resume/RESUME-FOR-OJT-JA.docx','Hired','2025-03-31 03:20:28','2025-03-30','19:28:00',11),
+(68,65,'Jeremy Apundar','apundarjeremy@gmail.com','uploads/resume/RESUME-FOR-OJT-JA.docx','Hired','2025-03-31 07:26:23','2025-03-30','23:27:00',10),
+(69,72,'test applicant','apundarjeremy@gmail.com','uploads/resume/GMAIL-ACC.txt','Hired','2025-04-01 19:35:48','2025-04-01','11:36:00',15),
+(70,63,'test3','test3@gmail.com','uploads/resume/ACCOUNT-1.txt','Hired','2025-04-02 06:51:18','2025-04-01','23:14:00',8),
+(71,62,'applicant1','apundarjeremy@gmail.com','uploads/resume/Aljhon Resume.docx','Hired','2025-04-06 00:33:23','2025-04-27','20:14:00',9),
+(72,66,'Penpen ','apundarjeremy@gmail.com','uploads/resume/Aljhon Resume.docx','Hired','2025-04-06 00:43:42','2025-04-06','13:00:00',9),
+(74,74,'PENPEN','apundarjeremy@gmail.com','uploads/resume/Aljhon Resume.docx','Hired','2025-04-06 01:14:53','2025-04-06','13:15:00',15),
+(80,78,'Apundar, Jeremy','apundarjeremy@gmail.com','uploads/verify/bcp logo.png','Background Check','2025-04-27 23:51:34','2025-04-27','21:27:00',10),
+(81,62,'Apundar','apundarjeremy@gmail.com','uploads/verify/bcp logo.png','Pending','2025-04-28 05:55:07',NULL,NULL,9),
+(82,64,'TRYYY','apundarjeremy@gmail.com','uploads/verify/bcp logo.png','Hired','2025-04-28 09:28:47','2025-04-28','09:32:00',9);
 
 /*Table structure for table `attendance` */
 
@@ -348,13 +349,14 @@ CREATE TABLE `document_submissions` (
   PRIMARY KEY (`id`),
   KEY `applicant_id` (`applicant_id`),
   CONSTRAINT `document_submissions_ibfk_1` FOREIGN KEY (`applicant_id`) REFERENCES `applicants` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `document_submissions` */
 
 insert  into `document_submissions`(`id`,`applicant_id`,`document`,`submission_date`) values 
-(8,80,'admin/talent/recruitment/uploads/documents/bcp logo.png','2025-04-28 00:59:08'),
-(10,80,'admin/talent/recruitment/uploads/documents/bcp2.jpg','2025-04-28 01:00:52');
+(12,82,'bcp3 (1).jpg','2025-04-28 10:20:59'),
+(13,82,'bcp1.jpg','2025-04-28 10:43:57'),
+(14,82,'Aljhon Resume (1).docx','2025-04-28 10:54:28');
 
 /*Table structure for table `documents` */
 
@@ -374,21 +376,21 @@ CREATE TABLE `documents` (
 /*Data for the table `documents` */
 
 insert  into `documents`(`id`,`user_id`,`document_name`,`file_path`,`uploaded_at`) values 
-(19,39,'BOSS Q 1.txt','uploads/documents/BOSS Q 1.txt','2024-11-14 00:03:36'),
-(20,44,'BOSS Q 1.txt','uploads/documents/BOSS Q 1.txt','2025-03-22 19:33:00'),
-(21,45,'BOSS Q 1.txt','uploads/documents/BOSS Q 1.txt','2025-03-22 19:33:24'),
-(22,46,'BOSS Q 1.txt','uploads/documents/BOSS Q 1.txt','2025-03-22 19:33:51'),
-(23,47,'BOSS Q 1.txt','uploads/documents/BOSS Q 1.txt','2025-03-22 19:33:51'),
-(24,48,'BOSS Q 1.txt','uploads/documents/BOSS Q 1.txt','2025-03-22 19:36:05'),
-(25,49,'BOSS Q 1.txt','uploads/documents/BOSS Q 1.txt','2025-03-22 19:36:05'),
-(26,4,'BOSS Q 1.txt','uploads/documents/BOSS Q 1.txt','2025-03-22 19:36:05'),
-(27,36,'BOSS Q 1.txt','uploads/documents/BOSS Q 1.txt','2025-03-22 19:36:05'),
-(28,36,'BOSS Q 2.txt','uploads/documents/BOSS Q 1.txt','2025-03-22 19:36:05'),
-(29,36,'BOSS Q 3.txt','uploads/documents/BOSS Q 1.txt','2025-03-22 19:36:05'),
-(36,53,'bootstrap.txt','uploads/bootstrap.txt','2025-03-31 15:43:34'),
-(38,54,'Aljhon Resume.docx','uploads/Aljhon Resume.docx','2025-03-31 15:45:46'),
-(39,55,'GMAIL-ACC.txt','uploads/GMAIL-ACC.txt','2025-04-01 11:39:27'),
-(42,60,'1-INDORSEMENT-FOR-INTERNSHIP.docx','uploads/1-INDORSEMENT-FOR-INTERNSHIP.docx','2025-04-05 17:18:16');
+(19,39,'BOSS Q 1.txt','uploads/documents/BOSS Q 1.txt','2024-11-14 08:03:36'),
+(20,44,'BOSS Q 1.txt','uploads/documents/BOSS Q 1.txt','2025-03-23 03:33:00'),
+(21,45,'BOSS Q 1.txt','uploads/documents/BOSS Q 1.txt','2025-03-23 03:33:24'),
+(22,46,'BOSS Q 1.txt','uploads/documents/BOSS Q 1.txt','2025-03-23 03:33:51'),
+(23,47,'BOSS Q 1.txt','uploads/documents/BOSS Q 1.txt','2025-03-23 03:33:51'),
+(24,48,'BOSS Q 1.txt','uploads/documents/BOSS Q 1.txt','2025-03-23 03:36:05'),
+(25,49,'BOSS Q 1.txt','uploads/documents/BOSS Q 1.txt','2025-03-23 03:36:05'),
+(26,4,'BOSS Q 1.txt','uploads/documents/BOSS Q 1.txt','2025-03-23 03:36:05'),
+(27,36,'BOSS Q 1.txt','uploads/documents/BOSS Q 1.txt','2025-03-23 03:36:05'),
+(28,36,'BOSS Q 2.txt','uploads/documents/BOSS Q 1.txt','2025-03-23 03:36:05'),
+(29,36,'BOSS Q 3.txt','uploads/documents/BOSS Q 1.txt','2025-03-23 03:36:05'),
+(36,53,'bootstrap.txt','uploads/bootstrap.txt','2025-03-31 23:43:34'),
+(38,54,'Aljhon Resume.docx','uploads/Aljhon Resume.docx','2025-03-31 23:45:46'),
+(39,55,'GMAIL-ACC.txt','uploads/GMAIL-ACC.txt','2025-04-01 19:39:27'),
+(42,60,'1-INDORSEMENT-FOR-INTERNSHIP.docx','uploads/1-INDORSEMENT-FOR-INTERNSHIP.docx','2025-04-06 01:18:16');
 
 /*Table structure for table `email_verifications` */
 
@@ -406,13 +408,14 @@ CREATE TABLE `email_verifications` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`,`job_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `email_verifications` */
 
 insert  into `email_verifications`(`id`,`email`,`applicant_name`,`resume_path`,`department_id`,`job_id`,`verification_token`,`is_verified`,`created_at`) values 
-(9,'apundarjeremy@gmail.com','Apundar, Jeremy','uploads/verify/bcp logo.png',10,78,'879b9be681221e30ef48a3efdc9d719b65edde0618875f7628ae8d6a55b11f5a',1,'2025-04-27 15:50:54'),
-(10,'apundarjeremy@gmail.com','Apundar','uploads/verify/bcp logo.png',9,62,'61d9c0929671ba1d41b4867131f14a2258efff3a80c4b8464f625aad60d13291',1,'2025-04-27 21:54:19');
+(9,'apundarjeremy@gmail.com','Apundar, Jeremy','uploads/verify/bcp logo.png',10,78,'879b9be681221e30ef48a3efdc9d719b65edde0618875f7628ae8d6a55b11f5a',1,'2025-04-27 23:50:54'),
+(10,'apundarjeremy@gmail.com','Apundar','uploads/verify/bcp logo.png',9,62,'61d9c0929671ba1d41b4867131f14a2258efff3a80c4b8464f625aad60d13291',1,'2025-04-28 05:54:19'),
+(11,'apundarjeremy@gmail.com','TRYYY','uploads/verify/bcp logo.png',9,64,'b2c79422703b750a18778bf95196dfc3b76068834aef38c6076de8ceeb12c8e8',1,'2025-04-28 09:28:22');
 
 /*Table structure for table `employee_awards` */
 
@@ -450,14 +453,15 @@ CREATE TABLE `employee_profile_pictures` (
   PRIMARY KEY (`id`),
   KEY `EmployeeID` (`EmployeeID`),
   CONSTRAINT `employee_profile_pictures_ibfk_1` FOREIGN KEY (`EmployeeID`) REFERENCES `employees` (`EmployeeID`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `employee_profile_pictures` */
 
 insert  into `employee_profile_pictures`(`id`,`EmployeeID`,`profile_picture_path`,`uploaded_at`) values 
-(1,88,'uploads/profile_pictures/1745159252_student1.jpg','2025-04-20 20:08:32'),
-(2,91,'uploads/profile_pictures/1745161537_student1.jpg','2025-04-20 22:03:42'),
-(3,45,'uploads/profile_pictures/1745714416_bcp logo.png','2025-04-27 08:40:16');
+(1,88,'uploads/profile_pictures/1745159252_student1.jpg','2025-04-21 04:08:32'),
+(2,91,'uploads/profile_pictures/1745161537_student1.jpg','2025-04-21 06:03:42'),
+(3,45,'uploads/profile_pictures/1745714416_bcp logo.png','2025-04-27 16:40:16'),
+(4,87,'uploads/profile_pictures/1745809935_bcp logo.png','2025-04-28 11:12:15');
 
 /*Table structure for table `employees` */
 
@@ -530,60 +534,60 @@ CREATE TABLE `fm_bookings` (
 /*Data for the table `fm_bookings` */
 
 insert  into `fm_bookings`(`id`,`employee_id`,`room_id`,`booking_date`,`start_time`,`end_time`,`purpose`,`status`,`created_at`,`updated_at`,`is_active`) values 
-(1,36,3,'2024-12-20','11:01:00','11:22:00','das','Approved','2024-12-13 22:30:51','2024-12-21 19:13:19',0),
-(2,36,1,'2024-12-09','22:22:00','22:44:00','222','Rejected','2024-12-14 12:00:56','2024-12-16 22:45:24',0),
-(3,36,1,'2024-12-12','23:11:00','01:33:00','dwed','Rejected','2024-12-14 16:08:20','2024-12-17 22:43:10',0),
-(4,36,8,'2024-12-04','12:02:00','03:03:00','dex','Approved','2024-12-14 16:09:43','2024-12-21 16:53:38',0),
-(5,36,3,'2222-12-22','21:02:00','12:21:00','adsd','Cancelled','2024-12-14 16:10:18','2024-12-27 00:40:58',0),
-(6,39,2,'2024-12-10','23:02:00','23:02:00','asdads','Approved','2024-12-14 18:49:47','2024-12-21 18:57:01',0),
-(7,39,1,'2024-12-16','12:02:00','12:34:00','asd','Rejected','2024-12-15 16:23:20','2024-12-26 22:48:50',0),
-(8,4,4,'2024-12-16','12:00:00','13:01:00','may event','Rejected','2024-12-15 16:39:38','2024-12-26 22:48:55',0),
-(9,39,5,'2024-12-16','12:02:00','03:03:00','asda','Cancelled','2024-12-15 16:50:37','2024-12-26 23:37:20',0),
-(10,39,6,'2024-12-16','12:02:00','11:11:00','asd','Rejected','2024-12-15 17:26:06','2024-12-26 22:50:01',0),
-(11,39,6,'2024-12-16','12:02:00','11:11:00','asd','Approved','2024-12-15 17:26:06','2024-12-25 00:18:48',0),
-(12,4,1,'2024-12-16','05:05:00','07:55:00','May gagawin lang\r\n','Approved','2024-12-15 19:34:40','2024-12-21 19:13:19',0),
-(13,4,2,'2024-12-16','12:02:00','04:04:00','asd','Approved','2024-12-15 19:37:44','2024-12-25 00:17:12',0),
-(14,39,7,'2024-12-17','21:22:00','23:33:00','wqweqwe','Rejected','2024-12-16 22:46:30','2024-12-26 22:50:01',0),
-(15,39,8,'2024-12-17','10:00:00','11:00:00','mnb nbjvk jyfkuyr uyrkvgk tcu vbj kguvtjyg','Approved','2024-12-17 21:40:39','2024-12-21 19:11:34',0),
-(16,39,9,'2024-12-17','12:12:00','22:22:00','dasdasd','Rejected','2024-12-17 21:42:19','2024-12-26 22:50:01',0),
-(17,39,4,'2024-12-22','23:33:00','03:33:00','sdasd','Approved','2024-12-21 21:10:48','2024-12-25 00:17:07',0),
-(18,39,4,'2024-12-22','12:02:00','03:04:00','deade','Approved','2024-12-21 21:12:39','2024-12-23 23:15:00',0),
-(19,39,8,'2024-12-22','03:44:00','03:06:00','dsfsdf','Approved','2024-12-21 21:56:36','2024-12-22 19:53:21',0),
-(20,0,11,'2024-12-23','23:33:00','23:03:00','admin','Pending','2024-12-22 11:24:41','2024-12-22 11:24:41',1),
-(21,36,10,'2024-12-23','23:03:00','05:06:00','sdfsf','Rejected','2024-12-22 17:15:01','2024-12-24 12:25:32',1),
-(22,36,13,'2024-12-23','23:33:00','23:44:00','admin','Approved','2024-12-22 17:15:39','2024-12-25 00:14:52',0),
-(23,36,21,'2024-12-22','18:25:00','05:06:00','naguupdate ba','Approved','2024-12-22 18:24:48','2024-12-24 12:34:28',0),
-(24,36,1,'2024-12-24','23:33:00','03:03:00','awdawdawd','Approved','2024-12-23 23:33:47','2024-12-24 16:41:24',0),
-(25,39,15,'2024-12-25','23:03:00','04:04:00','dasd','Approved','2024-12-24 13:02:59','2024-12-27 01:00:41',0),
-(26,39,19,'2025-12-05','03:04:00','04:57:00','padawd','Approved','2024-12-24 14:32:20','2024-12-25 00:19:04',1),
-(27,4,20,'2024-12-25','12:43:00','03:44:00','sdfsdf','Approved','2024-12-24 16:15:01','2024-12-25 11:31:00',0),
-(28,4,17,'2024-12-24','17:18:00','06:07:00','TESTTTTTTTTTT','Approved','2024-12-24 17:17:36','2024-12-24 17:46:14',0),
-(29,36,11,'2024-12-31','23:33:00','03:34:00','New YEars Party','Cancelled','2024-12-25 11:30:49','2025-01-27 00:36:15',1),
-(30,4,1,'2024-12-26','23:03:00','04:05:00','sdfsdf','Rejected','2024-12-25 22:14:57','2024-12-27 13:41:53',1),
-(31,4,2,'2024-12-27','23:03:00','04:55:00','sdfsdf','Approved','2024-12-26 21:33:19','2024-12-27 14:10:51',1),
-(32,4,4,'0006-01-06','03:44:00','04:05:00','dfgdfg','Approved','2024-12-26 21:47:48','2025-03-27 20:49:26',1),
-(33,4,5,'2025-01-30','23:03:00','04:05:00','dfgdfg','Approved','2024-12-26 21:49:06','2025-03-29 17:42:30',0),
-(34,4,6,'2025-02-18','23:03:00','04:05:00','sdff','Approved','2024-12-26 21:51:40','2025-02-20 21:08:55',0),
-(35,4,7,'2025-01-04','23:03:00','03:44:00','fsdsdf','Cancelled','2024-12-26 21:58:55','2024-12-27 00:26:06',1),
-(36,4,8,'2025-01-02','03:33:00','03:44:00','sdfsdf','Cancelled','2024-12-26 21:59:11','2024-12-26 23:52:59',1),
-(37,4,9,'2025-01-03','23:03:00','04:05:00','sdfsdf','Cancelled','2024-12-27 00:13:34','2024-12-27 00:30:22',1),
-(38,4,10,'2025-01-10','04:55:00','05:06:00','dfgdfg','Cancelled','2024-12-27 00:14:01','2024-12-27 00:22:44',1),
-(39,4,13,'2024-12-06','12:02:00','04:55:00','sdfsdf','Cancelled','2024-12-27 00:25:02','2024-12-27 00:25:10',1),
-(40,4,12,'2025-01-11','23:45:00','04:05:00','dfdfg','Cancelled','2024-12-27 00:32:14','2024-12-27 00:32:19',1),
-(41,4,14,'2025-01-09','23:04:00','04:05:00','dfgdfg','Cancelled','2024-12-27 00:32:57','2024-12-27 00:33:06',1),
-(42,4,17,'2025-01-08','23:03:00','04:55:00','dfgdfg','Cancelled','2024-12-27 00:36:02','2024-12-27 00:36:07',1),
-(43,4,16,'2025-01-07','03:44:00','04:05:00','sfsdf','Cancelled','2024-12-27 00:37:02','2024-12-27 00:37:28',1),
-(44,4,18,'2025-01-01','23:33:00','04:55:00','dfdfg','Cancelled','2024-12-27 00:53:14','2024-12-27 00:53:19',0),
-(45,4,18,'2025-01-06','04:44:00','05:55:00','4455','Cancelled','2024-12-27 00:54:25','2024-12-27 00:54:33',0),
-(46,4,18,'2025-01-07','01:05:00','01:06:00','dfdfg','Cancelled','2024-12-27 00:55:15','2024-12-27 00:55:20',0),
-(47,4,15,'2024-12-30','22:22:00','04:44:00','adad','Cancelled','2025-01-26 12:31:56','2025-01-26 12:32:04',0),
-(48,36,18,'2025-02-20','21:02:00','23:03:00','asdasd','Approved','2025-02-20 20:53:17','2025-03-27 20:49:31',0),
-(49,4,23,'2025-02-21','12:02:00','03:44:00','testing feb 20','Cancelled','2025-02-20 21:12:25','2025-02-20 21:12:52',0),
-(50,4,23,'2025-02-21','12:22:00','12:02:00','testing feb 20','Approved','2025-02-20 21:13:14','2025-03-16 22:54:31',0),
-(51,4,6,'2025-03-26','12:22:00','12:22:00','sSSsdf','Cancelled','2025-03-26 22:26:30','2025-03-26 22:26:40',0),
-(52,4,20,'2025-03-26','23:33:00','04:55:00','sfsdfsdf','Approved','2025-03-26 22:27:24','2025-04-12 21:10:09',1),
-(53,4,23,'2025-03-26','12:22:00','03:44:00','rwar','Approved','2025-03-26 22:29:14','2025-03-28 21:21:52',0),
-(54,4,6,'2025-03-06','12:22:00','04:44:00','sdfsdf','Pending','2025-03-28 21:17:11','2025-03-28 21:17:11',1);
+(1,36,3,'2024-12-20','11:01:00','11:22:00','das','Approved','2024-12-14 06:30:51','2024-12-22 03:13:19',0),
+(2,36,1,'2024-12-09','22:22:00','22:44:00','222','Rejected','2024-12-14 20:00:56','2024-12-17 06:45:24',0),
+(3,36,1,'2024-12-12','23:11:00','01:33:00','dwed','Rejected','2024-12-15 00:08:20','2024-12-18 06:43:10',0),
+(4,36,8,'2024-12-04','12:02:00','03:03:00','dex','Approved','2024-12-15 00:09:43','2024-12-22 00:53:38',0),
+(5,36,3,'2222-12-22','21:02:00','12:21:00','adsd','Cancelled','2024-12-15 00:10:18','2024-12-27 08:40:58',0),
+(6,39,2,'2024-12-10','23:02:00','23:02:00','asdads','Approved','2024-12-15 02:49:47','2024-12-22 02:57:01',0),
+(7,39,1,'2024-12-16','12:02:00','12:34:00','asd','Rejected','2024-12-16 00:23:20','2024-12-27 06:48:50',0),
+(8,4,4,'2024-12-16','12:00:00','13:01:00','may event','Rejected','2024-12-16 00:39:38','2024-12-27 06:48:55',0),
+(9,39,5,'2024-12-16','12:02:00','03:03:00','asda','Cancelled','2024-12-16 00:50:37','2024-12-27 07:37:20',0),
+(10,39,6,'2024-12-16','12:02:00','11:11:00','asd','Rejected','2024-12-16 01:26:06','2024-12-27 06:50:01',0),
+(11,39,6,'2024-12-16','12:02:00','11:11:00','asd','Approved','2024-12-16 01:26:06','2024-12-25 08:18:48',0),
+(12,4,1,'2024-12-16','05:05:00','07:55:00','May gagawin lang\r\n','Approved','2024-12-16 03:34:40','2024-12-22 03:13:19',0),
+(13,4,2,'2024-12-16','12:02:00','04:04:00','asd','Approved','2024-12-16 03:37:44','2024-12-25 08:17:12',0),
+(14,39,7,'2024-12-17','21:22:00','23:33:00','wqweqwe','Rejected','2024-12-17 06:46:30','2024-12-27 06:50:01',0),
+(15,39,8,'2024-12-17','10:00:00','11:00:00','mnb nbjvk jyfkuyr uyrkvgk tcu vbj kguvtjyg','Approved','2024-12-18 05:40:39','2024-12-22 03:11:34',0),
+(16,39,9,'2024-12-17','12:12:00','22:22:00','dasdasd','Rejected','2024-12-18 05:42:19','2024-12-27 06:50:01',0),
+(17,39,4,'2024-12-22','23:33:00','03:33:00','sdasd','Approved','2024-12-22 05:10:48','2024-12-25 08:17:07',0),
+(18,39,4,'2024-12-22','12:02:00','03:04:00','deade','Approved','2024-12-22 05:12:39','2024-12-24 07:15:00',0),
+(19,39,8,'2024-12-22','03:44:00','03:06:00','dsfsdf','Approved','2024-12-22 05:56:36','2024-12-23 03:53:21',0),
+(20,0,11,'2024-12-23','23:33:00','23:03:00','admin','Pending','2024-12-22 19:24:41','2024-12-22 19:24:41',1),
+(21,36,10,'2024-12-23','23:03:00','05:06:00','sdfsf','Rejected','2024-12-23 01:15:01','2024-12-24 20:25:32',1),
+(22,36,13,'2024-12-23','23:33:00','23:44:00','admin','Approved','2024-12-23 01:15:39','2024-12-25 08:14:52',0),
+(23,36,21,'2024-12-22','18:25:00','05:06:00','naguupdate ba','Approved','2024-12-23 02:24:48','2024-12-24 20:34:28',0),
+(24,36,1,'2024-12-24','23:33:00','03:03:00','awdawdawd','Approved','2024-12-24 07:33:47','2024-12-25 00:41:24',0),
+(25,39,15,'2024-12-25','23:03:00','04:04:00','dasd','Approved','2024-12-24 21:02:59','2024-12-27 09:00:41',0),
+(26,39,19,'2025-12-05','03:04:00','04:57:00','padawd','Approved','2024-12-24 22:32:20','2024-12-25 08:19:04',1),
+(27,4,20,'2024-12-25','12:43:00','03:44:00','sdfsdf','Approved','2024-12-25 00:15:01','2024-12-25 19:31:00',0),
+(28,4,17,'2024-12-24','17:18:00','06:07:00','TESTTTTTTTTTT','Approved','2024-12-25 01:17:36','2024-12-25 01:46:14',0),
+(29,36,11,'2024-12-31','23:33:00','03:34:00','New YEars Party','Cancelled','2024-12-25 19:30:49','2025-01-27 08:36:15',1),
+(30,4,1,'2024-12-26','23:03:00','04:05:00','sdfsdf','Rejected','2024-12-26 06:14:57','2024-12-27 21:41:53',1),
+(31,4,2,'2024-12-27','23:03:00','04:55:00','sdfsdf','Approved','2024-12-27 05:33:19','2024-12-27 22:10:51',1),
+(32,4,4,'0006-01-06','03:44:00','04:05:00','dfgdfg','Approved','2024-12-27 05:47:48','2025-03-28 04:49:26',1),
+(33,4,5,'2025-01-30','23:03:00','04:05:00','dfgdfg','Approved','2024-12-27 05:49:06','2025-03-30 01:42:30',0),
+(34,4,6,'2025-02-18','23:03:00','04:05:00','sdff','Approved','2024-12-27 05:51:40','2025-02-21 05:08:55',0),
+(35,4,7,'2025-01-04','23:03:00','03:44:00','fsdsdf','Cancelled','2024-12-27 05:58:55','2024-12-27 08:26:06',1),
+(36,4,8,'2025-01-02','03:33:00','03:44:00','sdfsdf','Cancelled','2024-12-27 05:59:11','2024-12-27 07:52:59',1),
+(37,4,9,'2025-01-03','23:03:00','04:05:00','sdfsdf','Cancelled','2024-12-27 08:13:34','2024-12-27 08:30:22',1),
+(38,4,10,'2025-01-10','04:55:00','05:06:00','dfgdfg','Cancelled','2024-12-27 08:14:01','2024-12-27 08:22:44',1),
+(39,4,13,'2024-12-06','12:02:00','04:55:00','sdfsdf','Cancelled','2024-12-27 08:25:02','2024-12-27 08:25:10',1),
+(40,4,12,'2025-01-11','23:45:00','04:05:00','dfdfg','Cancelled','2024-12-27 08:32:14','2024-12-27 08:32:19',1),
+(41,4,14,'2025-01-09','23:04:00','04:05:00','dfgdfg','Cancelled','2024-12-27 08:32:57','2024-12-27 08:33:06',1),
+(42,4,17,'2025-01-08','23:03:00','04:55:00','dfgdfg','Cancelled','2024-12-27 08:36:02','2024-12-27 08:36:07',1),
+(43,4,16,'2025-01-07','03:44:00','04:05:00','sfsdf','Cancelled','2024-12-27 08:37:02','2024-12-27 08:37:28',1),
+(44,4,18,'2025-01-01','23:33:00','04:55:00','dfdfg','Cancelled','2024-12-27 08:53:14','2024-12-27 08:53:19',0),
+(45,4,18,'2025-01-06','04:44:00','05:55:00','4455','Cancelled','2024-12-27 08:54:25','2024-12-27 08:54:33',0),
+(46,4,18,'2025-01-07','01:05:00','01:06:00','dfdfg','Cancelled','2024-12-27 08:55:15','2024-12-27 08:55:20',0),
+(47,4,15,'2024-12-30','22:22:00','04:44:00','adad','Cancelled','2025-01-26 20:31:56','2025-01-26 20:32:04',0),
+(48,36,18,'2025-02-20','21:02:00','23:03:00','asdasd','Approved','2025-02-21 04:53:17','2025-03-28 04:49:31',0),
+(49,4,23,'2025-02-21','12:02:00','03:44:00','testing feb 20','Cancelled','2025-02-21 05:12:25','2025-02-21 05:12:52',0),
+(50,4,23,'2025-02-21','12:22:00','12:02:00','testing feb 20','Approved','2025-02-21 05:13:14','2025-03-17 06:54:31',0),
+(51,4,6,'2025-03-26','12:22:00','12:22:00','sSSsdf','Cancelled','2025-03-27 06:26:30','2025-03-27 06:26:40',0),
+(52,4,20,'2025-03-26','23:33:00','04:55:00','sfsdfsdf','Approved','2025-03-27 06:27:24','2025-04-13 05:10:09',1),
+(53,4,23,'2025-03-26','12:22:00','03:44:00','rwar','Approved','2025-03-27 06:29:14','2025-03-29 05:21:52',0),
+(54,4,6,'2025-03-06','12:22:00','04:44:00','sdfsdf','Pending','2025-03-29 05:17:11','2025-03-29 05:17:11',1);
 
 /*Table structure for table `fm_resource_allocations` */
 
@@ -643,37 +647,37 @@ CREATE TABLE `fm_resource_requests` (
 /*Data for the table `fm_resource_requests` */
 
 insert  into `fm_resource_requests`(`id`,`resource_id`,`employee_id`,`quantity`,`purpose`,`status`,`requested_at`,`approved_by`,`approved_at`,`return_date`) values 
-(1,81,36,2,'wer','Returned','2024-12-29 09:08:00',NULL,NULL,'2025-04-12'),
-(2,81,36,34,'qweqwe','Returned','2024-12-29 09:33:56',NULL,NULL,'2025-04-12'),
-(3,90,36,2,'Pupose Testing','Returned','2024-12-29 12:38:04',NULL,NULL,'2025-04-12'),
-(4,81,4,3,'e','Returned','2025-01-26 10:38:38',NULL,NULL,'2025-04-12'),
-(5,82,4,5,'HIRAM','Returned','2025-01-26 10:48:32',NULL,NULL,'2025-04-12'),
-(6,82,4,33,'33','Rejected','2025-01-26 10:49:06',NULL,NULL,NULL),
-(7,82,4,1,'Client Meeting','Returned','2024-12-29 08:45:00',NULL,NULL,'2025-04-12'),
-(8,97,36,4,'Training Session','Returned','2024-12-29 09:00:00',2,'2024-12-30 10:00:00','2025-04-12'),
-(9,98,36,2,'Equipment Maintenance','Returned','2024-12-29 10:15:00',NULL,NULL,'2025-04-12'),
-(10,90,4,6,'Research Materials','Returned','2024-12-29 11:30:00',3,'2024-12-30 12:00:00','2025-04-12'),
-(11,90,39,8,'Conference Attendance','Rejected','2024-12-29 12:45:00',NULL,NULL,NULL),
-(12,97,4,7,'Software License','Returned','2024-12-29 13:00:00',NULL,NULL,'2025-04-12'),
-(13,98,39,9,'Hardware Upgrade','Approved','2024-12-29 14:15:00',4,'2024-12-30 15:00:00',NULL),
-(14,81,36,5,'Office Supplies','Returned','2024-12-29 05:00:00',NULL,NULL,'2025-04-12'),
-(15,81,39,10,'Project A Materials','Returned','2024-12-29 06:15:00',1,'2024-12-30 07:00:00','2025-04-12'),
-(16,82,36,3,'Team Building Event','Rejected','2024-12-29 07:30:00',NULL,NULL,NULL),
-(17,81,36,4,'Office Renovation','Returned','2024-11-01 10:00:00',NULL,NULL,'2025-04-12'),
-(18,82,39,2,'New Software Installation','Returned','2024-11-01 11:15:00',1,'2024-11-06 12:00:00','2025-04-12'),
-(19,97,36,3,'Team Outing','Rejected','2024-11-10 09:30:00',NULL,NULL,NULL),
-(20,98,4,1,'Client Presentation','Returned','2024-11-01 14:45:00',NULL,NULL,'2025-04-12'),
-(21,90,36,5,'Training Materials','Returned','2024-11-26 08:00:00',2,'2024-11-21 09:00:00','2025-04-12'),
-(22,90,39,6,'Equipment Purchase','Returned','2024-11-25 13:15:00',NULL,NULL,'2025-04-12'),
-(23,97,36,8,'Conference Registration','Returned','2024-11-26 15:30:00',3,'2024-11-27 16:00:00','2025-04-12'),
-(24,90,4,7,'Research Project','Returned','2024-11-26 17:45:00',NULL,NULL,'2025-04-12'),
-(25,90,36,9,'Marketing Materials','Returned','2024-11-29 18:00:00',NULL,NULL,'2025-04-12'),
-(26,81,36,10,'IT Support','Returned','2024-11-30 19:15:00',4,'2024-12-01 20:00:00','2025-04-12'),
-(27,99,36,10,'test','Returned','2025-02-20 20:50:15',NULL,NULL,'2025-04-12'),
-(28,82,4,90,'testing feb 20','Rejected','2025-02-20 21:17:03',NULL,NULL,NULL),
-(29,81,4,23,'asdasdasd','Returned','2025-03-26 22:27:34',NULL,NULL,'2025-04-12'),
-(30,100,4,1,'adasdasd','Returned','2025-03-26 22:29:27',NULL,NULL,'2025-04-12'),
-(31,81,4,5,'wrwere','Returned','2025-03-28 21:18:59',NULL,NULL,'2025-04-12');
+(1,81,36,2,'wer','Returned','2024-12-29 17:08:00',NULL,NULL,'2025-04-12'),
+(2,81,36,34,'qweqwe','Returned','2024-12-29 17:33:56',NULL,NULL,'2025-04-12'),
+(3,90,36,2,'Pupose Testing','Returned','2024-12-29 20:38:04',NULL,NULL,'2025-04-12'),
+(4,81,4,3,'e','Returned','2025-01-26 18:38:38',NULL,NULL,'2025-04-12'),
+(5,82,4,5,'HIRAM','Returned','2025-01-26 18:48:32',NULL,NULL,'2025-04-12'),
+(6,82,4,33,'33','Rejected','2025-01-26 18:49:06',NULL,NULL,NULL),
+(7,82,4,1,'Client Meeting','Returned','2024-12-29 16:45:00',NULL,NULL,'2025-04-12'),
+(8,97,36,4,'Training Session','Returned','2024-12-29 17:00:00',2,'2024-12-30 18:00:00','2025-04-12'),
+(9,98,36,2,'Equipment Maintenance','Returned','2024-12-29 18:15:00',NULL,NULL,'2025-04-12'),
+(10,90,4,6,'Research Materials','Returned','2024-12-29 19:30:00',3,'2024-12-30 20:00:00','2025-04-12'),
+(11,90,39,8,'Conference Attendance','Rejected','2024-12-29 20:45:00',NULL,NULL,NULL),
+(12,97,4,7,'Software License','Returned','2024-12-29 21:00:00',NULL,NULL,'2025-04-12'),
+(13,98,39,9,'Hardware Upgrade','Approved','2024-12-29 22:15:00',4,'2024-12-30 23:00:00',NULL),
+(14,81,36,5,'Office Supplies','Returned','2024-12-29 13:00:00',NULL,NULL,'2025-04-12'),
+(15,81,39,10,'Project A Materials','Returned','2024-12-29 14:15:00',1,'2024-12-30 15:00:00','2025-04-12'),
+(16,82,36,3,'Team Building Event','Rejected','2024-12-29 15:30:00',NULL,NULL,NULL),
+(17,81,36,4,'Office Renovation','Returned','2024-11-01 18:00:00',NULL,NULL,'2025-04-12'),
+(18,82,39,2,'New Software Installation','Returned','2024-11-01 19:15:00',1,'2024-11-06 20:00:00','2025-04-12'),
+(19,97,36,3,'Team Outing','Rejected','2024-11-10 17:30:00',NULL,NULL,NULL),
+(20,98,4,1,'Client Presentation','Returned','2024-11-01 22:45:00',NULL,NULL,'2025-04-12'),
+(21,90,36,5,'Training Materials','Returned','2024-11-26 16:00:00',2,'2024-11-21 17:00:00','2025-04-12'),
+(22,90,39,6,'Equipment Purchase','Returned','2024-11-25 21:15:00',NULL,NULL,'2025-04-12'),
+(23,97,36,8,'Conference Registration','Returned','2024-11-26 23:30:00',3,'2024-11-28 00:00:00','2025-04-12'),
+(24,90,4,7,'Research Project','Returned','2024-11-27 01:45:00',NULL,NULL,'2025-04-12'),
+(25,90,36,9,'Marketing Materials','Returned','2024-11-30 02:00:00',NULL,NULL,'2025-04-12'),
+(26,81,36,10,'IT Support','Returned','2024-12-01 03:15:00',4,'2024-12-02 04:00:00','2025-04-12'),
+(27,99,36,10,'test','Returned','2025-02-21 04:50:15',NULL,NULL,'2025-04-12'),
+(28,82,4,90,'testing feb 20','Rejected','2025-02-21 05:17:03',NULL,NULL,NULL),
+(29,81,4,23,'asdasdasd','Returned','2025-03-27 06:27:34',NULL,NULL,'2025-04-12'),
+(30,100,4,1,'adasdasd','Returned','2025-03-27 06:29:27',NULL,NULL,'2025-04-12'),
+(31,81,4,5,'wrwere','Returned','2025-03-29 05:18:59',NULL,NULL,'2025-04-12');
 
 /*Table structure for table `fm_resources` */
 
@@ -695,16 +699,16 @@ CREATE TABLE `fm_resources` (
 /*Data for the table `fm_resources` */
 
 insert  into `fm_resources`(`id`,`name`,`category`,`quantity`,`location`,`status`,`last_maintenance`,`next_maintenance`,`created_at`) values 
-(81,'Impact Tool','Hardware',112,'Storage room','Available','2025-01-01','2024-12-26','2024-12-09 16:44:08'),
-(82,'RJ45','Hardware',102,'2nd Floor','Available','2025-01-01','2025-01-03','2024-12-09 16:44:37'),
-(87,'System Unit','Hardware',12,'2nd Floor','Available','2024-12-17','2024-12-25','2024-12-10 20:16:42'),
-(88,'Cable','Hardware',1000,'IT Department','Available','3232-02-12','0222-12-21','2024-12-11 09:59:19'),
-(90,'Computer Monitor','Hardware',125,'IT Department','Available','2121-02-12','2222-02-12','2024-12-15 10:40:44'),
-(97,'Volleyball','Sports',112,'PEH Depertment','Available','2025-01-26','2025-01-26','2025-01-26 11:46:08'),
-(98,'Basketball','Sports',96,'PEH Depertment','Available','2025-01-26','2025-01-26','2025-01-26 11:46:54'),
-(99,'Chalk','Utilities',600,'Dean','Available','2025-01-26','2025-01-26','2025-01-26 18:10:58'),
-(100,'Pentel Pen','Utilities',12,'test','Available','2025-02-20','2025-02-21','2025-02-20 20:52:34'),
-(102,'test','Utilities',122,'test','Available','2025-03-28','2025-03-28','2025-03-27 20:47:51');
+(81,'Impact Tool','Hardware',112,'Storage room','Available','2025-01-01','2024-12-26','2024-12-10 00:44:08'),
+(82,'RJ45','Hardware',102,'2nd Floor','Available','2025-01-01','2025-01-03','2024-12-10 00:44:37'),
+(87,'System Unit','Hardware',12,'2nd Floor','Available','2024-12-17','2024-12-25','2024-12-11 04:16:42'),
+(88,'Cable','Hardware',1000,'IT Department','Available','3232-02-12','0222-12-21','2024-12-11 17:59:19'),
+(90,'Computer Monitor','Hardware',125,'IT Department','Available','2121-02-12','2222-02-12','2024-12-15 18:40:44'),
+(97,'Volleyball','Sports',112,'PEH Depertment','Available','2025-01-26','2025-01-26','2025-01-26 19:46:08'),
+(98,'Basketball','Sports',96,'PEH Depertment','Available','2025-01-26','2025-01-26','2025-01-26 19:46:54'),
+(99,'Chalk','Utilities',600,'Dean','Available','2025-01-26','2025-01-26','2025-01-27 02:10:58'),
+(100,'Pentel Pen','Utilities',12,'test','Available','2025-02-20','2025-02-21','2025-02-21 04:52:34'),
+(102,'test','Utilities',122,'test','Available','2025-03-28','2025-03-28','2025-03-28 04:47:51');
 
 /*Table structure for table `fm_rooms` */
 
@@ -814,26 +818,26 @@ CREATE TABLE `job_postings` (
 /*Data for the table `job_postings` */
 
 insert  into `job_postings`(`id`,`job_title`,`job_description`,`requirements`,`location`,`salary_range`,`status`,`created_at`,`DepartmentID`,`EmployeeID`) values 
-(57,'HR Manager','Oversee the HR department and manage all HR functions, including recruitment, employee relations, training, and compliance.','Bachelor’s degree in Human Resources, Business Administration, or related field\r\n5+ years of HR experience, with at least 2 years in a management role\r\nStrong knowledge of labor laws and regulations.','Bestlink College of the Philippines','PHP 60,000 - PHP 100,000 per month.','Open','2024-11-02 19:05:54',8,44),
-(58,'HR Coordinator','Assist in recruitment activities, onboarding of new hires, and maintaining employee records.\r\nSupport HR projects and initiatives, including training and employee engagement programs.','Bachelor’s degree in Human Resource Management or related field.\r\n1-3 years of HR experience.\r\nGood communication and organizational skills.','Bestlink College of the Philippines','PHP 25,000 - PHP 45,000 per month.','Open','2024-11-02 20:30:44',8,47),
-(59,'Systems Administrator','Manage and maintain school servers, networks, and computer systems.\r\nEnsure system availability, security, and performance.','Bachelor’s degree in Computer Science, Information Technology, or related field.\r\n3-5 years of experience in systems administration.\r\nFamiliarity with server management and network protocols.','Bestlink College of the Philippines','PHP 30,000 - PHP 60,000 per month.','Open','2024-11-02 20:31:56',9,48),
-(60,'Network Administrator','Configure, maintain, and troubleshoot the school\'s network infrastructure.\r\nMonitor network performance and security.','Bachelor’s degree in Information Technology, Network Engineering, or related field.\r\n3+ years of experience in network administration.\r\nKnowledge of network protocols, routers, and firewalls.','Bestlink College of the Philippines','PHP 30,000 - PHP 55,000 per month.','Open','2024-11-02 20:32:31',9,49),
-(61,'Maintenance Supervisor','Supervise maintenance staff and coordinate repair and maintenance activities for the school.\r\nEnsure that all facilities are safe and comply with relevant regulations.','Diploma or Bachelor’s degree in Engineering, Facilities Management, or related field.\r\n3-5 years of experience in facilities maintenance.\r\nKnowledge of building systems (HVAC, electrical, plumbing).','Bestlink College of the Philippines','PHP 30,000 - PHP 60,000 per month.','Closed','2024-11-02 20:34:00',11,50),
-(62,'Software Engineer','Develop and maintain software applications.','Bachelor’s degree in Computer Science or related field.','Bestlink College of the Philippines','PHP 40,000 - PHP 70,000 per month.','Open','2025-01-26 11:14:16',9,51),
-(63,'HR Manager','Oversee the HR department and manage all HR functions.','Bachelor’s degree in Human Resources.','Bestlink College of the Philippines','PHP 60,000 - PHP 100,000 per month.','Open','2025-01-26 11:14:16',8,52),
-(64,'Network Administrator','Manage and maintain network infrastructure.','Bachelor’s degree in IT.','Bestlink College of the Philippines','PHP 30,000 - PHP 55,000 per month.','Open','2025-01-26 11:14:16',9,53),
-(65,'Data Analyst','Analyze data and provide insights.','Bachelor’s degree in Statistics or related field.','Bestlink College of the Philippines','PHP 35,000 - PHP 60,000 per month.','Open','2025-01-26 11:14:16',10,46),
-(66,'Web Developer','Develop and maintain websites.','Bachelor’s degree in Computer Science.','Bestlink College of the Philippines','PHP 40,000 - PHP 70,000 per month.','Open','2025-01-26 11:14:16',9,45),
-(67,'Graphic Designer','Create visual concepts.','Bachelor’s degree in Design.','Bestlink College of the Philippines','PHP 25,000 - PHP 50,000 per month.','Open','2025-01-26 11:14:16',11,45),
-(68,'Sales Executive','Drive sales and manage client relationships.','Bachelor’s degree in Business.','Bestlink College of the Philippines','PHP 30,000 - PHP 55,000 per month.','Open','2025-01-26 11:14:16',12,NULL),
-(69,'Content Writer','Create content for various platforms.','Bachelor’s degree in Communications.','Bestlink College of the Philippines','PHP 25,000 - PHP 45,000 per month.','Closed','2025-01-26 11:14:16',10,NULL),
-(70,'IT Support','Provide technical support to users.','Bachelor’s degree in IT.','Bestlink College of the Philippines','PHP 20,000 - PHP 40,000 per month.','Open','2025-01-26 11:14:16',9,NULL),
-(71,'Project Manager','Manage projects from initiation to closure.','Bachelor’s degree in Management.','Bestlink College of the Philippines','PHP 50,000 - PHP 90,000 per month.','Open','2025-01-26 11:14:16',8,NULL),
-(72,'TEST JOB','TEST JOB','TEST JOB','TEST JOB LOCATION','3000','Open','2025-04-01 11:34:57',15,NULL),
-(73,'TESTING JOBS','TESTING JOBS','TESTING JOBS','BESTLINK','30000 - 50000','Open','2025-04-05 17:07:40',15,NULL),
-(74,'JOB TESTING','JOB TESTING','JOB TESTING','BESTLINK','30000 - 50000','Open','2025-04-05 17:14:10',15,NULL),
-(77,'IT Specialist','ASDASD','SADASDAS','Bestlink College of the Philippines','₱25,000 - ₱30,000','Open','2025-04-27 11:17:33',9,NULL),
-(78,'Operations Manager','asdfas','dasdasdas','Bestlink College of the Philippines','₱30,000 - ₱50,000','Open','2025-04-27 11:19:52',10,NULL);
+(57,'HR Manager','Oversee the HR department and manage all HR functions, including recruitment, employee relations, training, and compliance.','Bachelor’s degree in Human Resources, Business Administration, or related field\r\n5+ years of HR experience, with at least 2 years in a management role\r\nStrong knowledge of labor laws and regulations.','Bestlink College of the Philippines','PHP 60,000 - PHP 100,000 per month.','Open','2024-11-03 03:05:54',8,44),
+(58,'HR Coordinator','Assist in recruitment activities, onboarding of new hires, and maintaining employee records.\r\nSupport HR projects and initiatives, including training and employee engagement programs.','Bachelor’s degree in Human Resource Management or related field.\r\n1-3 years of HR experience.\r\nGood communication and organizational skills.','Bestlink College of the Philippines','PHP 25,000 - PHP 45,000 per month.','Open','2024-11-03 04:30:44',8,47),
+(59,'Systems Administrator','Manage and maintain school servers, networks, and computer systems.\r\nEnsure system availability, security, and performance.','Bachelor’s degree in Computer Science, Information Technology, or related field.\r\n3-5 years of experience in systems administration.\r\nFamiliarity with server management and network protocols.','Bestlink College of the Philippines','PHP 30,000 - PHP 60,000 per month.','Open','2024-11-03 04:31:56',9,48),
+(60,'Network Administrator','Configure, maintain, and troubleshoot the school\'s network infrastructure.\r\nMonitor network performance and security.','Bachelor’s degree in Information Technology, Network Engineering, or related field.\r\n3+ years of experience in network administration.\r\nKnowledge of network protocols, routers, and firewalls.','Bestlink College of the Philippines','PHP 30,000 - PHP 55,000 per month.','Open','2024-11-03 04:32:31',9,49),
+(61,'Maintenance Supervisor','Supervise maintenance staff and coordinate repair and maintenance activities for the school.\r\nEnsure that all facilities are safe and comply with relevant regulations.','Diploma or Bachelor’s degree in Engineering, Facilities Management, or related field.\r\n3-5 years of experience in facilities maintenance.\r\nKnowledge of building systems (HVAC, electrical, plumbing).','Bestlink College of the Philippines','PHP 30,000 - PHP 60,000 per month.','Closed','2024-11-03 04:34:00',11,50),
+(62,'Software Engineer','Develop and maintain software applications.','Bachelor’s degree in Computer Science or related field.','Bestlink College of the Philippines','PHP 40,000 - PHP 70,000 per month.','Open','2025-01-26 19:14:16',9,51),
+(63,'HR Manager','Oversee the HR department and manage all HR functions.','Bachelor’s degree in Human Resources.','Bestlink College of the Philippines','PHP 60,000 - PHP 100,000 per month.','Open','2025-01-26 19:14:16',8,52),
+(64,'Network Administrator','Manage and maintain network infrastructure.','Bachelor’s degree in IT.','Bestlink College of the Philippines','PHP 30,000 - PHP 55,000 per month.','Open','2025-01-26 19:14:16',9,53),
+(65,'Data Analyst','Analyze data and provide insights.','Bachelor’s degree in Statistics or related field.','Bestlink College of the Philippines','PHP 35,000 - PHP 60,000 per month.','Open','2025-01-26 19:14:16',10,46),
+(66,'Web Developer','Develop and maintain websites.','Bachelor’s degree in Computer Science.','Bestlink College of the Philippines','PHP 40,000 - PHP 70,000 per month.','Open','2025-01-26 19:14:16',9,45),
+(67,'Graphic Designer','Create visual concepts.','Bachelor’s degree in Design.','Bestlink College of the Philippines','PHP 25,000 - PHP 50,000 per month.','Open','2025-01-26 19:14:16',11,45),
+(68,'Sales Executive','Drive sales and manage client relationships.','Bachelor’s degree in Business.','Bestlink College of the Philippines','PHP 30,000 - PHP 55,000 per month.','Open','2025-01-26 19:14:16',12,NULL),
+(69,'Content Writer','Create content for various platforms.','Bachelor’s degree in Communications.','Bestlink College of the Philippines','PHP 25,000 - PHP 45,000 per month.','Closed','2025-01-26 19:14:16',10,NULL),
+(70,'IT Support','Provide technical support to users.','Bachelor’s degree in IT.','Bestlink College of the Philippines','PHP 20,000 - PHP 40,000 per month.','Open','2025-01-26 19:14:16',9,NULL),
+(71,'Project Manager','Manage projects from initiation to closure.','Bachelor’s degree in Management.','Bestlink College of the Philippines','PHP 50,000 - PHP 90,000 per month.','Open','2025-01-26 19:14:16',8,NULL),
+(72,'TEST JOB','TEST JOB','TEST JOB','TEST JOB LOCATION','3000','Open','2025-04-01 19:34:57',15,NULL),
+(73,'TESTING JOBS','TESTING JOBS','TESTING JOBS','BESTLINK','30000 - 50000','Open','2025-04-06 01:07:40',15,NULL),
+(74,'JOB TESTING','JOB TESTING','JOB TESTING','BESTLINK','30000 - 50000','Open','2025-04-06 01:14:10',15,NULL),
+(77,'IT Specialist','ASDASD','SADASDAS','Bestlink College of the Philippines','₱25,000 - ₱30,000','Open','2025-04-27 19:17:33',9,NULL),
+(78,'Operations Manager','asdfas','dasdasdas','Bestlink College of the Philippines','₱30,000 - ₱50,000','Open','2025-04-27 19:19:52',10,NULL);
 
 /*Table structure for table `jobroles` */
 
@@ -1166,8 +1170,8 @@ CREATE TABLE `succession_candidates` (
 /*Data for the table `succession_candidates` */
 
 insert  into `succession_candidates`(`candidate_id`,`employee_id`,`target_position`,`status`,`assigned_by`,`assigned_at`) values 
-(2,87,'HR Manager','Not Ready',36,'2025-04-19 23:00:00'),
-(3,78,'IT Support','In Development',36,'2025-04-19 23:04:11');
+(2,87,'HR Manager','Not Ready',36,'2025-04-20 07:00:00'),
+(3,78,'IT Support','In Development',36,'2025-04-20 07:04:11');
 
 /*Table structure for table `training_applications` */
 
@@ -1253,9 +1257,9 @@ CREATE TABLE `training_sessions` (
 /*Data for the table `training_sessions` */
 
 insert  into `training_sessions`(`training_id`,`training_name`,`training_description`,`trainer`,`department`,`training_materials`,`created_at`) values 
-(3,'BASKETBALL','BRING YOUR OWN BALLPEN','LeBron James',12,'SAWADA','2024-11-14 01:18:30'),
-(16,'ASDFGH','ASDFGH','ASDFGH',9,'ASDFGH','2025-04-01 17:18:44'),
-(17,'TEST TRAINING','TEST TRAINING','TEST TRAINER',15,'TEST TRAINING','2025-04-05 17:19:31');
+(3,'BASKETBALL','BRING YOUR OWN BALLPEN','LeBron James',12,'SAWADA','2024-11-14 09:18:30'),
+(16,'ASDFGH','ASDFGH','ASDFGH',9,'ASDFGH','2025-04-02 01:18:44'),
+(17,'TEST TRAINING','TEST TRAINING','TEST TRAINER',15,'TEST TRAINING','2025-04-06 01:19:31');
 
 /*Table structure for table `trainingprograms` */
 
@@ -1326,28 +1330,28 @@ CREATE TABLE `users` (
 /*Data for the table `users` */
 
 insert  into `users`(`id`,`username`,`password`,`usertype`,`createdAt`,`lastLogin`,`applicant_id`,`onboarding_step`) values 
-(4,'employee','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','employee','2024-09-24 23:23:39',NULL,43,4),
-(36,'admin','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','admin','2024-11-13 23:45:50','2024-11-13 00:00:00',49,4),
-(39,'manager','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','manager','2024-11-14 00:02:44','2024-11-14 00:00:00',44,4),
-(40,'superadmin','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','superadmin','2025-01-26 11:14:16','2025-01-26 11:14:16',52,4),
-(41,'nonteaching','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','employee','2025-01-26 11:14:16','2025-01-26 11:14:16',53,4),
-(42,'teaching','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','manager','2025-01-26 11:14:16','2025-01-26 11:14:16',54,4),
-(43,'bobbrown','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','employee','2025-01-26 11:14:16','2025-01-26 11:14:16',55,4),
-(44,'charliedavis','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','employee','2025-01-26 11:14:16','2025-01-26 11:14:16',56,4),
-(45,'dianaevans','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','employee','2025-01-26 11:14:16','2025-01-26 11:14:16',57,4),
-(46,'ethanfoster','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','employee','2025-01-26 11:14:16','2025-01-26 11:14:16',58,4),
-(47,'fionagreen','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','employee','2025-01-26 11:14:16','2025-01-26 11:14:16',59,4),
-(48,'georgeharris','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','employee','2025-01-26 11:14:16','2025-01-26 11:14:16',60,4),
-(49,'hannahivers','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','employee','2025-01-26 11:14:16','2025-01-26 11:14:16',61,4),
-(50,'curry','$2y$10$G2d9nlh.vONhotSaKED9t.7jQ7LKENxYEQDGuYJGmi6tvQUweveRe','employee','2025-03-30 15:15:46','2025-03-30 15:15:46',51,4),
-(51,'jeremy','$2y$10$4p8IAOQXo3Vs9iL2Iqt4/uI/67YEK8JpN3Hl32efwJHG2UUhJ/yG2','employee','2025-03-30 19:29:55','2025-03-30 19:29:55',67,4),
-(52,'qwe','$2y$10$pS3HTrwvopNbcGVQyML03.yJ9IFpn2Gpn9qOJVbD1.7IzBwuZiw4q','employee','2025-03-30 19:38:56','2025-03-30 19:38:56',63,4),
-(53,'@Ap8080','$2y$10$jfhjrRwAj/iV5m/FCC7RZOI1kg/6P6xGhH.e/naQntETMjb.wMRoW','employee','2025-03-30 23:28:13','2025-03-30 23:28:13',68,4),
-(54,'test','$2y$10$f0fGjn9Dp5tPN/R4rTum8On18JYrqBxmcSGZQ7GIkFAvpMs/SMILW','employee','2025-03-31 10:55:17','2025-03-31 10:55:17',50,4),
-(55,'testapplicant','$2y$10$8IL60mGl5.Jg9/881xDX2.9VxvuoXBeEHXtQhHuef7mCXQiRX7mce','employee','2025-04-01 11:37:50','2025-04-01 11:37:50',69,4),
-(59,'test3','$2y$10$BPFqQOUSxltXeK7K.cqwh.gZd2XHtEFz3UUCOcRnyjxwzgQWrcZPu','employee','2025-04-05 16:55:40','2025-04-05 16:55:40',70,4),
-(60,'penpen','$2y$10$SClvv0Bd9VAcEktm9pNps.AsZvcnB1MtbBvypSGm0g5iv1cy5/r8q','employee','2025-04-05 17:16:57','2025-04-05 17:16:57',74,4),
-(61,'penpen1','$2y$10$pKkAdb3G3FikrnLrDbv4..klBuTkSwrTC4YahwOsHomAXQsJslp6O','manager','2025-04-20 11:21:00','2025-04-20 11:21:00',72,4);
+(4,'employee','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','employee','2024-09-25 07:23:39',NULL,43,4),
+(36,'admin','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','admin','2024-11-14 07:45:50','2024-11-13 00:00:00',49,4),
+(39,'manager','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','manager','2024-11-14 08:02:44','2024-11-14 00:00:00',44,4),
+(40,'superadmin','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','superadmin','2025-01-26 19:14:16','2025-01-26 11:14:16',52,4),
+(41,'nonteaching','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','employee','2025-01-26 19:14:16','2025-01-26 11:14:16',53,4),
+(42,'teaching','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','manager','2025-01-26 19:14:16','2025-01-26 11:14:16',54,4),
+(43,'bobbrown','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','employee','2025-01-26 19:14:16','2025-01-26 11:14:16',55,4),
+(44,'charliedavis','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','employee','2025-01-26 19:14:16','2025-01-26 11:14:16',56,4),
+(45,'dianaevans','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','employee','2025-01-26 19:14:16','2025-01-26 11:14:16',57,4),
+(46,'ethanfoster','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','employee','2025-01-26 19:14:16','2025-01-26 11:14:16',58,4),
+(47,'fionagreen','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','employee','2025-01-26 19:14:16','2025-01-26 11:14:16',59,4),
+(48,'georgeharris','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','employee','2025-01-26 19:14:16','2025-01-26 11:14:16',60,4),
+(49,'hannahivers','$2y$10$IO1z7hhGf8TlAOvl6G6KDuaUagMhYU10fhmDc1DV8h8ahMe25dGMq','employee','2025-01-26 19:14:16','2025-01-26 11:14:16',61,4),
+(50,'curry','$2y$10$G2d9nlh.vONhotSaKED9t.7jQ7LKENxYEQDGuYJGmi6tvQUweveRe','employee','2025-03-30 23:15:46','2025-03-30 15:15:46',51,4),
+(51,'jeremy','$2y$10$4p8IAOQXo3Vs9iL2Iqt4/uI/67YEK8JpN3Hl32efwJHG2UUhJ/yG2','employee','2025-03-31 03:29:55','2025-03-30 19:29:55',67,4),
+(52,'qwe','$2y$10$pS3HTrwvopNbcGVQyML03.yJ9IFpn2Gpn9qOJVbD1.7IzBwuZiw4q','employee','2025-03-31 03:38:56','2025-03-30 19:38:56',63,4),
+(53,'@Ap8080','$2y$10$jfhjrRwAj/iV5m/FCC7RZOI1kg/6P6xGhH.e/naQntETMjb.wMRoW','employee','2025-03-31 07:28:13','2025-03-30 23:28:13',68,4),
+(54,'test','$2y$10$f0fGjn9Dp5tPN/R4rTum8On18JYrqBxmcSGZQ7GIkFAvpMs/SMILW','employee','2025-03-31 18:55:17','2025-03-31 10:55:17',50,4),
+(55,'testapplicant','$2y$10$8IL60mGl5.Jg9/881xDX2.9VxvuoXBeEHXtQhHuef7mCXQiRX7mce','employee','2025-04-01 19:37:50','2025-04-01 11:37:50',69,4),
+(59,'test3','$2y$10$BPFqQOUSxltXeK7K.cqwh.gZd2XHtEFz3UUCOcRnyjxwzgQWrcZPu','employee','2025-04-06 00:55:40','2025-04-05 16:55:40',70,4),
+(60,'penpen','$2y$10$SClvv0Bd9VAcEktm9pNps.AsZvcnB1MtbBvypSGm0g5iv1cy5/r8q','admin','2025-04-06 01:16:57','2025-04-05 17:16:57',74,4),
+(61,'penpen1','$2y$10$pKkAdb3G3FikrnLrDbv4..klBuTkSwrTC4YahwOsHomAXQsJslp6O','manager','2025-04-20 19:21:00','2025-04-20 11:21:00',72,4);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
