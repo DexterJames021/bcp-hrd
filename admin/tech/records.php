@@ -263,20 +263,18 @@ access_log($userData);
                                 <h2 class="card-title ">Employees Records</h2>
                             </div>
                             <div class="card-body">
-                                <form id="editEmployeeForm" method="POST">
-                                    <input type="hidden" name="edit_id" id="edit_id">
+                                <div id="editEmployeeForm">
 
                                     <div class="mb-2">
                                         <div class="row">
                                             <div class="col">
-                                                <label for="edit_name">First Name:</label>
-                                                <input type="text" name="edit_FirstName" id="edit_name" class="form-control"
-                                                    required>
+                                                <span class="fw-bold text-dark" for="edit_name">First Name:</span>
+                                                <div id="edit_name" class=""></div>
                                             </div>
                                             <div class="col">
-                                                <label for="edit_LastName">Last Name:</label>
-                                                <input type="text" name="edit_LastName" id="edit_LastName"
-                                                    class="form-control" required>
+                                                <span class="fw-bold text-dark" for="edit_LastName">Last Name:</span>
+                                                <div type="text" name="edit_LastName" id="edit_LastName"
+                                                    class=""></div>
                                             </div>
                                         </div>
                                     </div>
@@ -284,31 +282,28 @@ access_log($userData);
                                     <div class="mb-2">
                                         <div class="row">
                                             <div class="col">
-                                                <label for="edit_email">Email:</label>
-                                                <input type="email" name="edit_email" id="edit_email" class="form-control"
-                                                    required>
+                                                <span class="fw-bold text-dark" for="edit_email">Email:</span>
+                                                <div type="email" name="edit_email" id="edit_email" class=""
+                                                    ></div>
                                             </div>
                                             <div class="col">
-                                                <label for="edit_phone">Phone:</label>
-                                                <input type="text" name="edit_phone" id="edit_phone" class="form-control"
-                                                    required>
+                                                <span class="fw-bold text-dark" for="edit_phone">Phone:</span>
+                                                <div type="text" name="edit_phone" id="edit_phone" class=""
+                                                    ></div>
                                             </div>
                                             <div class="col">
-                                                <label for="edit_birthday">Birthday:</label>
-                                                <input type="date" name="edit_birthday" id="edit_birthday"
-                                                    class="form-control" required>
+                                                <span class="fw-bold text-dark" for="edit_birthday">Birthday:</span>
+                                                <div type="date" name="edit_birthday" id="edit_birthday"
+                                                    class="" ></div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="mb-2">
-                                        <label for="edit_address">Address:</label>
-                                        <input type="text" name="edit_address" id="edit_address" class="form-control"
-                                            required>
+                                        <span class="fw-bold text-dark" for="edit_address">Address:</span>
+                                        <div type="text" name="edit_address" id="edit_address" class=""
+                                            ></div>
                                     </div>
-                                    <div class="mb-2">
-                                        <button type="submit" class="btn btn-outline-primary">Save Changes</button>
-                                    </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
 

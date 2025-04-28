@@ -1,6 +1,6 @@
 <?php
-include_once __DIR__ .  '../../../../config/Database.php';
-include_once __DIR__ .  '../../../../auth/accesscontrol.php';
+include_once __DIR__ . '../../../../config/Database.php';
+include_once __DIR__ . '../../../../auth/accesscontrol.php';
 
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);
@@ -73,7 +73,7 @@ access_log($userData);
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-    <title>Facility Dashboard</title>
+    <title>Admin Dashboard</title>
 </head>
 
 <body>
@@ -223,7 +223,9 @@ access_log($userData);
                             <!-- utilization -->
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 style="cursor:pointer;" title="calculates much a facility is being used compared to its total available capacity">Over Utilized</h4>
+                                    <h4 style="cursor:pointer;"
+                                        title="calculates much a facility is being used compared to its total available capacity">
+                                        Over Utilized</h4>
                                 </div>
                                 <!-- utilize -->
                                 <div class="card-body" width="100%" height="100%">
@@ -259,6 +261,14 @@ access_log($userData);
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Status Distribution</h4>
+                                    <select id="statusDistributionFilter" class="form-select mb-3" style="width: 250px;">
+                                        <option value="">All Statuses</option>
+                                        <option value="Pending">Pending</option>
+                                        <option value="Approved">Approved</option>
+                                        <option value="Rejected">Rejected</option>
+                                        <option value="Cancelled">Cancelled</option>
+                                    </select>
+
                                 </div>
                                 <div class="card-body" width="100%" height="100%">
                                     <canvas id="bookingStatusDistribution"></canvas>
@@ -269,6 +279,9 @@ access_log($userData);
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Booking Trends</h4>
+                                    <select id="categoryFilter" class="form-select mb-3" style="width: 200px;">
+                                        <option value="">Date</option>
+                                    </select>
                                 </div>
                                 <div class="card-body">
                                     <canvas id="bookingTrends"></canvas>

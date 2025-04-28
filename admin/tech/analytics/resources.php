@@ -1,6 +1,6 @@
 <?php
-include_once __DIR__ .  '../../../../config/Database.php';
-include_once __DIR__ .  '../../../../auth/accesscontrol.php';
+include_once __DIR__ . '../../../../config/Database.php';
+include_once __DIR__ . '../../../../auth/accesscontrol.php';
 
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);
@@ -23,6 +23,7 @@ access_log($userData);
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- main cs -->
     <link rel="stylesheet" href="../../../assets/libs/css/style.css">
@@ -72,7 +73,7 @@ access_log($userData);
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-    <title>Analytics Efficiency</title>
+    <title>Admin Dashboard</title>
 </head>
 
 <body>
@@ -109,10 +110,26 @@ access_log($userData);
                                 <div class="btn-group m-1">
                                     <button type="button" onclick="window.print()"
                                         class="btn btn-outline-primary">Print</button>
-                                    <button type="button" id="logsView" class="btn btn-outline-primary">Logs</button>
+                                    <button type="button" id="logsView" class="btn btn-outline-primary">Logs Page</button>
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="start_date" class="form-label">Start Date</label>
+                            <input type="date" class="form-control" id="start_date">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="end_date" class="form-label">End Date</label>
+                            <input type="date" class="form-control" id="end_date">
+                        </div>
+                        <div class="col-md-2 d-flex  align-items-end">
+                            <button id="filterBtn" class="btn btn-primary ">Apply Filter</button>
+                            <button id="resetFilterBtn" class="btn btn-outline-primary">Reset</button>
+                        </div>
+
                     </div>
 
                     <div class="row d-flex">
@@ -199,7 +216,15 @@ access_log($userData);
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between ">
                                     <h1></h1>
-                                    <div>
+                                    
+                                    <div class="d-flex ">
+                                        <select id="statusFilter" class="form-select mb-3 mx-2" style="width: 250px;">
+                                            <option value="">All Statuses</option>
+                                            <option value="Returned">Returned</option>
+                                            <option value="Pending">Pending</option>
+                                            <option value="Approved">Approved</option>
+                                            <option value="Rejected">Rejected</option>
+                                        </select>
                                         <button type="button" id="openModalBtn" class="btn btn-outline-primary float-right"
                                             data-toggle="modal" data-target="#reportModal">Generate Report</button>
                                     </div>
@@ -209,6 +234,7 @@ access_log($userData);
                                     <table id="LogRequestTable" class="table table-hover" width="100%">
                                         <thead class="thead-light">
                                             <tr>
+                                                <th>ID</th>
                                                 <th>Name</th>
                                                 <th>Quantity</th>
                                                 <th>Status</th>
@@ -260,6 +286,14 @@ access_log($userData);
                         <button id="downloadBtn" class="btn btn-outline-info" style="display: none;">Download
                             Report</button>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="error" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-body bg-warning text-light">
+                    Please select both start and end dates.
                 </div>
             </div>
         </div>

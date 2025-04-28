@@ -268,18 +268,34 @@ access_log($userData);
                                     <div class="card">
                                         <div class="card-header d-flex justify-content-between">
                                             <h2 class="card-title">Resources Management</h2>
+                                            <div class="d-flex">
+                                                <select id="statusFilter" class="form-select mb-3 mx-1" style="width: 200px;">
+                                                    <option value="">All Status</option>
+                                                    <option value="Available">Available</option>
+                                                    <option value="In Maintenance">In Maintenance</option>
+                                                    <option value="Damaged">Damaged</option>
+                                                </select>
+
+                                                <select id="categoryFilter" class="form-select mb-3" style="width: 200px;">
+                                                    <option value="">All Categories</option>
+                                                    <option value="Utilities">Utilities</option>
+                                                    <option value="Hardware">Hardware</option>
+                                                    <option value="Sports">Sports</option>
+                                                    <!-- <option value="IT Equipment">IT Equipment</option> -->
+                                                    <!-- Add more as needed -->
+                                                </select>
+
+                                            </div>
                                             <div class="btn-group">
                                                 <?php if ($userData && in_array("CREATE", $userData['permissions'])): ?>
-                                                    <button type="button" class="btn float-right" data-toggle="modal"
-                                                        data-target="#addAsset">
-                                                        <i class="bi bi-plus-circle-fill text-primary"
-                                                            style="font-size:x-large;"></i>
+                                                    <button type="button" class="btn btn-outline-primary float-right"
+                                                        data-toggle="modal" data-target="#addAsset">
+                                                        Add New Resource
                                                     </button>
                                                 <?php else: ?>
-                                                    <button type="button" class="btn float-right" data-toggle="modal"
-                                                        data-target="#addAsset" disabled>
-                                                        <i class="bi bi-plus-circle-fill text-primary"
-                                                            style="font-size:x-large;"></i>
+                                                    <button type="button" class="btn btn-outline-primary float-right"
+                                                        data-toggle="modal" data-target="#addAsset" disabled>
+                                                        Add New Resource
                                                     </button>
                                                 <?php endif; ?>
                                             </div>
@@ -289,12 +305,13 @@ access_log($userData);
                                                 <table id="ResourcesTable" style="width: 100%;" class="table table-hover">
                                                     <thead class="thead-light">
                                                         <tr>
-                                                            <th>#</th>
-                                                            <th>Name</th>
-                                                            <th>Category</th>
-                                                            <th>Quantity</th>
-                                                            <th>Location</th>
-                                                            <th>Status</th>
+                                                            <th>
+                                                            <th>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <!-- <th></th> -->
                                                             <!-- <th>Last maintenance</th>
                                                             <th>Next maintenance</th> -->
                                                             <!-- <th>Created at</th> -->
@@ -630,7 +647,7 @@ access_log($userData);
                     </div>
                 </div>
                 <div id="rejected" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-body bg-danger text-light">
+                    <div class="toast-body bg-success text-light">
                         Updated, Successfully.
                     </div>
                 </div>

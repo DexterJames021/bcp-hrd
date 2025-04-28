@@ -16,7 +16,7 @@ $(function () {
 
   // utilize
   $.ajax({
-    url: BaseURL + "facility_utilization", // Replace with your API URL
+    url: BaseURL + "facility_utilization", 
     type: "POST",
     dataType: "json",
     success: function (response) {
@@ -75,7 +75,7 @@ $(function () {
 
   //trends
   $.ajax({
-    url: BaseURL + "booking_trends", // Replace with your API URL
+    url: BaseURL + "booking_trends", 
     type: "POST",
     dataType: "json",
     success: function (response) {
@@ -112,7 +112,7 @@ $(function () {
     // scrollY: 200,
     searching: false,
     ajax: {
-      url: BaseURL + "facility_categorization", // Replace with your API URL
+      url: BaseURL + "facility_categorization", 
       type: "POST",
       dataType: "json",
       dataSrc: "",

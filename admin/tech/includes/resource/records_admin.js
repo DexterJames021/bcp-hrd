@@ -195,13 +195,13 @@ $(function () {
                     $('#employeeListView').hide();
                     $('#employeeDetailView').show();
 
-                    $('#edit_id').val(response.EmployeeID);
-                    $('#edit_name').val(response.FirstName);
-                    $('#edit_LastName').val(response.LastName);
-                    $('#edit_email').val(response.Email);
-                    $('#edit_phone').val(response.Phone);
-                    $('#edit_address').val(response.Address);
-                    $('#edit_birthday').val(response.DOB);
+                    $('#edit_id').text(response.EmployeeID);
+                    $('#edit_name').text(response.FirstName);
+                    $('#edit_LastName').text(response.LastName);
+                    $('#edit_email').text(response.Email);
+                    $('#edit_phone').text(response.Phone);
+                    $('#edit_address').text(response.Address);
+                    $('#edit_birthday').text(response.DOB);
                 } else {
                     alert('Employee not found');
                 }
