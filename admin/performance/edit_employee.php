@@ -1,8 +1,7 @@
 <?php
 // Database connection
 require('C:/xampp/htdocs/bcp-hrd/config/db_talent.php');
-
-// Check for connection error
+// Check for connection error.
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }

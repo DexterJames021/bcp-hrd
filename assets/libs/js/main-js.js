@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 jQuery(document).ready(function ($) {
     'use strict';
 
@@ -55,6 +56,11 @@ jQuery(document).ready(function ($) {
 
     loadAdminNotifications();
 
+=======
+jQuery(document).ready(function($) {
+    'use strict';
+
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
     // ============================================================== 
     // Notification list
     // ============================================================== 
@@ -85,7 +91,11 @@ jQuery(document).ready(function ($) {
         $('.sidebar-nav-fixed a')
             // Remove links that don't actually link to anything
 
+<<<<<<< HEAD
             .click(function (event) {
+=======
+            .click(function(event) {
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
                 // On-page links
                 if (
                     location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') &&
@@ -100,7 +110,11 @@ jQuery(document).ready(function ($) {
                         event.preventDefault();
                         $('html, body').animate({
                             scrollTop: target.offset().top - 90
+<<<<<<< HEAD
                         }, 1000, function () {
+=======
+                        }, 1000, function() {
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
                             // Callback after animation
                             // Must change focus!
                             var $target = $(target);
@@ -114,7 +128,11 @@ jQuery(document).ready(function ($) {
                         });
                     }
                 };
+<<<<<<< HEAD
                 $('.sidebar-nav-fixed a').each(function () {
+=======
+                $('.sidebar-nav-fixed a').each(function() {
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
                     $(this).removeClass('active');
                 })
                 $(this).addClass('active');
@@ -126,6 +144,7 @@ jQuery(document).ready(function ($) {
     // tooltip
     // ============================================================== 
     if ($('[data-toggle="tooltip"]').length) {
+<<<<<<< HEAD
 
         $('[data-toggle="tooltip"]').tooltip()
 
@@ -145,6 +164,27 @@ jQuery(document).ready(function ($) {
 
     if ($('.chat-list').length) {
         $('.chat-list').slimScroll({
+=======
+            
+            $('[data-toggle="tooltip"]').tooltip()
+
+        }
+
+     // ============================================================== 
+    // popover
+    // ============================================================== 
+       if ($('[data-toggle="popover"]').length) {
+            $('[data-toggle="popover"]').popover()
+
+    }
+     // ============================================================== 
+    // Chat List Slim Scroll
+    // ============================================================== 
+        
+
+        if ($('.chat-list').length) {
+            $('.chat-list').slimScroll({
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
             color: 'false',
             width: '100%'
 
@@ -155,10 +195,40 @@ jQuery(document).ready(function ($) {
     // dropzone script
     // ============================================================== 
 
+<<<<<<< HEAD
     //     if ($('.dz-clickable').length) {
     //            $(".dz-clickable").dropzone({ url: "/file/post" });
     // }
+=======
+ //     if ($('.dz-clickable').length) {
+ //            $(".dz-clickable").dropzone({ url: "/file/post" });
+ // }
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
 
 }); // AND OF JQUERY
 
 
+<<<<<<< HEAD
+=======
+// $(function() {
+//     "use strict";
+
+
+    
+
+   // var monkeyList = new List('test-list', {
+    //    valueNames: ['name']
+
+     // });
+  // var monkeyList = new List('test-list-2', {
+    //    valueNames: ['name']
+
+   // });
+
+
+
+   
+   
+
+// });
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04

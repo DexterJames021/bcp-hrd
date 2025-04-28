@@ -2,8 +2,12 @@
 // supervisor_eval.php
 
 // Database connection configuration
+<<<<<<< HEAD
 require('C:/xampp/htdocs/bcp-hrd/config/db_talent.php');
 
+=======
+require('../../config/db_talent.php');
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -21,7 +25,53 @@ $result = $conn->query($sql);
     <title>Supervisor Evaluation Form</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
+<<<<<<< HEAD
         /* Your existing styles */
+=======
+        body {
+            background-image: url('https://bcp.edu.ph/images/bg.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.96);
+            padding: 40px;
+            border-radius: 15px;
+            margin-top: 50px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.15);
+        }
+
+        h2 {
+            color: #004a99;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .btn-primary {
+            background-color: #0056b3;
+            border: none;
+            padding: 10px 40px;
+            font-size: 16px;
+            border-radius: 8px;
+        }
+
+        .btn-primary:hover {
+            background-color: #004080;
+        }
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
     </style>
 </head>
 <body>
@@ -53,7 +103,11 @@ $result = $conn->query($sql);
                 </select>
             </div>
 
+<<<<<<< HEAD
             <!-- Evaluation questions with radio buttons -->
+=======
+            <!-- Evaluation questions -->
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
             <?php
             $questions = [
                 "1. How would you rate the employee's overall performance?",
@@ -71,6 +125,7 @@ $result = $conn->query($sql);
             foreach ($questions as $index => $question) {
                 $qNumber = $index + 1;
                 echo "
+<<<<<<< HEAD
                     <div class='card question-card'>
                         <div class='card-body'>
                             <label>$question</label>
@@ -98,6 +153,17 @@ $result = $conn->query($sql);
                                 </div>
                             </div>
                         </div>
+=======
+                    <div class='form-group'>
+                        <label for='question$qNumber'>$question</label>
+                        <select class='form-control' id='question$qNumber' name='question$qNumber' required>
+                            <option value='1'>1 (Poor)</option>
+                            <option value='2'>2</option>
+                            <option value='3'>3</option>
+                            <option value='4'>4</option>
+                            <option value='5'>5 (Excellent)</option>
+                        </select>
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
                     </div>
                 ";
             }
@@ -112,8 +178,12 @@ $result = $conn->query($sql);
     <script>
         function showConfirmation() {
             alert("Evaluation submitted successfully!");
+<<<<<<< HEAD
             window.location.href = 'supervisor_eval.php'; // Redirect to eval.php after submission
             return false; // Prevent the default form submission
+=======
+            return true;
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
         }
     </script>
 

@@ -1,8 +1,15 @@
 #############
 *.txt
+<<<<<<< HEAD
 *.vuerd
 *.drawio
 capstone.code-workspace
 pullpush.sh
 build.sh
 .vscode
+=======
+bpa/*
+
+
+
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04

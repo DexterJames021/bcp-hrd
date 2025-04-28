@@ -1,7 +1,11 @@
 <?php
 // students_eval.php
 
+<<<<<<< HEAD
 require('C:/xampp/htdocs/bcp-hrd/config/db_talent.php');
+=======
+require('../../config/db_talent.php');
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }

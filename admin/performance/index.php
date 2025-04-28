@@ -1,6 +1,19 @@
+<<<<<<< HEAD
 <!-- training main dashboard -->
 <?php
 session_start();
+=======
+<?php
+session_start();
+//check usertype
+if(isset($_SESSION['usertype']) && $_SESSION['usertype'] != 'employee'){
+    
+}else{
+
+    header("Location: ../auth/index.php");
+   
+}
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
 
 
 ?>
@@ -40,6 +53,7 @@ session_start();
 </head>
 
 <body>
+<<<<<<< HEAD
     <!-- ============================================================== -->
     <!-- main wrapper -->
     <!-- ============================================================== -->
@@ -47,6 +61,9 @@ session_start();
         <!-- ============================================================== -->
         <!-- navbar -->
         <!-- ============================================================== -->
+=======
+    <div class="dashboard-main-wrapper">
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
         <div class="dashboard-header ">
             <nav class="navbar navbar-expand-lg bg-white fixed-top ">
                 <a class="navbar-brand" href="index.php">
@@ -59,7 +76,11 @@ session_start();
                     <ul class="navbar-nav ml-auto navbar-right-top">
                         <li class="nav-item">
                             <div id="custom-search" class="top-search-bar">
+<<<<<<< HEAD
                                 <input class="form-control" type="text" placeholder="Search..">
+=======
+                                <input class="form-control" type="hays.php" placeholder="Search..">
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
                             </div>
                         </li>
                         <li class="nav-item dropdown notification">
@@ -142,6 +163,7 @@ session_start();
                             </ul>
                         </li> -->
                         <li class="nav-item dropdown nav-user">
+<<<<<<< HEAD
                             <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="#" alt="" class="user-avatar-md rounded-circle"></a>
                             <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
                                 <div class="nav-user-info">
@@ -158,6 +180,24 @@ session_start();
                                 </a>
                             </div>
                         </li>
+=======
+    <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <img src="#" alt="" class="user-avatar-md rounded-circle">
+    </a>
+    <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
+        <div class="nav-user-info">
+            <h5 class="mb-0 text-white nav-user-name"><?= $_SESSION['username'] ?></h5>
+            <span class="status"></span><span class="ml-2">Available</span>
+        </div>
+        <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Account</a>
+        <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
+        <a class="dropdown-item text-danger" href="auth/logout.php">
+            <i class="fas fa-power-off mr-2"></i> Logout
+        </a>
+    </div>
+</li>
+
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
                     </ul>
                 </div>
             </nav>
@@ -303,6 +343,7 @@ session_start();
                                 </div>
                             </li>
                             <!-- Performance -->
+<<<<<<< HEAD
                             <li class="nav-item">
                                 <a class="nav-link" href="perf_dboard.php" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5"><i class="fas fa-fw fa-table"></i>Performance</a>
                                 <div id="submenu-5" class="collapse submenu" style="">
@@ -331,6 +372,35 @@ session_start();
                                     </ul>
                                 </div>
                             </li>
+=======
+<li class="nav-item">
+    <a class="nav-link" href="perf_dboard.php" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5">
+        <i class="fas fa-fw fa-table"></i>Performance
+    </a>
+    <div id="submenu-5" class="collapse submenu" style="">
+        <ul class="nav flex-column">
+            <!-- 👇 Add this new item for the dashboard -->
+            <li class="nav-item">
+                <a class="nav-link" href="perf_dboard.php">Performance Dashboard</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#"> <span class="badge badge-secondary">New</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="hays.php">Employee Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="evalform.php">Evaluation Form</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="eval.php">Evaluation result</a>
+            </li>
+        </ul>
+    </div>
+</li>
+
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
                             <!-- Talent management -->
                             <li class="nav-item">
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-6" aria-controls="submenu-6"><i class="fas fa-fw fa-columns"></i>Talent management</a>
@@ -457,11 +527,17 @@ session_start();
         <!-- wrapper  -->
         <!-- ============================================================== -->
         <div class="dashboard-wrapper">
+<<<<<<< HEAD
+=======
+        
+
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
             <!-- <div class="dashboard-ecommerce"> -->
             <div class="container-fluid dashboard-content ">
                 <!-- ============================================================== -->
                 <!-- pageheader  -->
                 <!-- ============================================================== -->
+<<<<<<< HEAD
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="page-header">
@@ -499,6 +575,9 @@ session_start();
                     </div>
                 </div>
 
+=======
+                
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
 
 
                 <!-- </div> -->

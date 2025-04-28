@@ -1,8 +1,12 @@
 <?php
+<<<<<<< HEAD
 require('C:/xampp/htdocs/bcp-hrd/config/db_talent.php');
 
 
 
+=======
+require('../../config/db_talent.php');  
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
 
 
 // Step 2: Fetch basic statistics for the dashboard
@@ -125,11 +129,17 @@ $conn->close();
     <h4>HRD Menu</h4>
     <a href="index.php">🏠 Main Dashboard</a>
     <a href="hays.php">👤 Employee Profile</a>
+<<<<<<< HEAD
    
     <a href="view_evals.php">📝 Evaluations</a>
     <a href="eval.php">📋 Evaluation Result</a>
     <a href="../../auth/logout.php" style="color: #f8d7da;"><strong>🚪 Logout</strong></a>
 
+=======
+    <a href="managedep.php">🏢 Departments</a>
+    <a href="view_evals.php">📝 Evaluations</a>
+    <a href="eval.php">📋 Evaluation Result</a>
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
 </div>
 
 

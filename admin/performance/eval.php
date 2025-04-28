@@ -1,6 +1,7 @@
 <?php
 // eval.php
 
+<<<<<<< HEAD
 // Database connection
 require('C:/xampp/htdocs/bcp-hrd/config/db_talent.php');
 
@@ -11,6 +12,19 @@ $filter = $_GET['type'] ?? '';
 function showEvaluationTable($conn, $employeeType, $evaluationType)
 {
     // Query to fetch evaluation data based on employee type and evaluation type
+=======
+require('../../config/db_talent.php');
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$filter = $_GET['type'] ?? 'Teaching';
+
+// ✅ Function to show evaluation table by type
+function showEvaluationTable($conn, $employeeType, $evaluationType)
+{
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
     $stmt = $conn->prepare("
         SELECT 
             e.EmployeeID,
@@ -22,6 +36,7 @@ function showEvaluationTable($conn, $employeeType, $evaluationType)
         WHERE e.EmployeeType = ? AND p.EvaluationType = ?
         GROUP BY e.EmployeeID
     ");
+<<<<<<< HEAD
     
     // Bind parameters for employee type and evaluation type
     $stmt->bind_param("ss", $employeeType, $evaluationType);
@@ -32,6 +47,15 @@ function showEvaluationTable($conn, $employeeType, $evaluationType)
     ?>
     <div class="card mb-4">
         <h4 class="section-title"><?= htmlspecialchars($evaluationType) ?></h4>
+=======
+    $stmt->bind_param("ss", $employeeType, $evaluationType);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    ?>
+
+    <div class="card mb-4">
+        <h4 class="section-title"><?= $evaluationType ?></h4>
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
         <table class="table table-bordered">
             <thead class="thead-dark">
             <tr>
@@ -44,9 +68,15 @@ function showEvaluationTable($conn, $employeeType, $evaluationType)
             <?php if ($result->num_rows > 0): ?>
                 <?php while ($row = $result->fetch_assoc()): ?>
                     <tr>
+<<<<<<< HEAD
                         <td><?= htmlspecialchars($row['FullName']) ?></td>
                         <td><?= $row['AverageScore'] ?? 'N/A' ?></td>
                         <td><?= htmlspecialchars($row['LatestComment'] ?: 'No comment') ?></td>
+=======
+                        <td><?= $row['FullName'] ?></td>
+                        <td><?= $row['AverageScore'] ?? 'N/A' ?></td>
+                        <td><?= $row['LatestComment'] ?: 'No comment' ?></td>
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
                     </tr>
                 <?php endwhile; ?>
             <?php else: ?>
@@ -58,7 +88,10 @@ function showEvaluationTable($conn, $employeeType, $evaluationType)
     <?php
     $stmt->close();
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
 ?>
 
 <!DOCTYPE html>
@@ -152,7 +185,11 @@ function showEvaluationTable($conn, $employeeType, $evaluationType)
         ?>
 
         <div class="card">
+<<<<<<< HEAD
             <h4 class="section-title"><?= htmlspecialchars($filter) ?> Evaluation Results</h4>
+=======
+            <h4 class="section-title"><?= $filter ?> Evaluation Results</h4>
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
             <table class="table table-bordered">
                 <thead class="thead-dark">
                 <tr>
@@ -167,10 +204,17 @@ function showEvaluationTable($conn, $employeeType, $evaluationType)
                 <?php if ($result && $result->num_rows > 0): ?>
                     <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
+<<<<<<< HEAD
                             <td><?= htmlspecialchars($row['FullName']) ?></td>
                             <td><?= htmlspecialchars($row['EvaluationType'] ?: 'N/A') ?></td>
                             <td><?= $row['Score'] ?? 'N/A' ?></td>
                             <td><?= htmlspecialchars($row['Comments'] ?: 'No comment') ?></td>
+=======
+                            <td><?= $row['FullName'] ?></td>
+                            <td><?= $row['EvaluationType'] ?: 'N/A' ?></td>
+                            <td><?= $row['Score'] ?? 'N/A' ?></td>
+                            <td><?= $row['Comments'] ?: 'No comment' ?></td>
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
                             <td><?= $row['EvaluationDate'] ?? 'N/A' ?></td>
                         </tr>
                     <?php endwhile; ?>

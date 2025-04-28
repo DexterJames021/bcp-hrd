@@ -1,4 +1,5 @@
 @charset "UTF-8";
+<<<<<<< HEAD
 
 .svd-watermark {
     display: none !important;
@@ -45,6 +46,8 @@
 }
 
 
+=======
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
 /**
  * Summary:
  *
@@ -1396,7 +1399,11 @@ Top Header
 }
 
 .notification-list-user-block {
+<<<<<<< HEAD
     /* padding-left: 0; */
+=======
+    padding-left: 50px;
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
     font-size: 14px;
     line-height: 21px;
 }

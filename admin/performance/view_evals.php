@@ -2,9 +2,15 @@
 // types_of_evaluations.php
 
 $evaluationTypes = [
+<<<<<<< HEAD
     "Supervisor Evaluation" => "eval.php?type=Teaching&evaluationType=Supervisor Evaluation",
     "Students Evaluation" => "eval.php?type=Teaching&evaluationType=Students Evaluation",
     "Peer Evaluation" => "eval.php?type=Teaching&evaluationType=Peer Evaluation"
+=======
+    "Supervisor Evaluation" => "supervisor_eval.php",
+    "Students Evaluation" => "students_eval.php",
+    "Peer Evaluation" => "peer_eval.php"
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
 ];
 ?>
 

@@ -1,6 +1,10 @@
 <?php
 // Step 1: Connect to the Database
+<<<<<<< HEAD
 require('C:/xampp/htdocs/bcp-hrd/config/db_talent.php');
+=======
+require('../../config/db_talent.php');
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
 
 // Check connection
 if ($conn->connect_error) {

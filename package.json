@@ -1,8 +1,14 @@
 {
   "dependencies": {
     "bootstrap": "^4.1.0",
+<<<<<<< HEAD
     "chart.js": "^4.4.5",
     "datatables.net-dt": "^2.1.6",
     "jquery": "^3.3.1"
+=======
+    "datatables.net-dt": "^2.1.6",
+    "jquery": "^3.3.1",
+    "sweetalert2": "^11.13.2"
+>>>>>>> 7e9007b254c7a3b621580d2a7f5ee26253427f04
   }
 }
