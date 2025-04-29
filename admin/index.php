@@ -5,6 +5,11 @@ require __DIR__ . '../../auth/mysqli_accesscontrol.php';
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);
 
+if ($_SESSION['usertype'] === "operator") {
+    header("Location: ./tech/resource_list.php");
+    exit();
+}
+
 // echo "console.log(ROOT +++++++++++ " . $_SERVER['DOCUMENT_ROOT'] . ")";
 
 

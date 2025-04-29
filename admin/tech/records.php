@@ -78,6 +78,14 @@ access_log($userData);
     <!-- charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <style>
+        @media print {
+            .base-salary-print {
+                display: none;
+            }
+        }
+    </style>
+
     <title>Admin Dashboard</title>
 </head>
 
@@ -168,7 +176,7 @@ access_log($userData);
                                                     <span class="fw-bold">Department:</span>
                                                     <span id="employeeDepartment" class="float-end text-dark">---</span>
                                                 </li>
-                                                <li class="list-group-item">
+                                                <li class="list-group-item base-salary-print" >
                                                     <span class="fw-bold">Base Salary:</span>
                                                     <span id="employeeBaseSalary" class="float-end text-dark">---</span>
                                                 </li>
@@ -228,26 +236,17 @@ access_log($userData);
                         </div>
 
                         <!-- Compensation  list -->
-                        <div class="card ">
+                        <!-- <div class="card ">
                             <div class="card-title p-3 d-flex justify-content-between">
                                 <h3><span id="compensationName"></span>Compensation and Benefits</h3>
-                                <div>
-                                    <!-- <button type="button" class="btn float-right" data-toggle="modal"
-                                        data-target="#salaryModal">
-                                        <i class="bi bi-plus-circle-fill text-primary" style="font-size:x-large;"></i>
-                                    </button> -->
-                                    <!-- <button type="button" class="btn btn-primary float-right" data-toggle="modal"
-                                        data-target="#salaryModal">
-                                        Generate payslip
-                                    </button> -->
-                                </div>
+                               
                             </div>
                             <div class="card-body">
                                 <table class="table">
                                     <thead class="thead-light">
                                         <tr>
                                             <th>Base Salary</th>
-                                            <!-- <th>Bonus</th> -->
+                                            <th>Bonus</th>
                                             <th>Benefit Value</th>
                                         </tr>
                                     </thead>
@@ -255,7 +254,7 @@ access_log($userData);
                                 </table>
                             </div>
 
-                        </div>
+                        </div> -->
 
                         <!-- employee info -->
                         <div class="card">

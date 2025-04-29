@@ -448,9 +448,14 @@ access_log($userData);
                         Added, Successfully.
                     </div>
                 </div>
-                <div id="status" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div id="approve" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-body bg-success text-light">
-                        Status updated Successfully
+                    Successfully Approve 
+                    </div>
+                </div>
+                <div id="reject" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body bg-success text-light">
+                    Successfully Rejected
                     </div>
                 </div>
                 <div id="room_updated" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">

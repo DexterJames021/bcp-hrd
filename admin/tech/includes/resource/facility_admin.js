@@ -295,14 +295,14 @@ $(function () {
     $(document).on('click', '.approve-btn', function () {
         const id = $(this).data('id');
         console.log(id);
-        updateRoomStatus(id, 'Approved');
+        ApproveUpdateRoomStatus(id, 'Approved');
         loadActiveRoomTable()
         bookingTable.ajax.reload();
     });
 
     $(document).on('click', '.reject-btn', function () {
         const id = $(this).data('id');
-        updateRoomStatus(id, 'Rejected');
+        RejectUpdateRoomStatus(id, 'Rejected');
         loadActiveRoomTable();
         bookingTable.ajax.reload();
     });
@@ -324,7 +324,7 @@ $(function () {
         $('#purposeModal').modal('show');
     });
 
-    function updateRoomStatus(id, status) {
+    function ApproveUpdateRoomStatus(id, status) {
 
         $.ajax({
             url: BaseURL + 'update_book_status',
@@ -338,7 +338,36 @@ $(function () {
             success: (response) => {
                 if (response.success) {
                     console.log(response.success)
-                    $('#status').toast('show');
+                    $('#approve').toast('show');
+                    loadActiveRoomTable();
+                    AllRoomTable.ajax.reload();
+                } else {
+                    $('#error').toast('show');
+                }
+            },
+            error: (res) => {
+                $('#error').toast('show');
+                console.error(res)
+
+            }
+        })
+    }
+
+    function RejectUpdateRoomStatus(id, status) {
+
+        $.ajax({
+            url: BaseURL + 'update_book_status',
+            type: 'POST',
+            data: {
+                id: id,
+                status: status,
+                userID: userID
+            },
+            dataType: 'json',
+            success: (response) => {
+                if (response.success) {
+                    console.log(response.success)
+                    $('#reject').toast('show');
                     loadActiveRoomTable();
                     AllRoomTable.ajax.reload();
                 } else {

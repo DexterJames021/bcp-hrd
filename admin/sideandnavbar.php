@@ -281,10 +281,10 @@ if (!empty($employeeData['profile_picture_path'])) {
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav flex-column">
-                        <li class="nav-divider">
-                            Human Resource Dept.
-                        </li>
                         <?php if ($userData['role'] === "admin"): ?>
+                            <li class="nav-divider">
+                                Human Resource Dept.
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : ''; ?>"
                                     href="<?php echo $base_url; ?>/admin/index.php">
@@ -563,6 +563,9 @@ if (!empty($employeeData['profile_picture_path'])) {
                             <!-- Compensation & benefits -->
 
                         <?php elseif ($userData['role'] === 'operator'): ?>
+                            <li class="nav-divider">
+                                Operator Custodian Dept.
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'resource_list.php') ? 'active' : ''; ?>"
                                     href="<?php echo $base_url; ?>/admin/tech/resource_list.php">Resources
@@ -585,6 +588,9 @@ if (!empty($employeeData['profile_picture_path'])) {
                             </li>
                         <?php elseif ($userData['role'] === 'superadmin'): ?>
                             <!-- SUPER ADMIN NAVIGATION -->
+                            <li class="nav-divider">
+                                Human Resource Dept.
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'index.php') ? 'active' : ''; ?>"
                                     href="<?php echo $base_url; ?>/admin/index.php">
@@ -876,7 +882,7 @@ if (!empty($employeeData['profile_picture_path'])) {
                                 </div>
                             </li>
                         <?php else: ?>
-                            <?php include "./403.php" ?>
+                            <?php include "../403.php" ?>
                         <?php endif; ?>
                     </ul>
                 </div>

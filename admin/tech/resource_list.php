@@ -644,7 +644,7 @@ access_log($userData);
                 </div>
                 <div id="approved" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-body bg-success text-light">
-                        Updated, Successfully.
+                        Status Updated Successfully.
                     </div>
                 </div>
                 <div id="rejected" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
