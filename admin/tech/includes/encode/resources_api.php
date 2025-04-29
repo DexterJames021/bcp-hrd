@@ -220,22 +220,27 @@ switch ($action) {
         break;
 
     case 'usage_patterns':
-        echo json_encode($resource->UsagePatterns());
+        $startDate = $_POST['start_date'] ?? null;
+        $endDate = $_POST['end_date'] ?? null;
+        echo json_encode($resource->UsagePatterns($startDate, $endDate));
         break;
 
     case 'requests_trend':
-        echo json_encode($resource->RequestTrend());
+        $startDate = $_POST['start_date'] ?? null;
+        $endDate = $_POST['end_date'] ?? null;
+        echo json_encode($resource->RequestTrend($startDate, $endDate));
         break;
 
     case 'unused_resources':
-        echo json_encode($resource->getUnusedResources());
+        $startDate = $_POST['start_date'] ?? null;
+        $endDate = $_POST['end_date'] ?? null;
+        echo json_encode($resource->getUnusedResources($startDate, $endDate));
         break;
 
-    case 'overutilized_resources':
-        echo json_encode($resource->OverutilizedResources());
-        break;
     case 'categorize_resources':
-        echo json_encode($resource->CategorizedResources());
+        $startDate = $_POST['start_date'] ?? null;
+        $endDate = $_POST['end_date'] ?? null;
+        echo json_encode($resource->CategorizedResources($startDate, $endDate));
         break;
     case 'get_employee_for_allocation':
         echo json_encode($resource->get_employee_for_allocation());

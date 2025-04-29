@@ -5,7 +5,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 require "../../../vendor/autoload.php";
-
+$base_url = "http://localhost/bcp-hrd";
 // Initialize variables for messages
 $error_message = '';
 $success_message = '';
@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <strong>Username:</strong> $username<br>
                     <strong>Password:</strong> $password<br><br>
                     You can now log in to your dashboard using these credentials.<br><br>
-                    This is the link: <a href='http://localhost/bcp-hrd/auth/index.php'>Login</a><br><br>
+                    This is the link: <a href='$base_url/auth/index.php'>Login</a><br><br>
                     Best regards,<br>
                     HR Team
                 ";

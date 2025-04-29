@@ -143,7 +143,7 @@ access_log($userData);
                     <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" id="facility-booking-tab" data-toggle="tab" href="#facility-booking"
-                                role="tab" aria-controls="facility-booking" aria-selected="true">Facility Booking</a>
+                                role="tab" aria-controls="facility-booking" aria-selected="true">Facility Requesting</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="facility-pending-tab" data-toggle="tab" href="#facility-pending"
@@ -164,7 +164,7 @@ access_log($userData);
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                     <div class="card">
                                         <div class="card-header d-flex justify-content-between">
-                                            <h1>Booking</h1>
+                                            <h1>Requesting</h1>
                                             <div class="btn-group" role="group">
                                                 <!-- <button type="button" class="btn btn-outline-primary rounded-circle  float-right" data-toggle="modal" data-target="#Addbooking">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-file-earmark-plus" viewBox="0 0 16 16">
@@ -203,7 +203,7 @@ access_log($userData);
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                     <div class="card">
                                         <div class="card-header d-flex justify-content-between">
-                                            <h2>Pending</h2>
+                                            <h2>Pending Facility Request</h2>
                                         </div>
                                         <div class="card-body table-responsive">
                                             <table id="approvedTable" class="table table-hover ">
@@ -236,6 +236,19 @@ access_log($userData);
                                     <div class="card">
                                         <div class="card-header d-flex justify-content-between">
                                             <h2>Facility Lists</h2>
+                                            <div class="d-flex mb-3">
+                                                <select id="statusFilter" class="form-select mb-3 mx-1" style="width: 200px;">
+                                                    <option value="">All</option>
+                                                    <option value="Available">Available</option>
+                                                    <option value="Booked">Booked</option>
+                                                </select>
+                                                <div class="d-flex mb-3">
+                                                    <input type="number" id="minCapacity" class="form-control me-2"
+                                                        placeholder="Min Capacity" style="width: 150px;">
+                                                    <input type="number" id="maxCapacity" class="form-control"
+                                                        placeholder="Max Capacity" style="width: 150px;">
+                                                </div>
+                                            </div>
                                             <?php if ($userData && in_array("CREATE", $userData['permissions'])): ?>
                                                 <button type="button" class="btn float-right" data-toggle="modal"
                                                     data-target="#AddroomModal">
@@ -253,14 +266,7 @@ access_log($userData);
                                         <div class="card-body">
                                             <table id="roomTable" class="table table-hover" width="100% ">
                                                 <thead class="thead-light">
-                                                    <tr>
-                                                        <th>ID</th>
-                                                        <th>Name</th>
-                                                        <th>Location</th>
-                                                        <th>Capacity</th>
-                                                        <th>Status</th>
-                                                        <th>Action</th>
-                                                    </tr>
+
                                                 </thead>
                                             </table>
                                         </div>
@@ -387,7 +393,7 @@ access_log($userData);
                     </div>
                 </div>
             </div>
-            
+
             <!-- add room -->
             <div id="add-modal" class="row">
                 <div class="modal fade" id="AddroomModal" role="dialog">
@@ -442,9 +448,14 @@ access_log($userData);
                         Added, Successfully.
                     </div>
                 </div>
-                <div id="status" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div id="approve" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
                     <div class="toast-body bg-success text-light">
-                        Status updated Successfully
+                    Successfully Approve 
+                    </div>
+                </div>
+                <div id="reject" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body bg-success text-light">
+                    Successfully Rejected
                     </div>
                 </div>
                 <div id="room_updated" class="toast fade hide" role="alert" aria-live="assertive" aria-atomic="true">

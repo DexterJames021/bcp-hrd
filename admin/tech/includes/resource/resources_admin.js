@@ -22,69 +22,66 @@ $(function () {
     columns: [
       {
         data: null,
-        render: function (data, type, row, meta) {
-          return meta.row + 1;
-        },
+        render: function (data) {
+          return `<span class="badge-dot mr-1 badge 
+                  ${data.status === 'Available' ? 'bg-success' :
+              (data.status === 'In Maintenance' ? 'bg-warning' : 'bg-danger')}">
+                 </span>`;
+        }
       },
-      {
-        data: "name",
-      },
-      {
-        data: "category",
-        defaultContent: "-",
-      },
-      {
-        data: "quantity",
-      },
-      {
-        data: "location",
-        defaultContent: "<i>Not set</i>",
-      },
-      {
-        data: "status",
-      },
-      // {
-      //   data: "last_maintenance",
-      //   defaultContent: "<i>Not set</i>",
-      // },
-      // {
-      //   data: "created_at",
-      // },
-      // {
-      //   data: "next_maintenance",
-      //   defaultContent: "<i>Not set</i>",
-      // },
+      { title: "Resource ID", data: "id" },
+      { title: "Resource Name", data: "name" },
+      { title: "Category", data: "category", defaultContent: "-" },
+      { title: "Quantity", data: "quantity" },
+      { title: "Location", data: "location", defaultContent: "<i>Not set</i>" },
       {
         title: "Action",
         data: null,
         orderable: false,
         render: function (data) {
           let buttons = '';
-          // console.log("Checking Permissions for:", row.id);
-          // console.log("User Has UPDATE:", userPermissions.includes("EDIT"));
-          // console.log("User Has DELETE:", userPermissions.includes("DELETE"));
-
           if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
             buttons += `<button class="update btn btn-action" data-id="${data.id}" title="UPDATE">
-                          <i class="bi bi-pencil-square text-primary"  style="font-size:large;"></i>
-                      </button>`;
+                          <i class="bi bi-pencil-square text-primary" style="font-size:large;"></i>
+                        </button>`;
           }
-
           if (Array.isArray(userPermissions) && userPermissions.includes("DELETE")) {
             buttons += `<button class="delete btn btn-action" data-id="${data.id}" title="DELETE">
-                        <i class="bi bi-trash-fill text-danger"  style="font-size:large;"></i>
-                    </button>`;
-
+                          <i class="bi bi-trash-fill text-danger" style="font-size:large;"></i>
+                        </button>`;
           }
-
-
-
           return buttons || '<i class="bi bi-ban text-danger" title="No permission" style="font-size:x-large;"></i>';
         },
       },
+      {
+        data: "status",
+        visible: false, // Hidden status column (for filtering only)
+      },
     ],
+
     buttons: ["csv", "excel", "pdf", "print"],
   });
+
+  $('#statusFilter').on('change', function () {
+    const selectedStatus = $(this).val();
+    if (selectedStatus) {
+      resourcesTable.column(7).search('^' + selectedStatus + '$', true, false).draw();
+      // Column 7 (0-based index) → your hidden "status" column
+    } else {
+      resourcesTable.column(7).search('').draw(); // Show all if none selected
+    }
+  });
+
+  $('#categoryFilter').on('change', function () {
+    const selectedCategory = $(this).val();
+    if (selectedCategory) {
+      resourcesTable.column(3).search('^' + selectedCategory + '$', true, false).draw();
+      // Column 3 → your "Category" column (0-based index)
+    } else {
+      resourcesTable.column(3).search('').draw(); // Reset if none selected
+    }
+  });
+  
 
   function loadAnalytics() {
     $.ajax({
@@ -603,7 +600,7 @@ $(function () {
       },
       function (response) {
         if (response.success) {
-          $("#added").toast("show")
+          $("#approved").toast("show")
           //loadRequests(); // Reload the requests table
           requestsTable.ajax.reload();
         } else {

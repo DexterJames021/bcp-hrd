@@ -550,9 +550,9 @@ $(document).ready(function () {
                         <select class="form-control" id="usertype" name="usertype" required>
                             <option value="admin">Admin</option>
                             <option value="employee">Employee</option>
+                            <option value="staff">Staff</option>
                             <option value="manager">Manager</option>
-                            <option value="superadmin">SuperAdmin</option>
-                           
+                    
                         </select>
                     </div>
                     <input type="hidden" id="user_id" name="id">
@@ -814,12 +814,14 @@ $(document).ready(function () {
         
         <!-- If admin is logged in, only show New Hire option -->
         <?php if ($usertype === 'admin'): ?>
-            <option value="New Hire">Employee</option>
+            <option value="employee">Employee</option>
+            <option value="staff">Staff</option>
         
         <!-- If superadmin is logged in, show options for admin, employee, superadmin, and New Hire -->
         <?php elseif ($usertype === 'superadmin'): ?>
             <option value="admin">Admin</option>
             <option value="employee">Employee</option>
+            <option value="staff">Staff</option>
             <option value="manager">Manager</option>
         
         <?php endif; ?>

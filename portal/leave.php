@@ -6,38 +6,59 @@ $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);
 
 try {
-    // Query the leave types from the database
-    $stmt = $conn->prepare("SELECT leave_type FROM leavetype");
-    $stmt->execute();
-
     // Fetch all leave types
+    $stmt = $conn->prepare("SELECT id, leave_type FROM leavetype");
+    $stmt->execute();
     $leaveTypes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Fetch user's leave credits
+    $userId = $_SESSION['user_id'];
+    $stmtCredits = $conn->prepare("
+        SELECT lc.leave_type_id, lc.credits, lt.leave_type 
+        FROM leave_credits lc 
+        JOIN leavetype lt ON lc.leave_type_id = lt.id
+        WHERE lc.user_id = :user_id
+    ");
+    $stmtCredits->bindParam(':user_id', $userId, PDO::PARAM_INT);
+    $stmtCredits->execute();
+    $leaveCredits = $stmtCredits->fetchAll(PDO::FETCH_ASSOC);
+
+    // Prepare credits as [leave_type => credits]
+    $creditsMap = [];
+    foreach ($leaveCredits as $credit) {
+        $creditsMap[$credit['leave_type']] = $credit['credits'];
+    }
 
 } catch (PDOException $e) {
     die("Connection failed: " . $e->getMessage());
 }
+
 $messageFeedback = '';
 
+// Handle leave application submission
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     try {
-        // Check required session data
         if (!isset($_SESSION['user_id'])) {
             throw new Exception("User session data is incomplete.");
         }
 
         $userId = $_SESSION['user_id'];
 
-        // Sanitize form input
+        // Sanitize input
         $leaveType = htmlspecialchars(trim($_POST['leaveType']));
         $leaveDate = htmlspecialchars(trim($_POST['dateInput']));
         $message = htmlspecialchars(trim($_POST['message']));
 
-        // Validate inputs
         if (empty($leaveType) || empty($leaveDate) || empty($message)) {
             throw new Exception("All fields are required.");
         }
 
-        // Fetch applicant_name and department from database using JOIN
+        // Check if user has enough credits for selected leave
+        if (!isset($creditsMap[$leaveType]) || $creditsMap[$leaveType] <= 0) {
+            throw new Exception("You have no available credits for $leaveType.");
+        }
+
+        // Fetch applicant name and department
         $stmtInfo = $conn->prepare("
             SELECT a.applicant_name, d.DepartmentName
             FROM users u
@@ -56,12 +77,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $applicantName = $result['applicant_name'];
         $department = $result['DepartmentName'];
 
-        // Insert leave application into database
+        // Insert into leaveapplication (no credit deduction yet)
         $stmt = $conn->prepare("
             INSERT INTO leaveapplication (employeeId, name, leave_type, date, department, message) 
             VALUES (:employeeId, :name, :leaveType, :leaveDate, :department, :message)
         ");
-
         $stmt->bindParam(':employeeId', $userId, PDO::PARAM_INT);
         $stmt->bindParam(':name', $applicantName);
         $stmt->bindParam(':leaveType', $leaveType);
@@ -72,39 +92,81 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if ($stmt->execute()) {
             $messageFeedback = "<p style='color:green;'>Leave request submitted successfully!</p>";
         } else {
-            throw new Exception("Failed to submit the request.");
+            throw new Exception("Failed to submit leave request.");
         }
+
     } catch (Exception $e) {
         $messageFeedback = "<p style='color:red;'>Error: " . $e->getMessage() . "</p>";
     }
 }
 
+// Handle leave request approval/rejection by the manager
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['approve_leave'])) {
+    $leaveRequestId = $_POST['leave_request_id'];
+    $status = $_POST['status']; // 'approved' or 'rejected'
 
-// try {
-//     // Query to get all records from the leaveapplication table for the specific user
-//     $stmt = $conn->prepare("SELECT * FROM leaveapplication WHERE employeeId = :user_id");
-//     $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
-//     $stmt->execute();
+    // Check the current leave request
+    $stmtCheck = $conn->prepare("SELECT leave_type, employeeId FROM leaveapplication WHERE id = :leave_request_id");
+    $stmtCheck->bindParam(':leave_request_id', $leaveRequestId, PDO::PARAM_INT);
+    $stmtCheck->execute();
+    $leaveRequest = $stmtCheck->fetch(PDO::FETCH_ASSOC);
 
-//     // Fetch all results
-//     $leaveApplications = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if ($leaveRequest) {
+        $leaveType = $leaveRequest['leave_type'];
+        $employeeId = $leaveRequest['employeeId'];
 
-// } catch (PDOException $e) {
-//     die("Connection failed: " . $e->getMessage());
-// }
-$recordsPerPage = 5;  // Number of records per page
+        if ($status === 'approved') {
+            // Move the record from leaveapplication to leave_requests
+            $stmtMove = $conn->prepare("
+                INSERT INTO leave_requests (employeeId, name, leave_type, date, department, message, status) 
+                SELECT employeeId, name, leave_type, date, department, message, :status
+                FROM leaveapplication
+                WHERE id = :leave_request_id
+            ");
+            $stmtMove->bindParam(':status', $status);
+            $stmtMove->bindParam(':leave_request_id', $leaveRequestId, PDO::PARAM_INT);
+            $stmtMove->execute();
 
-// Get the current page from the URL, if not set default to 1
+            // After moving, delete the record from leaveapplication
+            $stmtDelete = $conn->prepare("DELETE FROM leaveapplication WHERE id = :leave_request_id");
+            $stmtDelete->bindParam(':leave_request_id', $leaveRequestId, PDO::PARAM_INT);
+            $stmtDelete->execute();
+
+            // If the leave type is approved, deduct leave credits
+            $stmtCheckCredits = $conn->prepare("SELECT credits FROM leave_credits WHERE user_id = :employeeId AND leave_type_id = (SELECT id FROM leavetype WHERE leave_type = :leaveType)");
+            $stmtCheckCredits->bindParam(':employeeId', $employeeId, PDO::PARAM_INT);
+            $stmtCheckCredits->bindParam(':leaveType', $leaveType);
+            $stmtCheckCredits->execute();
+            $creditData = $stmtCheckCredits->fetch(PDO::FETCH_ASSOC);
+
+            if ($creditData && $creditData['credits'] > 0) {
+                // Deduct 1 leave credit if enough credits are available
+                $stmtUpdateCredit = $conn->prepare("
+                    UPDATE leave_credits 
+                    SET credits = credits - 1 
+                    WHERE user_id = :employeeId AND leave_type_id = (SELECT id FROM leavetype WHERE leave_type = :leaveType)
+                ");
+                $stmtUpdateCredit->bindParam(':employeeId', $employeeId, PDO::PARAM_INT);
+                $stmtUpdateCredit->bindParam(':leaveType', $leaveType);
+                $stmtUpdateCredit->execute();
+            }
+        } else if ($status === 'rejected') {
+            // Just delete the record from leaveapplication if rejected
+            $stmtDelete = $conn->prepare("DELETE FROM leaveapplication WHERE id = :leave_request_id");
+            $stmtDelete->bindParam(':leave_request_id', $leaveRequestId, PDO::PARAM_INT);
+            $stmtDelete->execute();
+        }
+    }
+}
+
+// Pagination and Leave History Loading
+$recordsPerPage = 5;
 $currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-
-// Calculate offset for pagination
 $offset = ($currentPage - 1) * $recordsPerPage;
 
 try {
-    // Get the logged-in user's ID
     $userId = $_SESSION['user_id'];
 
-    // Fetch leave data from leaveapplication table
     $stmt1 = $conn->prepare("
         SELECT id, employeeId, name, leave_type, date, department, message, status
         FROM leaveapplication
@@ -114,7 +176,6 @@ try {
     $stmt1->execute();
     $leaveApplications = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
-    // Fetch leave data from leave_requests table
     $stmt2 = $conn->prepare("
         SELECT id, employeeId, name, leave_type, date, department, message, status
         FROM leave_requests
@@ -124,15 +185,12 @@ try {
     $stmt2->execute();
     $leaveRequests = $stmt2->fetchAll(PDO::FETCH_ASSOC);
 
-    // Combine both datasets
     $allLeaveData = array_merge($leaveApplications, $leaveRequests);
-    
-    // Sort data by date in descending order
+
     usort($allLeaveData, function ($a, $b) {
         return strtotime($b['date']) <=> strtotime($a['date']);
     });
 
-    // Pagination logic
     $totalRecords = count($allLeaveData);
     $totalPages = ceil($totalRecords / $recordsPerPage);
     $paginatedData = array_slice($allLeaveData, $offset, $recordsPerPage);
@@ -214,28 +272,32 @@ try {
                         <div class="page">
                             <div class="apply">
                                 <h3>Apply for Leave</h3>
+           <!-- Display Leave Application Form -->
+           <?= $messageFeedback ?? '' ?>
 
-                                <?= $messageFeedback ?? '' ?>
+<form method="POST" action="">
+    <label for="leaveType">Leave Type</label><br>
+    <select id="leaveType" name="leaveType" required>
+        <option value="">Select Leave Type</option>
+        <?php foreach ($leaveTypes as $leaveType): 
+            $type = htmlspecialchars($leaveType['leave_type']);
+            $credits = isset($creditsMap[$type]) ? (int)$creditsMap[$type] : 0;
+            $disabled = $credits <= 0 ? 'disabled' : '';
+        ?>
+            <option value="<?= $type ?>" <?= $disabled ?>>
+                <?= $type ?> (Credits: <?= $credits ?>)
+            </option>
+        <?php endforeach; ?>
+    </select>
 
-                                <form method="POST" action="">
-                                    <label for="leaveType">Leave Type</label><br>
-                                    <select id="leaveType" name="leaveType" required>
-                                        <option value="">Select Leave Type</option>
-                                        <?php foreach ($leaveTypes as $leaveType): ?>
-                                            <option value="<?= htmlspecialchars($leaveType['leave_type']) ?>">
-                                                <?= htmlspecialchars($leaveType['leave_type']) ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select><br><br>
+    <label for="dateInput">Leave Date</label><br>
+    <input type="date" id="dateInput" name="dateInput" required><br><br>
 
-                                    <label for="dateInput">Leave Date</label><br>
-                                    <input type="date" id="dateInput" name="dateInput" required><br><br>
+    <label for="message">Leave Message</label><br>
+    <input type="text" id="message" name="message" required><br><br>
 
-                                    <label for="message">Leave Message</label><br>
-                                    <input type="text" id="message" name="message" required><br><br>
-
-                                    <button type="submit" id="applyLeaveBtn" class="apply-btn">Apply for Leave</button>
-                                </form>
+    <button type="submit" id="applyLeaveBtn" class="apply-btn">Apply for Leave</button>
+</form>
                             </div>
                         </div>
 </div>
@@ -354,28 +416,17 @@ try {
                 </div>
 
 
-                <!-- </div> -->
+                <script>
+document.getElementById('leaveType').addEventListener('change', function() {
+    var selectedOption = this.options[this.selectedIndex];
+    if (selectedOption.disabled) {
+        alert('You have no remaining credits for this leave type.');
+        this.value = '';
+    }
+});
+</script>
             </div>
-            <!-- </div> -->
-            <!-- ============================================================== -->
-            <!-- footer -->
-            <!-- ============================================================== -->
-            <!-- <div class="footer mx-2">
-                <div class="container-fluid mx-2">
-                    <div class="row">
-                        <div class="col-xl-7 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="text-md-right footer-links d-none d-sm-block">
-                                <a href="javascript: void(0);">About</a>
-                                <a href="javascript: void(0);">Support</a>
-                                <a href="javascript: void(0);">Contact Us</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-            <!-- ============================================================== -->
-            <!-- end footer -->
-            <!-- ============================================================== -->
+          
         </div>
         <!-- ============================================================== -->
         <!-- end wrapper  -->

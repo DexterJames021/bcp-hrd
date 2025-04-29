@@ -12,22 +12,66 @@ $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 // Calculate the starting record for the SQL query
 $startFrom = ($page - 1) * $recordsPerPage;
 
-// Handle form submission to update status
+// Handle form submission to update status and deduct credits
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['update_status']) && isset($_POST['leave_id'])) {
         $leaveId = $_POST['leave_id'];
         $newStatus = $_POST['update_status'];
 
-        // Prepare the SQL query to update the status
-        $stmt = $conn->prepare("UPDATE leave_requests SET status = :status WHERE id = :id");
-        $stmt->bindParam(':status', $newStatus);
-        $stmt->bindParam(':id', $leaveId);
-
         try {
+            // Fetch the leave type and employeeId from the leave request
+            $stmt = $conn->prepare("SELECT leave_type, employeeId FROM leave_requests WHERE id = :leaveId");
+            $stmt->bindParam(':leaveId', $leaveId);
             $stmt->execute();
-            echo "<script>alert('Status updated successfully');</script>"; // Optional: Alert for success
+            $leaveRequest = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($leaveRequest) {
+                $leaveType = $leaveRequest['leave_type'];
+                $employeeId = $leaveRequest['employeeId'];
+
+                // If the leave is approved, we deduct the leave credit
+                if ($newStatus == 'approved') {
+                    // Get the leave type ID from the leave_type
+                    $stmtLeaveType = $conn->prepare("SELECT id FROM leavetype WHERE leave_type = :leaveType");
+                    $stmtLeaveType->bindParam(':leaveType', $leaveType);
+                    $stmtLeaveType->execute();
+                    $leaveTypeData = $stmtLeaveType->fetch(PDO::FETCH_ASSOC);
+
+                    if ($leaveTypeData) {
+                        $leaveTypeId = $leaveTypeData['id'];
+
+                        // Get current leave credits for the employee
+                        $stmtCredits = $conn->prepare("SELECT credits FROM leave_credits WHERE user_id = :employeeId AND leave_type_id = :leaveTypeId");
+                        $stmtCredits->bindParam(':employeeId', $employeeId);
+                        $stmtCredits->bindParam(':leaveTypeId', $leaveTypeId);
+                        $stmtCredits->execute();
+                        $creditsData = $stmtCredits->fetch(PDO::FETCH_ASSOC);
+
+                        if ($creditsData && $creditsData['credits'] > 0) {
+                            // Deduct 1 credit for the leave
+                            $stmtDeductCredits = $conn->prepare("UPDATE leave_credits SET credits = credits - 1 WHERE user_id = :employeeId AND leave_type_id = :leaveTypeId");
+                            $stmtDeductCredits->bindParam(':employeeId', $employeeId);
+                            $stmtDeductCredits->bindParam(':leaveTypeId', $leaveTypeId);
+                            $stmtDeductCredits->execute();
+                        } else {
+                            echo "<script>alert('Not enough credits for leave type: $leaveType');</script>";
+                            exit();
+                        }
+                    }
+                }
+
+                // Update the leave request status
+                $stmtUpdateStatus = $conn->prepare("UPDATE leave_requests SET status = :status WHERE id = :leaveId");
+                $stmtUpdateStatus->bindParam(':status', $newStatus);
+                $stmtUpdateStatus->bindParam(':leaveId', $leaveId);
+                $stmtUpdateStatus->execute();
+
+                echo "<script>alert('Status updated successfully');</script>"; // Success message
+            } else {
+                echo "<script>alert('Leave request not found');</script>";
+            }
         } catch (PDOException $e) {
-            echo "<script>alert('Error updating status: " . $e->getMessage() . "');</script>";
+            echo "<script>alert('Error: " . $e->getMessage() . "');</script>";
         }
     }
 }

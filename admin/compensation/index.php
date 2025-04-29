@@ -324,6 +324,30 @@ if (isset($_POST['update'])) {
                         </div>
                     </div>
                 </div>
+                <div class="row">
+    <div class="col-md-6">
+        <?php
+        // Start a protected module - use the ID from your authenticate table
+        createProtectedModule('salary_data', 'Salary Data', 'View and manage salary information');
+        ?>
+            <!-- This content will only be visible after entering the correct password -->
+            <div class="card">
+                <div class="card-body">
+                    <h3>Salary Overview</h3>
+                    <p>This is protected salary data that requires a password to access.</p>
+                    
+                    <!-- Your salary chart or data here -->
+                    <div class="chart-container">
+                        <canvas id="salaryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        <?php
+        // End the protected module
+        endProtectedModule('salary_data');
+        ?>
+    </div>
+</div>
 
 
             </div>

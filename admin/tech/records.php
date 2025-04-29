@@ -78,6 +78,14 @@ access_log($userData);
     <!-- charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <style>
+        @media print {
+            .base-salary-print {
+                display: none;
+            }
+        }
+    </style>
+
     <title>Admin Dashboard</title>
 </head>
 
@@ -168,7 +176,7 @@ access_log($userData);
                                                     <span class="fw-bold">Department:</span>
                                                     <span id="employeeDepartment" class="float-end text-dark">---</span>
                                                 </li>
-                                                <li class="list-group-item">
+                                                <li class="list-group-item base-salary-print" >
                                                     <span class="fw-bold">Base Salary:</span>
                                                     <span id="employeeBaseSalary" class="float-end text-dark">---</span>
                                                 </li>
@@ -228,26 +236,17 @@ access_log($userData);
                         </div>
 
                         <!-- Compensation  list -->
-                        <div class="card ">
+                        <!-- <div class="card ">
                             <div class="card-title p-3 d-flex justify-content-between">
                                 <h3><span id="compensationName"></span>Compensation and Benefits</h3>
-                                <div>
-                                    <!-- <button type="button" class="btn float-right" data-toggle="modal"
-                                        data-target="#salaryModal">
-                                        <i class="bi bi-plus-circle-fill text-primary" style="font-size:x-large;"></i>
-                                    </button> -->
-                                    <!-- <button type="button" class="btn btn-primary float-right" data-toggle="modal"
-                                        data-target="#salaryModal">
-                                        Generate payslip
-                                    </button> -->
-                                </div>
+                               
                             </div>
                             <div class="card-body">
                                 <table class="table">
                                     <thead class="thead-light">
                                         <tr>
                                             <th>Base Salary</th>
-                                            <!-- <th>Bonus</th> -->
+                                            <th>Bonus</th>
                                             <th>Benefit Value</th>
                                         </tr>
                                     </thead>
@@ -255,7 +254,7 @@ access_log($userData);
                                 </table>
                             </div>
 
-                        </div>
+                        </div> -->
 
                         <!-- employee info -->
                         <div class="card">
@@ -263,20 +262,18 @@ access_log($userData);
                                 <h2 class="card-title ">Employees Records</h2>
                             </div>
                             <div class="card-body">
-                                <form id="editEmployeeForm" method="POST">
-                                    <input type="hidden" name="edit_id" id="edit_id">
+                                <div id="editEmployeeForm">
 
                                     <div class="mb-2">
                                         <div class="row">
                                             <div class="col">
-                                                <label for="edit_name">First Name:</label>
-                                                <input type="text" name="edit_FirstName" id="edit_name" class="form-control"
-                                                    required>
+                                                <span class="fw-bold text-dark" for="edit_name">First Name:</span>
+                                                <div id="edit_name" class=""></div>
                                             </div>
                                             <div class="col">
-                                                <label for="edit_LastName">Last Name:</label>
-                                                <input type="text" name="edit_LastName" id="edit_LastName"
-                                                    class="form-control" required>
+                                                <span class="fw-bold text-dark" for="edit_LastName">Last Name:</span>
+                                                <div type="text" name="edit_LastName" id="edit_LastName"
+                                                    class=""></div>
                                             </div>
                                         </div>
                                     </div>
@@ -284,31 +281,28 @@ access_log($userData);
                                     <div class="mb-2">
                                         <div class="row">
                                             <div class="col">
-                                                <label for="edit_email">Email:</label>
-                                                <input type="email" name="edit_email" id="edit_email" class="form-control"
-                                                    required>
+                                                <span class="fw-bold text-dark" for="edit_email">Email:</span>
+                                                <div type="email" name="edit_email" id="edit_email" class=""
+                                                    ></div>
                                             </div>
                                             <div class="col">
-                                                <label for="edit_phone">Phone:</label>
-                                                <input type="text" name="edit_phone" id="edit_phone" class="form-control"
-                                                    required>
+                                                <span class="fw-bold text-dark" for="edit_phone">Phone:</span>
+                                                <div type="text" name="edit_phone" id="edit_phone" class=""
+                                                    ></div>
                                             </div>
                                             <div class="col">
-                                                <label for="edit_birthday">Birthday:</label>
-                                                <input type="date" name="edit_birthday" id="edit_birthday"
-                                                    class="form-control" required>
+                                                <span class="fw-bold text-dark" for="edit_birthday">Birthday:</span>
+                                                <div type="date" name="edit_birthday" id="edit_birthday"
+                                                    class="" ></div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="mb-2">
-                                        <label for="edit_address">Address:</label>
-                                        <input type="text" name="edit_address" id="edit_address" class="form-control"
-                                            required>
+                                        <span class="fw-bold text-dark" for="edit_address">Address:</span>
+                                        <div type="text" name="edit_address" id="edit_address" class=""
+                                            ></div>
                                     </div>
-                                    <div class="mb-2">
-                                        <button type="submit" class="btn btn-outline-primary">Save Changes</button>
-                                    </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
 

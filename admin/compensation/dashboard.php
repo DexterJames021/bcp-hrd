@@ -3,6 +3,7 @@
 require "../../config/Database.php";
 require '../../auth/accesscontrol.php';
 
+
 $userData = getUserRoleAndPermissions($_SESSION['user_id'], $conn);
 access_log($userData);
 
@@ -115,7 +116,7 @@ try {
 } catch (PDOException $e) {
     die("Connection failed: " . $e->getMessage());
 }
-?> -->
+?> 
 <!doctype html>
 <html lang="en">
 
@@ -154,6 +155,16 @@ try {
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+    <style>
+    /* Blur effect */
+    .blur-content {
+        filter: blur(8px);
+        pointer-events: none;
+        user-select: none;
+    }
+</style>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     
     <link rel="stylesheet" href="css/dashboard.css">
     <title>Admin Dashboard</title>
@@ -168,13 +179,17 @@ try {
         <!-- navbar -->
         <!-- ============================================================== -->
         <?php include '../sideandnavbar.php'; ?>
+
+     
         <!-- ============================================================== -->
         <!-- end left sidebar -->
         <!-- ============================================================== -->
         <!-- ============================================================== -->
         <!-- wrapper  -->
         <!-- ============================================================== -->
+      
         <div class="dashboard-wrapper">
+        <div id="main-content" class="blur-content">
             <!-- <div class="dashboard-ecommerce"> -->
             <div class="container-fluid dashboard-content ">
                 <!-- ============================================================== -->
@@ -514,7 +529,7 @@ try {
                     
                     </div>
                 </div>
-
+</div>
 
 
 
@@ -541,13 +556,64 @@ try {
             <!-- end footer -->
             <!-- ============================================================== -->
         </div>
+        </div>
+
         <!-- ============================================================== -->
         <!-- end wrapper  -->
         <!-- ============================================================== -->
     </div>
     <!-- ============================================================== -->
     <!-- end main wrapper  -->
-     
+     <!-- Password Modal -->
+<div class="modal fade" id="authModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form id="authForm">
+        <div class="modal-header">
+          <h5 class="modal-title" id="authModalLabel">Authentication Required</h5>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="authPassword">Enter Password:</label>
+            <input type="password" class="form-control" id="authPassword" required>
+            <div class="invalid-feedback">Incorrect password. Please try again.</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Verify</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap + JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    var authModal = new bootstrap.Modal(document.getElementById('authModal'), {
+        backdrop: 'static',
+        keyboard: false
+    });
+    authModal.show();
+
+    $("#authForm").submit(function(e) {
+        e.preventDefault();
+        var password = $("#authPassword").val();
+
+        $.post("verify_auth.php", { password: password }, function(response) {
+            if (response === "success") {
+                $("#main-content").removeClass("blur-content");
+                authModal.hide();
+            } else {
+                $("#authPassword").addClass("is-invalid");
+            }
+        });
+    });
+});
+</script>
     <!-- ============================================================== -->
 </body>
 

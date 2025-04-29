@@ -27,7 +27,7 @@ class Resources
 
     public function getAllRequest()
     {
-        $q = "SELECT r.name, r.quantity, rq.status, rq.requested_at  
+        $q = "SELECT r.id ,r.name, r.quantity, rq.status, rq.requested_at  
                 FROM fm_resource_requests rq
                 JOIN fm_resources r ON rq.resource_id = r.id;";
         $stmt = $this->conn->prepare($q);
@@ -288,24 +288,37 @@ class Resources
         }
     }
 
-    public function UsagePatterns()
+    public function UsagePatterns($startDate = null, $endDate = null)
     {
         try {
             $q = "SELECT 
-                name as resource_name, 
-                SUM(quantity) AS total_used 
-                FROM fm_resources 
-                GROUP BY name 
-                ORDER BY total_used DESC; ";
+            r.name as resource_name, 
+            SUM(ra.quantity) AS total_used 
+          FROM fm_resource_allocations ra
+          JOIN fm_resources r ON ra.resource_id = r.id
+          WHERE ra.status = 'Allocated' "; 
+
+            if ($startDate && $endDate) {
+                $q .= " AND ra.allocation_start BETWEEN :start_date AND :end_date";
+            }
+
+            $q .= " GROUP BY r.name ORDER BY total_used DESC";
+
             $stmt = $this->conn->prepare($q);
+
+            if ($startDate && $endDate) {
+                $stmt->bindParam(':start_date', $startDate);
+                $stmt->bindParam(':end_date', $endDate);
+            }
+
             $stmt->execute();
 
             $labels = [];
             $data = [];
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $labels[] = $row['resource_name'];  // Resource names
-                $data[] = $row['total_used'];      // Total usage for each resource
+                $labels[] = $row['resource_name'];
+                $data[] = $row['total_used'];
             }
 
             return [
@@ -317,23 +330,35 @@ class Resources
         }
     }
 
-    public function RequestTrend()
+    public function RequestTrend($startDate = null, $endDate = null)
     {
         try {
             $q = "SELECT DATE(requested_at) AS date, 
                 COUNT(*) AS total_requests 
                 FROM fm_resource_requests 
-                GROUP BY DATE(requested_at) 
-                ORDER BY date; ";
+                WHERE 1=1";
+
+            if ($startDate && $endDate) {
+                $q .= " AND requested_at BETWEEN :start_date AND :end_date";
+            }
+
+            $q .= " GROUP BY DATE(requested_at) ORDER BY date";
+
             $stmt = $this->conn->prepare($q);
+
+            if ($startDate && $endDate) {
+                $stmt->bindParam(':start_date', $startDate);
+                $stmt->bindParam(':end_date', $endDate);
+            }
+
             $stmt->execute();
 
             $labels = [];
             $data = [];
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $labels[] = $row['date'];  // Dates of requests
-                $data[] = $row['total_requests']; // Total requests on that date
+                $labels[] = $row['date'];
+                $data[] = $row['total_requests'];
             }
 
             return [
@@ -345,16 +370,22 @@ class Resources
         }
     }
 
-    public function getUnusedResources()
+    public function getUnusedResources($startDate = null, $endDate = null)
     {
         try {
-            $q = "SELECT fr.name AS resource_name, 
-                         fr.quantity - SUM(ra.quantity) AS unused 
-                  FROM fm_resources fr 
-                  LEFT JOIN fm_resource_allocations ra ON fr.id = ra.resource_id 
-                  GROUP BY resource_name 
-                  HAVING unused > 0
-                  ORDER BY unused DESC;";
+            $q = "SELECT 
+                fr.name AS resource_name, 
+                fr.quantity - IFNULL((
+                  SELECT SUM(quantity) 
+                  FROM fm_resource_allocations 
+                  WHERE resource_id = fr.id 
+                  AND status = 'allocated'
+                  " . ($startDate && $endDate ?
+                " AND allocation_start BETWEEN :start_date AND :end_date" : "") . "
+                ), 0) AS unused 
+              FROM fm_resources fr
+              HAVING unused > 0
+              ORDER BY unused DESC";
             $stmt = $this->conn->prepare($q);
             $stmt->execute();
 
@@ -414,19 +445,36 @@ class Resources
         }
     }
 
-    public function CategorizedResources()
-    {
+    public function CategorizedResources($startDate = null, $endDate = null) {
         try {
-            $q = "SELECT category, 
-                    name AS resource_name, 
-                    fr.quantity AS total_available, 
-                    IFNULL(SUM(ra.quantity), 0) AS total_allocated, 
-                    (fr.quantity - IFNULL(SUM(ra.quantity), 0)) AS unused 
-                    FROM fm_resources fr 
-                    LEFT JOIN fm_resource_allocations ra ON fr.id = ra.resource_id 
-                    GROUP BY category, resource_name 
-                    ORDER BY category, resource_name;";
+            $q = "SELECT 
+                    fr.category, 
+                    fr.name AS resource_name, 
+                    fr.quantity AS total_available,
+                    IFNULL(SUM(
+                      CASE WHEN ra.status = 'allocated' 
+                      ".($startDate && $endDate ? 
+                        " AND ra.allocation_start BETWEEN :start_date AND :end_date" : "")."
+                      THEN ra.quantity ELSE 0 END
+                    ), 0) AS total_allocated,
+                    fr.quantity - IFNULL(SUM(
+                      CASE WHEN ra.status = 'allocated' 
+                      ".($startDate && $endDate ? 
+                        " AND ra.allocation_start BETWEEN :start_date AND :end_date" : "")."
+                      THEN ra.quantity ELSE 0 END
+                    ), 0) AS unused 
+                  FROM fm_resources fr
+                  LEFT JOIN fm_resource_allocations ra ON fr.id = ra.resource_id
+                  GROUP BY fr.category, fr.name
+                  ORDER BY fr.category, fr.name";
+                  
             $stmt = $this->conn->prepare($q);
+            
+            if ($startDate && $endDate) {
+                $stmt->bindParam(':start_date', $startDate);
+                $stmt->bindParam(':end_date', $endDate);
+            }
+            
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {

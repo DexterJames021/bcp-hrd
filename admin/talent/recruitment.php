@@ -11,7 +11,15 @@ $result = $conn->query($sql);
 $row = $result->fetch_assoc();
 $pendingApplicants = $row['pending_applicants'];
 
+$sql = "SELECT COUNT(*) as totalJobRoles FROM jobroles";
+$result = $conn->query($sql);
 
+
+    // Fetch the result and store the count in $totaljobroles
+    $row = $result->fetch_assoc();
+    $totaljobroles = $row['totalJobRoles'];  // Store the total number of job roles
+
+    
 
 
 // Fetch the total number of job postings
@@ -163,11 +171,19 @@ $department_result = $conn->query($department_sql);
                                 <h1>Recruitment</h1>
                             <!-- Summary Cards -->
                                  <div class="row">
+                                 <div class="col-md-3">
+                                        <div class="card bg-light text-dark">
+                                            <div class="card-body">
+                                                <h5>Job Postings</h5>
+                                                <h3><?php echo $open_job_posting_count; ?></h3>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="col-md-3">
                                         <div class="card bg-light text-white">
                                             <div class="card-body">
                                                 <h5>Total Jobs</h5>
-                                                <h3><?php echo $job_posting_count; ?></h3>
+                                                <h3><?php echo $totaljobroles; ?></h3>
                                             </div>
                                         </div>
                                     </div>
@@ -179,14 +195,7 @@ $department_result = $conn->query($department_sql);
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="card bg-light text-dark">
-                                            <div class="card-body">
-                                                <h5>Total Open Jobs</h5>
-                                                <h3><?php echo $open_job_posting_count; ?></h3>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                     <div class="col-md-3">
                                         <div class="card bg-light text-dark">
                                             <div class="card-body">
@@ -212,11 +221,12 @@ $department_result = $conn->query($department_sql);
                                 <?php endif; ?>
 
                                 <ul class="nav nav-tabs" id="dashboardTabs" role="tablist">
-                                <li class="nav-item">
-        <a class="nav-link active" id="applicants-tab" data-toggle="tab" href="#applicants" role="tab">Applicants</a>
+                               
+    <li class="nav-item">
+        <a class="nav-link active" id="jobs-tab" data-toggle="tab" href="#jobs" role="tab">Job Posting</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link " id="jobs-tab" data-toggle="tab" href="#jobs" role="tab">Jobs</a>
+        <a class="nav-link" id="addJob-tab" data-toggle="tab" href="#addJob" role="tab">Jobs</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" id="departments-tab" data-toggle="tab" href="#departments" role="tab">Departments</a>
@@ -229,11 +239,11 @@ $department_result = $conn->query($department_sql);
 <div class="tab-content" id="dashboardTabContent">
 
     <!-- Jobs Tab -->
-    <div class="tab-pane fade " id="jobs" role="tabpanel" aria-labelledby="jobs-tab">
+    <div class="tab-pane fade show active" id="jobs" role="tabpanel" aria-labelledby="jobs-tab">
         <div class="card">
             <div class="card-header d-flex justify-content-between">
-                <h1 class="card-title">Jobs</h1>
-                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addJobModal">Add Job</button>
+                <h1 class="card-title">Jobs Posting</h1>
+                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addJobModal">Job Posting</button>
             </div>
             <div class="card-body">
                 <table class="table table-hover" id="myJobs" style="width: 100%">
@@ -312,88 +322,14 @@ if ($result->num_rows > 0) {
 }
 ?>
 </tbody>
-
-
-
-
-
-
-
                 </table>
-            </div>
-        </div>
-    </div>
+                <hr>
 
-    <!-- Departments Tab -->
-    <div class="tab-pane fade" id="departments" role="tabpanel" aria-labelledby="departments-tab">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between">
-                <h1 class="card-title">Departments</h1>
-                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addDepartmentModal">Add Department</button>
-            </div>
-            <div class="card-body">
-                <table class="table table-hover" id="myDepartments" style="100%">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>Department Name</th>
-                            <th>Manager</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                 <tbody>
-    <?php
-    // Query to fetch departments with managers
-    $sql = "SELECT d.DepartmentID, d.DepartmentName, e.FirstName AS Manager 
-            FROM departments d
-            LEFT JOIN employees e ON d.ManagerID = e.EmployeeID";
-    $result = $conn->query($sql);
-    
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            echo "<tr>";
-            echo "<td>" . htmlspecialchars($row['DepartmentName']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['Manager'] ?? 'No Manager') . "</td>"; // Show manager or 'No Manager'
-            echo "<td>
-            <button data-toggle='modal' 
-                    data-target='#editDepartmentModal' 
-                    data-id='" . htmlspecialchars($row['DepartmentID']) . "' 
-                    data-name='" . htmlspecialchars($row['DepartmentName']) . "' 
-                    data-manager='" . htmlspecialchars($row['Manager'] ?? '') . "' 
-                    title='Edit Department' 
-                    style='border: none; background: none; cursor: pointer; margin-right: 10px;'>
-                <i class='fas fa-edit text-warning' style='font-size: 16px;'></i> <!-- Edit Icon -->
-            </button>
-
-            <a href='recruitment/delete_department.php?DepartmentID=" . htmlspecialchars($row['DepartmentID']) . "' 
-               onclick='return confirm(\"Are you sure you want to delete this department?\");' 
-               title='Delete Department' 
-               style='text-decoration: none;'>
-                <i class='fas fa-trash-alt text-danger' style='font-size: 16px;'></i> <!-- Trash Icon -->
-            </a>
-                </td>";
-            echo "</tr>";
-        }
-    } else {
-        echo "<tr><td colspan='3'>No departments found.</td></tr>"; // Adjusted colspan
-    }
-    ?>
-</tbody>
-
-                </table>
-            </div>
-        </div>
-    </div>
-
-  
-
-    <!-- Applicants Tab -->
-    <div class="tab-pane fade show active" id="applicants" role="tabpanel" aria-labelledby="applicants-tab">
-        <div class="card">
             <div class="card-header d-flex justify-content-between">
                 <h1 class="card-title">Applicants</h1>
             </div>
-            <div class="card-body">
-                <table id="myApplicants" class="table table-hover" style="100%">
+            
+                <table id="myApplicants1" class="table table-hover" style="100%">
                     <thead class="thead-light">
                         <tr>
                             <th>No.</th>
@@ -471,13 +407,27 @@ if ($result->num_rows > 0) {
                         <i class='fas fa-user-times'></i> 
                       </button>"; 
             } elseif ($row['status'] === 'Shortlisted') {
-                echo "<button type='submit' name='status' value='Hired' class='btn btn-success btn-sm'>
-                        <i class='fas fa-briefcase'></i> 
+                echo "<button type='submit' name='status' value='Document Submission' class='btn btn-success btn-sm'>
+                        <i class='fas fa-paperclip'></i> 
                       </button>"; 
                 echo "<button type='submit' name='status' value='Rejected' class='btn btn-danger btn-sm'>
                         <i class='fas fa-user-times'></i> 
                       </button>"; 
-            }
+            } elseif ($row['status'] === 'Document Submission') {
+            echo "<button type='submit' name='status' value='Background Check' class='btn btn-success btn-sm'>
+                    <i class='fas fa-search'></i> 
+                  </button>"; 
+            echo "<button type='submit' name='status' value='Rejected' class='btn btn-danger btn-sm'>
+                    <i class='fas fa-user-times'></i> 
+                  </button>"; 
+            } elseif ($row['status'] === 'Background Check') {
+                    echo "<button type='submit' name='status' value='Hired' class='btn btn-success btn-sm'>
+                            <i class='fas fa-user-check'></i> 
+                          </button>"; 
+                    echo "<button type='submit' name='status' value='Rejected' class='btn btn-danger btn-sm'>
+                            <i class='fas fa-user-times'></i> 
+                          </button>"; 
+        }
 
             echo "</form>";
 
@@ -512,7 +462,201 @@ if ($result->num_rows > 0) {
             $counter++; // Increment counter
         }
     } else {
-        echo "<tr><td colspan='7'>No applicants found.</td></tr>";
+        echo "<tr><td colspan='7' class='text-center'>No applicants fount.</td></tr>";
+    }
+    ?>
+</tbody>
+
+
+
+                </table>
+                <hr>
+                <div class="card-header d-flex justify-content-between">
+                <h1 class="card-title">Documents</h1>
+                </div>
+                <table id="applicantDocument" class="table table-hover" style="100%">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>No.</th>
+                            <th>Name</th>
+                            <th>Document</th>
+                            <th>Submission Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $uploadDirectory = 'recruitment/uploads/documents/'; // Dito yung folder mo
+                        // Get job_id from URL, default to 0 if not set
+                        $job_id = isset($_GET['job_id']) ? intval($_GET['job_id']) : 0;
+
+                        // Check kung may job_id na pinasa
+                        if ($job_id > 0) {
+                            $sql = "SELECT ds.id, a.applicant_name, ds.document, ds.submission_date 
+                                    FROM document_submissions ds
+                                    INNER JOIN applicants a ON ds.applicant_id = a.id
+                                    WHERE a.job_id = $job_id";
+                        } else {
+                            $sql = "SELECT ds.id, a.applicant_name, ds.document, ds.submission_date 
+                                    FROM document_submissions ds
+                                    INNER JOIN applicants a ON ds.applicant_id = a.id";
+                        }
+
+                        $result = $conn->query($sql);
+
+                        if ($result->num_rows > 0) {
+                            $no = 1; // Counter for the "No." column
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<tr>";
+                                echo "<td>" . $no++ . "</td>";
+                                echo "<td>" . htmlspecialchars($row['applicant_name']) . "</td>";
+                                echo "<td>" . basename(htmlspecialchars($row['document'])) . "</td>"; // Show filename only
+                                echo "<td>" . htmlspecialchars(date('F d, Y', strtotime($row['submission_date']))) . "</td>";
+                                echo "<td>
+                                      <a href='" . $uploadDirectory . htmlspecialchars($row['document']) . "' class='btn btn-primary btn-sm' target='_blank'>View</a>
+                                    </td>";
+                                echo "</tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='5' class='text-center'>No documents submitted yet.</td></tr>";
+                        }
+                        ?>
+                        </tbody>
+
+                </table>
+            
+            </div>
+        </div>
+    
+    </div>
+    
+<script>
+    // Set the minimum date for the interview date input to today's date
+    document.getElementById('interview_date').setAttribute('min', new Date().toISOString().split('T')[0]);
+</script>
+    <!-- Add Job Modal -->
+<div class="modal fade" id="addJobsModal" tabindex="-1" role="dialog" aria-labelledby="addJobsModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form action="recruitment/addNewJob.php" method="POST">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addJobsModalLabel">Add New Job Role</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span> <!-- X button -->
+          </button>
+        </div>
+        
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="jobTitle">Job Title</label>
+            <input type="text" class="form-control" id="jobTitle" name="jobTitle" required>
+          </div>
+
+          <div class="form-group">
+            <label for="jobDescription">Job Description</label>
+            <textarea class="form-control" id="jobDescription" name="jobDescription" rows="3" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="departmentID">Department</label>
+            <select class="form-control" id="departmentID" name="departmentID" required>
+              <option value="" disabled selected>Select Department</option>
+              <?php
+              // Fetch departments dynamically
+              $deptQuery = "SELECT DepartmentID, DepartmentName FROM departments";
+              $deptResult = $conn->query($deptQuery);
+              if ($deptResult->num_rows > 0) {
+                  while ($dept = $deptResult->fetch_assoc()) {
+                      echo "<option value='" . $dept['DepartmentID'] . "'>" . htmlspecialchars($dept['DepartmentName']) . "</option>";
+                  }
+              }
+              ?>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="salaryMin">Minimum Salary</label>
+            <input type="number" class="form-control" id="salaryMin" name="salaryMin" required>
+          </div>
+
+          <div class="form-group">
+            <label for="salaryMax">Maximum Salary</label>
+            <input type="number" class="form-control" id="salaryMax" name="salaryMax" required>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Job</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+    <!--addjobs tabl -->
+    <!-- Jobs Tab -->
+    <div class="tab-pane fade" id="addJob" role="tabpanel" aria-labelledby="addJob-tab">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <h1 class="card-title">Jobs</h1>
+                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addJobsModal">Add Job</button>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover" id="myJobs2" style="width: 100%">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>No.</th>
+                            <th>Job Title</th>
+                            <th>Job Description</th>
+                            <th>Department</th>
+                            <th>Min Salary</th>
+                            <th>Max Salary</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    <?php
+    // Query to fetch job roles with department names
+    $sql = "SELECT jr.JobRoleID, jr.JobTitle, jr.JobDescription, d.DepartmentName, jr.SalaryRangeMin, jr.SalaryRangeMax, jr.DepartmentID
+            FROM jobroles jr
+            INNER JOIN departments d ON jr.DepartmentID = d.DepartmentID";
+    $result = $conn->query($sql);
+
+    $counter = 1; // Initialize the counter for numbering the rows
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td>" . $counter++ . "</td>"; // Display the row number
+            echo "<td>" . htmlspecialchars($row['JobTitle']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['JobDescription']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['DepartmentName']) . "</td>";
+            echo "<td>" . number_format($row['SalaryRangeMin'], 2) . "</td>";
+            echo "<td>" . number_format($row['SalaryRangeMax'], 2) . "</td>";
+            echo "<td>
+                <button data-toggle='modal' 
+                        data-target='#editJobssModal' 
+                        data-id='" . htmlspecialchars($row['JobRoleID']) . "' 
+                        data-title='" . htmlspecialchars($row['JobTitle']) . "' 
+                        data-description1='" . htmlspecialchars($row['JobDescription']) . "' 
+                        data-min-salary='" . $row['SalaryRangeMin'] . "' 
+                        data-max-salary='" . $row['SalaryRangeMax'] . "' 
+                        data-department='" . $row['DepartmentID'] . "' 
+                        title='Edit Job Role' 
+                        style='border: none; background: none; cursor: pointer; margin-right: 10px;'>
+                    <i class='fas fa-edit text-warning' style='font-size: 16px;'></i> <!-- Edit Icon -->
+                </button>
+                <a href='recruitment/deleteJob.php?JobRoleID=" . htmlspecialchars($row['JobRoleID']) . "' 
+                   onclick='return confirm(\"Are you sure you want to delete this job role?\");' 
+                   title='Delete Job Role' 
+                   style='text-decoration: none;'>
+                    <i class='fas fa-trash-alt text-danger' style='font-size: 16px;'></i> <!-- Trash Icon -->
+                </a>
+            </td>";
+            echo "</tr>";
+        }
+    } else {
+        echo "<tr><td colspan='7' class='text-center'>No job roles found.</td></tr>"; // Adjusted colspan
     }
     ?>
 </tbody>
@@ -524,7 +668,149 @@ if ($result->num_rows > 0) {
         </div>
     </div>
 
+   <!-- Edit Job Role Modal -->
+<div class="modal fade" id="editJobssModal" tabindex="-1" role="dialog" aria-labelledby="editJobssModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editJobssModalLabel">Edit Job Role</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="recruitment/edit_jobRoles.php" method="POST">
+                    <div class="form-group">
+                        <label for="JobTitle">Job Title</label>
+                        <input type="text" class="form-control" id="JobTitle" name="JobTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="JobDescription">Job Description</label>
+                        <input type="text" class="form-control" id="JobDescription" name="JobDescription" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="minSalary">Min Salary</label>
+                        <input type="number" class="form-control" id="minSalary" name="minSalary" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="maxSalary">Max Salary</label>
+                        <input type="number" class="form-control" id="maxSalary" name="maxSalary" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="department">Department</label>
+                        <select class="form-control" id="department" name="department" required>
+                            <option value="" disabled selected>Select Department</option>
+                            <?php
+                            // Fetch departments dynamically
+                            $deptQuery = "SELECT DepartmentID, DepartmentName FROM departments";
+                            $deptResult = $conn->query($deptQuery);
+                            if ($deptResult->num_rows > 0) {
+                                while ($dept = $deptResult->fetch_assoc()) {
+                                    echo "<option value='" . $dept['DepartmentID'] . "'>" . htmlspecialchars($dept['DepartmentName']) . "</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <input type="hidden" id="jobRoleID" name="jobRoleID">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+$(document).ready(function() {
+    $('#editJobssModal').on('show.bs.modal', function (e) {
+        // Get the button that triggered the modal
+        var button = $(e.relatedTarget);
+
+        // Extract data attributes from the button
+        var JobRoleID = button.data('id');
+        var JobTitle = button.data('title');
+        var JobDescription = button.data('description1');
+        var minSalary = button.data('min-salary');
+        var maxSalary = button.data('max-salary');
+        var departmentID = button.data('department');
+
+        // Set the data in the modal fields
+        $('#JobTitle').val(JobTitle);
+        $('#JobDescription').val(JobDescription);
+        $('#minSalary').val(minSalary);
+        $('#maxSalary').val(maxSalary);
+        $('#department').val(departmentID); // Assuming you have a select dropdown for departments
+        $('#jobRoleID').val(JobRoleID);
+    });
+});
+
+</script>
+
+    <!-- Departments Tab -->
+    <div class="tab-pane fade" id="departments" role="tabpanel" aria-labelledby="departments-tab">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <h1 class="card-title">Departments</h1>
+                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#addDepartmentModal">Add Department</button>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover" id="myDepartments" style="100%">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Department Name</th>
+                            <th>Manager</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                 <tbody>
+    <?php
+    // Query to fetch departments with managers
+    $sql = "SELECT d.DepartmentID, d.DepartmentName, e.FirstName AS Manager 
+            FROM departments d
+            LEFT JOIN employees e ON d.ManagerID = e.EmployeeID";
+    $result = $conn->query($sql);
+    
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td>" . htmlspecialchars($row['DepartmentName']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['Manager'] ?? 'No Manager') . "</td>"; // Show manager or 'No Manager'
+            echo "<td>
+            <button data-toggle='modal' 
+                    data-target='#editDepartmentModal' 
+                    data-id='" . htmlspecialchars($row['DepartmentID']) . "' 
+                    data-name='" . htmlspecialchars($row['DepartmentName']) . "' 
+                    data-manager='" . htmlspecialchars($row['Manager'] ?? '') . "' 
+                    title='Edit Department' 
+                    style='border: none; background: none; cursor: pointer; margin-right: 10px;'>
+                <i class='fas fa-edit text-warning' style='font-size: 16px;'></i> <!-- Edit Icon -->
+            </button>
+
+            <a href='recruitment/delete_department.php?DepartmentID=" . htmlspecialchars($row['DepartmentID']) . "' 
+               onclick='return confirm(\"Are you sure you want to delete this department?\");' 
+               title='Delete Department' 
+               style='text-decoration: none;'>
+                <i class='fas fa-trash-alt text-danger' style='font-size: 16px;'></i> <!-- Trash Icon -->
+            </a>
+                </td>";
+            echo "</tr>";
+        }
+    } else {
+        echo "<tr><td colspan='3'>No departments found.</td></tr>"; // Adjusted colspan
+    }
+    ?>
+</tbody>
+
+                </table>
+                
+            </div>
+        </div>
+    </div>
+
+  
+
+  
+      
 
 <script>
     // Check if the page is being reloaded
@@ -687,34 +973,30 @@ if ($result->num_rows > 0) {
             </div>
             <div class="modal-body">
                 <form action="recruitment/add_job.php" method="POST">
-                    <div class="form-group">
-                        <label for="job_title">Job Title:</label>
-                        <input type="text" class="form-control" id="job_title" name="job_title" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="job_description">Job Description:</label>
-                        <textarea class="form-control" id="job_description" name="job_description" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="requirements">Job Requirements:</label>
-                        <textarea class="form-control" id="requirements" name="requirements" placeholder="Enter each requirement on a new line" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="location">Location:</label>
-                        <input type="text" class="form-control" id="location" name="location" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="salary_range">Salary Range:</label>
-                        <input type="text" class="form-control" id="salary_range" name="salary_range" placeholder="e.g. ₱30,000 - ₱50,000" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="status">Status:</label>
-                        <select class="form-control" id="status" name="status" required>
-                            <option value="Open">Open</option>
-                            <option value="Closed">Closed</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
+               
+                <div class="form-group">
+    <label for="job_title">Job Title:</label>
+    <select class="form-control" id="job_title" name="job_title" required>
+        <option value="">Select Job Title</option> <!-- Placeholder option -->
+        <?php
+        // Fetch job titles from the jobroles table
+        $sql = "SELECT JobRoleID, JobTitle FROM jobroles";
+        $result = $conn->query($sql);
+
+        // Check if any job titles are available
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                // Add each job title as an option in the dropdown
+                echo "<option value='" . htmlspecialchars($row['JobTitle']) . "'>" . htmlspecialchars($row['JobTitle']) . "</option>";
+            }
+        } else {
+            echo "<option value='' disabled>No job titles available</option>";
+        }
+        ?>
+    </select>
+</div>
+
+<div class="form-group">
                         <label for="department_id">Department:</label>
                         <select class="form-control" id="department_id" name="DepartmentID" required>
                             <option value="">Select Department</option>
@@ -730,6 +1012,32 @@ if ($result->num_rows > 0) {
                             ?>
                         </select>
                     </div>
+
+                    <div class="form-group">
+                        <label for="job_description">Job Description:</label>
+                        <textarea class="form-control" id="job_description" name="job_description" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="requirements">Job Requirements:</label>
+                        <textarea class="form-control" id="requirements" name="requirements" placeholder="Enter each requirement on a new line" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="location">Location:</label>
+                        <input type="text" class="form-control" id="location" name="location" required>
+                    </div>
+                    <div class="form-group" style="display: none;"> <!-- Hides the field -->
+    <label for="salary_range">Salary Range:</label>
+    <input type="text" class="form-control" id="salary_range" name="salary_range" placeholder="e.g. ₱30,000 - ₱50,000" value="₱30,000 - ₱50,000" readonly> <!-- Default value set -->
+</div>
+
+                    <div class="form-group">
+                        <label for="status">Status:</label>
+                        <select class="form-control" id="status" name="status" required>
+                            <option value="Open">Open</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                    </div>
+                    
                     <button type="submit" class="btn btn-primary">Create Job Posting</button>
                 </form>
             </div>
@@ -898,8 +1206,8 @@ if ($result->num_rows > 0) {
 </script>
 <script>
     $(document).ready(function() {
-        if ($("#myApplicants tbody tr").length > 1) { // Ensure at least one row exists
-            $('#myApplicants').DataTable({
+        if ($("#applicantDocument tbody tr").length > 1) { // Ensure at least one row exists
+            $('#applicantDocument').DataTable({
                 "lengthMenu": [10, 25, 50, 100], 
                 "paging": true,
                 "searching": true,
@@ -908,6 +1216,19 @@ if ($result->num_rows > 0) {
         }
     });
 </script>
+<script>
+    $(document).ready(function() {
+        if ($("#myApplicants1 tbody tr").length > 1) { // Ensure at least one row exists
+            $('#myApplicants1').DataTable({
+                "lengthMenu": [10, 25, 50, 100], 
+                "paging": true,
+                "searching": true,
+                "ordering": true
+            });
+        }
+    });
+</script>
+
 </body>
 
 </html>

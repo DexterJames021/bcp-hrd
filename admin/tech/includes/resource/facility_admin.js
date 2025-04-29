@@ -26,60 +26,103 @@ $(function () {
             dataType: 'json',
             dataSrc: ''
         },
-        columns: [{
-            title: "ID",
-            data: null,
-            render: function (a, b, c, d) {
-                return d.row + 1;
+        columns: [
+            {
+                data: null,
+                render: function (data) {
+                    return `<span class="badge-dot mr-1 badge 
+                          ${data.status === 'Available' ? 'bg-success' : 'bg-danger'}">
+                         </span>`;
+                }
             },
-            // title: "No."
+            {
+                title: "Facility ID",
+                data: 'id',
+            },
+            {
+                data: 'name',
+                title: "Name"
+            },
+            {
+                data: 'location',
+                title: "Location",
+                defaultContent: '<i class="text-gray">not set</i>'
+            },
+            {
+                data: 'capacity',
+                title: "Capacity",
+                defaultContent: '<i class="text-gray">not set</i>'
+            },
+            // {
+            //     title: "Status",
+            //     data: 'status',
+            // },
+            {
+                title: 'Action',
+                data: null,
+                render: function (data) {
+                    let buttons = '';
+                    // console.log("Checking Permissions for:", row.id);
+                    // console.log("User Has UPDATE:", userPermissions.includes("EDIT"));
+                    // console.log("User Has DELETE:", userPermissions.includes("DELETE"));
 
-        },
-        {
-            data: 'name',
-            title: "Name"
-        },
-        {
-            data: 'location',
-            title: "Location",
-            defaultContent: '<i class="text-gray">not set</i>'
-        },
-        {
-            data: 'capacity',
-            title: "Capacity",
-            defaultContent: '<i class="text-gray">not set</i>'
-        },
-        {
-            data: 'status',
-            title: "Status",
-        },
-        {
-            title: 'Action',
-            data: null,
-            render: function (data) {
-                let buttons = '';
-                // console.log("Checking Permissions for:", row.id);
-                // console.log("User Has UPDATE:", userPermissions.includes("EDIT"));
-                // console.log("User Has DELETE:", userPermissions.includes("DELETE"));
-
-                if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
-                    buttons += `<button class="edit-btn btn my-1" data-id="${data.id}" title="UPDATE">
+                    if (Array.isArray(userPermissions) && userPermissions.includes("EDIT")) {
+                        buttons += `<button class="edit-btn btn my-1" data-id="${data.id}" title="UPDATE">
                             <i class="bi bi-pencil-square text-primary" style="font-size:large;"></i>
                         </button>`;
-                }
+                    }
 
-                if (Array.isArray(userPermissions) && userPermissions.includes("DELETE")) {
-                    buttons += `<button class="delete-btn btn my-1" data-id="${data.id}" title="DELETE">
+                    if (Array.isArray(userPermissions) && userPermissions.includes("DELETE")) {
+                        buttons += `<button class="delete-btn btn my-1" data-id="${data.id}" title="DELETE">
                             <i class="bi bi-trash text-danger" style="font-size:large;"></i>
                         </button>`;
-                }
+                    }
 
-                return buttons || '<i class="bi bi-ban text-danger" title="No permission" style="font-size:x-large;"></i>';
+                    return buttons || '<i class="bi bi-ban text-danger" title="No permission" style="font-size:x-large;"></i>';
+                },
+
+                orderable: false,
             },
-            orderable: false,
-        }
+            {
+                data: "status",
+                visible: false, // Hidden status column (for filtering only)
+            },
         ],
         order: [],
+    });
+
+    // Custom filter for capacity range
+    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+        const min = parseInt($('#minCapacity').val(), 10);
+        const max = parseInt($('#maxCapacity').val(), 10);
+        const capacity = parseFloat(data[4]) || 0; // Column 4 = Capacity
+
+        if (
+            (isNaN(min) && isNaN(max)) ||
+            (isNaN(min) && capacity <= max) ||
+            (min <= capacity && isNaN(max)) ||
+            (min <= capacity && capacity <= max)
+        ) {
+            return true;
+        }
+        return false;
+    });
+
+    $('#minCapacity, #maxCapacity').on('keyup change', function () {
+        AllRoomTable.draw();
+        let i = 0;
+        console.log(i++);
+    });
+
+    $('#statusFilter').on('change', function () {
+        const selectedStatus = $(this).val();
+        console.log('SELECTTED', selectedStatus);
+        if (selectedStatus) {
+            AllRoomTable.column(6).search('^' + selectedStatus + '$', true, false).draw();
+            // Column 7 (0-based index) → your hidden "status" column
+        } else {
+            AllRoomTable.column(6).search('').draw(); // Show all if none selected
+        }
     });
 
     function loadAnalytics() {
@@ -200,16 +243,16 @@ $(function () {
         },
         {
             title: "Purpose",
-            data: "purpose", 
+            data: "purpose",
             render: function (data, type, row) {
-              return `<button class="btn text-primary see-purpose-btn" data-purpose="${encodeURIComponent(row.purpose)}">
+                return `<button class="btn text-primary see-purpose-btn" data-purpose="${encodeURIComponent(row.purpose)}">
                         <i class="bi bi-file-earmark-richtext-fill" style="font-size:x-large;"></i>
                       </button>`;
             }
-          },
+        },
         {
             data: null,
-            render: function(data){
+            render: function (data) {
                 return `${data.status == "Approved" ? `<span class='badge badge-primary'>${data.status}</span>` : `<span class='badge badge-secondary'>${data.status}</span>`} `;
             }
         },
@@ -252,36 +295,36 @@ $(function () {
     $(document).on('click', '.approve-btn', function () {
         const id = $(this).data('id');
         console.log(id);
-        updateRoomStatus(id, 'Approved');
+        ApproveUpdateRoomStatus(id, 'Approved');
         loadActiveRoomTable()
         bookingTable.ajax.reload();
     });
 
     $(document).on('click', '.reject-btn', function () {
         const id = $(this).data('id');
-        updateRoomStatus(id, 'Rejected');
+        RejectUpdateRoomStatus(id, 'Rejected');
         loadActiveRoomTable();
         bookingTable.ajax.reload();
     });
 
     $(document).on('click', '.see-purpose-btn', function () {
         var purpose = decodeURIComponent($(this).data('purpose'));
-      
+
         $('#purposeText').text(purpose);
-      
+
         $('#downloadPurpose').off('click').on('click', function () {
-          const { jsPDF } = window.jspdf;
-          const doc = new jsPDF();
-      
-          doc.text(purpose, 10, 10);
-          doc.save('purpose.pdf'); // triggers the download
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.text(purpose, 10, 10);
+            doc.save('purpose.pdf'); // triggers the download
         });
-      
+
         // Show modal
         $('#purposeModal').modal('show');
-      });
+    });
 
-    function updateRoomStatus(id, status) {
+    function ApproveUpdateRoomStatus(id, status) {
 
         $.ajax({
             url: BaseURL + 'update_book_status',
@@ -295,7 +338,36 @@ $(function () {
             success: (response) => {
                 if (response.success) {
                     console.log(response.success)
-                    $('#status').toast('show');
+                    $('#approve').toast('show');
+                    loadActiveRoomTable();
+                    AllRoomTable.ajax.reload();
+                } else {
+                    $('#error').toast('show');
+                }
+            },
+            error: (res) => {
+                $('#error').toast('show');
+                console.error(res)
+
+            }
+        })
+    }
+
+    function RejectUpdateRoomStatus(id, status) {
+
+        $.ajax({
+            url: BaseURL + 'update_book_status',
+            type: 'POST',
+            data: {
+                id: id,
+                status: status,
+                userID: userID
+            },
+            dataType: 'json',
+            success: (response) => {
+                if (response.success) {
+                    console.log(response.success)
+                    $('#reject').toast('show');
                     loadActiveRoomTable();
                     AllRoomTable.ajax.reload();
                 } else {

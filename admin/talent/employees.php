@@ -224,29 +224,10 @@ if (isset($_SESSION['message'])) {
                     <i class='fas fa-eye'></i> 
                 </button>";
 
-            // Check if the user is a super admin and show the delete button
+          
             
             
-            // Check if the user is either 'superadmin' or 'admin'
-            if ($usertype == 'superadmin') {
-                echo "
-                    <a href='onboarding/delete_employee.php?id=" . htmlspecialchars($row['EmployeeID']) . "&action=delete'
-                       onclick='return confirm(\"Are you sure you want to delete this employee?\");'
-                       title='Delete Employee'
-                       style='margin-right: 10px; text-decoration: none;'>
-                        <i class='fas fa-trash-alt' style='font-size: 16px; color: #dc3545;'></i>
-                    </a>
-                ";
-            } elseif ($usertype == 'admin') {
-                echo "
-                    <a href='onboarding/delete_employee.php?id=" . htmlspecialchars($row['EmployeeID']) . "&action=softdelete'
-                       onclick='return confirm(\"Are you sure you want to mark this employee as inactive?\");'
-                       title='Deactivate Employee'
-                       style='margin-right: 10px; text-decoration: none;'>
-                        <i class='fas fa-trash-alt' style='font-size: 16px; color: #dc3545;'></i>
-                    </a>
-                ";
-            }
+        
             
             
             
